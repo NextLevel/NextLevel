@@ -1,7 +1,7 @@
 ## NextLevel
 Radical Audio Video in [Swift](https://developer.apple.com/swift/)
 
-This project is currently in development, will be completed this Spring 2015. It’s a fun collaboration between [Simon Corsin](http://github.com/rflex) and [Patrick Piemonte](http://github.com/piemonte).
+This project is currently in development, will be completed Spring 2015. It’s a fun collaboration between [Simon Corsin](http://github.com/rflex) and [Patrick Piemonte](http://github.com/piemonte).
 
 ## Community
 
