@@ -26,6 +26,21 @@ import UIKit
 import Foundation
 import AVFoundation
 
+// MARK: - Configuration Types
+
+public enum QualityPreset: Int {
+    case Highest = 0
+    case Medium
+    case Low
+}
+
+public enum WatermarkAnchorLocation: Int {
+    case TopLeft = 0
+    case TopRight
+    case BottomLeft
+    case BottomRight
+}
+
 // MARK: - MediaTypeConfiguration
 
 public protocol MediaTypeConfigurationDelegate {
@@ -34,7 +49,7 @@ public protocol MediaTypeConfigurationDelegate {
     
 }
 
-class MediaTypeConfiguration {
+public class MediaTypeConfiguration {
     
     /**
     Whether this media type is enabled or not.
@@ -57,7 +72,7 @@ class MediaTypeConfiguration {
 
 // MARK: - AudioConfiguration
 
-class AudioConfiguration: MediaTypeConfiguration {
+public class AudioConfiguration: MediaTypeConfiguration {
     
     /**
     Set the bitrate of the audio
@@ -151,7 +166,7 @@ extension AudioConfiguration {
 
 // MARK: - PhotoConfiguration
 
-class PhotoConfiguration : MediaTypeConfiguration {
+public class PhotoConfiguration : MediaTypeConfiguration {
     
 }
 
@@ -171,7 +186,7 @@ extension PhotoConfiguration {
 
 // MARK: - VideoConfiguration
 
-class VideoConfiguration : MediaTypeConfiguration {
+public class VideoConfiguration : MediaTypeConfiguration {
     
     /**
     Set the bitrate of the video
@@ -252,7 +267,7 @@ class VideoConfiguration : MediaTypeConfiguration {
     transition between filters in the same record segment, make sure to set
     an empty SCFilterGroup instead of setting this property to nil.
     */
-    var filter: Filter? = nil
+    //var filter: Filter? = nil
     
     /**
     The video composition to use.
