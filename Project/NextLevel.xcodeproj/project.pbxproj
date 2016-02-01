@@ -10,8 +10,7 @@
 		06AECC651AC3830800EFCD03 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AECC641AC3830800EFCD03 /* AppDelegate.swift */; };
 		06AECC671AC3830800EFCD03 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AECC661AC3830800EFCD03 /* ViewController.swift */; };
 		06AECC6C1AC3830800EFCD03 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 06AECC6B1AC3830800EFCD03 /* Images.xcassets */; };
-		06AECC861AC3894800EFCD03 /* NextLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AECC851AC3894800EFCD03 /* NextLevel.swift */; };
-		06AECC881AC38B3700EFCD03 /* NextLevelConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AECC871AC38B3700EFCD03 /* NextLevelConfiguration.swift */; };
+		06AECC881AC38B3700EFCD03 /* NextLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AECC871AC38B3700EFCD03 /* NextLevel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,8 +19,7 @@
 		06AECC641AC3830800EFCD03 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		06AECC661AC3830800EFCD03 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		06AECC6B1AC3830800EFCD03 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		06AECC851AC3894800EFCD03 /* NextLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextLevel.swift; path = ../Source/NextLevel.swift; sourceTree = "<group>"; };
-		06AECC871AC38B3700EFCD03 /* NextLevelConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextLevelConfiguration.swift; path = ../Source/NextLevelConfiguration.swift; sourceTree = "<group>"; };
+		06AECC871AC38B3700EFCD03 /* NextLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextLevel.swift; path = ../Sources/NextLevel.swift; sourceTree = "<group>"; };
 		06AECC891AC38B7C00EFCD03 /* Base.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		06AECC8A1AC38B7C00EFCD03 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		06AECC8B1AC38B7C00EFCD03 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -81,8 +79,7 @@
 		06AECC841AC3892A00EFCD03 /* NextLevel */ = {
 			isa = PBXGroup;
 			children = (
-				06AECC871AC38B3700EFCD03 /* NextLevelConfiguration.swift */,
-				06AECC851AC3894800EFCD03 /* NextLevel.swift */,
+				06AECC871AC38B3700EFCD03 /* NextLevel.swift */,
 			);
 			name = NextLevel;
 			sourceTree = "<group>";
@@ -113,7 +110,8 @@
 		06AECC571AC3830800EFCD03 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0620;
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = NextLevel;
 				TargetAttributes = {
 					06AECC5E1AC3830800EFCD03 = {
@@ -156,8 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				06AECC671AC3830800EFCD03 /* ViewController.swift in Sources */,
-				06AECC861AC3894800EFCD03 /* NextLevel.swift in Sources */,
-				06AECC881AC38B3700EFCD03 /* NextLevelConfiguration.swift in Sources */,
+				06AECC881AC38B3700EFCD03 /* NextLevel.swift in Sources */,
 				06AECC651AC3830800EFCD03 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -199,7 +196,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -235,7 +232,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -250,6 +247,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = NextLevel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nextlevel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -262,6 +260,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = NextLevel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nextlevel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
