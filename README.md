@@ -1,8 +1,14 @@
 Rad Media Capture in [Swift](https://developer.apple.com/swift/)
 
-## Intro
+### Features
 
-Check back very soon.
+## Installation
+
+## Community
+
+- Feature idea? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
+
+## History
 
 ## Resources
 
