@@ -1,10 +1,8 @@
 //
-//  ViewController.swift
-//  NextLevel
+//  NextLevel.h
+//  NextLevel (http://nextlevel.engineering/)
 //
-//  Copyright (c) 2015 NextLevel (http://nextlevel.engineering/)
-//
-//  Simon Corsin and Patrick Piemonte
+//  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,28 +21,16 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
+//
 
-import UIKit
+#import <UIKit/UIKit.h>
 
-class ViewController: UIViewController {
+//! Project version number for NextLevel.
+FOUNDATION_EXPORT double NextLevelVersionNumber;
 
-    // MARK: - UIViewController
+//! Project version string for NextLevel.
+FOUNDATION_EXPORT const unsigned char NextLevelVersionString[];
 
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
+// In this header, you should import all the public headers of your framework using statements like #import <NextLevel/PublicHeader.h>
 
-    // MARK: - view lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = UIColor.blackColor()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-
-    // MARK: - UIButton
-
-    // MARK: - NextLevel
-
-}
 

@@ -1,6 +1,13 @@
-# Xcode
-#
+## macOS
+.DS_Store
+
+## Xcode
+
+# Build generated
 build/
+DerivedData/
+
+# Settings
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -9,15 +16,28 @@ build/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-xcuserdata
+xcuserdata/
 *.xccheckout
 *.moved-aside
-DerivedData
+*.xcuserstate
+
+# iOS specific
 *.hmap
 *.ipa
-*.xcuserstate
+*.dSYM.zip
+*.dSYM
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+.build/
 
 # CocoaPods
 Pods/
-Podfile.lock
+
+# Carthage
+Carthage/Checkouts
+Carthage/Build
 

@@ -1,10 +1,8 @@
 //
 //  AppDelegate.swift
-//  NextLevel
+//  NextLevel (http://nextlevel.engineering/)
 //
-//  Copyright (c) 2015 NextLevel (http://nextlevel.engineering/)
-//
-//  Simon Corsin and Patrick Piemonte
+//  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -33,27 +31,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - UIApplicationDelegate
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        self.window = UIWindow(frame:UIScreen.mainScreen().bounds)
-        self.window!.backgroundColor = UIColor.blackColor()
-        self.window!.rootViewController = ViewController.init()
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        self.window = UIWindow(frame:UIScreen.main.bounds)
+        self.window!.backgroundColor = UIColor.black
+        
+        let viewController = CameraViewController()
+        
+        self.window!.rootViewController = viewController
         self.window!.makeKeyAndVisible()
         return true
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
     }
 
 }

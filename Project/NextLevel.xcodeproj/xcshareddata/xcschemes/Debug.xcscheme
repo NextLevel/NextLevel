@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0720"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "06AECC5E1AC3830800EFCD03"
-               BuildableName = "NextLevel.app"
-               BlueprintName = "NextLevel"
+               BuildableName = "NL.app"
+               BlueprintName = "NL"
                ReferencedContainer = "container:NextLevel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "06AECC5E1AC3830800EFCD03"
-            BuildableName = "NextLevel.app"
-            BlueprintName = "NextLevel"
+            BuildableName = "NL.app"
+            BlueprintName = "NL"
             ReferencedContainer = "container:NextLevel.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -56,8 +56,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "06AECC5E1AC3830800EFCD03"
-            BuildableName = "NextLevel.app"
-            BlueprintName = "NextLevel"
+            BuildableName = "NL.app"
+            BlueprintName = "NL"
             ReferencedContainer = "container:NextLevel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "06AECC5E1AC3830800EFCD03"
-            BuildableName = "NextLevel.app"
-            BlueprintName = "NextLevel"
+            BuildableName = "NL.app"
+            BlueprintName = "NL"
             ReferencedContainer = "container:NextLevel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
