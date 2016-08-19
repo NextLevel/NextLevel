@@ -1,16 +1,8 @@
-![NextLevel, Radical Audio Video in Swift](https://raw.github.com/nextlevel/NextLevel/master/NextLevel.png)
+Rad Media Capture in [Swift](https://developer.apple.com/swift/)
 
-Radical Audio Video in [Swift](https://developer.apple.com/swift/)
+## Intro
 
-This project is a fun collaboration between [Simon Corsin](http://github.com/rflex) and [Patrick Piemonte](http://github.com/piemonte).
-
-### Features
-
-## Installation
-
-## Community
-
-- Feature idea? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
+Check back very soon.
 
 ## Resources
 
@@ -25,4 +17,3 @@ This project is a fun collaboration between [Simon Corsin](http://github.com/rfl
 ## License
 
 NextLevel is available under the MIT license, see the [LICENSE](https://github.com/nextlevel/NextLevel/blob/master/LICENSE) file for more information.
-
