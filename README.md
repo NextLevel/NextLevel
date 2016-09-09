@@ -1,6 +1,6 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" style="max-width:100%;"></p>
 
-*** in the works… almost fully tested and fully functional!
+*** in the works… almost fully tested and featured!
 *** check back soon or ask how to help!
 
 NextLevel is a media capture library for iOS written in [Swift](https://developer.apple.com/swift/).
