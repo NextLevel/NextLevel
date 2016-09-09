@@ -51,12 +51,13 @@ NextLevel is a community – contributions and discussions are welcome!
 - Found a bug? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
 - Need help? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag ’nextlevel’.
 - Questions? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag 'nextlevel'.
-- Stickers? Visit Next Level on [Sticker Mule](https://www.stickermule.com/en/marketplace/15145-next-level)
 - Want to contribute? Submit a pull request.
+
+### Stickers
 
 If this project was helpful, check out the [standardized](https://terinjokes.github.io/StickerConstructorSpec/) sticker on [Sticker Mule](https://www.stickermule.com/en/marketplace/15145-next-level).
 
-There are more features and usage examples in the sample project.
+### Complementary Projects
 
 Need a video player?
 - [Player (Swift)](https://github.com/piemonte/player)
@@ -145,7 +146,7 @@ To enable automatic end of capture, you can specify a maximum duration within th
 
 Next Level is just a little weekend project that is still going.
 
-The software now tries to provide the foundational components for advanced media recording, camera interface customization, and gestural interaction customization on iOS. The same capture capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
+The software tries to provide the foundational components for advanced media recording, camera interface customization, and gestural interaction customization on iOS. The same capture capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
 
 If it can provide a good foundation for quick integration, then this allows everyone us to focus on the functionality that makes the matters most – such as image processing, computer vision apps such as 3D photography or object mapping, augmented reality, depth of field, or even new cinematographic techniques.
 
@@ -154,12 +155,15 @@ If it can provide a good foundation for quick integration, then this allows ever
 * [iOS Device Camera Summary](https://developer.apple.com/library/prerelease/content/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/Cameras/Cameras.html)
 * [AV Foundation Programming Guide](https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html)
 * [AV Foundation Framework Reference](https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVFoundationFramework/)
+* [Swift Evolution](https://github.com/apple/swift-evolution)
 * [objc.io Camera and Photos](http://www.objc.io/issue-21/)
 * [objc.io Video](http://www.objc.io/issue-23/)
-* [Player, a simple iOS video player in Swift](https://github.com/piemonte/player)
-* [PBJVideoPlayer, a simple iOS video player in Objective-C](https://github.com/piemonte/PBJVideoPlayer)
-* [SCRecorder, Objective-C iOS camera engine with Vine-like tap to record, filters, slow motion, segments editing](https://github.com/rFlex/SCRecorder)
-* [PBJVision, Objective-C iOS camera engine, features touch-to-record video, slow motion video, and photo capture](https://github.com/piemonte/PBJVision)
+* [Player](https://github.com/piemonte/player), a simple iOS video player in Swift
+* [PBJVideoPlayer](https://github.com/piemonte/PBJVideoPlayer), a simple iOS video player in obj-c
+* [SCRecorder](https://github.com/rFlex/SCRecorder), obj-C iOS camera engine with Vine-like tap to record, filters, slow motion, segments editing
+* [PBJVision](https://github.com/piemonte/PBJVision), obj-c iOS camera engine, features touch-to-record video, slow motion video, and photo capture
+* [GPUImage2](https://github.com/BradLarson/GPUImage2), image processing library in Swift
+* [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), media export and transcoding library
 
 ## License
 
