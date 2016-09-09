@@ -952,11 +952,15 @@ extension NextLevel {
     // preview
     
     public func freezePreview() {
-        self.previewLayer.connection.isEnabled = false
+        if let previewConnection = self.previewLayer.connection {
+            previewConnection.isEnabled = false
+        }
     }
     
     public func unfreezePreview() {
-        self.previewLayer.connection.isEnabled = true
+        if let previewConnection = self.previewLayer.connection {
+            previewConnection.isEnabled = true
+        }
     }
     
     // flash and torch
@@ -1424,8 +1428,7 @@ extension NextLevel {
     
     public var mirroringMode: NextLevelMirroringMode {
         get {
-            let previewConnection = self.previewLayer.connection
-            if let pc = previewConnection {
+            if let pc = self.previewLayer.connection {
                 if pc.isVideoMirroringSupported {
                     if !pc.automaticallyAdjustsVideoMirroring {
                         return pc.isVideoMirrored ? .on : .off
@@ -1438,16 +1441,15 @@ extension NextLevel {
         }
         set {
             if let _ = self.captureSession, let videoOutput = self.videoOutput {
-                let videoConnection = videoOutput.connection(withMediaType: AVMediaTypeVideo)
-                let previewConnection = self.previewLayer.connection
+
                 switch newValue {
                 case .off:
-                    if let vc = videoConnection {
+                    if let vc = videoOutput.connection(withMediaType: AVMediaTypeVideo) {
                         if vc.isVideoMirroringSupported {
                             vc.isVideoMirrored = false
                         }
                     }
-                    if let pc = previewConnection {
+                    if let pc = self.previewLayer.connection {
                         if pc.isVideoMirroringSupported {
                             pc.isVideoMirrored = false
                             pc.automaticallyAdjustsVideoMirroring = false
@@ -1455,12 +1457,12 @@ extension NextLevel {
                     }
                     break
                 case .on:
-                    if let vc = videoConnection {
+                    if let vc = videoOutput.connection(withMediaType: AVMediaTypeVideo) {
                         if vc.isVideoMirroringSupported {
                             vc.isVideoMirrored = true
                         }
                     }
-                    if let pc = previewConnection {
+                    if let pc = self.previewLayer.connection {
                         if pc.isVideoMirroringSupported {
                             pc.isVideoMirrored = true
                             pc.automaticallyAdjustsVideoMirroring = false
@@ -1468,12 +1470,12 @@ extension NextLevel {
                     }
                     break
                 case .auto:
-                    if let vc = videoConnection, let device = self.currentDevice {
+                    if let vc = videoOutput.connection(withMediaType: AVMediaTypeVideo), let device = self.currentDevice {
                         if vc.isVideoMirroringSupported {
                             vc.isVideoMirrored = (device.position == .front)
                         }
                     }
-                    if let pc = previewConnection {
+                    if let pc = self.previewLayer.connection {
                         if pc.isVideoMirroringSupported {
                             pc.isVideoMirrored = true
                             pc.automaticallyAdjustsVideoMirroring = true
@@ -1571,10 +1573,12 @@ extension NextLevel {
         
         let currentOrientation = AVCaptureVideoOrientation.avorientationFromUIDeviceOrientation(UIDevice.current.orientation)
     
-        if self.previewLayer.connection.isVideoOrientationSupported {
-            self.previewLayer.connection.videoOrientation = currentOrientation
+        if let previewConnection = self.previewLayer.connection {
+            if previewConnection.isVideoOrientationSupported {
+                previewConnection.videoOrientation = currentOrientation
+            }
         }
-
+            
         if let videoOutput = self.videoOutput, let videoConnection = videoOutput.connection(withMediaType: AVMediaTypeVideo) {
             if videoConnection.isVideoOrientationSupported {
                 videoConnection.videoOrientation = currentOrientation
