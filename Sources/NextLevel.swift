@@ -1912,13 +1912,13 @@ extension NextLevel {
     internal func handleSessionDidStartRunning(_ notification: Notification) {
         //self.performRecoveryCheckIfNecessary()
         // TODO
-        self.sessionQueue.sync {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelSessionDidStart(self)
         }
     }
         
     internal func handleSessionDidStopRunning(_ notification: Notification) {
-        self.sessionQueue.sync {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelSessionDidStop(self)
         }
     }
