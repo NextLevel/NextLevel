@@ -468,14 +468,14 @@ public class NextLevel: NSObject {
 
     public var cameraMode: NextLevelCaptureMode {
         didSet {
-            self.configureSessionOutput()
-            self.configureSessionInput()
+            self.configureSession()
+            self.configureDevices()
         }
     }
         
     public var devicePosition: NextLevelDevicePosition {
         didSet {
-            self.configureSessionInput()
+            self.configureDevices()
         }
     }
     
@@ -643,8 +643,8 @@ extension NextLevel {
                 self.beginConfiguration()
                 self.previewLayer.session = session
                 
-                self.configureSessionOutput()
-                self.configureSessionInput()
+                self.configureSession()
+                self.configureDevices()
                 
                 self.updateVideoOrientation()
                 self.commitConfiguration()
@@ -687,7 +687,7 @@ extension NextLevel {
         }
     }
     
-    internal func configureSessionInput() {
+    internal func configureDevices() {
         if self.captureSession != nil {
             self.beginConfiguration()
             
@@ -733,7 +733,7 @@ extension NextLevel {
         }
     }
     
-    internal func configureSessionOutput() {
+    internal func configureSession() {
         if let session = self.captureSession {
             self.beginConfiguration()
         
@@ -938,34 +938,6 @@ extension NextLevel {
                     }
                 }
                 break
-            }
-        }
-        
-    }
-
-    private func removeAllOutputs() {
-        
-        if let session = self.captureSession {
-            // remove possible video output
-            
-            if let videoOutput = self.videoOutput {
-                if session.outputs.contains(where: { (videoOutput) -> Bool in
-                    return true
-                }) {
-                    session.removeOutput(videoOutput)
-                    self.videoOutput = nil
-                }
-            }
-            
-            // remove possible audio output
-            
-            if let audioOutput = self.audioOutput {
-                if session.outputs.contains(where: { (audioOutput) -> Bool in
-                    return true
-                }) {
-                    session.removeOutput(audioOutput)
-                    self.audioOutput = nil
-                }
             }
         }
         
