@@ -88,15 +88,21 @@ Setup the camera preview.
 ```swift
 let screenBounds = UIScreen.main.bounds
 self.previewView = UIView(frame: screenBounds)
-let previewLayer = NextLevel.sharedInstance.previewLayer
-self.previewView?.layer.addSublayer(previewLayer)
+if let previewView = self.previewView {
+       previewView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+       previewView.backgroundColor = UIColor.black
+       previewView.layer.addSublayer(NextLevel.sharedInstance.previewLayer)
+       self.view.addSubview(previewView)
+}
 ```
 
-Setup and configure the `NextLevel` controller and start your camera session.
+Start, configure, and clean-up the `NextLevel` controller.
 
 ```swift
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // modify .videoConfiguration, .photoConfiguration, . audioConfiguration properties, if necessary
         NextLevel.sharedInstance.start()
         // …
     }
@@ -110,7 +116,7 @@ Setup and configure the `NextLevel` controller and start your camera session.
     }
 ```
 
-Pause/Record
+Video Pause/Record
 
 ```swift
 // pause
@@ -118,11 +124,8 @@ NextLevel.sharedInstance.pause(nil)
 
 // record
 NextLevel.sharedInstance.record()
-```
 
-End recording.
-
-```swift
+// finalize
 NextLevel.sharedInstance.completeSession()
 ```
 
@@ -140,7 +143,11 @@ Handle the output and export the recorded session.
 
 ### Configure automatic video duration limit
 
-To enable automatic end of capture, you can specify a maximum duration within the `NextLevelVideoConfiguration`.
+To enable automatic end of capture, you can specify a maximum duration on the `.videoConfiguration` property.
+
+```swift
+NextLevel.sharedInstance.videoConfiguration.maximumCaptureDuration = CMTimeMakeWithSeconds(5, 600)
+```
 
 ## About
 
