@@ -1560,7 +1560,7 @@ extension NextLevel {
     
     // device switch
     
-    public func switchCameraDevice() {
+    public func flipCaptureDevicePosition() {
         if self.devicePosition == .back {
             self.devicePosition = .front
         } else {

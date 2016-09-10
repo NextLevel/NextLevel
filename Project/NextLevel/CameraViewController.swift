@@ -37,11 +37,12 @@ class CameraViewController: UIViewController {
     
     private var previewView: UIView?
     private var gestureView: UIView?
-    
-    private var switchCameraButton: UIButton?
-    private var flashButton: UIButton?
+    private var controlDockView: UIView?
+
     private var recordButton: UIButton?
-    private var doneButton: UIButton?
+    private var flipButton: UIButton?
+    private var flashButton: UIButton?
+    private var saveButton: UIButton?
 
     private var focusTapGestureRecognizer: UITapGestureRecognizer?
     private var zoomPanGestureRecognizer: UIPanGestureRecognizer?
@@ -70,15 +71,50 @@ class CameraViewController: UIViewController {
         self.view.backgroundColor = UIColor.black
         self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        // preview
         let screenBounds = UIScreen.main.bounds
+        
+        // preview
         self.previewView = UIView(frame: screenBounds)
-        self.previewView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        self.previewView?.backgroundColor = UIColor.black
-        let previewLayer = NextLevel.sharedInstance.previewLayer
-        self.previewView?.layer.addSublayer(previewLayer)
+        if let previewView = self.previewView {
+            previewView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            previewView.backgroundColor = UIColor.black
+            previewView.layer.addSublayer(NextLevel.sharedInstance.previewLayer)
+            self.view.addSubview(previewView)
+        }
         
         // buttons
+        self.recordButton = UIButton(type: .custom)
+        if let recordButton = self.recordButton {
+            recordButton.setImage(UIImage(named: "record_button"), for: .normal)
+            recordButton.sizeToFit()
+            recordButton.addTarget(self, action: #selector(handleRecordButton(_:)), for: .touchUpInside)
+        }
+        
+        self.flipButton = UIButton(type: .custom)
+        if let flipButton = self.flipButton {
+            flipButton.setImage(UIImage(named: "flip_button"), for: .normal)
+            flipButton.sizeToFit()
+            flipButton.addTarget(self, action: #selector(handleFlipButton(_:)), for: .touchUpInside)
+        }
+        
+        // capture control "dock"
+        let controlDockHeight = screenBounds.height * 0.2
+        self.controlDockView = UIView(frame: CGRect(x: 0, y: screenBounds.height - controlDockHeight, width: screenBounds.width, height: controlDockHeight))
+        if let controlDockView = self.controlDockView {
+            controlDockView.backgroundColor = UIColor.clear
+            controlDockView.autoresizingMask = [.flexibleTopMargin]
+            self.view.addSubview(controlDockView)
+            
+            if let recordButton = self.recordButton {
+                recordButton.center = CGPoint(x: controlDockView.bounds.midX, y: controlDockView.bounds.midY)
+                controlDockView.addSubview(recordButton)
+            }
+            
+            if let flipButton = self.flipButton, let recordButton = self.recordButton {
+                flipButton.center = CGPoint(x: recordButton.center.x + controlDockView.bounds.width * 0.25 + flipButton.bounds.width * 0.5, y: recordButton.center.y)
+                controlDockView.addSubview(flipButton)
+            }
+        }
         
         // gestures
         
@@ -106,8 +142,8 @@ class CameraViewController: UIViewController {
 
 extension CameraViewController {
 
-    internal func handleSwitchCameraButton(_ button: UIButton) {
-    
+    internal func handleFlipButton(_ button: UIButton) {
+        NextLevel.sharedInstance.flipCaptureDevicePosition()
     }
     
     internal func handleFlashModeButton(_ button: UIButton) {
