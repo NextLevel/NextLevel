@@ -18,6 +18,7 @@
 		06BA97691D7FFDF200CD20D7 /* NextLevel+Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BA97681D7FFDF200CD20D7 /* NextLevel+Metadata.swift */; };
 		06C86E391D81DD5800A43411 /* NextLevel+AVFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C86E381D81DD5800A43411 /* NextLevel+AVFoundation.swift */; };
 		06C86E531D8208D900A43411 /* NextLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = 06C86E511D8208D900A43411 /* NextLevel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06C86E5B1D83857500A43411 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06C86E591D83857500A43411 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		06C86E4F1D8208D900A43411 /* NextLevel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NextLevel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		06C86E511D8208D900A43411 /* NextLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NextLevel.h; path = ../../Sources/NextLevel.h; sourceTree = "<group>"; };
 		06C86E521D8208D900A43411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		06C86E5A1D83857500A43411 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = NextLevel/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				06AECC891AC38B7C00EFCD03 /* Base.xcconfig */,
 				06AECC8A1AC38B7C00EFCD03 /* Debug.xcconfig */,
 				06AECC8B1AC38B7C00EFCD03 /* Release.xcconfig */,
+				06C86E591D83857500A43411 /* LaunchScreen.storyboard */,
 				06AECC6B1AC3830800EFCD03 /* Images.xcassets */,
 				06AECC631AC3830800EFCD03 /* Info.plist */,
 			);
@@ -218,6 +221,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06C86E5B1D83857500A43411 /* LaunchScreen.storyboard in Resources */,
 				06AECC6C1AC3830800EFCD03 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -256,6 +260,18 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		06C86E591D83857500A43411 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				06C86E5A1D83857500A43411 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			path = ..;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		06AECC7C1AC3830800EFCD03 /* Debug */ = {
