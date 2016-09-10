@@ -155,7 +155,7 @@ Next Level is just a little weekend project that is still going.
 
 The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization on iOS. The same capture capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
 
-If it can provide a good foundation for quick integration, then this allows everyone us to focus on the functionality that makes the matters most – such as image processing, computer vision apps such as 3D photography or object mapping, augmented reality, depth of field, or even new cinematographic techniques.
+If it can provide a good foundation for quick integration, allowing everyone to focus on the functionality that makes the matters most – such as image processing, computer vision apps such as 3D photography or object mapping, augmented reality, depth of field, or even new cinematographic techniques.
 
 ## Resources
 
