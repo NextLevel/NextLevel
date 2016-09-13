@@ -22,5 +22,9 @@
 	<string></string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Next Level uses the camera for photo and video capture.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Next Level uses the microphone for audio capture.</string>
 </dict>
 </plist>
