@@ -51,7 +51,7 @@ extension AVCaptureDevice {
     
     public class func primaryVideoDevice(forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
         let deviceTypes: [AVCaptureDeviceType] = [.builtInDuoCamera, .builtInWideAngleCamera]
-        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeAudio, position: position) {
+        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
             // prioritize duo camera systems before wide angle
             for device in discoverySession.devices {
                 if (device.deviceType == .builtInDuoCamera) {
