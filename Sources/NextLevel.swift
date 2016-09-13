@@ -796,7 +796,7 @@ extension NextLevel {
         }
     }
     
-    private func deviceInputForMediaType(_ mediaType: String) -> AVCaptureDeviceInput? {
+    private func currentInputForMediaType(_ mediaType: String) -> AVCaptureDeviceInput? {
         if let session = self.captureSession {
             let inputs = session.inputs as! [AVCaptureDeviceInput]
             for deviceInput in inputs {
@@ -811,38 +811,41 @@ extension NextLevel {
     // inputs
     
     private func configureDevice(captureDevice: AVCaptureDevice, mediaType: String) {
-        if let currentDeviceInput = self.deviceInputForMediaType(mediaType) {
-            if currentDeviceInput.device != captureDevice {
-                if mediaType == AVMediaTypeVideo {
-                    do {
-                        try captureDevice.lockForConfiguration()
-                        
-                        if captureDevice.isSmoothAutoFocusSupported {
-                            captureDevice.isSmoothAutoFocusEnabled = true
-                        }
-                        
-                        captureDevice.isSubjectAreaChangeMonitoringEnabled = true
-                        
-                        if captureDevice.isLowLightBoostSupported {
-                            captureDevice.automaticallyEnablesLowLightBoostWhenAvailable = true
-                        }
-                        captureDevice.unlockForConfiguration()
-                    }
-                    catch {
-                        print("NextLevel, flashMode failed to lock device for configuration")
-                    }
+        if let currentDeviceInput = self.currentInputForMediaType(mediaType) {
+            if currentDeviceInput.device == captureDevice {
+                return
+            }
+        }
+        
+        if mediaType == AVMediaTypeVideo {
+            do {
+                try captureDevice.lockForConfiguration()
+                
+                if captureDevice.isSmoothAutoFocusSupported {
+                    captureDevice.isSmoothAutoFocusEnabled = true
                 }
-            
-                if let session = self.captureSession {
-                    
-                    session.removeInput(currentDeviceInput)
-                    if currentDeviceInput.device.hasMediaType(AVMediaTypeVideo) {
-                        self.removeKeyValueObservers()
-                    }
-                    
-                    let _ = self.addInput(session: session, device: captureDevice)
+                
+                captureDevice.isSubjectAreaChangeMonitoringEnabled = true
+                
+                if captureDevice.isLowLightBoostSupported {
+                    captureDevice.automaticallyEnablesLowLightBoostWhenAvailable = true
+                }
+                captureDevice.unlockForConfiguration()
+            }
+            catch {
+                print("NextLevel, flashMode failed to lock device for configuration")
+            }
+        }
+        
+        if let session = self.captureSession {
+            if let currentDeviceInput = self.currentInputForMediaType(mediaType) {
+                session.removeInput(currentDeviceInput)
+                if currentDeviceInput.device.hasMediaType(AVMediaTypeVideo) {
+                    self.removeKeyValueObservers()
                 }
             }
+            // TODO prompts authorization here, add auth check prior
+            let _ = self.addInput(session: session, device: captureDevice)
         }
     }
 
@@ -1588,6 +1591,10 @@ extension NextLevel {
         } else {
             self.devicePosition = .back
         }
+    }
+    
+    public func changeCaptureDeviceIfAvailable(captureDevice: NextLevelDeviceType) throws {
+        // TODO
     }
     
     internal func updateVideoOrientation() {
