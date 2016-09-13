@@ -84,6 +84,28 @@ public enum NextLevelDevicePosition: Int, CustomStringConvertible {
     }
 }
 
+public enum NextLevelDeviceType: Int, CustomStringConvertible {
+    case microphone = 0
+    case wideAngleCamera
+    case telephotoCamera
+    case duoCamera
+    
+    public var description: String {
+        get {
+            switch self {
+            case .microphone:
+                return "Microphone"
+            case .wideAngleCamera:
+                return "Wide Angle Camera"
+            case .telephotoCamera:
+                return "Telephoto Camera"
+            case .duoCamera:
+                return "Duo Camera"
+            }
+        }
+    }
+}
+
 public enum NextLevelCaptureMode: Int, CustomStringConvertible {
     case video = 0
     case photo
