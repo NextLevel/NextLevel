@@ -732,7 +732,10 @@ extension NextLevel {
                 if let videoDevice = AVCaptureDevice.primaryVideoDevice(forPosition: self.devicePosition.avfoundationType) {
                     if videoDevice != self.currentDevice {
                         self.configureDevice(captureDevice: videoDevice, mediaType: AVMediaTypeVideo)
+                        
+                        self.willChangeValue(forKey: "currentDevice")
                         self.currentDevice = videoDevice
+                        self.didChangeValue(forKey: "currentDevice")
                     }
                 }
             }
