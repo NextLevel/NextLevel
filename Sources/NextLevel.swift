@@ -26,6 +26,8 @@
 import UIKit
 import Foundation
 import AVFoundation
+import CoreImage
+import CoreVideo
 import ImageIO
 import MobileCoreServices
 
@@ -557,6 +559,7 @@ public class NextLevel: NSObject {
     internal var recording: Bool
     internal var recordingSession: NextLevelSession?
     
+    internal var cicontext: CIContext?
     internal var currentError: Error?
     
     // MARK: - singleton
@@ -1724,6 +1727,26 @@ extension NextLevel {
 extension NextLevel {
     
     // sample buffer processing
+    
+    internal func uiimageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
+        var sampleBufferImage: UIImage? = nil
+        
+        if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+            
+            if self.cicontext == nil {
+                self.cicontext = CIContext(eaglContext: EAGLContext(api: .openGLES3))
+            }
+            
+            if let context = self.cicontext {
+                let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
+                if let cgimage = context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
+                    sampleBufferImage = UIImage(cgImage: cgimage)
+                }
+            }
+        }
+        
+        return sampleBufferImage
+    }
     
     internal func handleVideoOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         // TODO NextLevelSession init
