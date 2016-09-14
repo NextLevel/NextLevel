@@ -443,10 +443,17 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevelDidStopPreview(_ nextLevel: NextLevel)
     
     // video
-    // TODO
+    func nextLevel(_ nextLevel: NextLevel, didConfigureAudioInSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didConfigureVideoInSession session: NextLevelSession)
     
-    // video capture integration
-    // TODO
+    func nextLevel(_ nextLevel: NextLevel, didStartRecordingClipInSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didStopRecordingClip clip: NextLevelSessionClip, inSession session: NextLevelSession)
+    
+    func nextLevel(_ nextLevel: NextLevel, didAppendVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didSkipVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
+    
+    func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession)
     
     // photo
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)

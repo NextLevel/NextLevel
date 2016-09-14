@@ -23,6 +23,7 @@
 //  SOFTWARE.
 
 import UIKit
+import AVFoundation
 //import NextLevel
 
 class CameraViewController: UIViewController {
@@ -268,7 +269,37 @@ extension CameraViewController: NextLevelDelegate {
     }
     
     // video
-    // TODO
+    func nextLevel(_ nextLevel: NextLevel, didConfigureAudioInSession session: NextLevelSession) {
+        
+    }
+    
+    func nextLevel(_ nextLevel: NextLevel, didConfigureVideoInSession session: NextLevelSession) {
+        
+    }
+    
+    func nextLevel(_ nextLevel: NextLevel, didStartRecordingClipInSession session: NextLevelSession) {
+        
+    }
+    
+    func nextLevel(_ nextLevel: NextLevel, didStopRecordingClip clip: NextLevelSessionClip, inSession session: NextLevelSession) {
+        
+    }
+    
+    func nextLevel(_ nextLevel: NextLevel, didAppendVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
+        
+    }
+    
+    func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
+        
+    }
+    
+    func nextLevel(_ nextLevel: NextLevel, didSkipVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
+        
+    }
+    
+    func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession) {
+        
+    }
     
     // photo
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration) {
