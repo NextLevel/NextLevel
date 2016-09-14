@@ -1029,7 +1029,6 @@ extension NextLevel {
                             if modes.contains(numberMode) {
                                 settings.flashMode = newValue.avfoundationType
                             }
-                            // TODO Photo: store settings?
                         }
                     }
                         
@@ -1712,9 +1711,6 @@ extension NextLevel {
         if let photoOutput = self.photoOutput, let _ = photoOutput.connection(withMediaType: AVMediaTypeVideo) {
             if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
                 let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
-                if photoOutput.isLensStabilizationDuringBracketedCaptureSupported {
-                    // TODO, bracketSettings.isLensStabilizatonEnabled = self.photoStabilizationEnabled
-                }
                 photoOutput.capturePhoto(with: photoSettings, delegate: self)
             }
         }
@@ -1774,13 +1770,11 @@ extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudi
         if let videoOutput = self.videoOutput, let audioOutput = self.audioOutput {
             switch captureOutput {
             case videoOutput:
-                // TODO hold last buffer
                 if let session = self.recordingSession {
                     self.handleVideoOutput(sampleBuffer: sampleBuffer, session: session)
                 }
                 break
             case audioOutput:
-                // TODO hold last buffer
                 if let session = self.recordingSession {
                     self.handleAudioOutput(sampleBuffer: sampleBuffer, session: session)
                 }
