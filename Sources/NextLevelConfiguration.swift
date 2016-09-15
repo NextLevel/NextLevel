@@ -46,7 +46,7 @@ public class NextLevelConfiguration: NSObject {
     
     // MARK: func
     
-    public func avcaptureDictionary() -> [String: Any]? {
+    public func avcaptureDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String: Any]? {
         if let options = self.options {
             return options
         } else {
@@ -59,61 +59,72 @@ public class NextLevelConfiguration: NSObject {
 
 public class NextLevelVideoConfiguration: NextLevelConfiguration {
 
-    public var bitRate: UInt64                      // AVEncoderBitRateKey
+    public var bitRate: UInt64                      // AVVideoAverageBitRateKey
     
-    public var dimensions: CGSize                   // AVVideoWidthKey, AVVideoHeightKey
+    public var dimensions: CGSize?                  // AVVideoWidthKey, AVVideoHeightKey
     
     public var affineTransform: CGAffineTransform?
     
     public var codec: String                        // AVVideoCodecKey
     
+    public var profileLevel: String?                // AVVideoProfileLevelKey (H.264 codec only)
+    
     public var scalingMode: String?                 // AVVideoScalingModeKey
     
-    public var maxFrameRate: CMTimeScale            // AVVideoMaxKeyFrameIntervalKey
+    public var maxFrameRate: CMTimeScale?           // AVVideoMaxKeyFrameIntervalKey
     
-    public var timeScale: CGFloat
+    public var timeScale: CGFloat?
     
-    public var maximumCaptureDuration: CMTime
+    public var maximumCaptureDuration: CMTime?
     
-    // MARK: - class func
-    
-    public class func videoConfiguration(fromSampleBuffer sampleBuffer: CMSampleBuffer) -> NextLevelVideoConfiguration {
-        // TODO
-        return NextLevelVideoConfiguration()
-    }
+    // TODO provide video sizing presets, ie. Square/Widescreen/etc
     
     // MARK: - object lifecycle
     
     override init() {
         self.bitRate = 2000000
-        self.dimensions = CGSize(width: 0, height: 0)
         self.affineTransform = CGAffineTransform.identity
         self.codec = AVVideoCodecH264
         self.scalingMode = AVVideoScalingModeResizeAspectFill
-        self.maxFrameRate = 0
-        self.timeScale = 0
-        self.maximumCaptureDuration = kCMTimeInvalid
         super.init()
     }
     
     // MARK: - func
     
-    override public func avcaptureDictionary() -> [String : Any]? {
+    override public func avcaptureDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String : Any]? {
         if let options = self.options {
             return options
         } else {
-            var config: [String: Any] = [AVEncoderBitRateKey:self.bitRate]
-            config[AVVideoWidthKey] = self.dimensions.width
-            config[AVVideoHeightKey] = self.dimensions.height
-            config[AVVideoCodecKey] = self.codec
+            var config: [String: Any] = [AVVideoAverageBitRateKey:self.bitRate]
+            
+            if let dimensions = self.dimensions {
+                config[AVVideoWidthKey] = dimensions.width
+                config[AVVideoHeightKey] = dimensions.height
+            } else if let buffer = sampleBuffer {
+                if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(buffer) {
+                    let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
+                    config[AVVideoWidthKey] = videoDimensions.width
+                    config[AVVideoHeightKey] = videoDimensions.height
+                }
+            }
 
+            config[AVVideoCodecKey] = self.codec
+            
             if let scalingMode = self.scalingMode {
                 config[AVVideoScalingModeKey] = scalingMode
             }
             
-            let compressionDict = [AVVideoMaxKeyFrameIntervalKey:self.maxFrameRate]
+            var compressionDict: [String:Any] = [:]
+            compressionDict[AVVideoAllowFrameReorderingKey] = false
+            compressionDict[AVVideoExpectedSourceFrameRateKey] = 30
+            if let profileLevel = self.profileLevel {
+                compressionDict[AVVideoProfileLevelKey] = profileLevel
+            }
+            if let maxFrameRate = self.maxFrameRate {
+                compressionDict[AVVideoMaxKeyFrameIntervalKey] = maxFrameRate
+            }
             config[AVVideoCompressionPropertiesKey] = compressionDict
-            
+
             return config
         }
     }
@@ -121,47 +132,63 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
 
 // MARK: - AudioConfiguration
 
+let NextLevelAudioConfigurationDefaultBitRate: UInt64 = 128000
+let NextLevelAudioConfigurationDefaultSampleRate: Float64 = 44100
+let NextLevelAudioConfigurationDefaultChannelsCount: UInt32 = 2
+
 public class NextLevelAudioConfiguration: NextLevelConfiguration {
     
     public var bitRate: UInt64          // AVEncoderBitRateKey
     
     public var sampleRate: Float64?     // AVSampleRateKey
     
-    public var channelsCount: Int?      // AVNumberOfChannelsKey
+    public var channelsCount: UInt32?   // AVNumberOfChannelsKey
     
     public var format: AudioFormatID    // AVFormatIDKey
 
-    // MARK: - class func
-    
-    public class func audioConfiguration(fromSampleBuffer sampleBuffer: CMSampleBuffer) -> NextLevelAudioConfiguration {
-        // TODO
-        return NextLevelAudioConfiguration()
-    }
-    
     // MARK: - object lifecycle
     
     override init() {
-        self.bitRate = 128000
-        self.sampleRate = 44100
-        self.channelsCount = 2
+        self.bitRate = NextLevelAudioConfigurationDefaultBitRate
         self.format = kAudioFormatMPEG4AAC
         super.init()
     }
 
     // MARK: funcs
     
-    override public func avcaptureDictionary() -> [String: Any]? {
+    override public func avcaptureDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String: Any]? {
         if let options = self.options {
             return options
         } else {
             var config: [String: Any] = [AVEncoderBitRateKey:self.bitRate]
             
-            if let sampleRate = self.sampleRate {
-                config[AVSampleRateKey] = sampleRate
+            if let buffer = sampleBuffer {
+                if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(buffer) {
+                    if let _ = self.sampleRate, let _ = self.channelsCount {
+                        // loading user provided settings after buffer use
+                    } else if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
+                        self.sampleRate = streamBasicDescription.pointee.mSampleRate
+                        self.channelsCount = streamBasicDescription.pointee.mChannelsPerFrame
+                    }
+                    
+                    var layoutSize: Int = 0
+                    if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, &layoutSize) {
+                        let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count:layoutSize) : Data()
+                        config[AVChannelLayoutKey] = currentChannelLayoutData
+                    }
+                }
             }
             
+            if let sampleRate = self.sampleRate {
+                config[AVSampleRateKey] = sampleRate == 0 ? NextLevelAudioConfigurationDefaultSampleRate : sampleRate
+            } else {
+                config[AVSampleRateKey] = NextLevelAudioConfigurationDefaultSampleRate
+            }
+                
             if let channels = self.channelsCount {
-                config[AVNumberOfChannelsKey] = channels
+                config[AVNumberOfChannelsKey] = channels == 0 ? NextLevelAudioConfigurationDefaultChannelsCount : channelsCount
+            } else {
+                config[AVNumberOfChannelsKey] = NextLevelAudioConfigurationDefaultChannelsCount
             }
             
             config[AVFormatIDKey] = self.format
@@ -169,7 +196,6 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
             return config
         }
     }
-    
 }
 
 // MARK: - PhotoConfiguration
@@ -187,7 +213,7 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     
     // MARK: funcs
         
-    override public func avcaptureDictionary() -> [String: Any]? {
+    public func avcaptureDictionary() -> [String: Any]? {
         if let options = self.options {
             return options
         } else {
