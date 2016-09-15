@@ -269,11 +269,11 @@ extension CameraViewController: NextLevelDelegate {
     }
     
     // video
-    func nextLevel(_ nextLevel: NextLevel, didConfigureAudioInSession session: NextLevelSession) {
+    func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession) {
         
     }
     
-    func nextLevel(_ nextLevel: NextLevel, didConfigureVideoInSession session: NextLevelSession) {
+    func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession) {
         
     }
     
@@ -298,6 +298,12 @@ extension CameraViewController: NextLevelDelegate {
     }
     
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession) {
+        
+    }
+    
+    // video frame photo
+
+    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhotoCaptureFromVideoFrame photoDict: [String:Any]?) {
         
     }
     

@@ -443,8 +443,8 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevelDidStopPreview(_ nextLevel: NextLevel)
     
     // video
-    func nextLevel(_ nextLevel: NextLevel, didConfigureAudioInSession session: NextLevelSession)
-    func nextLevel(_ nextLevel: NextLevel, didConfigureVideoInSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession)
     
     func nextLevel(_ nextLevel: NextLevel, didStartRecordingClipInSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didStopRecordingClip clip: NextLevelSessionClip, inSession session: NextLevelSession)
@@ -454,6 +454,9 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevel(_ nextLevel: NextLevel, didSkipVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession)
+    
+    // video frame photo
+    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhotoCaptureFromVideoFrame photoDict: [String:Any]?)
     
     // photo
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
@@ -1610,7 +1613,11 @@ extension NextLevel {
     }
     
     internal func updateVideoOrientation() {
-        // TODO adjust any potential pending clip on the recording session
+        if let session = self.recordingSession {
+            if session.currentClipHasAudio == false && session.currentClipHasVideo == false {
+                session.reset()
+            }
+        }
         
         let currentOrientation = AVCaptureVideoOrientation.avorientationFromUIDeviceOrientation(UIDevice.current.orientation)
     
@@ -1674,7 +1681,61 @@ extension NextLevel {
     // functions
     
     public func capturePhotoFromVideo() {
-        // TODO
+        
+        self.sessionQueue.async {
+            
+            var photoDict: [String: Any]? = nil
+            
+            if let session = self.recordingSession, let videoFrame = session.lastVideoFrame {
+            
+                let tiffMetadataAdditions = NextLevel.tiffMetadata()
+                
+                // append tiff metadata to buffer for proagation
+                //if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, kCGImagePropertyTIFFDictionary, kCMAttachmentMode_ShouldPropagate) {
+                //    var fullDict = tiffDict as Dictionary
+                //    for (key, value) in tiffMetadataAdditions {
+                //        fullDict.updateValue(value as AnyObject, forKey: key)
+                //    }
+                //    CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, fullDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+                //} else {
+                CMSetAttachment(videoFrame, kCGImagePropertyTIFFDictionary, tiffMetadataAdditions as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+                //}
+                
+                // add exif metadata
+                if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, videoFrame, kCMAttachmentMode_ShouldPropagate) {
+                    let metadata = cfmetadata as Dictionary
+                    
+                    if photoDict == nil {
+                        photoDict = [:]
+                    }
+                    photoDict?[NextLevelPhotoMetadataKey] = metadata
+                }
+                
+                if let photo = self.uiimageFromSampleBuffer(sampleBuffer: videoFrame) {
+                    
+                    // add JPEG, thumbnail
+                    let imageData = UIImageJPEGRepresentation(photo, 0)
+                    if let data = imageData {
+                        if photoDict == nil {
+                            photoDict = [:]
+                        }
+                        photoDict?[NextLevelPhotoJPEGKey] = data
+                    }
+                    
+                    // add explicit thumbnail
+                    //let thumbnailData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: previewBuffer, previewPhotoSampleBuffer: nil)
+                    //if let tData = thumbnailData {
+                    //    photoDict[NextLevelPhotoThumbnailKey] = tData
+                    //}
+                }
+            }
+
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                self.delegate?.nextLevel(self, didFinishProcessingPhotoCaptureFromVideoFrame: photoDict)
+            }
+
+        }
+        
     }
     
     public func record() {
@@ -1693,8 +1754,8 @@ extension NextLevel {
         self.recording = false
         
         self.executeClosureAsyncOnSessionQueueIfNecessary {
-            if let recordingSession = self.recordingSession {
-                if recordingSession.isClipReady {
+            if let session = self.recordingSession {
+                if session.isClipReady {
                     // TODO
                 }
             }
@@ -1798,11 +1859,15 @@ extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudi
 extension NextLevel: AVCapturePhotoCaptureDelegate {
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, willCapturePhotoForResolvedSettings resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        self.delegate?.nextLevel(self, willCapturePhotoWithConfiguration: self.photoConfiguration)
+        self.executeClosureAsyncOnMainQueueIfNecessary {
+            self.delegate?.nextLevel(self, willCapturePhotoWithConfiguration: self.photoConfiguration)
+        }
     }
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, didCapturePhotoForResolvedSettings resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        self.delegate?.nextLevel(self, didCapturePhotoWithConfiguration: self.photoConfiguration)
+        self.executeClosureAsyncOnMainQueueIfNecessary {
+            self.delegate?.nextLevel(self, didCapturePhotoWithConfiguration: self.photoConfiguration)
+        }
     }
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
@@ -1842,7 +1907,9 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             //    photoDict[NextLevelPhotoThumbnailKey] = tData
             //}
             
-            self.delegate?.nextLevel(self, didFinishProcessingPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                self.delegate?.nextLevel(self, didFinishProcessingPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
+            }
         }
     }
     
@@ -1884,12 +1951,16 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             //    photoDict[NextLevelPhotoThumbnailKey] = tData
             //}
             
-            self.delegate?.nextLevel(self, didFinishProcessingPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                self.delegate?.nextLevel(self, didFinishProcessingPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
+            }
         }
     }
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, didFinishCaptureForResolvedSettings resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
-        self.delegate?.nextLevelDidFinishPhotoCapture(self)
+        self.executeClosureAsyncOnMainQueueIfNecessary {
+            self.delegate?.nextLevelDidFinishPhotoCapture(self)
+        }
     }
     
 }
