@@ -1,5 +1,8 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" style="max-width:100%;"></p>
 
+*** in the works… almost fully tested and featured!
+*** check back soon or ask how to help!
+
 NextLevel is a media capture library for iOS written in [Swift](https://developer.apple.com/swift/).
 
 [![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) 
@@ -7,7 +10,7 @@ NextLevel is a media capture library for iOS written in [Swift](https://develope
 ## Features
 
 - [x] simple and extensible API
-- [x] “[Vine](http://vine.co)-like” video clip recording
+- [ ] “[Vine](http://vine.co)-like” video clip recording
 - [x] slow motion capture on supported hardware ([iPhone](https://www.apple.com/iphone/compare/), [iPad](https://www.apple.com/ipad/compare/))
 - [x] video zoom
 - [x] customizable user interface and gestural interactions
