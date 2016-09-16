@@ -1908,9 +1908,10 @@ extension NextLevel {
                         session.appendVideo(withSampleBuffer: sampleBuffer, duration: duration, completionHandler: { (success: Bool)-> Void in
                             self.lastVideoFrameTimeInterval = CACurrentMediaTime()
                             if success == true {
-                                
-                                // TODO
-                                
+                                self.executeClosureAsyncOnMainQueueIfNecessary {
+                                    self.delegate?.nextLevel(self, didAppendVideoSampleBuffer: sampleBuffer, inSession: session)
+                                }
+                                self.checkSessionDuration()
                             } else {
                                 self.executeClosureAsyncOnMainQueueIfNecessary {
                                     self.delegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBuffer, inSession: session)
@@ -1964,9 +1965,10 @@ extension NextLevel {
                 if self.recording && session.currentClipReady && session.currentClipHasVideo {
                     session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool)-> Void in
                         if success {
-                            
-                            // TODO
-                            
+                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                                self.delegate?.nextLevel(self, didAppendAudioSampleBuffer: sampleBuffer, inSession: session)
+                            }
+                            self.checkSessionDuration()
                         } else {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
                                 self.delegate?.nextLevel(self, didSkipAudioSampleBuffer: sampleBuffer, inSession: session)
@@ -1975,6 +1977,21 @@ extension NextLevel {
                     })
                 }
                 
+            }
+        }
+    }
+    
+    private func checkSessionDuration() {
+        if let session = self.recordingSession,
+            let maxRecordingDuration = self.videoConfiguration.maximumCaptureDuration {
+            let currentDuration = session.duration
+            if maxRecordingDuration.isValid && currentDuration >= maxRecordingDuration {
+                self.recording = false
+                
+                // already on session queue, adding to next cycle
+                self.executeClosureAsyncOnSessionQueueIfNecessary {
+                    // TODO end clip and complete session
+                }
             }
         }
     }
