@@ -669,9 +669,9 @@ extension NextLevel {
     public func requestAuthorization(forMediaType mediaType: String!) {
         AVCaptureDevice.requestAccess(forMediaType: mediaType) { (granted: Bool) in
             let status: NextLevelAuthorizationStatus = (granted == true) ? .authorized : .notAuthorized
-            self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+            self.executeClosureAsyncOnMainQueueIfNecessary {
                 self.delegate?.nextLevel(self, didUpdateAuthorizationStatus: status, forMediaType: mediaType)
-            })
+            }
         }
     }
     
@@ -744,6 +744,7 @@ extension NextLevel {
     
     internal func configureDevices() {
         if self.captureSession != nil {
+        
             self.beginConfiguration()
             
             var shouldConfigureVideo = false
@@ -765,22 +766,33 @@ extension NextLevel {
                 var captureDevice: AVCaptureDevice? = nil
                 
                 if let requestedDevice = self.requestedDevice {
-                    if requestedDevice != self.currentDevice {
-                        captureDevice = requestedDevice
-                    }
+                    captureDevice = requestedDevice
                 } else if let videoDevice = AVCaptureDevice.primaryVideoDevice(forPosition: self.devicePosition.avfoundationType) {
-                    if videoDevice != self.currentDevice {
-                        captureDevice = videoDevice
-                    }
+                    captureDevice = videoDevice
                 }
                 
                 if let device = captureDevice {
-                    self.configureDevice(captureDevice: device, mediaType: AVMediaTypeVideo)
-                    
-                    self.willChangeValue(forKey: "currentDevice")
-                    self.currentDevice = device
-                    self.didChangeValue(forKey: "currentDevice")
-                    self.requestedDevice = nil
+                    if device != self.currentDevice {
+                        self.configureDevice(captureDevice: device, mediaType: AVMediaTypeVideo)
+                        
+                        let changingPosition = device.position != self.currentDevice?.position
+                        if changingPosition == true {
+                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                                self.delegate?.nextLevelDevicePositionWillChange(self)
+                            }
+                        }
+                        
+                        self.willChangeValue(forKey: "currentDevice")
+                        self.currentDevice = device
+                        self.didChangeValue(forKey: "currentDevice")
+                        self.requestedDevice = nil
+                        
+                        if changingPosition == true {
+                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                                self.delegate?.nextLevelDevicePositionDidChange(self)
+                            }
+                        }
+                    }
                 }
             }
 
@@ -1331,7 +1343,7 @@ extension NextLevel {
             guard
                 !device.isAdjustingFocus,
                 !device.isAdjustingExposure
-                else {
+            else {
                     return
             }
             
@@ -1375,9 +1387,9 @@ extension NextLevel {
     }
     
     internal func focusStarted() {
-        self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelWillStartFocus(self)
-        })
+        }
     }
     
     internal func focusEnded() {
@@ -1403,17 +1415,17 @@ extension NextLevel {
                 }
             }
             
-            self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+            self.executeClosureAsyncOnMainQueueIfNecessary {
                 self.delegate?.nextLevelDidStopFocus(self)
-            })
+            }
             
         }
     }
     
     internal func exposureStarted() {
-        self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelWillChangeExposure(self)
-        })
+        }
     }
     
     internal func exposureEnded() {
@@ -1439,22 +1451,22 @@ extension NextLevel {
                 }
             }
 
-            self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+            self.executeClosureAsyncOnMainQueueIfNecessary {
                 self.delegate?.nextLevelDidChangeExposure(self)
-            })
+            }
         }
     }
     
     internal func whiteBalanceStarted() {
-        self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelWillChangeWhiteBalance(self)
-        })
+        }
     }
     
     internal func whiteBalanceEnded() {
-        self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelDidChangeWhiteBalance(self)
-        })
+        }
     }
     
     internal func flashActiveChanged() {
@@ -1478,21 +1490,21 @@ extension NextLevel {
             }
         }
         
-        self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelFlashActiveChanged(self)
-        })
+        }
     }
     
     internal func torchActiveChanged() {
-        self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelTorchActiveChanged(self)
-        })
+        }
     }
     
     internal func flashAndTorchAvailabilityChanged() {
-        self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelFlashAndTorchAvailabilityChanged(self)
-        })
+        }
     }
     
     // mirroring
