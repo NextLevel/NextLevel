@@ -632,16 +632,20 @@ public class NextLevel: NSObject {
     }
     
     deinit {
+        self.delegate = nil
+
         self.removeApplicationObservers()
         self.removeSessionObservers()
         self.removeDeviceObservers()
         
-        self.delegate = nil
+        // TODO self.removeKeyValueObservers() and IO
 
-        // TODO: remove KVO and I/O device
-
-        
         self.previewLayer.session = nil
+            
+        self.currentDevice = nil
+        self.recordingSession = nil
+        self.cicontext = nil
+        
         self.captureSession = nil
     }
 }
@@ -855,22 +859,12 @@ extension NextLevel {
         }
     }
     
-    private func currentInputForMediaType(_ mediaType: String) -> AVCaptureDeviceInput? {
-        if let session = self.captureSession {
-            let inputs = session.inputs as! [AVCaptureDeviceInput]
-            for deviceInput in inputs {
-                if deviceInput.device.hasMediaType(mediaType) {
-                    return deviceInput
-                }
-            }
-        }
-        return nil
-    }
-    
     // inputs
     
     private func configureDevice(captureDevice: AVCaptureDevice, mediaType: String) {
-        if let currentDeviceInput = self.currentInputForMediaType(mediaType) {
+        
+        if let session = captureSession,
+            let currentDeviceInput = AVCaptureDeviceInput.deviceInput(withMediaType: mediaType, captureSession: session) {
             if currentDeviceInput.device == captureDevice {
                 return
             }
@@ -922,7 +916,7 @@ extension NextLevel {
                 return true
             }
         } catch  {
-            print("NextLevel, failure creating input device")
+            print("NextLevel, failure adding input device")
         }
         return false
     }

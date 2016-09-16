@@ -27,6 +27,19 @@ import UIKit
 import Foundation
 import AVFoundation
 
+extension AVCaptureDeviceInput {
+    
+    public class func deviceInput(withMediaType mediaType: String, captureSession: AVCaptureSession) -> AVCaptureDeviceInput? {
+        let inputs = captureSession.inputs as! [AVCaptureDeviceInput]
+        for deviceInput in inputs {
+            if deviceInput.device.hasMediaType(mediaType) {
+                return deviceInput
+            }
+        }
+        return nil
+    }
+    
+}
 
 extension AVCaptureConnection {
     
@@ -48,21 +61,7 @@ extension AVCaptureConnection {
 extension AVCaptureDevice {
 
     // MARK: additions
-    
-    public class func primaryVideoDevice(forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
-        let deviceTypes: [AVCaptureDeviceType] = [.builtInDuoCamera, .builtInWideAngleCamera]
-        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
-            // prioritize duo camera systems before wide angle
-            for device in discoverySession.devices {
-                if (device.deviceType == .builtInDuoCamera) {
-                    return device
-                }
-            }
-            return discoverySession.devices.first
-        }
-        return nil
-    }
-    
+
     public class func captureDevice(withType deviceType: AVCaptureDeviceType, forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
         let deviceTypes: [AVCaptureDeviceType] = [deviceType]
         if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
@@ -82,6 +81,20 @@ extension AVCaptureDevice {
     public class func telephotoVideoDevice(forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
         let deviceTypes: [AVCaptureDeviceType] = [.builtInTelephotoCamera]
         if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
+            return discoverySession.devices.first
+        }
+        return nil
+    }
+    
+    public class func primaryVideoDevice(forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
+        let deviceTypes: [AVCaptureDeviceType] = [.builtInDuoCamera, .builtInWideAngleCamera]
+        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
+            // prioritize duo camera systems before wide angle
+            for device in discoverySession.devices {
+                if (device.deviceType == .builtInDuoCamera) {
+                    return device
+                }
+            }
             return discoverySession.devices.first
         }
         return nil
