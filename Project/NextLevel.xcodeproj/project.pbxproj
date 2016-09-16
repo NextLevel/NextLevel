@@ -10,6 +10,13 @@
 		060D50EF1D5BC77E00247AD0 /* NextLevelSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50EE1D5BC77E00247AD0 /* NextLevelSession.swift */; };
 		060D50F11D5BF09F00247AD0 /* NextLevelConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F01D5BF09F00247AD0 /* NextLevelConfiguration.swift */; };
 		060D50F41D5C4D5A00247AD0 /* NextLevelSessionClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F31D5C4D5A00247AD0 /* NextLevelSessionClip.swift */; };
+		06250A9D1D8C57A60008C903 /* NextLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AECC871AC38B3700EFCD03 /* NextLevel.swift */; };
+		06250A9E1D8C57AA0008C903 /* NextLevelConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F01D5BF09F00247AD0 /* NextLevelConfiguration.swift */; };
+		06250A9F1D8C57AD0008C903 /* NextLevelSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50EE1D5BC77E00247AD0 /* NextLevelSession.swift */; };
+		06250AA01D8C57AF0008C903 /* NextLevelSessionClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F31D5C4D5A00247AD0 /* NextLevelSessionClip.swift */; };
+		06250AA11D8C57B20008C903 /* NextLevel+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0699B4BC1D7942D4005958BC /* NextLevel+Additions.swift */; };
+		06250AA21D8C57B50008C903 /* NextLevel+Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BA97681D7FFDF200CD20D7 /* NextLevel+Metadata.swift */; };
+		06250AA31D8C57B70008C903 /* NextLevel+AVFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C86E381D81DD5800A43411 /* NextLevel+AVFoundation.swift */; };
 		0699B4BD1D7942D4005958BC /* NextLevel+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0699B4BC1D7942D4005958BC /* NextLevel+Additions.swift */; };
 		06AECC651AC3830800EFCD03 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AECC641AC3830800EFCD03 /* AppDelegate.swift */; };
 		06AECC671AC3830800EFCD03 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AECC661AC3830800EFCD03 /* CameraViewController.swift */; };
@@ -256,6 +263,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06250AA01D8C57AF0008C903 /* NextLevelSessionClip.swift in Sources */,
+				06250A9E1D8C57AA0008C903 /* NextLevelConfiguration.swift in Sources */,
+				06250AA11D8C57B20008C903 /* NextLevel+Additions.swift in Sources */,
+				06250A9F1D8C57AD0008C903 /* NextLevelSession.swift in Sources */,
+				06250AA21D8C57B50008C903 /* NextLevel+Metadata.swift in Sources */,
+				06250A9D1D8C57A60008C903 /* NextLevel.swift in Sources */,
+				06250AA31D8C57B70008C903 /* NextLevel+AVFoundation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +485,7 @@
 				06C86E561D8208D900A43411 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
