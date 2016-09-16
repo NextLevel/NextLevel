@@ -36,18 +36,18 @@ class CameraViewController: UIViewController {
     
     // MARK: - properties
     
-    private var previewView: UIView?
-    private var gestureView: UIView?
-    private var controlDockView: UIView?
+    internal var previewView: UIView?
+    internal var gestureView: UIView?
+    internal var controlDockView: UIView?
 
-    private var recordButton: UIButton?
-    private var flipButton: UIButton?
-    private var flashButton: UIButton?
-    private var saveButton: UIButton?
+    internal var recordButton: UIButton?
+    internal var flipButton: UIButton?
+    internal var flashButton: UIButton?
+    internal var saveButton: UIButton?
 
-    private var focusTapGestureRecognizer: UITapGestureRecognizer?
-    private var zoomPanGestureRecognizer: UIPanGestureRecognizer?
-    private var flipDoubleTapGestureRecognizer: UITapGestureRecognizer?
+    internal var focusTapGestureRecognizer: UITapGestureRecognizer?
+    internal var zoomPanGestureRecognizer: UIPanGestureRecognizer?
+    internal var flipDoubleTapGestureRecognizer: UITapGestureRecognizer?
     
     // MARK: - object lifecycle
     
@@ -119,6 +119,20 @@ class CameraViewController: UIViewController {
         }
         
         // gestures
+        self.gestureView = UIView(frame: screenBounds)
+        if let gestureView = self.gestureView, let controlDockView = self.controlDockView {
+            gestureView.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
+            gestureView.frame.size.height -= controlDockView.frame.height
+            gestureView.backgroundColor = .clear
+            self.view.addSubview(gestureView)
+
+            self.focusTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleFocusTapGestureRecognizer(_:)))
+            if let focusTapGestureRecognizer = self.focusTapGestureRecognizer {
+                focusTapGestureRecognizer.delegate = self
+                focusTapGestureRecognizer.numberOfTapsRequired = 1
+                gestureView.addGestureRecognizer(focusTapGestureRecognizer)
+            }
+        }
         
     }
 
@@ -162,13 +176,27 @@ extension CameraViewController {
     
 }
 
-// MARK: - UIGestureRecognizer
+// MARK: - UIGestureRecognizerDelegate
 
-extension CameraViewController {
+extension CameraViewController: UIGestureRecognizerDelegate {
 
+    internal func handleLongPressGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
+        
+    }
+    
+    internal func handleFocusTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
+        let tapPoint = gestureRecognizer.location(in: self.previewView)
+
+        // TODO: create focus view and animate
+        
+        let previewLayer = NextLevel.sharedInstance.previewLayer
+        let adjustedPoint = previewLayer.captureDevicePointOfInterest(for: tapPoint)
+        NextLevel.sharedInstance.focusExposeAndAdjustWhiteBalance(atAdjustedPoint: adjustedPoint)
+    }
+    
 }
 
-// MARK: - NextLevel
+// MARK: - NextLevelDelegate
 
 extension CameraViewController: NextLevelDelegate {
 
