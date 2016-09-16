@@ -92,6 +92,19 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
     case telephotoCamera
     case duoCamera
     
+    var avfoundationType: AVCaptureDeviceType {
+        switch self {
+        case .microphone:
+            return .builtInMicrophone
+        case .telephotoCamera:
+            return .builtInTelephotoCamera
+        case .wideAngleCamera:
+            return .builtInWideAngleCamera
+        case .duoCamera:
+            return .builtInDuoCamera
+        }
+    }
+    
     public var description: String {
         get {
             switch self {
@@ -362,16 +375,19 @@ public enum NextLevelError: Error, CustomStringConvertible {
     case unknown
     case started
     case outputFileExists
+    case deviceNotAvailable
     
     public var description: String {
         get {
             switch self {
-                case .unknown:
-                    return "Unknown"
-                case .started:
-                    return "NextLevel already started"
-                case .outputFileExists:
-                    return "Output file exists"
+            case .unknown:
+                return "Unknown"
+            case .started:
+                return "NextLevel already started"
+            case .outputFileExists:
+                return "Output file exists"
+            case .deviceNotAvailable:
+                return "Device Not Available"
             }
         }
     }
@@ -566,6 +582,7 @@ public class NextLevel: NSObject {
     internal var photoOutput: AVCapturePhotoOutput?
     
     internal var currentDevice: AVCaptureDevice?
+    internal var requestedDevice: AVCaptureDevice?
 
     internal var recording: Bool
     internal var recordingSession: NextLevelSession?
@@ -745,14 +762,25 @@ extension NextLevel {
             }
             
             if shouldConfigureVideo == true {
-                if let videoDevice = AVCaptureDevice.primaryVideoDevice(forPosition: self.devicePosition.avfoundationType) {
-                    if videoDevice != self.currentDevice {
-                        self.configureDevice(captureDevice: videoDevice, mediaType: AVMediaTypeVideo)
-                        
-                        self.willChangeValue(forKey: "currentDevice")
-                        self.currentDevice = videoDevice
-                        self.didChangeValue(forKey: "currentDevice")
+                var captureDevice: AVCaptureDevice? = nil
+                
+                if let requestedDevice = self.requestedDevice {
+                    if requestedDevice != self.currentDevice {
+                        captureDevice = requestedDevice
                     }
+                } else if let videoDevice = AVCaptureDevice.primaryVideoDevice(forPosition: self.devicePosition.avfoundationType) {
+                    if videoDevice != self.currentDevice {
+                        captureDevice = videoDevice
+                    }
+                }
+                
+                if let device = captureDevice {
+                    self.configureDevice(captureDevice: device, mediaType: AVMediaTypeVideo)
+                    
+                    self.willChangeValue(forKey: "currentDevice")
+                    self.currentDevice = device
+                    self.didChangeValue(forKey: "currentDevice")
+                    self.requestedDevice = nil
                 }
             }
 
@@ -1612,7 +1640,13 @@ extension NextLevel {
     }
     
     public func changeCaptureDeviceIfAvailable(captureDevice: NextLevelDeviceType) throws {
-        // TODO
+        let deviceForUse = AVCaptureDevice.captureDevice(withType: captureDevice.avfoundationType, forPosition: .back)
+        if deviceForUse == nil {
+            throw NextLevelError.deviceNotAvailable
+        } else {
+            self.requestedDevice = deviceForUse
+            self.configureDevices()
+        }
     }
     
     internal func updateVideoOrientation() {

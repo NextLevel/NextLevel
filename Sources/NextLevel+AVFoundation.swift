@@ -63,6 +63,14 @@ extension AVCaptureDevice {
         return nil
     }
     
+    public class func captureDevice(withType deviceType: AVCaptureDeviceType, forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
+        let deviceTypes: [AVCaptureDeviceType] = [deviceType]
+        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
+            return discoverySession.devices.first
+        }
+        return nil
+    }
+    
     public class func wideAngleVideoDevice(forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
         let deviceTypes: [AVCaptureDeviceType] = [.builtInWideAngleCamera]
         if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
@@ -77,6 +85,10 @@ extension AVCaptureDevice {
             return discoverySession.devices.first
         }
         return nil
+    }
+    
+    public class func videoDevice() -> AVCaptureDevice? {
+        return AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
     }
     
     public class func audioDevice() -> AVCaptureDevice? {
