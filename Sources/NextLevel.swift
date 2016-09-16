@@ -891,7 +891,7 @@ extension NextLevel {
         }
         
         if let session = self.captureSession {
-            if let currentDeviceInput = self.currentInputForMediaType(mediaType) {
+            if let currentDeviceInput = AVCaptureDeviceInput.deviceInput(withMediaType: mediaType, captureSession: session) {
                 session.removeInput(currentDeviceInput)
                 if currentDeviceInput.device.hasMediaType(AVMediaTypeVideo) {
                     self.removeKeyValueObservers()
