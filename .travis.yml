@@ -7,4 +7,4 @@ env:
   - IOS_SDK=iphonesimulator10.0
 script:
   - xcodebuild -showsdks
-  - xcodebuild -workspace NextLevel.xcworkspace -scheme 'Debug - iOS' -sdk $IOS_SDK build analyze
+  - xcodebuild -workspace NextLevel.xcworkspace -scheme 'Debug' -sdk $IOS_SDK build analyze
