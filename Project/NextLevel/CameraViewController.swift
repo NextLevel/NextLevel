@@ -297,6 +297,10 @@ extension CameraViewController: NextLevelDelegate {
         
     }
     
+    func nextLevel(_ nextLevel: NextLevel, didSkipAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
+        
+    }
+    
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession) {
         
     }

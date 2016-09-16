@@ -452,6 +452,7 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevel(_ nextLevel: NextLevel, didAppendVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didSkipVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didSkipAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession)
     
@@ -568,6 +569,7 @@ public class NextLevel: NSObject {
 
     internal var recording: Bool
     internal var recordingSession: NextLevelSession?
+    internal var lastVideoFrameTimeInterval: TimeInterval
     
     internal var cicontext: CIContext?
     internal var currentError: Error?
@@ -597,6 +599,7 @@ public class NextLevel: NSObject {
         self.videoStabilizationMode = .standard
         
         self.recording = false
+        self.lastVideoFrameTimeInterval = 0
         
         self.automaticallyConfiguresApplicationAudioSession = true
         self.automaticallyUpdatesDeviceOrientation = false
@@ -1740,8 +1743,9 @@ extension NextLevel {
     
     public func record() {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            if let _ = self.captureSession {
-
+            self.recording = true
+            if let _ = self.recordingSession {
+                self.beginRecordingNewClipIfNecessary()
             }
         }
     }
@@ -1758,6 +1762,19 @@ extension NextLevel {
                 if session.isClipReady {
                     // TODO
                 }
+            }
+        }
+    }
+    
+    // private
+    
+    internal func beginRecordingNewClipIfNecessary() {
+        if let session = self.recordingSession {
+            if session.currentClipStarted == false {
+                session.beginClip()
+            }
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                self.delegate?.nextLevel(self, didStartRecordingClipInSession: session)
             }
         }
     }
@@ -1813,19 +1830,113 @@ extension NextLevel {
     }
     
     internal func handleVideoOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
-        // TODO NextLevelSession init
+        if let session = self.recordingSession {
+            guard
+                session.videoSetupFailed == false
+            else {
+                return
+            }
         
-        // TODO if setup and ready append frame to session
-        
-        // TODO tell delegate we appended or skipped
+            if session.videoReady == false {
+                if let settings = self.videoConfiguration.avcaptureDictionary(withSampleBuffer: sampleBuffer),
+                        let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+                    do {
+                        try session.setupVideo(withSettings: settings, formatDescription: formatDescription)
+                    } catch {
+                        print("NextLevel, could not setup video session")
+                    }
+                }
+                
+                self.executeClosureAsyncOnMainQueueIfNecessary {
+                    self.delegate?.nextLevel(self, didSetupVideoInSession: session)
+                }
+            }
+            
+            if session.audioReady || session.audioSetupFailed {
+                self.beginRecordingNewClipIfNecessary()
+                
+                if self.recording && session.currentClipReady {
+                    
+                    let NextLevelMinTimeBetweenFrames = 0.004
+                    let sleepDuration = NextLevelMinTimeBetweenFrames - (CACurrentMediaTime() - self.lastVideoFrameTimeInterval)
+                    if sleepDuration > 0 {
+                        Thread.sleep(forTimeInterval: sleepDuration)
+                    }
+                    
+                    if let device = self.currentDevice {
+                        let duration = device.activeVideoMaxFrameDuration
+                        session.appendVideo(withSampleBuffer: sampleBuffer, duration: duration, completionHandler: { (success: Bool)-> Void in
+                            self.lastVideoFrameTimeInterval = CACurrentMediaTime()
+                            if success == true {
+                                
+                                // TODO
+                                
+                            } else {
+                                self.executeClosureAsyncOnMainQueueIfNecessary {
+                                    self.delegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBuffer, inSession: session)
+                                }
+                            }
+                        })
+                    }
+
+                    if session.currentClipHasVideo == false && session.currentClipHasAudio == false {
+                        if let audioBuffer = session.lastAudioFrame {
+                            let lastAudioEndTime = CMTimeAdd(CMSampleBufferGetPresentationTimeStamp(audioBuffer), CMSampleBufferGetDuration(audioBuffer))
+                            let videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+                            
+                            if lastAudioEndTime > videoStartTime {
+                                self.handleAudioOutput(sampleBuffer: audioBuffer, session: session)
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
     }
     
     internal func handleAudioOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
-        // TODO NextLevelSession init
-        
-        // TODO if setup and ready append frame to session
-        
-        // TODO tell delegate we appended or skipped
+        if let session = self.recordingSession {
+            guard
+                session.audioSetupFailed == false
+            else {
+                return
+            }
+            
+            if session.audioReady == false {
+                if let settings = self.audioConfiguration.avcaptureDictionary(withSampleBuffer: sampleBuffer),
+                        let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+                    do {
+                        try session.setupAudio(withSettings: settings, formatDescription: formatDescription)
+                    } catch {
+                        print("NextLevel, could not setup audio session")
+                    }
+                }
+                
+                self.executeClosureAsyncOnMainQueueIfNecessary {
+                    self.delegate?.nextLevel(self, didSetupAudioInSession: session)
+                }
+            }
+            
+            if session.videoReady || session.videoSetupFailed {
+                self.beginRecordingNewClipIfNecessary()
+                
+                if self.recording && session.currentClipReady && session.currentClipHasVideo {
+                    session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool)-> Void in
+                        if success {
+                            
+                            // TODO
+                            
+                        } else {
+                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                                self.delegate?.nextLevel(self, didSkipAudioSampleBuffer: sampleBuffer, inSession: session)
+                            }
+                        }
+                    })
+                }
+                
+            }
+        }
     }
     
 }

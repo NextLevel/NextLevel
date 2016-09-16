@@ -97,12 +97,25 @@ public class NextLevelSession: NSObject {
         get {
             return self.sessionDuration
         }
+
     }
     
+    public var isActive: Bool {
+        get {
+            return self.active
+        }
+    }
+
     public var clipsDuration: CMTime {
         get {
             // TODO
             return kCMTimeInvalid
+        }
+    }
+
+    public var isClipReady: Bool {
+        get {
+            return self.ready
         }
     }
 
@@ -111,19 +124,20 @@ public class NextLevelSession: NSObject {
             return self.sessionCurrentClipDuration
         }
     }
+
+    public var currentClipReady: Bool = false // TODO
+    public var currentClipStarted: Bool = false
+    public var currentClipHasAudio: Bool = false
+    public var currentClipHasVideo: Bool = false
     
-    public var isActive: Bool {
-        get {
-            return self.active
-        }
-    }
+    public var videoReady: Bool = false
+    public var audioReady: Bool = false
+    public var videoSetupFailed: Bool = false
+    public var audioSetupFailed: Bool = false
     
-    public var isClipReady: Bool {
-        get {
-            return self.ready
-        }
-    }
-    
+    public var lastVideoFrame: CMSampleBuffer?
+    public var lastAudioFrame: CMSampleBuffer?
+        
     public var fullSessionAsset: AVAsset? {
         get {
             // TODO
@@ -147,7 +161,6 @@ public class NextLevelSession: NSObject {
     
     private var timeOffset: CMTime
     private var lastAudioTimestamp: CMTime
-    
     private var lastVideoTimestamp: CMTime
     
     private var sessionCurrentClipDuration: CMTime
@@ -182,7 +195,7 @@ public class NextLevelSession: NSObject {
         
         self.sessionCurrentClipDuration = kCMTimeZero
         self.sessionCurrentClipStartTimestamp = kCMTimeInvalid
-                
+
         super.init()
     }
     
@@ -191,7 +204,33 @@ public class NextLevelSession: NSObject {
     
     // MARK: - functions
     
+    // setup
+    
+    public func setupVideo(withSettings settings: [String:Any], formatDescription: CMFormatDescription) throws {
+        
+    }
+    
+    public func setupAudio(withSettings settings: [String:Any], formatDescription: CMFormatDescription) throws {
+        
+    }
+    
     // recording
+    
+    typealias NextLevelSessionCompletionHandler = (Bool)-> Void
+    
+    public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, duration: CMTime, completionHandler: NextLevelSessionCompletionHandler) {
+
+    }
+    
+    public func appendAudio(withSampleBuffer sampleBuffer: CMSampleBuffer, completionHandler: NextLevelSessionCompletionHandler) {
+        
+    }
+    
+    public func reset() {
+        
+    }
+    
+    // clip creation
     
     public func beginClip() {
         
@@ -223,9 +262,6 @@ public class NextLevelSession: NSObject {
     }
 
     public func removeLastClip() {
-    }
-    
-    public func cancelSession(withCompletionHandler completionHandler: ()-> Void) {
     }
     
     // finalize
