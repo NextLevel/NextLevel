@@ -68,12 +68,12 @@ class CameraViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.view.backgroundColor = UIColor.black
         self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let screenBounds = UIScreen.main.bounds
-        
+
         // preview
         self.previewView = UIView(frame: screenBounds)
         if let previewView = self.previewView {
@@ -134,6 +134,12 @@ class CameraViewController: UIViewController {
             }
         }
         
+        // Configure NextLevel by modifying the configuration ivars
+        //NextLevel.sharedInstance.videoConfiguration
+        //NextLevel.sharedInstance.audioConfiguration
+        
+        // setup a new recording session
+        NextLevel.sharedInstance.session = NextLevelSession.session()
     }
 
     override func viewWillAppear(_ animated: Bool) {
