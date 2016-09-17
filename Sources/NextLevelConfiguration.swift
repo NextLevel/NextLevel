@@ -97,7 +97,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
         if let options = self.options {
             return options
         } else {
-            var config: [String: Any] = [AVVideoAverageBitRateKey:self.bitRate]
+            var config: [String: Any] = [:]
             
             if let dimensions = self.dimensions {
                 config[AVVideoWidthKey] = dimensions.width
@@ -117,6 +117,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             }
             
             var compressionDict: [String:Any] = [:]
+            compressionDict[AVVideoAverageBitRateKey] = self.bitRate
             compressionDict[AVVideoAllowFrameReorderingKey] = false
             compressionDict[AVVideoExpectedSourceFrameRateKey] = 30
             if let profileLevel = self.profileLevel {
@@ -125,6 +126,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             if let maxFrameRate = self.maxFrameRate {
                 compressionDict[AVVideoMaxKeyFrameIntervalKey] = maxFrameRate
             }
+            
             config[AVVideoCompressionPropertiesKey] = compressionDict
 
             return config
