@@ -135,17 +135,17 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
 
 // MARK: - AudioConfiguration
 
-let NextLevelAudioConfigurationDefaultBitRate: UInt64 = 128000
+let NextLevelAudioConfigurationDefaultBitRate: Int = 128000
 let NextLevelAudioConfigurationDefaultSampleRate: Float64 = 44100
-let NextLevelAudioConfigurationDefaultChannelsCount: UInt32 = 2
+let NextLevelAudioConfigurationDefaultChannelsCount: Int = 2
 
 public class NextLevelAudioConfiguration: NextLevelConfiguration {
     
-    public var bitRate: UInt64          // AVEncoderBitRateKey
+    public var bitRate: Int             // AVEncoderBitRateKey
     
     public var sampleRate: Float64?     // AVSampleRateKey
     
-    public var channelsCount: UInt32?   // AVNumberOfChannelsKey
+    public var channelsCount: Int?       // AVNumberOfChannelsKey
     
     public var format: AudioFormatID    // AVFormatIDKey
 
@@ -163,7 +163,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
         if let options = self.options {
             return options
         } else {
-            var config: [String : Any] = [AVEncoderBitRateKey:self.bitRate]
+            var config: [String : Any] = [AVEncoderBitRateKey : self.bitRate]
             
             if let buffer = sampleBuffer {
                 if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(buffer) {
@@ -171,7 +171,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
                         // loading user provided settings after buffer use
                     } else if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
                         self.sampleRate = streamBasicDescription.pointee.mSampleRate
-                        self.channelsCount = streamBasicDescription.pointee.mChannelsPerFrame
+                        self.channelsCount = Int(streamBasicDescription.pointee.mChannelsPerFrame)
                     }
                     
                     var layoutSize: Int = 0
@@ -194,7 +194,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
                 config[AVNumberOfChannelsKey] = NextLevelAudioConfigurationDefaultChannelsCount
             }
             
-            config[AVFormatIDKey] = self.format
+            config[AVFormatIDKey] = Int(self.format)
 
             return config
         }

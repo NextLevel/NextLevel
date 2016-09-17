@@ -187,7 +187,7 @@ public class NextLevelSessionClip: NSObject {
     internal var clipAsset: AVAsset?
     internal var clipThumbnailImage: UIImage?
     internal var clipLastFrameImage: UIImage?
-    internal var clipInfoDict: [String:Any]?
+    internal var clipInfoDict: [String : Any]?
     
     // MARK: - object lifecycle
     
@@ -196,16 +196,16 @@ public class NextLevelSessionClip: NSObject {
         super.init()
     }
     
-    convenience init(url: URL?, infoDict: [String:Any]?) {
+    convenience init(url: URL?, infoDict: [String : Any]?) {
         self.init()
         self.url = url
         self.clipInfoDict = infoDict
     }
     
-    convenience init(dictionaryRep: [String:Any]?, directory: NextLevelDirectoryType) {
+    convenience init(dictionaryRep: [String : Any]?, directory: NextLevelDirectoryType) {
         if let clipDict = dictionaryRep, let filename = clipDict[NextLevelClipFilenameKey] as? String {
             let url: URL = NextLevelSessionClip.clipURL(withFilename: filename, directory: directory)
-            let infoDict = clipDict[NextLevelClipInfoDictKey] as? [String:Any]
+            let infoDict = clipDict[NextLevelClipInfoDictKey] as? [String : Any]
             self.init(url: url, infoDict: infoDict)
         } else {
             self.init()
@@ -228,7 +228,7 @@ public class NextLevelSessionClip: NSObject {
         }
     }
     
-    public func dictionaryRep() -> [String:Any]? {
+    public func dictionaryRep() -> [String : Any]? {
         if let infoDict = self.infoDict, let url = self.url {
             return [NextLevelClipFilenameKey:url.lastPathComponent,
                     NextLevelClipInfoDictKey:infoDict]

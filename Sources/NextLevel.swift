@@ -473,7 +473,7 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession)
     
     // video frame photo
-    func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String:Any]?)
+    func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String : Any]?)
     
     // photo
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
@@ -855,9 +855,9 @@ extension NextLevel {
                         print("NextLevel, could not set preset on session")
                     }
                 }
-                
-                let _ = self.addVideoOutput()
+
                 let _ = self.addAudioOuput()
+                let _ = self.addVideoOutput()
                 break
             case .photo:
                 if session.sessionPreset != self.photoConfiguration.preset {

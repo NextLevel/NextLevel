@@ -341,7 +341,7 @@ extension CameraViewController: NextLevelDelegate {
     
     // video frame photo
 
-    func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String:Any]?) {
+    func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String : Any]?) {
         
     }
     
@@ -352,10 +352,10 @@ extension CameraViewController: NextLevelDelegate {
     func nextLevel(_ nextLevel: NextLevel, didCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration) {
     }
     
-    func nextLevel(_ nextLevel: NextLevel, didProcessPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration) {
+    func nextLevel(_ nextLevel: NextLevel, didProcessPhotoCaptureWith photoDictionary: [String : Any]?, photoConfiguration: NextLevelPhotoConfiguration) {
     }
     
-    func nextLevel(_ nextLevel: NextLevel, didProcessRawPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration) {
+    func nextLevel(_ nextLevel: NextLevel, didProcessRawPhotoCaptureWith photoDictionary: [String : Any]?, photoConfiguration: NextLevelPhotoConfiguration) {
     }
 
     func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel) {
