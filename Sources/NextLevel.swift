@@ -952,7 +952,6 @@ extension NextLevel {
         }
 
         if let session = self.captureSession, let videoOutput = self.videoOutput {
-            
             if !session.outputs.contains(where: { (videoOutput) -> Bool in
                 return true
             }) {
@@ -1917,7 +1916,6 @@ extension NextLevel {
             if session.isVideoReady == false {
                 if let settings = self.videoConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
                         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
-
                     if !session.setupVideo(withSettings: settings, transform: self.videoConfiguration.transform, formatDescription: formatDescription) {
                         print("NextLevel, could not setup video session")
                     }
