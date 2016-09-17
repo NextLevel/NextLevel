@@ -1801,7 +1801,29 @@ extension NextLevel {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let session = self.recordingSession {
                 if session.isClipReady {
-                    // TODO
+                    
+                    session.endClip(completionHandler: { (sessionClip: NextLevelSessionClip?) in
+                        if let clip = sessionClip {
+                            self.delegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
+                            if let handler = completionHandler {
+                                handler()
+                            }
+                        } else {
+                            // TODO propagate error
+                            if let handler = completionHandler {
+                                handler()
+                            }
+                        }
+                    })
+                    
+                } else {
+                    if let handler = completionHandler {
+                        self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: handler)
+                    }
+                }
+            } else {
+                if let handler = completionHandler {
+                    self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: handler)
                 }
             }
         }
