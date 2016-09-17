@@ -86,6 +86,18 @@ public class NextLevelSession: NSObject {
             return self.sessionDate
         }
     }
+    
+    public var isVideoReady: Bool {
+        get {
+            return self.videoReady
+        }
+    }
+    
+    public var isAudioReady: Bool {
+        get {
+            return self.audioReady
+        }
+    }
 
     public var clips: [NextLevelSessionClip] {
         get {
@@ -99,27 +111,14 @@ public class NextLevelSession: NSObject {
         }
 
     }
-    
-    public var isActive: Bool {
-        get {
-            return self.active
-        }
-    }
-
-    public var clipsDuration: CMTime {
-        get {
-            // TODO
-            return kCMTimeInvalid
-        }
-    }
 
     public var isClipReady: Bool {
         get {
-            return self.ready
+            return self.clipReady
         }
     }
 
-    public var currentClipDuration: CMTime {
+    public var clipDuration: CMTime {
         get {
             return self.sessionCurrentClipDuration
         }
@@ -129,11 +128,6 @@ public class NextLevelSession: NSObject {
     public var currentClipStarted: Bool = false
     public var currentClipHasAudio: Bool = false
     public var currentClipHasVideo: Bool = false
-    
-    public var videoReady: Bool = false
-    public var audioReady: Bool = false
-    public var videoSetupFailed: Bool = false
-    public var audioSetupFailed: Bool = false
     
     public var lastVideoFrame: CMSampleBuffer?
     public var lastAudioFrame: CMSampleBuffer?
@@ -152,13 +146,17 @@ public class NextLevelSession: NSObject {
     private var sessionDate: Date
     private var sessionDuration: CMTime
     
-    private var active: Bool
-    private var ready: Bool
+    private var videoReady: Bool
+    private var audioReady: Bool
     
     private var assetWriter: AVAssetWriter?
     private var videoInput: AVAssetWriterInput?
     private var audioInput: AVAssetWriterInput?
     
+    private var pixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
+    
+    private var clipReady: Bool
+
     private var timeOffset: CMTime
     private var lastAudioTimestamp: CMTime
     private var lastVideoTimestamp: CMTime
@@ -166,17 +164,10 @@ public class NextLevelSession: NSObject {
     private var sessionCurrentClipDuration: CMTime
     private var sessionCurrentClipStartTimestamp: CMTime
     
-    private var pixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
-    
     // MARK: - class functions
     
     class func session() -> NextLevelSession {
         return NextLevelSession()
-    }
-    
-    class func session(with dictRepresentation: [String: Any]) -> NextLevelSession {
-        let session = NextLevelSession()
-        return session
     }
     
     // MARK: - object lifecycle
@@ -186,8 +177,13 @@ public class NextLevelSession: NSObject {
         self.sessionClips = []
         self.sessionDate = Date()
         self.sessionDuration = kCMTimeZero
-        self.active = false
-        self.ready = false
+        
+        self.videoReady = false
+        self.audioReady = false
+
+        //
+
+        self.clipReady = false
         
         self.timeOffset = kCMTimeInvalid
         self.lastAudioTimestamp = kCMTimeInvalid
@@ -206,12 +202,12 @@ public class NextLevelSession: NSObject {
     
     // setup
     
-    public func setupVideo(withSettings settings: [String:Any], formatDescription: CMFormatDescription) throws {
-        
+    public func setupVideo(withSettings settings: [String:Any], transform: CGAffineTransform, formatDescription: CMFormatDescription) -> Bool {
+        return self.videoInput != nil
     }
     
-    public func setupAudio(withSettings settings: [String:Any], formatDescription: CMFormatDescription) throws {
-        
+    public func setupAudio(withSettings settings: [String:Any], formatDescription: CMFormatDescription) -> Bool {
+        return self.audioInput != nil
     }
     
     // recording

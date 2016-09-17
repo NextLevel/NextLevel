@@ -202,8 +202,8 @@ public class NextLevelSessionClip: NSObject {
         self.clipInfoDict = infoDict
     }
     
-    convenience init(dictRepresentation: [String:Any]?, directory: NextLevelDirectoryType) {
-        if let clipDict = dictRepresentation, let filename = clipDict[NextLevelClipFilenameKey] as? String {
+    convenience init(dictionaryRep: [String:Any]?, directory: NextLevelDirectoryType) {
+        if let clipDict = dictionaryRep, let filename = clipDict[NextLevelClipFilenameKey] as? String {
             let url: URL = NextLevelSessionClip.clipURL(withFilename: filename, directory: directory)
             let infoDict = clipDict[NextLevelClipInfoDictKey] as? [String:Any]
             self.init(url: url, infoDict: infoDict)
@@ -228,7 +228,7 @@ public class NextLevelSessionClip: NSObject {
         }
     }
     
-    public func dictRepresentation() -> [String:Any]? {
+    public func dictionaryRep() -> [String:Any]? {
         if let infoDict = self.infoDict, let url = self.url {
             return [NextLevelClipFilenameKey:url.lastPathComponent,
                     NextLevelClipInfoDictKey:infoDict]

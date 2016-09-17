@@ -1894,18 +1894,12 @@ extension NextLevel {
     
     internal func handleVideoOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         if let session = self.recordingSession {
-            guard
-                session.videoSetupFailed == false
-            else {
-                return
-            }
         
-            if session.videoReady == false {
+            if session.isVideoReady == false {
                 if let settings = self.videoConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
                         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
-                    do {
-                        try session.setupVideo(withSettings: settings, formatDescription: formatDescription)
-                    } catch {
+
+                    if !session.setupVideo(withSettings: settings, transform: self.videoConfiguration.transform, formatDescription: formatDescription) {
                         print("NextLevel, could not setup video session")
                     }
                 }
@@ -1915,7 +1909,7 @@ extension NextLevel {
                 }
             }
             
-            if session.audioReady || session.audioSetupFailed {
+            if session.isAudioReady {
                 self.beginRecordingNewClipIfNecessary()
                 
                 if self.recording && session.currentClipReady {
@@ -1961,18 +1955,11 @@ extension NextLevel {
     
     internal func handleAudioOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         if let session = self.recordingSession {
-            guard
-                session.audioSetupFailed == false
-            else {
-                return
-            }
             
-            if session.audioReady == false {
+            if session.isAudioReady == false {
                 if let settings = self.audioConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
                         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
-                    do {
-                        try session.setupAudio(withSettings: settings, formatDescription: formatDescription)
-                    } catch {
+                    if !session.setupAudio(withSettings: settings, formatDescription: formatDescription) {
                         print("NextLevel, could not setup audio session")
                     }
                 }
@@ -1982,7 +1969,7 @@ extension NextLevel {
                 }
             }
             
-            if session.videoReady || session.videoSetupFailed {
+            if session.isVideoReady {
                 self.beginRecordingNewClipIfNecessary()
                 
                 if self.recording && session.currentClipReady && session.currentClipHasVideo {
