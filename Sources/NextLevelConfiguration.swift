@@ -46,7 +46,7 @@ public class NextLevelConfiguration: NSObject {
     
     // MARK: func
     
-    public func avcaptureDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String: Any]? {
+    public func avcaptureSettingsDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String: Any]? {
         if let options = self.options {
             return options
         } else {
@@ -57,13 +57,15 @@ public class NextLevelConfiguration: NSObject {
 
 // MARK: - VideoConfiguration
 
+let NextLevelVideoConfigurationDefaultBitRate: UInt64 = 2000000
+
 public class NextLevelVideoConfiguration: NextLevelConfiguration {
 
     public var bitRate: UInt64                      // AVVideoAverageBitRateKey
     
     public var dimensions: CGSize?                  // AVVideoWidthKey, AVVideoHeightKey
     
-    public var affineTransform: CGAffineTransform?
+    public var transform: CGAffineTransform
     
     public var codec: String                        // AVVideoCodecKey
     
@@ -82,8 +84,8 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     // MARK: - object lifecycle
     
     override init() {
-        self.bitRate = 2000000
-        self.affineTransform = CGAffineTransform.identity
+        self.bitRate = NextLevelVideoConfigurationDefaultBitRate
+        self.transform = CGAffineTransform.identity
         self.codec = AVVideoCodecH264
         self.scalingMode = AVVideoScalingModeResizeAspectFill
         super.init()
@@ -91,7 +93,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     
     // MARK: - func
     
-    override public func avcaptureDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String : Any]? {
+    override public func avcaptureSettingsDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String : Any]? {
         if let options = self.options {
             return options
         } else {
@@ -156,7 +158,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
 
     // MARK: funcs
     
-    override public func avcaptureDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String: Any]? {
+    override public func avcaptureSettingsDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String: Any]? {
         if let options = self.options {
             return options
         } else {

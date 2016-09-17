@@ -1901,7 +1901,7 @@ extension NextLevel {
             }
         
             if session.videoReady == false {
-                if let settings = self.videoConfiguration.avcaptureDictionary(withSampleBuffer: sampleBuffer),
+                if let settings = self.videoConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
                         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                     do {
                         try session.setupVideo(withSettings: settings, formatDescription: formatDescription)
@@ -1968,7 +1968,7 @@ extension NextLevel {
             }
             
             if session.audioReady == false {
-                if let settings = self.audioConfiguration.avcaptureDictionary(withSampleBuffer: sampleBuffer),
+                if let settings = self.audioConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
                         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                     do {
                         try session.setupAudio(withSettings: settings, formatDescription: formatDescription)
