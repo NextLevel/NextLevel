@@ -540,6 +540,25 @@ public class NextLevel: NSObject {
         }
     }
     
+    // recording session
+    
+    public var session: NextLevelSession? {
+        get {
+            if let session = self.recordingSession {
+                return session
+            }
+            return nil
+        }
+        
+        set {
+            if self.recordingSession != newValue {
+                self.executeClosureSyncOnSessionQueueIfNecessary {
+                    self.recordingSession = newValue
+                }
+            }
+        }
+    }
+    
     // stabilization
     
     public var photoStabilizationEnabled: Bool
@@ -634,7 +653,8 @@ public class NextLevel: NSObject {
     
     deinit {
         self.delegate = nil
-
+        self.session = nil
+        
         self.removeApplicationObservers()
         self.removeSessionObservers()
         self.removeDeviceObservers()
@@ -644,7 +664,6 @@ public class NextLevel: NSObject {
         self.previewLayer.session = nil
             
         self.currentDevice = nil
-        self.recordingSession = nil
         self.cicontext = nil
         
         self.captureSession = nil
