@@ -55,9 +55,13 @@ NextLevel is a community – contributions and discussions are welcome!
 - Questions? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag 'nextlevel'.
 - Want to contribute? Submit a pull request.
 
-### Stickers
+### Sticker
 
-If this project was helpful, check out the [standardized](https://terinjokes.github.io/StickerConstructorSpec/) sticker on [Sticker Mule](https://www.stickermule.com/en/marketplace/15145-next-level).
+If you found this project to be helpful, check out the [Next Level sticker](https://www.stickermule.com/en/marketplace/15145-next-level).
+
+It conforms to the [living standard](https://terinjokes.github.io/StickerConstructorSpec/), just incase another project may want to do the same. 
+
+Here’s a sign up link for [$10 credit](https://www.stickermule.com/unlock?ref_id=1012370701).
 
 ### Complementary Projects
 
