@@ -462,8 +462,8 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession)
     
-    func nextLevel(_ nextLevel: NextLevel, didStartRecordingClipInSession session: NextLevelSession)
-    func nextLevel(_ nextLevel: NextLevel, didStopRecordingClip clip: NextLevelSessionClip, inSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didCompleteClip clip: NextLevelSessionClip, inSession session: NextLevelSession)
     
     func nextLevel(_ nextLevel: NextLevel, didAppendVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
@@ -473,15 +473,16 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession)
     
     // video frame photo
-    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhotoCaptureFromVideoFrame photoDict: [String:Any]?)
+    func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String:Any]?)
     
     // photo
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
     func nextLevel(_ nextLevel: NextLevel, didCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
     
-    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration)
-    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingRawPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration)
-    func nextLevelDidFinishPhotoCapture(_ nextLevel: NextLevel)
+    func nextLevel(_ nextLevel: NextLevel, didProcessPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration)
+    func nextLevel(_ nextLevel: NextLevel, didProcessRawPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration)
+    
+    func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel)
     
 }
 
@@ -1774,7 +1775,7 @@ extension NextLevel {
             }
 
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevel(self, didFinishProcessingPhotoCaptureFromVideoFrame: photoDict)
+                self.delegate?.nextLevel(self, didCompletePhotoCaptureFromVideoFrame: photoDict)
             }
 
         }
@@ -1814,7 +1815,7 @@ extension NextLevel {
                 session.beginClip()
             }
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevel(self, didStartRecordingClipInSession: session)
+                self.delegate?.nextLevel(self, didStartClipInSession: session)
             }
         }
     }
@@ -1990,7 +1991,14 @@ extension NextLevel {
                 
                 // already on session queue, adding to next cycle
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
-                    // TODO end clip and complete session
+                    session.endClip(completionHandler: { (sessionClip: NextLevelSessionClip?) in
+                        if let clip = sessionClip {
+                            self.delegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
+                        } else {
+                            // TODO report error
+                        }
+                        self.delegate?.nextLevel(self, didCompleteSession: session)
+                    })
                 }
             }
         }
@@ -2076,7 +2084,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             //}
             
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevel(self, didFinishProcessingPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
+                self.delegate?.nextLevel(self, didProcessPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
             }
         }
     }
@@ -2120,14 +2128,14 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             //}
             
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevel(self, didFinishProcessingPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
+                self.delegate?.nextLevel(self, didProcessPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
             }
         }
     }
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, didFinishCaptureForResolvedSettings resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevelDidFinishPhotoCapture(self)
+            self.delegate?.nextLevelDidCompletePhotoCapture(self)
         }
     }
     

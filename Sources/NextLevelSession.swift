@@ -236,7 +236,8 @@ public class NextLevelSession: NSObject {
         
     }
     
-    public func endClip(withInfoDict infoDict: [String:Any], completionHandler: (_: NextLevelSessionClip, _: Error)-> Void) {
+    public func endClip(completionHandler: (_ sessionClip: NextLevelSessionClip?) -> Void) {
+        
     }
     
     // editing

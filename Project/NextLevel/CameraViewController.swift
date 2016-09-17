@@ -305,11 +305,11 @@ extension CameraViewController: NextLevelDelegate {
         
     }
     
-    func nextLevel(_ nextLevel: NextLevel, didStartRecordingClipInSession session: NextLevelSession) {
+    func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession) {
         
     }
     
-    func nextLevel(_ nextLevel: NextLevel, didStopRecordingClip clip: NextLevelSessionClip, inSession session: NextLevelSession) {
+    func nextLevel(_ nextLevel: NextLevel, didCompleteClip clip: NextLevelSessionClip, inSession session: NextLevelSession) {
         
     }
     
@@ -335,7 +335,7 @@ extension CameraViewController: NextLevelDelegate {
     
     // video frame photo
 
-    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhotoCaptureFromVideoFrame photoDict: [String:Any]?) {
+    func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String:Any]?) {
         
     }
     
@@ -346,12 +346,12 @@ extension CameraViewController: NextLevelDelegate {
     func nextLevel(_ nextLevel: NextLevel, didCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration) {
     }
     
-    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration) {
+    func nextLevel(_ nextLevel: NextLevel, didProcessPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration) {
     }
     
-    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingRawPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration) {
+    func nextLevel(_ nextLevel: NextLevel, didProcessRawPhotoCaptureWith photoDictionary: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration) {
     }
 
-    func nextLevelDidFinishPhotoCapture(_ nextLevel: NextLevel) {
+    func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel) {
     }
 }
