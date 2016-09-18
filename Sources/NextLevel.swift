@@ -949,6 +949,26 @@ extension NextLevel {
             self.videoOutput = AVCaptureVideoDataOutput()
             self.videoOutput?.alwaysDiscardsLateVideoFrames = false
             self.videoOutput?.setSampleBufferDelegate(self, queue: self.sessionQueue)
+            
+            var videoSettings = [String(kCVPixelBufferPixelFormatTypeKey):Int(kCVPixelFormatType_32BGRA)]
+            if let formatTypes = self.videoOutput?.availableVideoCVPixelFormatTypes as? [Int] {
+                var supportsFullRange = false
+                var supportsVideoRange = false
+                for format: Int in formatTypes {
+                    if format == Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
+                        supportsFullRange = true
+                    }
+                    if format == Int(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange) {
+                        supportsVideoRange = true
+                    }
+                }
+                if supportsFullRange {
+                    videoSettings[String(kCVPixelBufferPixelFormatTypeKey)] = Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
+                } else if supportsVideoRange {
+                    videoSettings[String(kCVPixelBufferPixelFormatTypeKey)] = Int(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
+                }
+            }
+            self.videoOutput?.videoSettings = videoSettings
         }
 
         if let session = self.captureSession, let videoOutput = self.videoOutput {
@@ -1916,7 +1936,7 @@ extension NextLevel {
             if session.isVideoReady == false {
                 if let settings = self.videoConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
                         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
-                    if !session.setupVideo(withSettings: settings, transform: self.videoConfiguration.transform, formatDescription: formatDescription) {
+                    if !session.setupVideo(withSettings: settings, configuration: self.videoConfiguration, formatDescription: formatDescription) {
                         print("NextLevel, could not setup video session")
                     }
                 }
@@ -1976,7 +1996,7 @@ extension NextLevel {
             if session.isAudioReady == false {
                 if let settings = self.audioConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
                         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
-                    if !session.setupAudio(withSettings: settings, formatDescription: formatDescription) {
+                    if !session.setupAudio(withSettings: settings, configuration: self.audioConfiguration, formatDescription: formatDescription) {
                         print("NextLevel, could not setup audio session")
                     }
                 }
