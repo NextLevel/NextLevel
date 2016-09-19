@@ -63,13 +63,6 @@ public class NextLevelSession: NSObject {
 //        }
 //    }
     
-//    public var fileType: String {
-//        get {
-//        }
-//        set {
-//        }
-//    }
-    
 //    public var url: URL {
 //    }
 
@@ -89,13 +82,13 @@ public class NextLevelSession: NSObject {
     
     public var isVideoReady: Bool {
         get {
-            return self.videoReady
+            return self.videoInput != nil
         }
     }
     
     public var isAudioReady: Bool {
         get {
-            return self.audioReady
+            return self.audioInput != nil
         }
     }
 
@@ -124,10 +117,20 @@ public class NextLevelSession: NSObject {
         }
     }
 
-    public var currentClipReady: Bool = false // TODO
+    public var currentClipHasAudio: Bool {
+        get {
+            return self.sessionCurrentClipHasAudio
+        }
+    }
+    
+    public var currentClipHasVideo: Bool {
+        get {
+            return self.sessionCurrentClipHasVideo
+        }
+    }
+
+    public var currentClipReady: Bool = false
     public var currentClipStarted: Bool = false
-    public var currentClipHasAudio: Bool = false
-    public var currentClipHasVideo: Bool = false
     
     public var lastVideoFrame: CMSampleBuffer?
     public var lastAudioFrame: CMSampleBuffer?
@@ -146,31 +149,41 @@ public class NextLevelSession: NSObject {
     private var sessionDate: Date
     private var sessionDuration: CMTime
     
-    private var videoReady: Bool
-    private var audioReady: Bool
-    
-    private var assetWriter: AVAssetWriter?
+    private var writer: AVAssetWriter?
     private var videoInput: AVAssetWriterInput?
     private var audioInput: AVAssetWriterInput?
-    
     private var pixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
+
+    private var videoConfiguration: NextLevelVideoConfiguration?
+    private var audioConfiguration: NextLevelAudioConfiguration?
+    
+    internal var sessionQueue: DispatchQueue
+    internal var sessionQueueKey: DispatchSpecificKey<NSObject>
+    
+    private var sessionCurrentClipDuration: CMTime
+    private var sessionCurrentClipHasAudio: Bool
+    private var sessionCurrentClipHasVideo: Bool
+
+    // TODO
     
     private var clipReady: Bool
-
     private var timeOffset: CMTime
     private var lastAudioTimestamp: CMTime
     private var lastVideoTimestamp: CMTime
-    
-    private var sessionCurrentClipDuration: CMTime
     private var sessionCurrentClipStartTimestamp: CMTime
     
-    // MARK: - class functions
+    //
     
-    class func session() -> NextLevelSession {
-        return NextLevelSession()
-    }
+    private let NextLevelSessionIdentifier = "engineering.NextLevel.session"
+    private let NextLevelSessionSpecificKey = DispatchSpecificKey<NSObject>()
     
     // MARK: - object lifecycle
+    
+    convenience init(queue: DispatchQueue, queueKey: DispatchSpecificKey<NSObject>) {
+        self.init()
+        self.sessionQueue = queue
+        self.sessionQueueKey = queueKey
+    }
     
     override init() {
         self.sessionIdentifier = NSUUID().uuidString
@@ -178,35 +191,65 @@ public class NextLevelSession: NSObject {
         self.sessionDate = Date()
         self.sessionDuration = kCMTimeZero
         
-        self.videoReady = false
-        self.audioReady = false
+        self.sessionQueue = DispatchQueue(label: NextLevelSessionIdentifier)
+        self.sessionQueue.setSpecific(key: NextLevelSessionSpecificKey, value: self.sessionQueue)
+        self.sessionQueueKey = NextLevelSessionSpecificKey
 
+        self.sessionCurrentClipDuration = kCMTimeZero
+        self.sessionCurrentClipHasAudio = false
+        self.sessionCurrentClipHasVideo = false
+        
         //
-
+        
         self.clipReady = false
         
         self.timeOffset = kCMTimeInvalid
         self.lastAudioTimestamp = kCMTimeInvalid
         self.lastVideoTimestamp = kCMTimeInvalid
         
-        self.sessionCurrentClipDuration = kCMTimeZero
         self.sessionCurrentClipStartTimestamp = kCMTimeInvalid
-
+        
         super.init()
     }
     
     deinit {
+        self.writer = nil
+        self.videoInput = nil
+        self.audioInput = nil
+        self.pixelBufferAdapter = nil
+        
+        self.videoConfiguration = nil
+        self.audioConfiguration = nil
+        
     }
     
     // MARK: - functions
     
     // setup
     
-    public func setupVideo(withSettings settings: [String:Any], transform: CGAffineTransform, formatDescription: CMFormatDescription) -> Bool {
+    public func setupVideo(withSettings settings: [String : Any]?, configuration: NextLevelVideoConfiguration, formatDescription: CMFormatDescription) -> Bool {
+        self.videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: settings, sourceFormatHint: formatDescription)
+        if let videoInput = self.videoInput {
+            videoInput.expectsMediaDataInRealTime = true
+            videoInput.transform = configuration.transform
+            self.videoConfiguration = configuration
+            
+            let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
+            
+            let pixelBufferAttri: [String : Any] = [String(kCVPixelBufferPixelFormatTypeKey): Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
+                                                    String(kCVPixelBufferWidthKey): Float(videoDimensions.width),
+                                                    String(kCVPixelBufferHeightKey): Float(videoDimensions.height)]
+            self.pixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput, sourcePixelBufferAttributes: pixelBufferAttri)
+        }
         return self.videoInput != nil
     }
     
-    public func setupAudio(withSettings settings: [String:Any], formatDescription: CMFormatDescription) -> Bool {
+    public func setupAudio(withSettings settings: [String : Any]?, configuration: NextLevelAudioConfiguration, formatDescription: CMFormatDescription) -> Bool {
+        self.audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: settings, sourceFormatHint: formatDescription)
+        if let audioInput = self.audioInput {
+            audioInput.expectsMediaDataInRealTime = true
+            self.audioConfiguration = configuration
+        }
         return self.audioInput != nil
     }
     
@@ -229,47 +272,143 @@ public class NextLevelSession: NSObject {
     // clip creation
     
     public func beginClip() {
-        
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            if self.writer == nil {
+                self.setupWriter()
+                self.sessionCurrentClipDuration = kCMTimeZero
+                self.sessionCurrentClipHasAudio = false
+                self.sessionCurrentClipHasVideo = false
+            } else {
+                print("NextLevel, clip has already been created.")
+            }
+        }
     }
     
     public func endClip(completionHandler: (_ sessionClip: NextLevelSessionClip?) -> Void) {
-        
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            
+        }
     }
     
     // editing
     
     public func add(clip: NextLevelSessionClip) {
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            self.sessionClips.append(clip)
+            self.sessionDuration = self.sessionDuration + clip.duration
+        }
     }
     
     public func add(clip: NextLevelSessionClip, at idx: Int) {
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            self.sessionClips.insert(clip, at: idx)
+            self.sessionDuration = self.sessionDuration + clip.duration
+        }
     }
     
     public func remove(clip: NextLevelSessionClip) {
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            if let idx = self.sessionClips.index(of: clip) {
+                self.sessionClips.remove(at: idx)
+                self.sessionDuration = self.sessionDuration - clip.duration
+            }
+        }
     }
     
-    public func remove(clipAt idx: Int, deleteFile: Bool) {
+    public func remove(clipAt idx: Int, removeFile: Bool) {
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            if self.sessionClips.indices.contains(idx) {
+                let clip = self.sessionClips.remove(at: idx)
+                if removeFile {
+                    clip.removeFile()
+                }
+                self.sessionDuration = self.sessionDuration - clip.duration
+            }
+        }
     }
     
     public func removeAllClips() {
-        self.removeAllClips(deleteFiles: true)
+        self.removeAllClips(removeFiles: true)
     }
     
-    public func removeAllClips(deleteFiles: Bool) {
-        
+    public func removeAllClips(removeFiles: Bool) {
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            while self.sessionClips.count > 0 {
+                if removeFiles {
+                    if let clipToRemove = self.sessionClips.first {
+                        clipToRemove.removeFile()
+                    }
+                    self.sessionClips.removeFirst()
+                }
+            }
+            self.sessionDuration = kCMTimeZero
+        }
     }
 
     public func removeLastClip() {
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            if self.clips.count > 0 {
+                if let clipToRemove = self.clips.last {
+                    self.remove(clip: clipToRemove)
+                    self.sessionDuration = self.sessionDuration - clipToRemove.duration
+                }
+            }
+        }
     }
     
     // finalize
     
     public func mergeClips(usingPreset preset: String, completionHandler: (_: URL, _: Error)-> Void) {
-        
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            let fileType = self.fileType()
+            
+            
+        }
     }
     
     // MARK: - private
     
     private func setupWriter() {
+        let fileType = self.fileType()
+        
+//        self.writer = AVAssetWriter(url: URL, fileType: fileType)
+//        if let writer = self.writer {
+//            writer.metadata =
+//        }
+        
+    }
+    
+    private func fileType() -> String {
+        return AVFileTypeAppleM4A
     }
 
+}
+
+// MARK: - queues
+
+extension NextLevelSession {
+    
+    internal func executeClosureAsyncOnMainQueueIfNecessary(withClosure closure: @escaping () -> Void) {
+        if Thread.isMainThread {
+            closure()
+        } else {
+            DispatchQueue.main.async(execute: closure)
+        }
+    }
+    
+    internal func executeClosureAsyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
+        if DispatchQueue.getSpecific(key: self.sessionQueueKey) == self.sessionQueue {
+            closure()
+        } else {
+            self.sessionQueue.async(execute: closure)
+        }
+    }
+    
+    internal func executeClosureSyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
+        if DispatchQueue.getSpecific(key: self.sessionQueueKey) == self.sessionQueue {
+            closure()
+        } else {
+            self.sessionQueue.sync(execute: closure)
+        }
+    }
 }

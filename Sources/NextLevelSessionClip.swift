@@ -217,7 +217,7 @@ public class NextLevelSessionClip: NSObject {
     
     // MARK: - functions
     
-    public func deleteFile() throws {
+    public func removeFile()  {
         do {
             if let url = self.url {
                 try FileManager.default.removeItem(at: url)

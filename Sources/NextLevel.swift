@@ -488,8 +488,8 @@ public protocol NextLevelDelegate: NSObjectProtocol {
 
 // MARK: - constants
 
-private let NextLevelSessionQueueIdentifier = "engineering.NextLevel.session"
-private let NextLevelSessionQueueSpecificKey = DispatchSpecificKey<NSObject>()
+private let NextLevelCaptureSessionIdentifier = "engineering.NextLevel.captureSession"
+private let NextLevelCaptureSessionSpecificKey = DispatchSpecificKey<NSObject>()
 private let NextLevelRequiredMinimumStorageSpaceInBytes: UInt64 = 49999872 // ~47 MB
 
 // MARK: - NextLevel state
@@ -537,25 +537,6 @@ public class NextLevel: NSObject {
         didSet {
             self.automaticallyUpdatesDeviceOrientation = false
             self.updateVideoOrientation()
-        }
-    }
-    
-    // recording session
-    
-    public var session: NextLevelSession? {
-        get {
-            if let session = self.recordingSession {
-                return session
-            }
-            return nil
-        }
-        
-        set {
-            if self.recordingSession != newValue {
-                self.executeClosureSyncOnSessionQueueIfNecessary {
-                    self.recordingSession = newValue
-                }
-            }
         }
     }
     
@@ -621,8 +602,8 @@ public class NextLevel: NSObject {
         self.previewLayer = AVCaptureVideoPreviewLayer()
         self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         
-        self.sessionQueue = DispatchQueue(label: NextLevelSessionQueueIdentifier)
-        self.sessionQueue.setSpecific(key: NextLevelSessionQueueSpecificKey, value: self.sessionQueue)
+        self.sessionQueue = DispatchQueue(label: NextLevelCaptureSessionIdentifier)
+        self.sessionQueue.setSpecific(key: NextLevelCaptureSessionSpecificKey, value: self.sessionQueue)
         self.sessionConfigurationCount = 0
         
         self.videoConfiguration = NextLevelVideoConfiguration()
@@ -633,7 +614,7 @@ public class NextLevel: NSObject {
         self.cameraMode = .video
         
         self.photoStabilizationEnabled = false
-        self.videoStabilizationMode = .standard
+        self.videoStabilizationMode = .auto
         
         self.recording = false
         self.lastVideoFrameTimeInterval = 0
@@ -652,8 +633,9 @@ public class NextLevel: NSObject {
     }
     
     deinit {
+        // TODO do a better job at clean up
+        
         self.delegate = nil
-        self.session = nil
         
         self.removeApplicationObservers()
         self.removeSessionObservers()
@@ -666,6 +648,7 @@ public class NextLevel: NSObject {
         self.currentDevice = nil
         self.cicontext = nil
         
+        self.recordingSession = nil
         self.captureSession = nil
     }
 }
@@ -713,9 +696,13 @@ extension NextLevel {
         }
 
         self.sessionQueue.async {
+            // setup AV capture sesssion
             self.captureSession = AVCaptureSession()
             self.sessionConfigurationCount = 0
 
+            // setup NL recording session
+            self.recordingSession = NextLevelSession(queue: self.sessionQueue, queueKey: NextLevelCaptureSessionSpecificKey)
+            
             if let session = self.captureSession {
                 session.automaticallyConfiguresApplicationAudioSession = self.automaticallyConfiguresApplicationAudioSession
                 
@@ -2200,7 +2187,7 @@ extension NextLevel {
     }
 
     internal func executeClosureAsyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
-        if DispatchQueue.getSpecific(key: NextLevelSessionQueueSpecificKey) == self.sessionQueue {
+        if DispatchQueue.getSpecific(key: NextLevelCaptureSessionSpecificKey) == self.sessionQueue {
             closure()
         } else {
             self.sessionQueue.async(execute: closure)
@@ -2208,7 +2195,7 @@ extension NextLevel {
     }
     
     internal func executeClosureSyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
-        if DispatchQueue.getSpecific(key: NextLevelSessionQueueSpecificKey) == self.sessionQueue {
+        if DispatchQueue.getSpecific(key: NextLevelCaptureSessionSpecificKey) == self.sessionQueue {
             closure()
         } else {
             self.sessionQueue.sync(execute: closure)
