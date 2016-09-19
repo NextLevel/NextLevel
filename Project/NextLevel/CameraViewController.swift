@@ -136,10 +136,7 @@ class CameraViewController: UIViewController {
         
         // Configure NextLevel by modifying the configuration ivars
         //NextLevel.sharedInstance.videoConfiguration
-        //NextLevel.sharedInstance.audioConfiguration
-        
-        // setup a new recording session
-        NextLevel.sharedInstance.session = NextLevelSession.session()
+        //NextLevel.sharedInstance.audioConfiguration        
     }
 
     override func viewWillAppear(_ animated: Bool) {
