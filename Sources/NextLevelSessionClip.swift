@@ -30,7 +30,6 @@ import AVFoundation
 public let NextLevelClipFilenameKey = "NextLevelClipFilenameKey"
 public let NextLevelClipInfoDictKey = "NextLevelClipInfoDictKey"
 
-
 public class NextLevelSessionClip: NSObject {
 
     // config
@@ -124,12 +123,10 @@ public class NextLevelSessionClip: NSObject {
         get {
             if let asset = self.asset {
                 let tracks: [AVAssetTrack] = asset.tracks(withMediaType: AVMediaTypeVideo)
-                if tracks.count == 0 {
-                    return 0
-                }
-                
-                if let videoTrack = tracks.first {
-                    return videoTrack.nominalFrameRate
+                if tracks.count > 0 {
+                    if let videoTrack = tracks.first {
+                        return videoTrack.nominalFrameRate
+                    }
                 }
             }
             return 0
@@ -147,7 +144,7 @@ public class NextLevelSessionClip: NSObject {
     
     // MARK: - class functions
     
-    public class func clipURL(withFilename filename: String, directory: NextLevelDirectoryType) -> URL {
+    public class func clipURL(withFilename filename: String, directory: NextLevelDirectoryType) -> URL? {
         var clipURL: URL? = nil
     
         switch directory {
@@ -175,7 +172,13 @@ public class NextLevelSessionClip: NSObject {
             break
         }
     
-        return clipURL!.appendingPathComponent(filename)
+        if let _ = clipURL {
+            clipURL!.appendPathComponent(filename)
+        } else {
+            clipURL = nil
+        }
+
+        return clipURL
     }
     
     public class func clip(withUrl url: URL?, infoDict: [String: AnyObject]?) -> NextLevelSessionClip {
@@ -203,8 +206,9 @@ public class NextLevelSessionClip: NSObject {
     }
     
     convenience init(dictionaryRep: [String : Any]?, directory: NextLevelDirectoryType) {
-        if let clipDict = dictionaryRep, let filename = clipDict[NextLevelClipFilenameKey] as? String {
-            let url: URL = NextLevelSessionClip.clipURL(withFilename: filename, directory: directory)
+        if let clipDict = dictionaryRep,
+           let filename = clipDict[NextLevelClipFilenameKey] as? String,
+           let url: URL = NextLevelSessionClip.clipURL(withFilename: filename, directory: directory) {
             let infoDict = clipDict[NextLevelClipInfoDictKey] as? [String : Any]
             self.init(url: url, infoDict: infoDict)
         } else {
