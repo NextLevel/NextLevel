@@ -26,46 +26,25 @@
 import Foundation
 import AVFoundation
 
-// MARK: - types
-
-public enum NextLevelDirectoryType: Int, CustomStringConvertible {
-    case temporary = 0
-    case cache
-    case document
-    case custom
-    
-    public var description: String {
-        get {
-            switch self {
-            case .temporary:
-                return "Temporary"
-            case .cache:
-                return "Cache"
-            case .document:
-                return "Document"
-            case .custom:
-                return "Custom"
-            }
-        }
-    }
-}
-
 // MARK: - NextLevelSession
 
 public class NextLevelSession: NSObject {
     
     // config
     
-//    public var directory: NextLevelDirectoryType {
-//        get {
-//        }
-//        set {
-//        }
-//    }
+    public var url: URL? {
+        get {
+            let fileType = self.fileType()
+            let fileExtension = self.fileExtension(fileType: fileType)
+            let filename = "\(self.identifier)-NL-Merged.\(fileExtension)"
+            if let url = NextLevelSessionClip.clipURL(withFilename: filename, directory: self.sessionDirectory) {
+                return url
+            } else {
+                return nil
+            }
+        }
+    }
     
-//    public var url: URL {
-//    }
-
     // state
     
     public var identifier: String {
@@ -102,7 +81,6 @@ public class NextLevelSession: NSObject {
         get {
             return self.sessionDuration
         }
-
     }
 
     public var isClipReady: Bool {
@@ -128,24 +106,43 @@ public class NextLevelSession: NSObject {
             return self.sessionCurrentClipHasVideo
         }
     }
-
-    public var currentClipReady: Bool = false
-    public var currentClipStarted: Bool = false
     
-    public var lastVideoFrame: CMSampleBuffer?
-    public var lastAudioFrame: CMSampleBuffer?
-        
-    public var fullSessionAsset: AVAsset? {
+    public var asset: AVAsset? {
         get {
-            // TODO
+            var asset: AVAsset? = nil
+            self.executeClosureSyncOnSessionQueueIfNecessary {
+                if self.sessionClips.count == 1 {
+                    asset = self.sessionClips.first?.asset
+                } else {
+                    let composition: AVMutableComposition = AVMutableComposition()
+                    self.appendClips(toComposition: composition)
+                    asset = composition
+                }
+            }
+            return asset
+        }
+    }
+    
+    public var pixelBufferPool: CVPixelBufferPool? {
+        get {
+            if let pixelBufferAdapter = self.pixelBufferAdapter, let pool = pixelBufferAdapter.pixelBufferPool {
+                return pool
+            }
             return nil
         }
     }
     
+    // TODO
+    public var lastVideoFrame: CMSampleBuffer?
+    public var lastAudioFrame: CMSampleBuffer?
+    //
+    
     // MARK: - private instance vars
     
-    private var sessionIdentifier: String
-    private var sessionClips: [NextLevelSessionClip]
+    internal var sessionIdentifier: String
+    internal var sessionDirectory: String
+    internal var sessionClips: [NextLevelSessionClip]
+    internal var sessionClipCount: Int
     private var sessionDate: Date
     private var sessionDuration: CMTime
     
@@ -164,14 +161,13 @@ public class NextLevelSession: NSObject {
     private var sessionCurrentClipHasAudio: Bool
     private var sessionCurrentClipHasVideo: Bool
 
-    // TODO
-    
     private var clipReady: Bool
     private var timeOffset: CMTime
+    private var sessionStartTimestamp: CMTime
+
+    // TODO
     private var lastAudioTimestamp: CMTime
     private var lastVideoTimestamp: CMTime
-    private var sessionCurrentClipStartTimestamp: CMTime
-    
     //
     
     private let NextLevelSessionIdentifier = "engineering.NextLevel.session"
@@ -187,10 +183,13 @@ public class NextLevelSession: NSObject {
     
     override init() {
         self.sessionIdentifier = NSUUID().uuidString
+        self.sessionDirectory = NSTemporaryDirectory()
         self.sessionClips = []
+        self.sessionClipCount = 0
         self.sessionDate = Date()
         self.sessionDuration = kCMTimeZero
         
+        // should always use init(queue:queueKey:), but this may be good for the future
         self.sessionQueue = DispatchQueue(label: NextLevelSessionIdentifier)
         self.sessionQueue.setSpecific(key: NextLevelSessionSpecificKey, value: self.sessionQueue)
         self.sessionQueueKey = NextLevelSessionSpecificKey
@@ -199,15 +198,14 @@ public class NextLevelSession: NSObject {
         self.sessionCurrentClipHasAudio = false
         self.sessionCurrentClipHasVideo = false
         
-        //
-        
         self.clipReady = false
-        
         self.timeOffset = kCMTimeInvalid
+        self.sessionStartTimestamp = kCMTimeInvalid
+        
+        // TODO
         self.lastAudioTimestamp = kCMTimeInvalid
         self.lastVideoTimestamp = kCMTimeInvalid
-        
-        self.sessionCurrentClipStartTimestamp = kCMTimeInvalid
+        //
         
         super.init()
     }
@@ -220,7 +218,6 @@ public class NextLevelSession: NSObject {
         
         self.videoConfiguration = nil
         self.audioConfiguration = nil
-        
     }
     
     // MARK: - functions
@@ -360,8 +357,7 @@ public class NextLevelSession: NSObject {
     
     public func mergeClips(usingPreset preset: String, completionHandler: (_: URL, _: Error)-> Void) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            let fileType = self.fileType()
-            
+
             
         }
     }
@@ -369,19 +365,93 @@ public class NextLevelSession: NSObject {
     // MARK: - private
     
     private func setupWriter() {
-        let fileType = self.fileType()
-        
-//        self.writer = AVAssetWriter(url: URL, fileType: fileType)
-//        if let writer = self.writer {
-//            writer.metadata =
-//        }
-        
+        if let url = self.nextFileURL() {
+            do {
+                self.writer = try AVAssetWriter(url: url, fileType: self.fileType())
+                if let writer = self.writer {
+                    writer.shouldOptimizeForNetworkUse = true
+                    writer.metadata = NextLevel.assetWriterMetadata()
+                
+                    if let videoInput = self.videoInput {
+                        if writer.canAdd(videoInput) {
+                            writer.add(videoInput)
+                        } else {
+                            print("NextLevel, could not add video input to session")
+                        }
+                    }
+                    
+                    if let audioInput = self.audioInput {
+                        if writer.canAdd(audioInput) {
+                            writer.add(audioInput)
+                        } else {
+                            print("NextLevel, could not add audio input to session")
+                        }
+                    }
+                    
+                    if writer.startWriting() {
+                        self.timeOffset = kCMTimeZero
+                        self.sessionStartTimestamp = kCMTimeInvalid
+                        self.clipReady = true
+                    } else {
+                        print("NextLevel, writer encountered an error \(writer.error)")
+                        self.writer = nil
+                    }
+                    
+                }
+                
+            } catch {
+                print("NextLevel could not create asset writer")
+            }
+        }
+    }
+}
+
+// MARK: - compositions
+
+extension NextLevelSession {
+
+    internal func appendClips(toComposition composition: AVMutableComposition) {
+        self.appendClips(toComposition: composition, audioMix: nil)
     }
     
-    private func fileType() -> String {
+    internal func appendClips(toComposition composition: AVMutableComposition, audioMix: AVMutableAudioMix?) {
+        // TODO
+    }
+    
+}
+
+// MARK: - file management
+
+extension NextLevelSession {
+    
+    internal func fileType() -> String {
         return AVFileTypeAppleM4A
     }
-
+    
+    internal func fileExtension(fileType: String) -> String {
+        return "m4a"
+    }
+    
+    internal func nextFileURL() -> URL? {
+        let fileType = self.fileType()
+        let fileExtension = self.fileExtension(fileType: fileType)
+        let filename = "\(self.identifier)-NL-Clip.\(self.sessionClipCount).\(fileExtension)"
+        if let url = NextLevelSessionClip.clipURL(withFilename: filename, directory: self.sessionDirectory) {
+            self.removeFile(fileUrl: url)
+            self.sessionClipCount += 1
+            return url
+        } else {
+            return nil
+        }
+    }
+    
+    internal func removeFile(fileUrl: URL) {
+        do {
+            try FileManager.default.removeItem(atPath: fileUrl.path)
+        } catch {
+            print("NextLevel, could not remove file at path")
+        }
+    }
 }
 
 // MARK: - queues

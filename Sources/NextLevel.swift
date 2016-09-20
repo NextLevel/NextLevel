@@ -1858,7 +1858,7 @@ extension NextLevel {
     
     internal func beginRecordingNewClipIfNecessary() {
         if let session = self.recordingSession {
-            if session.currentClipStarted == false {
+            if session.isClipReady == false {
                 session.beginClip()
             }
             self.executeClosureAsyncOnMainQueueIfNecessary {
@@ -1936,7 +1936,7 @@ extension NextLevel {
             if session.isAudioReady {
                 self.beginRecordingNewClipIfNecessary()
                 
-                if self.recording && session.currentClipReady {
+                if self.recording && session.isClipReady {
                     
                     let NextLevelMinTimeBetweenFrames = 0.004
                     let sleepDuration = NextLevelMinTimeBetweenFrames - (CACurrentMediaTime() - self.lastVideoFrameTimeInterval)
@@ -1996,7 +1996,7 @@ extension NextLevel {
             if session.isVideoReady {
                 self.beginRecordingNewClipIfNecessary()
                 
-                if self.recording && session.currentClipReady && session.currentClipHasVideo {
+                if self.recording && session.isClipReady && session.currentClipHasVideo {
                     session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool)-> Void in
                         if success {
                             self.executeClosureAsyncOnMainQueueIfNecessary {

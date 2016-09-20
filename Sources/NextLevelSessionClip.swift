@@ -144,40 +144,9 @@ public class NextLevelSessionClip: NSObject {
     
     // MARK: - class functions
     
-    public class func clipURL(withFilename filename: String, directory: NextLevelDirectoryType) -> URL? {
-        var clipURL: URL? = nil
-    
-        switch directory {
-        case .temporary:
-            clipURL = URL(fileURLWithPath: NSTemporaryDirectory())
-            break
-        case .cache:
-            let searchPaths: [String] = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
-            if let path = searchPaths.first {
-                clipURL = URL(fileURLWithPath: path)
-            } else {
-                clipURL = URL(fileURLWithPath: directory.description)
-            }
-            break
-        case .document:
-            let searchPaths: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            if let path = searchPaths.first {
-                clipURL = URL(fileURLWithPath: path)
-            } else {
-                clipURL = URL(fileURLWithPath: directory.description)
-            }
-            break
-        default:
-            clipURL = URL(fileURLWithPath: directory.description)
-            break
-        }
-    
-        if let _ = clipURL {
-            clipURL!.appendPathComponent(filename)
-        } else {
-            clipURL = nil
-        }
-
+    public class func clipURL(withFilename filename: String, directory: String) -> URL? {
+        var clipURL: URL = URL(fileURLWithPath: directory)
+        clipURL.appendPathComponent(filename)
         return clipURL
     }
     
@@ -205,7 +174,7 @@ public class NextLevelSessionClip: NSObject {
         self.clipInfoDict = infoDict
     }
     
-    convenience init(dictionaryRep: [String : Any]?, directory: NextLevelDirectoryType) {
+    convenience init(dictionaryRep: [String : Any]?, directory: String) {
         if let clipDict = dictionaryRep,
            let filename = clipDict[NextLevelClipFilenameKey] as? String,
            let url: URL = NextLevelSessionClip.clipURL(withFilename: filename, directory: directory) {
