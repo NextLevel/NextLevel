@@ -28,7 +28,7 @@ import AVFoundation
 
 extension NextLevel {
     
-    // MARK: Device Format
+    // MARK: device format
     
     public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale) -> Bool {
         return NextLevel.isCaptureDeviceFormat(inRange: format, frameRate: frameRate, dimensions: CMVideoDimensions(width: 0, height: 0))
@@ -48,7 +48,7 @@ extension NextLevel {
         return false
     }
     
-    // MARK: Frame Rate
+    // MARK: frame rate
     
     public class func maxFrameRate(forFormat format: AVCaptureDeviceFormat, minFrameRate: CMTimeScale) -> CMTimeScale {
         var lowestTimeScale: CMTimeScale = 0
@@ -61,13 +61,45 @@ extension NextLevel {
         return lowestTimeScale
     }
     
-    // MARK: Configuration
-    
-    public class func averageVideoBitRate(fromWidth width: Int, height: Int) {
+    // MARK: sampleBuffer adjustment
         
+    public class func sampleBufferOffset(withSampleBuffer sampleBuffer: CMSampleBuffer, timeOffset: CMTime, duration: CMTime?) -> CMSampleBuffer? {
+        var itemCount: CMItemCount = 0
+        var status = CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, 0, nil, &itemCount)
+        if status == 0 {
+            return nil
+        }
+        
+        var timingInfo = [CMSampleTimingInfo](repeating: CMSampleTimingInfo(duration: CMTimeMake(0, 0), presentationTimeStamp: CMTimeMake(0, 0), decodeTimeStamp: CMTimeMake(0, 0)), count: itemCount)
+        status = CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, itemCount, &timingInfo, &itemCount);
+        if status == 0 {
+            return nil
+        }
+        
+        if let dur = duration {
+            for i in 0 ..< itemCount {
+                timingInfo[i].decodeTimeStamp = CMTimeSubtract(timingInfo[i].decodeTimeStamp, timeOffset);
+                timingInfo[i].presentationTimeStamp = CMTimeSubtract(timingInfo[i].presentationTimeStamp, timeOffset);
+                timingInfo[i].duration = dur
+            }
+        } else {
+            for i in 0 ..< itemCount {
+                timingInfo[i].decodeTimeStamp = CMTimeSubtract(timingInfo[i].decodeTimeStamp, timeOffset);
+                timingInfo[i].presentationTimeStamp = CMTimeSubtract(timingInfo[i].presentationTimeStamp, timeOffset);
+            }
+        }
+        
+        var sampleBufferOffset: CMSampleBuffer? = nil
+        CMSampleBufferCreateCopyWithNewTiming(kCFAllocatorDefault, sampleBuffer, itemCount, &timingInfo, &sampleBufferOffset);
+        
+        if let output = sampleBufferOffset {
+            return output
+        } else {
+            return nil
+        }
     }
     
-    // MARK: Storage
+    // MARK: storage
     
     public class func availableStorageSpaceInBytes() -> UInt64 {
         do {
