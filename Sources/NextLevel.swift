@@ -1638,7 +1638,7 @@ extension NextLevel {
         set {
             if let device: AVCaptureDevice = self.currentDevice {
                 guard
-                    NextLevel.isCaptureDeviceFormat(inRange: device.activeFormat, frameRate: newValue)
+                    AVCaptureDevice.isCaptureDeviceFormat(inRange: device.activeFormat, frameRate: newValue)
                 else {
                     print("unsupported frame rate for current device format config, \(newValue) fps")
                     return

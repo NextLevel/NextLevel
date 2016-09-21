@@ -60,7 +60,7 @@ extension AVCaptureConnection {
 
 extension AVCaptureDevice {
 
-    // MARK: additions
+    // MARK: device lookup
 
     public class func captureDevice(withType deviceType: AVCaptureDeviceType, forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
         let deviceTypes: [AVCaptureDeviceType] = [deviceType]
@@ -106,6 +106,26 @@ extension AVCaptureDevice {
     
     public class func audioDevice() -> AVCaptureDevice? {
         return AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio)
+    }
+    
+    // MARK: device format
+    
+    public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale) -> Bool {
+        return AVCaptureDevice.isCaptureDeviceFormat(inRange: format, frameRate: frameRate, dimensions: CMVideoDimensions(width: 0, height: 0))
+    }
+    
+    public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale, dimensions: CMVideoDimensions) -> Bool {
+        let formatDimensions: CMVideoDimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
+        
+        if (formatDimensions.width >= dimensions.width && formatDimensions.height >= dimensions.height) {
+            let videoSupportedFrameRateRanges: [AVFrameRateRange] = format.videoSupportedFrameRateRanges as! [AVFrameRateRange]
+            for frameRateRange in videoSupportedFrameRateRanges {
+                if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
+                    return true
+                }
+            }
+        }
+        return false
     }
     
     // MARK: NextLevel types

@@ -27,27 +27,7 @@ import Foundation
 import AVFoundation
 
 extension NextLevel {
-    
-    // MARK: device format
-    
-    public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale) -> Bool {
-        return NextLevel.isCaptureDeviceFormat(inRange: format, frameRate: frameRate, dimensions: CMVideoDimensions(width: 0, height: 0))
-    }
-    
-    public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale, dimensions: CMVideoDimensions) -> Bool {
-        let formatDimensions: CMVideoDimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
         
-        if (formatDimensions.width >= dimensions.width && formatDimensions.height >= dimensions.height) {
-            let videoSupportedFrameRateRanges: [AVFrameRateRange] = format.videoSupportedFrameRateRanges as! [AVFrameRateRange]
-            for frameRateRange in videoSupportedFrameRateRanges {
-                if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-    
     // MARK: frame rate
     
     public class func maxFrameRate(forFormat format: AVCaptureDeviceFormat, minFrameRate: CMTimeScale) -> CMTimeScale {
@@ -61,8 +41,8 @@ extension NextLevel {
         return lowestTimeScale
     }
     
-    // MARK: sampleBuffer adjustment
-        
+    // MARK: sampleBuffer offset adjustment
+
     public class func sampleBufferOffset(withSampleBuffer sampleBuffer: CMSampleBuffer, timeOffset: CMTime, duration: CMTime?) -> CMSampleBuffer? {
         var itemCount: CMItemCount = 0
         var status = CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, 0, nil, &itemCount)
