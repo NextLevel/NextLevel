@@ -463,7 +463,7 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession)
     
     func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession)
-    func nextLevel(_ nextLevel: NextLevel, didCompleteClip clip: NextLevelSessionClip, inSession session: NextLevelSession)
+    func nextLevel(_ nextLevel: NextLevel, didCompleteClip clip: NextLevelClip, inSession session: NextLevelSession)
     
     func nextLevel(_ nextLevel: NextLevel, didAppendVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
@@ -1820,14 +1820,14 @@ extension NextLevel {
         self.pause(withCompletionHandler: nil)
     }
     
-    public func pause(withCompletionHandler completionHandler: (()-> Void)?) {
+    public func pause(withCompletionHandler completionHandler: (() -> Void)?) {
         self.recording = false
         
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let session = self.recordingSession {
                 if session.isClipReady {
                     
-                    session.endClip(completionHandler: { (sessionClip: NextLevelSessionClip?) in
+                    session.endClip(completionHandler: { (sessionClip: NextLevelClip?) in
                         if let clip = sessionClip {
                             self.delegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
                             if let handler = completionHandler {
@@ -1945,8 +1945,8 @@ extension NextLevel {
                     }
                     
                     if let device = self.currentDevice {
-                        let duration = device.activeVideoMaxFrameDuration
-                        session.appendVideo(withSampleBuffer: sampleBuffer, duration: duration, completionHandler: { (success: Bool)-> Void in
+                        let minFrameDuration = device.activeVideoMinFrameDuration
+                        session.appendVideo(withSampleBuffer: sampleBuffer, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
                             self.lastVideoFrameTimeInterval = CACurrentMediaTime()
                             if success == true {
                                 self.executeClosureAsyncOnMainQueueIfNecessary {
@@ -1997,7 +1997,7 @@ extension NextLevel {
                 self.beginRecordingNewClipIfNecessary()
                 
                 if self.recording && session.isClipReady && session.currentClipHasVideo {
-                    session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool)-> Void in
+                    session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool) -> Void in
                         if success {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
                                 self.delegate?.nextLevel(self, didAppendAudioSampleBuffer: sampleBuffer, inSession: session)
@@ -2024,7 +2024,7 @@ extension NextLevel {
                 
                 // already on session queue, adding to next cycle
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
-                    session.endClip(completionHandler: { (sessionClip: NextLevelSessionClip?) in
+                    session.endClip(completionHandler: { (sessionClip: NextLevelClip?) in
                         if let clip = sessionClip {
                             self.delegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
                         } else {

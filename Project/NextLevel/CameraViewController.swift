@@ -312,7 +312,7 @@ extension CameraViewController: NextLevelDelegate {
         
     }
     
-    func nextLevel(_ nextLevel: NextLevel, didCompleteClip clip: NextLevelSessionClip, inSession session: NextLevelSession) {
+    func nextLevel(_ nextLevel: NextLevel, didCompleteClip clip: NextLevelClip, inSession session: NextLevelSession) {
         
     }
     

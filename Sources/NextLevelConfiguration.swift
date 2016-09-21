@@ -75,7 +75,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     
     public var maxFrameRate: CMTimeScale?           // AVVideoMaxKeyFrameIntervalKey
     
-    public var timeScale: CGFloat?
+    public var timeScale: Float64?
     
     public var maximumCaptureDuration: CMTime?
     

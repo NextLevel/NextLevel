@@ -1,5 +1,5 @@
 //
-//  NextLevelSessionClip.swift
+//  NextLevelClip.swift
 //  NextLevel (http://nextlevel.engineering/)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
@@ -30,7 +30,7 @@ import AVFoundation
 public let NextLevelClipFilenameKey = "NextLevelClipFilenameKey"
 public let NextLevelClipInfoDictKey = "NextLevelClipInfoDictKey"
 
-public class NextLevelSessionClip: NSObject {
+public class NextLevelClip: NSObject {
 
     // config
     
@@ -150,8 +150,8 @@ public class NextLevelSessionClip: NSObject {
         return clipURL
     }
     
-    public class func clip(withUrl url: URL?, infoDict: [String: AnyObject]?) -> NextLevelSessionClip {
-        return NextLevelSessionClip(url: url, infoDict: infoDict)
+    public class func clip(withUrl url: URL?, infoDict: [String: Any]?) -> NextLevelClip {
+        return NextLevelClip(url: url, infoDict: infoDict)
     }
     
     // MARK: - private instance vars
@@ -177,7 +177,7 @@ public class NextLevelSessionClip: NSObject {
     convenience init(dictionaryRep: [String : Any]?, directory: String) {
         if let clipDict = dictionaryRep,
            let filename = clipDict[NextLevelClipFilenameKey] as? String,
-           let url: URL = NextLevelSessionClip.clipURL(withFilename: filename, directory: directory) {
+           let url: URL = NextLevelClip.clipURL(withFilename: filename, directory: directory) {
             let infoDict = clipDict[NextLevelClipInfoDictKey] as? [String : Any]
             self.init(url: url, infoDict: infoDict)
         } else {
