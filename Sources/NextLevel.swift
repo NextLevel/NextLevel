@@ -377,6 +377,7 @@ public enum NextLevelError: Error, CustomStringConvertible {
     case fileExists
     case notAvailable
     case nothingRecorded
+    case notReady
     
     public var description: String {
         get {
@@ -391,6 +392,8 @@ public enum NextLevelError: Error, CustomStringConvertible {
                 return "Not Available"
             case .nothingRecorded:
                 return "Nothing recorded"
+            case .notReady:
+                return "Not ready"
             }
         }
     }
@@ -1838,14 +1841,14 @@ extension NextLevel {
             if let session = self.recordingSession {
                 if session.isClipReady {
                     
-                    session.endClip(completionHandler: { (sessionClip: NextLevelClip?) in
+                    session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
                             self.delegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
                             if let handler = completionHandler {
                                 handler()
                             }
-                        } else {
-                            // TODO propagate error
+                        } else if let _ = error {
+                            // TODO, report error
                             if let handler = completionHandler {
                                 handler()
                             }
@@ -2035,10 +2038,10 @@ extension NextLevel {
                 
                 // already on session queue, adding to next cycle
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
-                    session.endClip(completionHandler: { (sessionClip: NextLevelClip?) in
+                    session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
                             self.delegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
-                        } else {
+                        } else if let _ = error {
                             // TODO report error
                         }
                         self.delegate?.nextLevel(self, didCompleteSession: session)

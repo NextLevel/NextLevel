@@ -318,7 +318,7 @@ extension NextLevelSession {
     
     // recording
     
-    typealias NextLevelSessionAppendSampleBufferCompletionHandler = (_: Bool) -> Void
+    public typealias NextLevelSessionAppendSampleBufferCompletionHandler = (_: Bool) -> Void
     
     public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
         self.sessionLastVideoFrame = sampleBuffer
@@ -354,13 +354,32 @@ extension NextLevelSession {
         completionHandler(false)
     }
     
-    public func appendAudio(withSampleBuffer sampleBuffer: CMSampleBuffer, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
+    public func appendAudio(withSampleBuffer sampleBuffer: CMSampleBuffer, completionHandler: @escaping NextLevelSessionAppendSampleBufferCompletionHandler) {
         self.startSessionIfNecessary(timestamp: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
-        // TODO
         
-        
-        
-        
+        let duration = CMSampleBufferGetDuration(sampleBuffer)
+        if let adjustedBuffer = NextLevel.sampleBufferOffset(withSampleBuffer: sampleBuffer, timeOffset: self.timeOffset, duration: duration) {
+            let presentationTimestamp = CMSampleBufferGetPresentationTimeStamp(adjustedBuffer)
+            let lastTimestamp = presentationTimestamp + duration
+            
+            self.audioQueue.async {
+                if let audioInput = self.audioInput {
+                    if audioInput.isReadyForMoreMediaData && audioInput.append(adjustedBuffer) {
+                        self.lastAudioTimestamp = lastTimestamp
+                        
+                        if !self.currentClipHasVideo {
+                            self.sessionCurrentClipDuration = lastTimestamp - self.startTimestamp
+                        }
+                        
+                        self.sessionCurrentClipHasAudio = true
+                        
+                        completionHandler(true)
+                        return
+                    }
+                }
+                completionHandler(false)
+            }
+        }
     }
     
     public func reset() {
@@ -375,6 +394,8 @@ extension NextLevelSession {
             
             self.sessionLastVideoFrame = nil
             self.sessionLastAudioFrame = nil
+            
+            self.sessionClipFilenameCount = 0
         }
     }
     
@@ -389,7 +410,7 @@ extension NextLevelSession {
     
     // create
     
-    public typealias NextLevelSessionEndClipCompletionHandler = (_: NextLevelClip?) -> Void
+    public typealias NextLevelSessionEndClipCompletionHandler = (_: NextLevelClip?, _: Error?) -> Void
     
     public func beginClip() {
         self.executeClosureSyncOnSessionQueueIfNecessary {
@@ -406,43 +427,53 @@ extension NextLevelSession {
     
     public func endClip(completionHandler: NextLevelSessionEndClipCompletionHandler?) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            if self.isClipReady {
-                self.clipReady = false
-                
-                if let writer = self.writer {
-                    if !self.currentClipHasAudio && !self.currentClipHasVideo {
-                        writer.cancelWriting()
-
-                        self.removeFile(fileUrl: writer.outputURL)
-                        self.destroyWriter()
-                        
-                        if let handler = completionHandler {
-                            self.executeClosureAsyncOnMainQueueIfNecessary {
-                                handler(nil)
+            self.audioQueue.sync {
+                if self.isClipReady {
+                    self.clipReady = false
+                    
+                    if let writer = self.writer {
+                        if !self.currentClipHasAudio && !self.currentClipHasVideo {
+                            writer.cancelWriting()
+                            
+                            self.removeFile(fileUrl: writer.outputURL)
+                            self.destroyWriter()
+                            
+                            if let handler = completionHandler {
+                                self.executeClosureAsyncOnMainQueueIfNecessary {
+                                    handler(nil, nil)
+                                }
                             }
+                            
+                        } else {
+                            writer.endSession(atSourceTime: (self.sessionCurrentClipDuration + self.startTimestamp))
+                            writer.finishWriting(completionHandler: {
+                                // TODO support info dictionaries
+                                self.appendClip(withClipURL: writer.outputURL, infoDict: nil, error: writer.error, completionHandler: completionHandler)
+                            })
+                            return
                         }
-                        
-                    } else {
-                        
-                        writer.endSession(atSourceTime: (self.sessionCurrentClipDuration + self.startTimestamp))
-                        writer.finishWriting(completionHandler: {
-                            // TODO
-                            
-                            
-                            
-                            
-                            
-                        })
-                        return
+                    }
+                }
+                
+                if let handler = completionHandler {
+                    self.executeClosureAsyncOnMainQueueIfNecessary {
+                        handler(nil, NextLevelError.notReady)
                     }
                 }
             }
+        }
+    }
+    
+    private func appendClip(withClipURL url: URL, infoDict: [String : Any]?, error: Error?, completionHandler: NextLevelSessionEndClipCompletionHandler?) {
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            let clip = NextLevelClip(url: url, infoDict: infoDict)
+            self.add(clip: clip)
             
-            if let handler = completionHandler {
-                self.executeClosureAsyncOnMainQueueIfNecessary {
-                    if completionHandler != nil {
-                        handler(nil)
-                    }
+            self.destroyWriter()
+            
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                if let handler = completionHandler {
+                    handler(clip, error)
                 }
             }
         }
@@ -561,12 +592,82 @@ extension NextLevelSession {
     }
     
     internal func appendClips(toComposition composition: AVMutableComposition, audioMix: AVMutableAudioMix?) {
-        // TODO
+        self.executeClosureSyncOnSessionQueueIfNecessary {
+            var videoTrack: AVMutableCompositionTrack? = nil
+            var audioTrack: AVMutableCompositionTrack? = nil
+            
+            var currentTime = composition.duration
+            
+            for clip: NextLevelClip in self.sessionClips {
+                if let asset = clip.asset {
+                    let videoAssetTracks = asset.tracks(withMediaType: AVMediaTypeVideo)
+                    let audioAssetTracks = asset.tracks(withMediaType: AVMediaTypeAudio)
+                 
+                    var maxRange = kCMTimeInvalid
+                    
+                    var videoTime = currentTime
+                    for videoAssetTrack in videoAssetTracks {
+                        if videoTrack == nil {
+                            let videoTracks = composition.tracks(withMediaType: AVMediaTypeVideo)
+                            if videoTracks.count > 0 {
+                                videoTrack = videoTracks.first
+                            } else {
+                                videoTrack = composition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
+                                videoTrack?.preferredTransform = videoAssetTrack.preferredTransform
+                            }
+                        }
+                        
+                        if let foundTrack = videoTrack {
+                            videoTime = self.appendTrack(track: videoAssetTrack, toCompositionTrack: foundTrack, withStartTime: videoTime, range: maxRange)
+                            maxRange = videoTime
+                        }
+                    }
+                    
+                    var audioTime = currentTime
+                    for audioAssetTrack in audioAssetTracks {
+                        if audioTrack == nil {
+                            let audioTracks = composition.tracks(withMediaType: AVMediaTypeAudio)
+                            
+                            if audioTracks.count > 0 {
+                                audioTrack = audioTracks.first
+                            } else {
+                                audioTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: kCMPersistentTrackID_Invalid)
+                            }
+                            
+                        }
+                        if let foundTrack = audioTrack {
+                            audioTime = self.appendTrack(track: audioAssetTrack, toCompositionTrack: foundTrack, withStartTime: audioTime, range: maxRange)
+                        }
+                    }
+                    
+                    currentTime = composition.duration
+                }
+            }
+        }
+    }
+    
+    private func appendTrack(track: AVAssetTrack, toCompositionTrack compositionTrack: AVMutableCompositionTrack, withStartTime time: CMTime, range: CMTime) -> CMTime {
+        var timeRange = track.timeRange
+        let startTime = time + timeRange.start
         
+        if range.isValid {
+            let currentRange = startTime + timeRange.duration
+            
+            if currentRange > range {
+                timeRange = CMTimeRange(start: timeRange.start, duration: (timeRange.duration - (currentRange - range)))
+            }
+        }
         
+        if timeRange.duration > kCMTimeZero {
+            do {
+                try compositionTrack.insertTimeRange(timeRange, of: track, at: startTime)
+            } catch {
+                print("NextLevel, failed to insert composition track")
+            }
+            return (startTime + timeRange.duration)
+        }
         
-        
-        
+        return startTime
     }
     
 }
@@ -624,4 +725,5 @@ extension NextLevelSession {
             self.sessionQueue.sync(execute: closure)
         }
     }
+    
 }
