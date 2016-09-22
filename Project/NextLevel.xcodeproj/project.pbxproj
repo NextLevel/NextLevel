@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		060D50EF1D5BC77E00247AD0 /* NextLevelSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50EE1D5BC77E00247AD0 /* NextLevelSession.swift */; };
 		060D50F11D5BF09F00247AD0 /* NextLevelConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F01D5BF09F00247AD0 /* NextLevelConfiguration.swift */; };
-		060D50F41D5C4D5A00247AD0 /* NextLevelSessionClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F31D5C4D5A00247AD0 /* NextLevelSessionClip.swift */; };
+		060D50F41D5C4D5A00247AD0 /* NextLevelClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F31D5C4D5A00247AD0 /* NextLevelClip.swift */; };
 		06250A9D1D8C57A60008C903 /* NextLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AECC871AC38B3700EFCD03 /* NextLevel.swift */; };
 		06250A9E1D8C57AA0008C903 /* NextLevelConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F01D5BF09F00247AD0 /* NextLevelConfiguration.swift */; };
 		06250A9F1D8C57AD0008C903 /* NextLevelSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50EE1D5BC77E00247AD0 /* NextLevelSession.swift */; };
-		06250AA01D8C57AF0008C903 /* NextLevelSessionClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F31D5C4D5A00247AD0 /* NextLevelSessionClip.swift */; };
+		06250AA01D8C57AF0008C903 /* NextLevelClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060D50F31D5C4D5A00247AD0 /* NextLevelClip.swift */; };
 		06250AA11D8C57B20008C903 /* NextLevel+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0699B4BC1D7942D4005958BC /* NextLevel+Additions.swift */; };
 		06250AA21D8C57B50008C903 /* NextLevel+Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BA97681D7FFDF200CD20D7 /* NextLevel+Metadata.swift */; };
 		06250AA31D8C57B70008C903 /* NextLevel+AVFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C86E381D81DD5800A43411 /* NextLevel+AVFoundation.swift */; };
@@ -31,7 +31,7 @@
 /* Begin PBXFileReference section */
 		060D50EE1D5BC77E00247AD0 /* NextLevelSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextLevelSession.swift; path = ../Sources/NextLevelSession.swift; sourceTree = "<group>"; };
 		060D50F01D5BF09F00247AD0 /* NextLevelConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextLevelConfiguration.swift; path = ../Sources/NextLevelConfiguration.swift; sourceTree = "<group>"; };
-		060D50F31D5C4D5A00247AD0 /* NextLevelSessionClip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextLevelSessionClip.swift; path = ../Sources/NextLevelSessionClip.swift; sourceTree = "<group>"; };
+		060D50F31D5C4D5A00247AD0 /* NextLevelClip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextLevelClip.swift; path = ../Sources/NextLevelClip.swift; sourceTree = "<group>"; };
 		0699B4BC1D7942D4005958BC /* NextLevel+Additions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NextLevel+Additions.swift"; path = "../Sources/NextLevel+Additions.swift"; sourceTree = "<group>"; };
 		06AECC5F1AC3830800EFCD03 /* NL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		06AECC631AC3830800EFCD03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -117,7 +117,7 @@
 				06AECC871AC38B3700EFCD03 /* NextLevel.swift */,
 				060D50F01D5BF09F00247AD0 /* NextLevelConfiguration.swift */,
 				060D50EE1D5BC77E00247AD0 /* NextLevelSession.swift */,
-				060D50F31D5C4D5A00247AD0 /* NextLevelSessionClip.swift */,
+				060D50F31D5C4D5A00247AD0 /* NextLevelClip.swift */,
 				0699B4BC1D7942D4005958BC /* NextLevel+Additions.swift */,
 				06BA97681D7FFDF200CD20D7 /* NextLevel+Metadata.swift */,
 				06C86E381D81DD5800A43411 /* NextLevel+AVFoundation.swift */,
@@ -251,7 +251,7 @@
 				06C86E391D81DD5800A43411 /* NextLevel+AVFoundation.swift in Sources */,
 				0699B4BD1D7942D4005958BC /* NextLevel+Additions.swift in Sources */,
 				060D50EF1D5BC77E00247AD0 /* NextLevelSession.swift in Sources */,
-				060D50F41D5C4D5A00247AD0 /* NextLevelSessionClip.swift in Sources */,
+				060D50F41D5C4D5A00247AD0 /* NextLevelClip.swift in Sources */,
 				060D50F11D5BF09F00247AD0 /* NextLevelConfiguration.swift in Sources */,
 				06AECC881AC38B3700EFCD03 /* NextLevel.swift in Sources */,
 				06BA97691D7FFDF200CD20D7 /* NextLevel+Metadata.swift in Sources */,
@@ -263,7 +263,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06250AA01D8C57AF0008C903 /* NextLevelSessionClip.swift in Sources */,
+				06250AA01D8C57AF0008C903 /* NextLevelClip.swift in Sources */,
 				06250A9E1D8C57AA0008C903 /* NextLevelConfiguration.swift in Sources */,
 				06250AA11D8C57B20008C903 /* NextLevel+Additions.swift in Sources */,
 				06250A9F1D8C57AD0008C903 /* NextLevelSession.swift in Sources */,
