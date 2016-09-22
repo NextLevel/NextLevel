@@ -2,6 +2,8 @@
 
 NextLevel is a media capture library for iOS written in [Swift](https://developer.apple.com/swift/).
 
+Initial **beta** released, several features are untested and have bugs – these are being addressed in the short term.
+
 [![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) 
 
 ## Features
