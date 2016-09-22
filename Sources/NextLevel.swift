@@ -374,8 +374,9 @@ public let NextLevelErrorDomain = "NextLevelErrorDomain"
 public enum NextLevelError: Error, CustomStringConvertible {
     case unknown
     case started
-    case outputFileExists
-    case deviceNotAvailable
+    case fileExists
+    case notAvailable
+    case nothingRecorded
     
     public var description: String {
         get {
@@ -384,10 +385,12 @@ public enum NextLevelError: Error, CustomStringConvertible {
                 return "Unknown"
             case .started:
                 return "NextLevel already started"
-            case .outputFileExists:
-                return "Output file exists"
-            case .deviceNotAvailable:
-                return "Device Not Available"
+            case .fileExists:
+                return "File exists"
+            case .notAvailable:
+                return "Not Available"
+            case .nothingRecorded:
+                return "Nothing recorded"
             }
         }
     }
@@ -557,6 +560,12 @@ public class NextLevel: NSObject {
     public var isRecording: Bool {
         get {
             return self.recording
+        }
+    }
+    
+    public var session: NextLevelSession? {
+        get {
+            return self.recordingSession
         }
     }
     
@@ -730,6 +739,8 @@ extension NextLevel {
                 }
             }
         }
+        
+        self.recordingSession = nil
     }
     
     // private session functions
@@ -1674,7 +1685,7 @@ extension NextLevel {
     public func changeCaptureDeviceIfAvailable(captureDevice: NextLevelDeviceType) throws {
         let deviceForUse = AVCaptureDevice.captureDevice(withType: captureDevice.avfoundationType, forPosition: .back)
         if deviceForUse == nil {
-            throw NextLevelError.deviceNotAvailable
+            throw NextLevelError.notAvailable
         } else {
             self.requestedDevice = deviceForUse
             self.configureDevices()

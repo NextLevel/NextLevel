@@ -95,15 +95,27 @@ public class NextLevelSession: NSObject {
         }
     }
 
+    public var currentClipHasVideo: Bool {
+        get {
+            return self.sessionCurrentClipHasVideo
+        }
+    }
+
     public var currentClipHasAudio: Bool {
         get {
             return self.sessionCurrentClipHasAudio
         }
     }
     
-    public var currentClipHasVideo: Bool {
+    public var lastVideoFrame: CMSampleBuffer? {
         get {
-            return self.sessionCurrentClipHasVideo
+            return self.sessionLastVideoFrame
+        }
+    }
+    
+    public var lastAudioFrame: CMSampleBuffer? {
+        get {
+            return self.sessionLastAudioFrame
         }
     }
     
@@ -132,11 +144,6 @@ public class NextLevelSession: NSObject {
         }
     }
     
-    // TODO
-    public var lastVideoFrame: CMSampleBuffer?
-    public var lastAudioFrame: CMSampleBuffer?
-    //
-    
     // MARK: - private instance vars
     
     internal var sessionIdentifier: String
@@ -155,6 +162,7 @@ public class NextLevelSession: NSObject {
     internal var videoConfiguration: NextLevelVideoConfiguration?
     internal var audioConfiguration: NextLevelAudioConfiguration?
     
+    internal var audioQueue: DispatchQueue
     internal var sessionQueue: DispatchQueue
     internal var sessionQueueKey: DispatchSpecificKey<NSObject>
     
@@ -168,7 +176,11 @@ public class NextLevelSession: NSObject {
     internal var lastAudioTimestamp: CMTime
     internal var lastVideoTimestamp: CMTime
     
-    private let NextLevelSessionIdentifier = "engineering.NextLevel.session"
+    internal var sessionLastVideoFrame: CMSampleBuffer?
+    internal var sessionLastAudioFrame: CMSampleBuffer?
+    
+    private let NextLevelSessionAudioQueueIdentifier = "engineering.NextLevel.session.audioQueue"
+    private let NextLevelSessionQueueIdentifier = "engineering.NextLevel.sessionQueue"
     private let NextLevelSessionSpecificKey = DispatchSpecificKey<NSObject>()
     
     // MARK: - object lifecycle
@@ -186,9 +198,11 @@ public class NextLevelSession: NSObject {
         self.sessionClipFilenameCount = 0
         self.sessionDate = Date()
         self.sessionDuration = kCMTimeZero
-        
+     
+        self.audioQueue = DispatchQueue(label: NextLevelSessionAudioQueueIdentifier)
+
         // should always use init(queue:queueKey:), but this may be good for the future
-        self.sessionQueue = DispatchQueue(label: NextLevelSessionIdentifier)
+        self.sessionQueue = DispatchQueue(label: NextLevelSessionQueueIdentifier)
         self.sessionQueue.setSpecific(key: NextLevelSessionSpecificKey, value: self.sessionQueue)
         self.sessionQueueKey = NextLevelSessionSpecificKey
 
@@ -214,8 +228,8 @@ public class NextLevelSession: NSObject {
         self.videoConfiguration = nil
         self.audioConfiguration = nil
     
-        self.lastVideoFrame = nil
-        self.lastAudioFrame = nil
+        self.sessionLastVideoFrame = nil
+        self.sessionLastAudioFrame = nil
     }
     
     // MARK: - functions
@@ -280,9 +294,7 @@ public class NextLevelSession: NSObject {
                         print("NextLevel, writer encountered an error \(writer.error)")
                         self.writer = nil
                     }
-                    
                 }
-                
             } catch {
                 print("NextLevel could not create asset writer")
             }
@@ -309,6 +321,8 @@ extension NextLevelSession {
     typealias NextLevelSessionAppendSampleBufferCompletionHandler = (_: Bool) -> Void
     
     public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
+        self.sessionLastVideoFrame = sampleBuffer
+        
         if let pixelBufferImage = CMSampleBufferGetImageBuffer(sampleBuffer) {
             let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
             self.startSessionIfNecessary(timestamp: timestamp)
@@ -358,6 +372,9 @@ extension NextLevelSession {
             
             self.videoConfiguration = nil
             self.audioConfiguration = nil
+            
+            self.sessionLastVideoFrame = nil
+            self.sessionLastAudioFrame = nil
         }
     }
     
@@ -416,16 +433,15 @@ extension NextLevelSession {
                             
                             
                         })
-                        
+                        return
                     }
                 }
-                
-            } else {
-                if let handler = completionHandler {
-                    self.executeClosureAsyncOnMainQueueIfNecessary {
-                        if completionHandler != nil {
-                            handler(nil)
-                        }
+            }
+            
+            if let handler = completionHandler {
+                self.executeClosureAsyncOnMainQueueIfNecessary {
+                    if completionHandler != nil {
+                        handler(nil)
                     }
                 }
             }
@@ -498,11 +514,40 @@ extension NextLevelSession {
         }
     }
     
-    public typealias NextLevelSessionMergeClipsCompletionHandler = (_: URL, _: Error) -> Void
-    public func mergeClips(usingPreset preset: String, completionHandler: NextLevelSessionMergeClipsCompletionHandler) {
+    public typealias NextLevelSessionMergeClipsCompletionHandler = (_: URL?, _: Error?) -> Void
+    
+    public func mergeClips(usingPreset preset: String, completionHandler: @escaping NextLevelSessionMergeClipsCompletionHandler) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
+            let fileType = self.fileType()
+            let fileExtension = self.fileExtension(fileType: fileType)
+            let filename = "\(self.identifier)-NL-merged.\(fileExtension)"
 
+            let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directory: self.sessionDirectory)
+            var asset: AVAsset? = nil
             
+            if self.sessionClips.count > 0 {
+                asset = self.asset
+
+                if let exportAsset = asset, let exportURL = outputURL {
+                    self.removeFile(fileUrl: exportURL)
+                    
+                    if let exportSession = AVAssetExportSession(asset: exportAsset, presetName: preset) {
+                        exportSession.shouldOptimizeForNetworkUse = true
+                        exportSession.outputURL = exportURL
+                        exportSession.outputFileType = fileType
+                        exportSession.exportAsynchronously {
+                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                                completionHandler(exportURL, exportSession.error)
+                            }
+                        }
+                        return
+                    }
+                }
+            }
+            
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                completionHandler(nil, NextLevelError.unknown)
+            }
         }
     }
 }
