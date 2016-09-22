@@ -1,8 +1,5 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" style="max-width:100%;"></p>
 
-*** in the works… almost fully tested and featured!
-*** check back soon or ask how to help!
-
 NextLevel is a media capture library for iOS written in [Swift](https://developer.apple.com/swift/).
 
 [![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) 
@@ -10,7 +7,7 @@ NextLevel is a media capture library for iOS written in [Swift](https://develope
 ## Features
 
 - [x] simple and extensible API
-- [ ] “[Vine](http://vine.co)-like” video clip recording
+- [x] “[Vine](http://vine.co)-like” video clip recording
 - [x] slow motion capture on supported hardware ([iPhone](https://www.apple.com/iphone/compare/), [iPad](https://www.apple.com/ipad/compare/))
 - [x] video zoom
 - [x] customizable user interface and gestural interactions
@@ -18,7 +15,7 @@ NextLevel is a media capture library for iOS written in [Swift](https://develope
 - [x] flash/torch support
 - [x] mirroring support
 - [x] photo capture
-- [x] dual camera system support
+- [x] dual camera, wide angle, telephoto device support
 - [x] [Swift 3](https://developer.apple.com/swift/)
 
 ## Quick Start
@@ -93,69 +90,83 @@ Setup the camera preview.
 let screenBounds = UIScreen.main.bounds
 self.previewView = UIView(frame: screenBounds)
 if let previewView = self.previewView {
-       previewView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-       previewView.backgroundColor = UIColor.black
-       previewView.layer.addSublayer(NextLevel.sharedInstance.previewLayer)
-       self.view.addSubview(previewView)
+    previewView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    previewView.backgroundColor = UIColor.black
+    NextLevel.sharedInstance.previewLayer.frame = previewView.bounds
+    previewView.layer.addSublayer(NextLevel.sharedInstance.previewLayer)
+    self.view.addSubview(previewView)
 }
 ```
 
-Start, configure, and clean-up the `NextLevel` controller.
+Configure the capture session.
+```swift
+override func viewDidLoad() {
+    NextLevel.sharedInstance.delegate = self
+    
+    // modify .videoConfiguration, .audioConfiguration, .photoConfiguration properties
+    // Compression, resolution, and maximum recording time options are available
+    NextLevel.sharedInstance.videoConfiguration.maxRecordDuration = CMTimeMakeWithSeconds(5, 600)
+    NextLevel.sharedInstance.audioConfiguration.bitRate = 44000
+ }
+```
+
+Start/stop the session when appropriate. These methods create a new "session" instance for 'NextLevel.sharedInstance.session' when called.
 
 ```swift
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // modify .videoConfiguration, .photoConfiguration, . audioConfiguration properties, if necessary
-        NextLevel.sharedInstance.start()
-        // …
-    }
+override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)     
+    NextLevel.sharedInstance.start()
+    // …
+}
 ```
 
 ```swift
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)        
-        NextLevel.sharedInstance.stop()
-        // …
-    }
+override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)        
+    NextLevel.sharedInstance.stop()
+    // …
+}
 ```
 
-Video Pause/Record
+Video record/pause.
 
 ```swift
-// pause
-NextLevel.sharedInstance.pause(nil)
-
 // record
 NextLevel.sharedInstance.record()
 
-// finalize
-NextLevel.sharedInstance.completeSession()
+// pause
+NextLevel.sharedInstance.pause()
 ```
 
-Handle the output and export the recorded session.
-
+Editing and finalizing the recorded session.
 ```swift
-// TODO
-```
 
-### Configure video quality and compression
+if let session = NextLevel.sharedInstance.session {
 
-```swift
-// TODO
-```
+    //..
 
-### Configure automatic video duration limit
+    // undo
+    session.removeLastClip()
 
-To enable automatic end of capture, you can specify a maximum duration on the `.videoConfiguration` property.
+    // various editing operations can be done using the NextLevelSession methods
 
-```swift
-NextLevel.sharedInstance.videoConfiguration.maximumCaptureDuration = CMTimeMakeWithSeconds(5, 600)
+    // export
+    session.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
+        if let _ = url {
+            //
+        } else if let _ = error {
+            //
+        }
+     })
+
+    //..
+
+}
 ```
 
 ## About
 
-Next Level is just a little weekend project that is still going.
+Next Level is just a little weekend project that kept going.
 
 The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization on iOS. The same capture capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
 
