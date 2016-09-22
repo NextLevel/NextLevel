@@ -135,6 +135,7 @@ class CameraViewController: UIViewController {
         }
         
         // Configure NextLevel by modifying the configuration ivars
+        NextLevel.sharedInstance.delegate = self
         //NextLevel.sharedInstance.videoConfiguration
         //NextLevel.sharedInstance.audioConfiguration        
     }
@@ -174,7 +175,13 @@ extension CameraViewController {
     }
     
     internal func handleDoneButton(_ button: UIButton) {
-        
+        NextLevel.sharedInstance.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
+            if let _ = url {
+                //
+            } else if let _ = error {
+                //
+            }
+        })
     }
     
 }
