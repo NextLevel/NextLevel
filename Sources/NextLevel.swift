@@ -502,7 +502,7 @@ private let NextLevelRequiredMinimumStorageSpaceInBytes: UInt64 = 49999872 // ~4
 
 public class NextLevel: NSObject {
     
-    weak var delegate: NextLevelDelegate?
+    public weak var delegate: NextLevelDelegate?
     
     // preview
     
@@ -606,7 +606,7 @@ public class NextLevel: NSObject {
     
     // MARK: - singleton
     
-    static let sharedInstance: NextLevel = NextLevel()
+    public static let sharedInstance: NextLevel = NextLevel()
     
     // MARK: - object lifecycle
     
