@@ -1,6 +1,6 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" alt="Next Level" style="max-width:100%;"></p>
 
-NextLevel is a media capture library for iOS written in [Swift](https://developer.apple.com/swift/).
+Next Level is a media capture library for iOS written in [Swift](https://developer.apple.com/swift/).
 
 Currently initial **beta**, several features are being tested and have bugs – these are being addressed.
 
@@ -9,15 +9,15 @@ Currently initial **beta**, several features are being tested and have bugs – 
 ## Features
 
 - [x] simple and extensible API
+- [x] camera user interface and gestural interaction customization
 - [x] “[Vine](http://vine.co)-like” video clip recording
 - [x] slow motion capture on supported hardware ([iPhone](https://www.apple.com/iphone/compare/), [iPad](https://www.apple.com/ipad/compare/))
 - [x] video zoom
-- [x] customizable user interface and gestural interactions
-- [x] white balance, focus, and exposure adjustment support
+- [x] white balance, focus, and exposure adjustment
 - [x] flash/torch support
 - [x] mirroring support
 - [x] photo capture
-- [x] dual camera, wide angle, telephoto device support
+- [x] dual camera, wide angle, telephoto device switching
 - [x] [Swift 3](https://developer.apple.com/swift/)
 
 ## Quick Start
@@ -69,23 +69,6 @@ If you found this project to be helpful, check out the [Next Level sticker](http
 For a [$10 credit](https://www.stickermule.com/unlock?ref_id=1012370701), use this sign up [link](https://www.stickermule.com/unlock?ref_id=1012370701).
 
 If other projects have interest in providing something similar, this conforms to the [sticker standard](https://terinjokes.github.io/StickerConstructorSpec/) which is also used by several node projects. 
-
-### Complementary Projects
-
-Need a video player?
-- [Player (Swift)](https://github.com/piemonte/player)
-- [PBJVideoPlayer (obj-c)](https://github.com/piemonte/PBJVideoPlayer)
-
-Need an image processing library?
-- [GPUImage2](https://github.com/BradLarson/GPUImage2)
-
-Need an obj-c media capture library?
-- [SCRecorder](https://github.com/rFlex/SCRecorder)
-- [PBJVision](https://github.com/piemonte/PBJVision)
-
-Need a transcoding library?
-- [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter)
-- [SDAVAssetExportSession](https://github.com/rs/SDAVAssetExportSession)
 
 ## Overview
 
@@ -180,9 +163,19 @@ if let session = NextLevel.sharedInstance.session {
 
 Next Level is just a little weekend project that kept going.
 
-The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization on iOS. The same capture capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
+The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization on iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
 
-If it can provide a good foundation for quick integration, allowing everyone to focus on the functionality that makes the matters most – such as image processing, computer vision apps such as 3D photography or object mapping, augmented reality, depth of field, or even new cinematographic techniques.
+It's goal is to provide a good foundation for quick integration – allowing everyone to focus on the functionality that builds on this, such as image processing, computer vision methods including 3D photography, augmented reality, depth of field, or even new technology aided cinematographic techniques.
+
+### Related Projects
+
+- [Player (Swift)](https://github.com/piemonte/player), video player in Swift
+- [PBJVideoPlayer (obj-c)](https://github.com/piemonte/PBJVideoPlayer), video player in obj-c
+- [GPUImage2](https://github.com/BradLarson/GPUImage2), image processing library
+- [SCRecorder](https://github.com/rFlex/SCRecorder), obj-c capture library
+- [PBJVision](https://github.com/piemonte/PBJVision), obj-c capture library
+- [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), media transcoding in Swift
+- [SDAVAssetExportSession](https://github.com/rs/SDAVAssetExportSession), media transcoding in obj-c
 
 ## Resources
 
@@ -192,12 +185,6 @@ If it can provide a good foundation for quick integration, allowing everyone to 
 * [Swift Evolution](https://github.com/apple/swift-evolution)
 * [objc.io Camera and Photos](http://www.objc.io/issue-21/)
 * [objc.io Video](http://www.objc.io/issue-23/)
-* [Player](https://github.com/piemonte/player), a simple iOS video player in Swift
-* [PBJVideoPlayer](https://github.com/piemonte/PBJVideoPlayer), a simple iOS video player in obj-c
-* [SCRecorder](https://github.com/rFlex/SCRecorder), obj-C iOS camera engine with Vine-like tap to record, filters, slow motion, segments editing
-* [PBJVision](https://github.com/piemonte/PBJVision), obj-c iOS camera engine, features touch-to-record video, slow motion video, and photo capture
-* [GPUImage2](https://github.com/BradLarson/GPUImage2), image processing library in Swift
-* [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), media export and transcoding library
 
 ## License
 
