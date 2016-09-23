@@ -1,6 +1,6 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" alt="Next Level" style="max-width:100%;"></p>
 
-Next Level is a media capture library for iOS written in [Swift](https://developer.apple.com/swift/).
+Next Level is a media capture camera library for iOS written in [Swift](https://developer.apple.com/swift/).
 
 Currently initial **beta**, several features are being tested and have bugs – these are being addressed.
 
