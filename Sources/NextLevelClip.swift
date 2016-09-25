@@ -157,9 +157,9 @@ public class NextLevelClip: NSObject {
     // MARK: - private instance vars
     
     internal var clipAsset: AVAsset?
-    internal var clipThumbnailImage: UIImage?
-    internal var clipLastFrameImage: UIImage?
     internal var clipInfoDict: [String : Any]?
+    internal weak var clipThumbnailImage: UIImage?
+    internal weak var clipLastFrameImage: UIImage?
     
     // MARK: - object lifecycle
     
