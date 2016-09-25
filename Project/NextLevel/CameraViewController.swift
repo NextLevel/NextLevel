@@ -143,10 +143,17 @@ class CameraViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        do {
-            try NextLevel.sharedInstance.start()
-        } catch {
-            print("NextLevel, failed to start camera session")
+        let nextLevel = NextLevel.sharedInstance
+        if nextLevel.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized &&
+            nextLevel.authorizationStatus(forMediaType: AVMediaTypeAudio) == .authorized {
+            do {
+                try nextLevel.start()
+            } catch {
+                print("NextLevel, failed to start camera session")
+            }
+        } else {
+            nextLevel.requestAuthorization(forMediaType: AVMediaTypeVideo)
+            nextLevel.requestAuthorization(forMediaType: AVMediaTypeAudio)
         }
     }
     
@@ -212,7 +219,17 @@ extension CameraViewController: NextLevelDelegate {
 
     // permission
     func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: String!) {
-        
+        if nextLevel.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized &&
+            nextLevel.authorizationStatus(forMediaType: AVMediaTypeAudio) == .authorized {
+            do {
+                try nextLevel.start()
+            } catch {
+                print("NextLevel, failed to start camera session")
+            }
+        } else if status == .notAuthorized {
+            // gracefully handle when audio/video is not authorized
+            print("NextLevel doesn't have authorization for audio or video")
+        }
     }
     
     // configuration
@@ -226,15 +243,12 @@ extension CameraViewController: NextLevelDelegate {
     
     // session
     func nextLevelSessionWillStart(_ nextLevel: NextLevel) {
-        
     }
     
     func nextLevelSessionDidStart(_ nextLevel: NextLevel) {
-        
     }
     
     func nextLevelSessionDidStop(_ nextLevel: NextLevel) {
-        
     }
     
     // device, mode, orientation
@@ -346,7 +360,6 @@ extension CameraViewController: NextLevelDelegate {
     // video frame photo
 
     func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String : Any]?) {
-        
     }
     
     // photo
