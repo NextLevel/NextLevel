@@ -1974,16 +1974,14 @@ extension NextLevel {
                 
                 if self.recording && session.isClipReady {
                     
-                    let NextLevelMinTimeBetweenFrames = 0.004
-                    let sleepDuration = NextLevelMinTimeBetweenFrames - (CACurrentMediaTime() - self.lastVideoFrameTimeInterval)
+                    let minTimeBetweenFrames = 0.004
+                    let sleepDuration = minTimeBetweenFrames - (CACurrentMediaTime() - self.lastVideoFrameTimeInterval)
                     if sleepDuration > 0 {
                         Thread.sleep(forTimeInterval: sleepDuration)
                     }
                     
                     if let device = self.currentDevice {
                         
-                        let minFrameDuration = device.activeVideoMinFrameDuration
-
                         // check with the client to setup/maintain an external render context
                         let imageBuffer = self.isCustomContextVideoRenderingEnabled == true ? CMSampleBufferGetImageBuffer(sampleBuffer) : nil
 
@@ -2002,6 +2000,7 @@ extension NextLevel {
                             sampleBufferToProcess = sampleBuffer
                         }
                         
+                        let minFrameDuration = device.activeVideoMinFrameDuration
                         session.appendVideo(withSampleBuffer: sampleBufferToProcess, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
                             // cleanup client rendering context
                             if self.isCustomContextVideoRenderingEnabled {
