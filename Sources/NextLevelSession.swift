@@ -176,8 +176,8 @@ public class NextLevelSession: NSObject {
     internal var lastAudioTimestamp: CMTime
     internal var lastVideoTimestamp: CMTime
     
-    internal var sessionLastVideoFrame: CMSampleBuffer?
-    internal var sessionLastAudioFrame: CMSampleBuffer?
+    internal weak var sessionLastVideoFrame: CMSampleBuffer?
+    internal weak var sessionLastAudioFrame: CMSampleBuffer?
     
     private let NextLevelSessionAudioQueueIdentifier = "engineering.NextLevel.session.audioQueue"
     private let NextLevelSessionQueueIdentifier = "engineering.NextLevel.sessionQueue"
@@ -320,36 +320,48 @@ extension NextLevelSession {
     
     public typealias NextLevelSessionAppendSampleBufferCompletionHandler = (_: Bool) -> Void
     
-    public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
+    public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, imageBuffer: CVPixelBuffer?, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
         self.sessionLastVideoFrame = sampleBuffer
         
-        if let pixelBufferImage = CMSampleBufferGetImageBuffer(sampleBuffer) {
-            let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-            self.startSessionIfNecessary(timestamp: timestamp)
-            
-            var frameDuration = minFrameDuration
-            let offsetBufferTimestamp = timestamp - self.timeOffset
-            
-            if let videoConfig = self.videoConfiguration, let timeScale = videoConfig.timeScale {
-                if timeScale != 1.0 {
-                    let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
-                    if self.sessionCurrentClipDuration.value > 0 {
-                        self.timeOffset = self.timeOffset + (duration - scaledDuration)
-                    }
-                    frameDuration = scaledDuration
+        let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        self.startSessionIfNecessary(timestamp: timestamp)
+        
+        var frameDuration = minFrameDuration
+        let offsetBufferTimestamp = timestamp - self.timeOffset
+        
+        if let videoConfig = self.videoConfiguration, let timeScale = videoConfig.timeScale {
+            if timeScale != 1.0 {
+                let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
+                if self.sessionCurrentClipDuration.value > 0 {
+                    self.timeOffset = self.timeOffset + (duration - scaledDuration)
                 }
-            }
-            
-            if let videoInput = self.videoInput, let pixelBufferAdapter = self.pixelBufferAdapter {
-                if videoInput.isReadyForMoreMediaData && pixelBufferAdapter.append(pixelBufferImage, withPresentationTime: offsetBufferTimestamp) {
-                    self.sessionCurrentClipDuration = (offsetBufferTimestamp + frameDuration) - self.startTimestamp
-                    self.lastVideoTimestamp = timestamp
-                    self.sessionCurrentClipHasVideo = true
-                    completionHandler(true)
-                    return
-                }
+                frameDuration = scaledDuration
             }
         }
+        
+        if let videoInput = self.videoInput, let pixelBufferAdapter = self.pixelBufferAdapter {
+            if videoInput.isReadyForMoreMediaData {
+                
+                var bufferToProcess: CVPixelBuffer? = nil
+                if let pixelImageBuffer = imageBuffer {
+                    bufferToProcess = pixelImageBuffer
+                } else {
+                    bufferToProcess = CMSampleBufferGetImageBuffer(sampleBuffer)
+                }
+                
+                if let outputBuffer = bufferToProcess {
+                    if pixelBufferAdapter.append(outputBuffer, withPresentationTime: offsetBufferTimestamp) {
+                        self.sessionCurrentClipDuration = (offsetBufferTimestamp + frameDuration) - self.startTimestamp
+                        self.lastVideoTimestamp = timestamp
+                        self.sessionCurrentClipHasVideo = true
+                        completionHandler(true)
+                        return
+                    }
+                }
+                
+            }
+        }
+
         print("NextLevel, session failed to append video frame to clip")
         completionHandler(false)
     }

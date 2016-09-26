@@ -325,7 +325,7 @@ extension CameraViewController: NextLevelDelegate {
     }
     
     // enabled by isCustomContextVideoRenderingEnabled
-    func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithSampleBuffer sampleBuffer: CMSampleBuffer, onQueue queue: DispatchQueue) {
+    func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue) {
     }
     
     // video recording session

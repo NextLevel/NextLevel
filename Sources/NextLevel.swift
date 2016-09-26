@@ -29,7 +29,6 @@ import AVFoundation
 import CoreImage
 import CoreVideo
 import ImageIO
-import MobileCoreServices
 
 // MARK: - types
 
@@ -466,7 +465,7 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     
     // video processing
     func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer)
-    func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithSampleBuffer sampleBuffer: CMSampleBuffer, onQueue queue: DispatchQueue)
+    func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue)
 
     // video recording session
     func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession)
@@ -565,26 +564,27 @@ public class NextLevel: NSObject {
     // custom video rendering
     
     // property enables callbacks for rendering into a custom context
-    public var isCustomContextVideoRenderingEnabled: Bool {
+    public var isVideoCustomContextRenderingEnabled: Bool {
         get {
-            return self.customContextVideoRenderingEnabled
+            return self.videoCustomContextRenderingEnabled
         }
         set {
             self.executeClosureSyncOnSessionQueueIfNecessary {
-                self.customContextVideoRenderingEnabled = newValue
+                self.videoCustomContextRenderingEnabled = newValue
+                self.sessionVideoCustomContextImageBuffer = nil
             }
         }
     }
     
-    // if you want to record the modified frame from isCustomContextVideoRenderingEnabled, set it here
-    // if you do not want to record the modified frame, set it to nil
-    public var customContextResultingSampleBuffer: CMSampleBuffer? {
+    // if you want to record the modified frame from isVideoCustomContextRenderingEnabled, set this property
+    // if you do not want to record the modified frame, keep or set it to nil
+    public var videoCustomContextImageBuffer: CVPixelBuffer? {
         get {
-            return self.customContextResultingSampleBuffer
+            return self.sessionVideoCustomContextImageBuffer
         }
         set {
             self.executeClosureSyncOnSessionQueueIfNecessary {
-                self.customContextResultingSampleBuffer = newValue
+                self.sessionVideoCustomContextImageBuffer = newValue
             }
         }
     }
@@ -628,7 +628,8 @@ public class NextLevel: NSObject {
     internal var currentDevice: AVCaptureDevice?
     internal var requestedDevice: AVCaptureDevice?
 
-    internal var customContextVideoRenderingEnabled: Bool
+    internal var videoCustomContextRenderingEnabled: Bool
+    internal var sessionVideoCustomContextImageBuffer: CVPixelBuffer?
     
     internal var recording: Bool
     internal var recordingSession: NextLevelSession?
@@ -660,7 +661,7 @@ public class NextLevel: NSObject {
         
         self.photoStabilizationEnabled = false
         self.videoStabilizationMode = .auto
-        self.customContextVideoRenderingEnabled = false
+        self.videoCustomContextRenderingEnabled = false
         
         self.recording = false
         self.lastVideoFrameTimeInterval = 0
@@ -1009,7 +1010,7 @@ extension NextLevel {
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
                 videoOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
-                //return true
+                return true
             }
         }
         print("NextLevel, couldn't add video output to session")
@@ -1938,6 +1939,7 @@ extension NextLevel {
         
         if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
             
+            // TODO better expose this or a sharegroup for custom context rendering support
             if self.cicontext == nil {
                 self.cicontext = CIContext(eaglContext: EAGLContext(api: .openGLES3))
             }
@@ -1948,6 +1950,7 @@ extension NextLevel {
                     sampleBufferImage = UIImage(cgImage: cgimage)
                 }
             }
+            
         }
         
         return sampleBufferImage
@@ -1983,27 +1986,21 @@ extension NextLevel {
                     if let device = self.currentDevice {
                         
                         // check with the client to setup/maintain an external render context
-                        let imageBuffer = self.isCustomContextVideoRenderingEnabled == true ? CMSampleBufferGetImageBuffer(sampleBuffer) : nil
+                        let imageBuffer = self.isVideoCustomContextRenderingEnabled == true ? CMSampleBufferGetImageBuffer(sampleBuffer) : nil
 
                         if let bufferRef = imageBuffer {
                             if CVPixelBufferLockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0))) == kCVReturnSuccess {
                                 // only called from captureQueue
-                                self.delegate?.nextLevel(self, renderToCustomContextWithSampleBuffer: sampleBuffer, onQueue: self.sessionQueue)
+                                self.delegate?.nextLevel(self, renderToCustomContextWithImageBuffer: bufferRef, onQueue: self.sessionQueue)
+                            } else {
+                                self.sessionVideoCustomContextImageBuffer = nil
                             }
                         }
                         
-                        // pass on any resulting rendered context, if desired
-                        let sampleBufferToProcess: CMSampleBuffer
-                        if let customBuffer = self.customContextResultingSampleBuffer {
-                            sampleBufferToProcess = customBuffer
-                        } else {
-                            sampleBufferToProcess = sampleBuffer
-                        }
-                        
                         let minFrameDuration = device.activeVideoMinFrameDuration
-                        session.appendVideo(withSampleBuffer: sampleBufferToProcess, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
+                        session.appendVideo(withSampleBuffer: sampleBuffer, imageBuffer: self.sessionVideoCustomContextImageBuffer, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
                             // cleanup client rendering context
-                            if self.isCustomContextVideoRenderingEnabled {
+                            if self.isVideoCustomContextRenderingEnabled {
                                 if let bufferRef = imageBuffer {
                                     CVPixelBufferUnlockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
                                 }
@@ -2013,12 +2010,12 @@ extension NextLevel {
                             self.lastVideoFrameTimeInterval = CACurrentMediaTime()
                             if success == true {
                                 self.executeClosureAsyncOnMainQueueIfNecessary {
-                                    self.delegate?.nextLevel(self, didAppendVideoSampleBuffer: sampleBufferToProcess, inSession: session)
+                                    self.delegate?.nextLevel(self, didAppendVideoSampleBuffer: sampleBuffer, inSession: session)
                                 }
                                 self.checkSessionDuration()
                             } else {
                                 self.executeClosureAsyncOnMainQueueIfNecessary {
-                                    self.delegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBufferToProcess, inSession: session)
+                                    self.delegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBuffer, inSession: session)
                                 }
                             }
                         })
@@ -2026,7 +2023,7 @@ extension NextLevel {
                         if session.currentClipHasVideo == false && session.currentClipHasAudio == false {
                             if let audioBuffer = session.lastAudioFrame {
                                 let lastAudioEndTime = CMTimeAdd(CMSampleBufferGetPresentationTimeStamp(audioBuffer), CMSampleBufferGetDuration(audioBuffer))
-                                let videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBufferToProcess)
+                                let videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
                                 
                                 if lastAudioEndTime > videoStartTime {
                                     self.handleAudioOutput(sampleBuffer: audioBuffer, session: session)
@@ -2037,7 +2034,7 @@ extension NextLevel {
                     } // self.currentDevice
                 }
             } // session.isAudioReady
-            
+
         } // self.recordingSession
     }
     
