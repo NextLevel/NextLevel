@@ -1007,13 +1007,9 @@ extension NextLevel {
         }
 
         if let session = self.captureSession, let videoOutput = self.videoOutput {
-            if !session.outputs.contains(where: { (videoOutput) -> Bool in
+            if session.canAddOutput(videoOutput) {
+                session.addOutput(videoOutput)
                 return true
-            }) {
-                if session.canAddOutput(videoOutput) {
-                    session.addOutput(videoOutput)
-                    return true
-                }
             }
         }
         print("NextLevel, couldn't add video output to session")
@@ -1029,13 +1025,9 @@ extension NextLevel {
         }
         
         if let session = self.captureSession, let audioOutput = self.audioOutput {
-            if !session.outputs.contains(where: { (audioOutput) -> Bool in
+            if session.canAddOutput(audioOutput) {
+                session.addOutput(audioOutput)
                 return true
-            }) {
-                if session.canAddOutput(audioOutput) {
-                    session.addOutput(audioOutput)
-                    return true
-                }
             }
         }
         print("NextLevel, couldn't add audio output to session")
@@ -1050,13 +1042,9 @@ extension NextLevel {
         }
         
         if let session = self.captureSession, let photoOutput = self.photoOutput {
-            if !session.outputs.contains(where: { (photoOutput) -> Bool in
+            if session.canAddOutput(photoOutput) {
+                session.addOutput(photoOutput)
                 return true
-            }) {
-                if session.canAddOutput(photoOutput) {
-                    session.addOutput(photoOutput)
-                    return true
-                }
             }
         }
         print("NextLevel, couldn't add audio output to session")
