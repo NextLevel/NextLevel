@@ -30,7 +30,3 @@ FOUNDATION_EXPORT double NextLevelVersionNumber;
 
 //! Project version string for NextLevel.
 FOUNDATION_EXPORT const unsigned char NextLevelVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <NextLevel/PublicHeader.h>
-
-
