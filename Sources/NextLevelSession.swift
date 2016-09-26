@@ -698,10 +698,12 @@ extension NextLevelSession {
     }
     
     internal func removeFile(fileUrl: URL) {
-        do {
-            try FileManager.default.removeItem(atPath: fileUrl.path)
-        } catch {
-            print("NextLevel, could not remove file at path")
+        if FileManager.default.fileExists(atPath: fileUrl.path) {
+            do {
+                try FileManager.default.removeItem(atPath: fileUrl.path)
+            } catch {
+                print("NextLevel, could not remove file at path")
+            }
         }
     }
 }
