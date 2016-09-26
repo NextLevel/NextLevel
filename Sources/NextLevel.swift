@@ -983,7 +983,6 @@ extension NextLevel {
         if self.videoOutput == nil {
             self.videoOutput = AVCaptureVideoDataOutput()
             self.videoOutput?.alwaysDiscardsLateVideoFrames = false
-            self.videoOutput?.setSampleBufferDelegate(self, queue: self.sessionQueue)
             
             var videoSettings = [String(kCVPixelBufferPixelFormatTypeKey):Int(kCVPixelFormatType_32BGRA)]
             if let formatTypes = self.videoOutput?.availableVideoCVPixelFormatTypes as? [Int] {
@@ -1009,7 +1008,8 @@ extension NextLevel {
         if let session = self.captureSession, let videoOutput = self.videoOutput {
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
-                return true
+                videoOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
+                //return true
             }
         }
         print("NextLevel, couldn't add video output to session")
@@ -1021,12 +1021,12 @@ extension NextLevel {
         
         if self.audioOutput == nil {
             self.audioOutput = AVCaptureAudioDataOutput()
-            self.audioOutput?.setSampleBufferDelegate(self, queue: self.sessionQueue)
         }
         
         if let session = self.captureSession, let audioOutput = self.audioOutput {
             if session.canAddOutput(audioOutput) {
                 session.addOutput(audioOutput)
+                audioOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
                 return true
             }
         }
