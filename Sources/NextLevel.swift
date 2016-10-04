@@ -58,18 +58,18 @@ public enum NextLevelDevicePosition: Int, CustomStringConvertible {
     var uikitType: UIImagePickerControllerCameraDevice {
         switch self {
         case .back:
-            return UIImagePickerControllerCameraDevice.rear
+            return .rear
         case .front:
-            return UIImagePickerControllerCameraDevice.front
+            return .front
         }
     }
     
     var avfoundationType: AVCaptureDevicePosition {
         switch self {
         case .back:
-            return AVCaptureDevicePosition.back
+            return .back
         case .front:
-            return AVCaptureDevicePosition.front
+            return .front
         }
     }
     
@@ -148,26 +148,26 @@ public enum NextLevelDeviceOrientation: Int, CustomStringConvertible {
     var uikitType: UIDeviceOrientation {
         switch self {
         case .portrait:
-            return UIDeviceOrientation.portrait
+            return .portrait
         case .landscapeLeft:
-            return UIDeviceOrientation.landscapeLeft
+            return .landscapeLeft
         case .landscapeRight:
-            return UIDeviceOrientation.landscapeRight
+            return .landscapeRight
         case .portraitUpsideDown:
-            return UIDeviceOrientation.portraitUpsideDown
+            return .portraitUpsideDown
         }
     }
     
     var avfoundationType: AVCaptureVideoOrientation {
         switch self {
         case .portrait:
-            return AVCaptureVideoOrientation.portrait
+            return .portrait
         case .portraitUpsideDown:
-            return AVCaptureVideoOrientation.portraitUpsideDown
+            return .portraitUpsideDown
         case .landscapeRight:
-            return AVCaptureVideoOrientation.landscapeRight
+            return .landscapeRight
         case .landscapeLeft:
-            return AVCaptureVideoOrientation.landscapeLeft
+            return .landscapeLeft
         }
     }
     
@@ -195,11 +195,11 @@ public enum NextLevelFocusMode: Int, CustomStringConvertible {
     var avfoundationType: AVCaptureFocusMode {
         switch self {
         case .locked:
-            return AVCaptureFocusMode.locked
+            return .locked
         case .autoFocus:
-            return AVCaptureFocusMode.autoFocus
+            return .autoFocus
         case .continuousAutoFocus:
-            return AVCaptureFocusMode.continuousAutoFocus
+            return .continuousAutoFocus
         }
     }
 
@@ -226,13 +226,13 @@ public enum NextLevelExposureMode: Int, CustomStringConvertible {
     var avfoundationType: AVCaptureExposureMode {
         switch self {
         case .locked:
-            return AVCaptureExposureMode.locked
+            return .locked
         case .autoExpose:
-            return AVCaptureExposureMode.autoExpose
+            return .autoExpose
         case .continuousAutoExposure:
-            return AVCaptureExposureMode.continuousAutoExposure
+            return .continuousAutoExposure
         case .custom:
-            return AVCaptureExposureMode.custom
+            return .custom
         }
     }
     
