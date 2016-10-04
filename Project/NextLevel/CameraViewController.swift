@@ -135,9 +135,16 @@ class CameraViewController: UIViewController {
         }
         
         // Configure NextLevel by modifying the configuration ivars
-        NextLevel.sharedInstance.delegate = self
-        //NextLevel.sharedInstance.videoConfiguration
-        //NextLevel.sharedInstance.audioConfiguration        
+        let nextLevel = NextLevel.sharedInstance
+        nextLevel.delegate = self
+        
+        // video configuration
+        nextLevel.videoConfiguration.bitRate = 2000000
+        nextLevel.videoConfiguration.dimensions = CGSize(width: 1280, height: 720)
+        nextLevel.videoConfiguration.scalingMode = AVVideoScalingModeResizeAspectFill
+        
+        // audio configuration
+        nextLevel.audioConfiguration.bitRate = 128000
     }
 
     override func viewWillAppear(_ animated: Bool) {
