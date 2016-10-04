@@ -374,6 +374,7 @@ public enum NextLevelError: Error, CustomStringConvertible {
     case unknown
     case started
     case deviceNotAvailable
+    case authorization
     case fileExists
     case nothingRecorded
     case notReadyToRecord
@@ -387,6 +388,8 @@ public enum NextLevelError: Error, CustomStringConvertible {
                 return "NextLevel already started"
             case .fileExists:
                 return "File exists"
+            case .authorization:
+                return "Authorization has not been requested"
             case .deviceNotAvailable:
                 return "Device Not Available"
             case .nothingRecorded:
@@ -729,6 +732,18 @@ extension NextLevel {
         }
     }
     
+    internal func authorizationStatusForCurrentCameraMode() -> NextLevelAuthorizationStatus {
+        switch self.cameraMode {
+        case .audio:
+            return self.authorizationStatus(forMediaType: AVMediaTypeAudio)
+        case .video:
+            let audioStatus = self.authorizationStatus(forMediaType: AVMediaTypeAudio)
+            let videoStatus = self.authorizationStatus(forMediaType: AVMediaTypeVideo)
+            return (audioStatus == .authorized && videoStatus == .authorized) ? .authorized : .notAuthorized
+        case .photo:
+            return self.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        }
+    }
 }
 
 // MARK: - encoding configuration
@@ -741,7 +756,13 @@ extension NextLevel {
         else {
             throw NextLevelError.started
         }
-
+        
+        guard
+            self.authorizationStatusForCurrentCameraMode() == .authorized
+        else {
+            throw NextLevelError.authorization
+        }
+        
         self.sessionQueue.async {
             // setup AV capture sesssion
             self.captureSession = AVCaptureSession()
