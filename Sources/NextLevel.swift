@@ -373,10 +373,10 @@ public let NextLevelErrorDomain = "NextLevelErrorDomain"
 public enum NextLevelError: Error, CustomStringConvertible {
     case unknown
     case started
+    case deviceNotAvailable
     case fileExists
-    case notAvailable
     case nothingRecorded
-    case notReady
+    case notReadyToRecord
     
     public var description: String {
         get {
@@ -387,12 +387,12 @@ public enum NextLevelError: Error, CustomStringConvertible {
                 return "NextLevel already started"
             case .fileExists:
                 return "File exists"
-            case .notAvailable:
-                return "Not Available"
+            case .deviceNotAvailable:
+                return "Device Not Available"
             case .nothingRecorded:
                 return "Nothing recorded"
-            case .notReady:
-                return "Not ready"
+            case .notReadyToRecord:
+                return "NextLevel is not ready to record"
             }
         }
     }
@@ -704,7 +704,7 @@ public class NextLevel: NSObject {
 
 extension NextLevel {
     
-    public func authorizationStatus(forMediaType mediaType: String!) -> NextLevelAuthorizationStatus {
+    public func authorizationStatus(forMediaType mediaType: String) -> NextLevelAuthorizationStatus {
         let status = AVCaptureDevice.authorizationStatus(forMediaType: mediaType)
         var nextLevelStatus: NextLevelAuthorizationStatus = .notDetermined
         switch status {
@@ -720,7 +720,7 @@ extension NextLevel {
         return nextLevelStatus
     }
     
-    public func requestAuthorization(forMediaType mediaType: String!) {
+    public func requestAuthorization(forMediaType mediaType: String) {
         AVCaptureDevice.requestAccess(forMediaType: mediaType) { (granted: Bool) in
             let status: NextLevelAuthorizationStatus = (granted == true) ? .authorized : .notAuthorized
             self.executeClosureAsyncOnMainQueueIfNecessary {
@@ -1711,7 +1711,7 @@ extension NextLevel {
     public func changeCaptureDeviceIfAvailable(captureDevice: NextLevelDeviceType) throws {
         let deviceForUse = AVCaptureDevice.captureDevice(withType: captureDevice.avfoundationType, forPosition: .back)
         if deviceForUse == nil {
-            throw NextLevelError.notAvailable
+            throw NextLevelError.deviceNotAvailable
         } else {
             self.requestedDevice = deviceForUse
             self.configureDevices()

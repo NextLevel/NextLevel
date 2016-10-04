@@ -469,7 +469,7 @@ extension NextLevelSession {
                 
                 if let handler = completionHandler {
                     self.executeClosureAsyncOnMainQueueIfNecessary {
-                        handler(nil, NextLevelError.notReady)
+                        handler(nil, NextLevelError.notReadyToRecord)
                     }
                 }
             }
