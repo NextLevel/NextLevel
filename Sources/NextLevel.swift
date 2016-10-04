@@ -413,7 +413,7 @@ public let NextLevelPhotoThumbnailKey = "NextLevelPhotoThumbnailKey"
 public protocol NextLevelDelegate: NSObjectProtocol {
 
     // permission
-    func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: String!)
+    func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: String)
     
     // configuration
     func nextLevel(_ nextLevel: NextLevel, didUpdateVideoConfiguration videoConfiguration: NextLevelVideoConfiguration)

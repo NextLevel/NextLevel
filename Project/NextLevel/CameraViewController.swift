@@ -225,7 +225,8 @@ extension CameraViewController: UIGestureRecognizerDelegate {
 extension CameraViewController: NextLevelDelegate {
 
     // permission
-    func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: String!) {
+    func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: String) {
+        print("NextLevel, authorization updated for media \(mediaType) status \(status)")
         if nextLevel.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized &&
             nextLevel.authorizationStatus(forMediaType: AVMediaTypeAudio) == .authorized {
             do {
