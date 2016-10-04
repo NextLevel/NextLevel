@@ -39,7 +39,7 @@ public class NextLevelConfiguration: NSObject {
     // object lifecycle
     
     override init() {
-        self.preset = AVCaptureSessionPresetMedium
+        self.preset = AVCaptureSessionPresetHigh
         self.options = nil
         super.init()
     }
@@ -47,11 +47,7 @@ public class NextLevelConfiguration: NSObject {
     // MARK: func
     
     public func avcaptureSettingsDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String: Any]? {
-        if let options = self.options {
-            return options
-        } else {
-            return nil
-        }
+        return self.options
     }
 }
 
@@ -78,9 +74,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     public var timeScale: Float64?
     
     public var maximumCaptureDuration: CMTime?
-    
-    // TODO provide video sizing presets, ie. Square/Widescreen/etc
-    
+        
     // MARK: - object lifecycle
     
     override init() {
