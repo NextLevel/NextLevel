@@ -44,13 +44,13 @@ public class NextLevelSession: NSObject {
 
     public var identifier: String {
         get {
-            return self.sessionIdentifier
+            return self._identifier
         }
     }
     
     public var date: Date {
         get {
-            return self.sessionDate
+            return self._date
         }
     }
     
@@ -67,13 +67,13 @@ public class NextLevelSession: NSObject {
 
     public var isVideoReady: Bool {
         get {
-            return self.videoInput != nil
+            return self._videoInput != nil
         }
     }
     
     public var isAudioReady: Bool {
         get {
-            return self.audioInput != nil
+            return self._audioInput != nil
         }
     }
 
@@ -143,26 +143,24 @@ public class NextLevelSession: NSObject {
     
     public var pixelBufferPool: CVPixelBufferPool? {
         get {
-            if let pixelBufferAdapter = self.pixelBufferAdapter, let pool = pixelBufferAdapter.pixelBufferPool {
-                return pool
-            }
-            return nil
+            return self._pixelBufferAdapter?.pixelBufferPool
         }
     }
     
     // MARK: - private instance vars
     
-    internal var sessionIdentifier: String
-    internal var sessionDate: Date
+    internal var _identifier: String
+    internal var _date: Date
+    
     internal var sessionDuration: CMTime
 
     internal var sessionClips: [NextLevelClip]
     internal var sessionClipFilenameCount: Int
 
-    internal var writer: AVAssetWriter?
-    internal var videoInput: AVAssetWriterInput?
-    internal var audioInput: AVAssetWriterInput?
-    internal var pixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
+    internal var _writer: AVAssetWriter?
+    internal var _videoInput: AVAssetWriterInput?
+    internal var _audioInput: AVAssetWriterInput?
+    internal var _pixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
 
     internal var videoConfiguration: NextLevelVideoConfiguration?
     internal var audioConfiguration: NextLevelAudioConfiguration?
@@ -197,14 +195,14 @@ public class NextLevelSession: NSObject {
     }
     
     override init() {
-        self.sessionIdentifier = NSUUID().uuidString
+        self._identifier = NSUUID().uuidString
+        self._date = Date()
         self.outputDirectory = NSTemporaryDirectory()
         self.fileType = AVFileTypeMPEG4
         self.fileExtension = "mp4"
         
         self.sessionClips = []
         self.sessionClipFilenameCount = 0
-        self.sessionDate = Date()
         self.sessionDuration = kCMTimeZero
      
         self.audioQueue = DispatchQueue(label: NextLevelSessionAudioQueueIdentifier)
@@ -228,10 +226,10 @@ public class NextLevelSession: NSObject {
     }
     
     deinit {
-        self.writer = nil
-        self.videoInput = nil
-        self.audioInput = nil
-        self.pixelBufferAdapter = nil
+        self._writer = nil
+        self._videoInput = nil
+        self._audioInput = nil
+        self._pixelBufferAdapter = nil
         
         self.videoConfiguration = nil
         self.audioConfiguration = nil
@@ -245,8 +243,8 @@ public class NextLevelSession: NSObject {
     // setup
     
     public func setupVideo(withSettings settings: [String : Any]?, configuration: NextLevelVideoConfiguration, formatDescription: CMFormatDescription) -> Bool {
-        self.videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: settings, sourceFormatHint: formatDescription)
-        if let videoInput = self.videoInput {
+        self._videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: settings, sourceFormatHint: formatDescription)
+        if let videoInput = self._videoInput {
             videoInput.expectsMediaDataInRealTime = true
             videoInput.transform = configuration.transform
             self.videoConfiguration = configuration
@@ -256,29 +254,29 @@ public class NextLevelSession: NSObject {
             let pixelBufferAttri: [String : Any] = [String(kCVPixelBufferPixelFormatTypeKey): Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
                                                     String(kCVPixelBufferWidthKey): Float(videoDimensions.width),
                                                     String(kCVPixelBufferHeightKey): Float(videoDimensions.height)]
-            self.pixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput, sourcePixelBufferAttributes: pixelBufferAttri)
+            self._pixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput, sourcePixelBufferAttributes: pixelBufferAttri)
         }
-        return self.videoInput != nil
+        return self._videoInput != nil
     }
     
     public func setupAudio(withSettings settings: [String : Any]?, configuration: NextLevelAudioConfiguration, formatDescription: CMFormatDescription) -> Bool {
-        self.audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: settings, sourceFormatHint: formatDescription)
-        if let audioInput = self.audioInput {
+        self._audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: settings, sourceFormatHint: formatDescription)
+        if let audioInput = self._audioInput {
             audioInput.expectsMediaDataInRealTime = true
             self.audioConfiguration = configuration
         }
-        return self.audioInput != nil
+        return self._audioInput != nil
     }
     
     internal func setupWriter() {
         if let url = self.nextFileURL() {
             do {
-                self.writer = try AVAssetWriter(url: url, fileType: self.fileType)
-                if let writer = self.writer {
+                self._writer = try AVAssetWriter(url: url, fileType: self.fileType)
+                if let writer = self._writer {
                     writer.shouldOptimizeForNetworkUse = true
                     writer.metadata = NextLevel.assetWriterMetadata()
                     
-                    if let videoInput = self.videoInput {
+                    if let videoInput = self._videoInput {
                         if writer.canAdd(videoInput) {
                             writer.add(videoInput)
                         } else {
@@ -286,7 +284,7 @@ public class NextLevelSession: NSObject {
                         }
                     }
                     
-                    if let audioInput = self.audioInput {
+                    if let audioInput = self._audioInput {
                         if writer.canAdd(audioInput) {
                             writer.add(audioInput)
                         } else {
@@ -300,7 +298,7 @@ public class NextLevelSession: NSObject {
                         self.startTimestamp = kCMTimeInvalid
                     } else {
                         print("NextLevel, writer encountered an error \(writer.error)")
-                        self.writer = nil
+                        self._writer = nil
                     }
                 }
             } catch {
@@ -310,7 +308,7 @@ public class NextLevelSession: NSObject {
     }
     
     internal func destroyWriter() {
-        self.writer = nil
+        self._writer = nil
         self.clipReady = false
         self.timeOffset = kCMTimeZero
         self.startTimestamp = kCMTimeInvalid
@@ -347,7 +345,7 @@ extension NextLevelSession {
             }
         }
         
-        if let videoInput = self.videoInput, let pixelBufferAdapter = self.pixelBufferAdapter {
+        if let videoInput = self._videoInput, let pixelBufferAdapter = self._pixelBufferAdapter {
             if videoInput.isReadyForMoreMediaData {
                 
                 var bufferToProcess: CVPixelBuffer? = nil
@@ -383,7 +381,7 @@ extension NextLevelSession {
             let lastTimestamp = presentationTimestamp + duration
             
             self.audioQueue.async {
-                if let audioInput = self.audioInput {
+                if let audioInput = self._audioInput {
                     if audioInput.isReadyForMoreMediaData && audioInput.append(adjustedBuffer) {
                         self.lastAudioTimestamp = lastTimestamp
                         
@@ -405,9 +403,9 @@ extension NextLevelSession {
     public func reset() {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             self.endClip(completionHandler: nil)
-            self.videoInput = nil
-            self.audioInput = nil
-            self.pixelBufferAdapter = nil
+            self._videoInput = nil
+            self._audioInput = nil
+            self._pixelBufferAdapter = nil
             
             self.videoConfiguration = nil
             self.audioConfiguration = nil
@@ -422,7 +420,7 @@ extension NextLevelSession {
     private func startSessionIfNecessary(timestamp: CMTime) {
         if !self.startTimestamp.isValid {
             self.startTimestamp = timestamp
-            if let writer = self.writer {
+            if let writer = self._writer {
                 writer.startSession(atSourceTime: timestamp)
             }
         }
@@ -434,7 +432,7 @@ extension NextLevelSession {
     
     public func beginClip() {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            if self.writer == nil {
+            if self._writer == nil {
                 self.setupWriter()
                 self.sessionCurrentClipDuration = kCMTimeZero
                 self.sessionCurrentClipHasAudio = false
@@ -451,7 +449,7 @@ extension NextLevelSession {
                 if self.isClipReady {
                     self.clipReady = false
                     
-                    if let writer = self.writer {
+                    if let writer = self._writer {
                         if !self.currentClipHasAudio && !self.currentClipHasVideo {
                             writer.cancelWriting()
                             
