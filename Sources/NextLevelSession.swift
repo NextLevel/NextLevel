@@ -34,9 +34,7 @@ public class NextLevelSession: NSObject {
     
     public var url: URL? {
         get {
-            let fileType = self.fileType()
-            let fileExtension = self.fileExtension(fileType: fileType)
-            let filename = "\(self.identifier)-NL-merged.\(fileExtension)"
+            let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
             if let url = NextLevelClip.clipURL(withFilename: filename, directory: self.sessionDirectory) {
                 return url
             } else {
@@ -44,6 +42,14 @@ public class NextLevelSession: NSObject {
             }
         }
     }
+    
+    // AVMediaFormat.h
+    
+    public var fileType: String
+
+    // AVMediaFormat.h
+    
+    public var fileExtension: String
     
     // state
     
@@ -193,6 +199,9 @@ public class NextLevelSession: NSObject {
     
     override init() {
         self.sessionIdentifier = NSUUID().uuidString
+        self.fileType = AVFileTypeMPEG4
+        self.fileExtension = "mp4"
+        
         self.sessionDirectory = NSTemporaryDirectory()
         self.sessionClips = []
         self.sessionClipFilenameCount = 0
@@ -265,7 +274,7 @@ public class NextLevelSession: NSObject {
     internal func setupWriter() {
         if let url = self.nextFileURL() {
             do {
-                self.writer = try AVAssetWriter(url: url, fileType: self.fileType())
+                self.writer = try AVAssetWriter(url: url, fileType: self.fileType)
                 if let writer = self.writer {
                     writer.shouldOptimizeForNetworkUse = true
                     writer.metadata = NextLevel.assetWriterMetadata()
@@ -561,8 +570,8 @@ extension NextLevelSession {
     
     public func mergeClips(usingPreset preset: String, completionHandler: @escaping NextLevelSessionMergeClipsCompletionHandler) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            let fileType = self.fileType()
-            let fileExtension = self.fileExtension(fileType: fileType)
+            let fileType = self.fileType
+            let fileExtension = self.fileExtension
             let filename = "\(self.identifier)-NL-merged.\(fileExtension)"
 
             let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directory: self.sessionDirectory)
@@ -688,18 +697,8 @@ extension NextLevelSession {
 
 extension NextLevelSession {
     
-    internal func fileType() -> String {
-        return AVFileTypeAppleM4A
-    }
-    
-    internal func fileExtension(fileType: String) -> String {
-        return "m4a"
-    }
-    
     internal func nextFileURL() -> URL? {
-        let fileType = self.fileType()
-        let fileExtension = self.fileExtension(fileType: fileType)
-        let filename = "\(self.identifier)-NL-clip.\(self.sessionClipFilenameCount).\(fileExtension)"
+        let filename = "\(self.identifier)-NL-clip.\(self.sessionClipFilenameCount).\(self.fileExtension)"
         if let url = NextLevelClip.clipURL(withFilename: filename, directory: self.sessionDirectory) {
             self.removeFile(fileUrl: url)
             self.sessionClipFilenameCount += 1
