@@ -32,27 +32,16 @@ public class NextLevelSession: NSObject {
     
     // config
     
-    public var url: URL? {
-        get {
-            let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
-            if let url = NextLevelClip.clipURL(withFilename: filename, directory: self.sessionDirectory) {
-                return url
-            } else {
-                return nil
-            }
-        }
-    }
+    public var outputDirectory: String
     
-    // AVMediaFormat.h
+    // see AVMediaFormat.h for file type and extension
     
     public var fileType: String
-
-    // AVMediaFormat.h
     
     public var fileExtension: String
     
     // state
-    
+
     public var identifier: String {
         get {
             return self.sessionIdentifier
@@ -65,6 +54,17 @@ public class NextLevelSession: NSObject {
         }
     }
     
+    public var url: URL? {
+        get {
+            let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
+            if let url = NextLevelClip.clipURL(withFilename: filename, directory: self.outputDirectory) {
+                return url
+            } else {
+                return nil
+            }
+        }
+    }
+
     public var isVideoReady: Bool {
         get {
             return self.videoInput != nil
@@ -153,7 +153,6 @@ public class NextLevelSession: NSObject {
     // MARK: - private instance vars
     
     internal var sessionIdentifier: String
-    internal var sessionDirectory: String
     internal var sessionDate: Date
     internal var sessionDuration: CMTime
 
@@ -199,10 +198,10 @@ public class NextLevelSession: NSObject {
     
     override init() {
         self.sessionIdentifier = NSUUID().uuidString
+        self.outputDirectory = NSTemporaryDirectory()
         self.fileType = AVFileTypeMPEG4
         self.fileExtension = "mp4"
         
-        self.sessionDirectory = NSTemporaryDirectory()
         self.sessionClips = []
         self.sessionClipFilenameCount = 0
         self.sessionDate = Date()
@@ -574,7 +573,7 @@ extension NextLevelSession {
             let fileExtension = self.fileExtension
             let filename = "\(self.identifier)-NL-merged.\(fileExtension)"
 
-            let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directory: self.sessionDirectory)
+            let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directory: self.outputDirectory)
             var asset: AVAsset? = nil
             
             if self.sessionClips.count > 0 {
@@ -699,7 +698,7 @@ extension NextLevelSession {
     
     internal func nextFileURL() -> URL? {
         let filename = "\(self.identifier)-NL-clip.\(self.sessionClipFilenameCount).\(self.fileExtension)"
-        if let url = NextLevelClip.clipURL(withFilename: filename, directory: self.sessionDirectory) {
+        if let url = NextLevelClip.clipURL(withFilename: filename, directory: self.outputDirectory) {
             self.removeFile(fileUrl: url)
             self.sessionClipFilenameCount += 1
             return url
