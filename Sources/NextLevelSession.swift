@@ -91,7 +91,13 @@ public class NextLevelSession: NSObject {
 
     public var isClipReady: Bool {
         get {
-            return self.clipReady
+            return self._writer != nil
+        }
+    }
+    
+    public var clipStarted: Bool {
+        get {
+            return self._clipStarted
         }
     }
 
@@ -172,7 +178,7 @@ public class NextLevelSession: NSObject {
     internal var sessionCurrentClipHasAudio: Bool
     internal var sessionCurrentClipHasVideo: Bool
 
-    internal var clipReady: Bool
+    internal var _clipStarted: Bool
     internal var timeOffset: CMTime
     internal var startTimestamp: CMTime
     internal var lastAudioTimestamp: CMTime
@@ -215,7 +221,7 @@ public class NextLevelSession: NSObject {
         self.sessionCurrentClipHasAudio = false
         self.sessionCurrentClipHasVideo = false
         
-        self.clipReady = false
+        self._clipStarted = false
         self.timeOffset = kCMTimeInvalid
         self.startTimestamp = kCMTimeInvalid
         self.lastAudioTimestamp = kCMTimeInvalid
@@ -292,7 +298,7 @@ public class NextLevelSession: NSObject {
                     }
                     
                     if writer.startWriting() {
-                        self.clipReady = true
+                        self._clipStarted = true
                         self.timeOffset = kCMTimeZero
                         self.startTimestamp = kCMTimeInvalid
                     } else {
@@ -308,7 +314,7 @@ public class NextLevelSession: NSObject {
     
     internal func destroyWriter() {
         self._writer = nil
-        self.clipReady = false
+        self._clipStarted = false
         self.timeOffset = kCMTimeZero
         self.startTimestamp = kCMTimeInvalid
         self.sessionCurrentClipDuration = kCMTimeZero
@@ -445,8 +451,8 @@ extension NextLevelSession {
     public func endClip(completionHandler: NextLevelSessionEndClipCompletionHandler?) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             self.audioQueue.sync {
-                if self.isClipReady {
-                    self.clipReady = false
+                if self.clipStarted {
+                    self._clipStarted = false
                     
                     if let writer = self._writer {
                         if !self.currentClipHasAudio && !self.currentClipHasVideo {

@@ -95,7 +95,7 @@ class CameraViewController: UIViewController {
             recordButton.sizeToFit()
             longPressGestureRecognizer.delegate = self
             longPressGestureRecognizer.minimumPressDuration = 0.05
-            longPressGestureRecognizer.allowableMovement = 5.0
+            longPressGestureRecognizer.allowableMovement = 10.0
             recordButton.addGestureRecognizer(longPressGestureRecognizer)
         }
         
@@ -368,11 +368,11 @@ extension CameraViewController: NextLevelDelegate {
     
     // video recording session
     func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession) {
-        print("video setup!")
+//        print("setup video")
     }
     
     func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession) {
-        print("audio setup!")
+//        print("setup audio")
     }
     
     func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession) {

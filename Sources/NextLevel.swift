@@ -1883,7 +1883,7 @@ extension NextLevel {
         
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let session = self.recordingSession {
-                if session.isClipReady {
+                if session.clipStarted {
                     
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
@@ -1918,9 +1918,9 @@ extension NextLevel {
         if let session = self.recordingSession {
             if session.isClipReady == false {
                 session.beginClip()
-            }
-            self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevel(self, didStartClipInSession: session)
+                self.executeClosureAsyncOnMainQueueIfNecessary {
+                    self.delegate?.nextLevel(self, didStartClipInSession: session)
+                }
             }
         }
     }
@@ -1993,68 +1993,66 @@ extension NextLevel {
                 }
             }
             
-            if session.isAudioReady {
+            if self.recording && session.isAudioReady && session.clipStarted {
                 self.beginRecordingNewClipIfNecessary()
-                
-                if self.recording && session.isClipReady {
                     
-                    let minTimeBetweenFrames = 0.004
-                    let sleepDuration = minTimeBetweenFrames - (CACurrentMediaTime() - self.lastVideoFrameTimeInterval)
-                    if sleepDuration > 0 {
-                        Thread.sleep(forTimeInterval: sleepDuration)
+                let minTimeBetweenFrames = 0.004
+                let sleepDuration = minTimeBetweenFrames - (CACurrentMediaTime() - self.lastVideoFrameTimeInterval)
+                if sleepDuration > 0 {
+                    Thread.sleep(forTimeInterval: sleepDuration)
+                }
+                
+                if let device = self.currentDevice {
+                    
+                    // check with the client to setup/maintain external render contexts
+                    let imageBuffer = self.isVideoCustomContextRenderingEnabled == true ? CMSampleBufferGetImageBuffer(sampleBuffer) : nil
+
+                    if let bufferRef = imageBuffer {
+                        if CVPixelBufferLockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0))) == kCVReturnSuccess {
+                            // only called from captureQueue
+                            self.delegate?.nextLevel(self, renderToCustomContextWithImageBuffer: bufferRef, onQueue: self.sessionQueue)
+                        } else {
+                            self.sessionVideoCustomContextImageBuffer = nil
+                        }
                     }
                     
-                    if let device = self.currentDevice {
-                        
-                        // check with the client to setup/maintain an external render context
-                        let imageBuffer = self.isVideoCustomContextRenderingEnabled == true ? CMSampleBufferGetImageBuffer(sampleBuffer) : nil
-
-                        if let bufferRef = imageBuffer {
-                            if CVPixelBufferLockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0))) == kCVReturnSuccess {
-                                // only called from captureQueue
-                                self.delegate?.nextLevel(self, renderToCustomContextWithImageBuffer: bufferRef, onQueue: self.sessionQueue)
-                            } else {
-                                self.sessionVideoCustomContextImageBuffer = nil
+                    let minFrameDuration = device.activeVideoMinFrameDuration
+                    session.appendVideo(withSampleBuffer: sampleBuffer, imageBuffer: self.sessionVideoCustomContextImageBuffer, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
+                        // cleanup client rendering context
+                        if self.isVideoCustomContextRenderingEnabled {
+                            if let bufferRef = imageBuffer {
+                                CVPixelBufferUnlockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
                             }
                         }
                         
-                        let minFrameDuration = device.activeVideoMinFrameDuration
-                        session.appendVideo(withSampleBuffer: sampleBuffer, imageBuffer: self.sessionVideoCustomContextImageBuffer, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
-                            // cleanup client rendering context
-                            if self.isVideoCustomContextRenderingEnabled {
-                                if let bufferRef = imageBuffer {
-                                    CVPixelBufferUnlockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
-                                }
+                        // process frame
+                        self.lastVideoFrameTimeInterval = CACurrentMediaTime()
+                        if success == true {
+                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                                self.delegate?.nextLevel(self, didAppendVideoSampleBuffer: sampleBuffer, inSession: session)
                             }
+                            self.checkSessionDuration()
+                        } else {
+                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                                self.delegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBuffer, inSession: session)
+                            }
+                        }
+                    })
+
+                    if session.currentClipHasVideo == false && session.currentClipHasAudio == false {
+                        if let audioBuffer = session.lastAudioFrame {
+                            let lastAudioEndTime = CMTimeAdd(CMSampleBufferGetPresentationTimeStamp(audioBuffer), CMSampleBufferGetDuration(audioBuffer))
+                            let videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
                             
-                            // process frame
-                            self.lastVideoFrameTimeInterval = CACurrentMediaTime()
-                            if success == true {
-                                self.executeClosureAsyncOnMainQueueIfNecessary {
-                                    self.delegate?.nextLevel(self, didAppendVideoSampleBuffer: sampleBuffer, inSession: session)
-                                }
-                                self.checkSessionDuration()
-                            } else {
-                                self.executeClosureAsyncOnMainQueueIfNecessary {
-                                    self.delegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBuffer, inSession: session)
-                                }
-                            }
-                        })
-
-                        if session.currentClipHasVideo == false && session.currentClipHasAudio == false {
-                            if let audioBuffer = session.lastAudioFrame {
-                                let lastAudioEndTime = CMTimeAdd(CMSampleBufferGetPresentationTimeStamp(audioBuffer), CMSampleBufferGetDuration(audioBuffer))
-                                let videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-                                
-                                if lastAudioEndTime > videoStartTime {
-                                    self.handleAudioOutput(sampleBuffer: audioBuffer, session: session)
-                                }
+                            if lastAudioEndTime > videoStartTime {
+                                self.handleAudioOutput(sampleBuffer: audioBuffer, session: session)
                             }
                         }
+                    }
                         
-                    } // self.currentDevice
-                }
-            } // session.isAudioReady
+                } // self.currentDevice
+
+            }
 
         } // self.recordingSession
     }
@@ -2075,24 +2073,21 @@ extension NextLevel {
                 }
             }
             
-            if session.isVideoReady {
+            if self.recording && session.isVideoReady && session.clipStarted && session.currentClipHasVideo {
                 self.beginRecordingNewClipIfNecessary()
                 
-                if self.recording && session.isClipReady && session.currentClipHasVideo {
-                    session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool) -> Void in
-                        if success {
-                            self.executeClosureAsyncOnMainQueueIfNecessary {
-                                self.delegate?.nextLevel(self, didAppendAudioSampleBuffer: sampleBuffer, inSession: session)
-                            }
-                            self.checkSessionDuration()
-                        } else {
-                            self.executeClosureAsyncOnMainQueueIfNecessary {
-                                self.delegate?.nextLevel(self, didSkipAudioSampleBuffer: sampleBuffer, inSession: session)
-                            }
+                session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool) -> Void in
+                    if success {
+                        self.executeClosureAsyncOnMainQueueIfNecessary {
+                            self.delegate?.nextLevel(self, didAppendAudioSampleBuffer: sampleBuffer, inSession: session)
                         }
-                    })
-                }
-                
+                        self.checkSessionDuration()
+                    } else {
+                        self.executeClosureAsyncOnMainQueueIfNecessary {
+                            self.delegate?.nextLevel(self, didSkipAudioSampleBuffer: sampleBuffer, inSession: session)
+                        }
+                    }
+                })
             }
         }
     }
