@@ -153,7 +153,6 @@ public class NextLevelSession: NSObject {
     internal var _date: Date
     
     internal var sessionDuration: CMTime
-
     internal var sessionClips: [NextLevelClip]
     internal var sessionClipFilenameCount: Int
 
@@ -162,8 +161,8 @@ public class NextLevelSession: NSObject {
     internal var _audioInput: AVAssetWriterInput?
     internal var _pixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
 
-    internal var videoConfiguration: NextLevelVideoConfiguration?
-    internal var audioConfiguration: NextLevelAudioConfiguration?
+    internal var _videoConfiguration: NextLevelVideoConfiguration?
+    internal var _audioConfiguration: NextLevelAudioConfiguration?
     
     internal var audioQueue: DispatchQueue
     internal var sessionQueue: DispatchQueue
@@ -231,8 +230,8 @@ public class NextLevelSession: NSObject {
         self._audioInput = nil
         self._pixelBufferAdapter = nil
         
-        self.videoConfiguration = nil
-        self.audioConfiguration = nil
+        self._videoConfiguration = nil
+        self._audioConfiguration = nil
     
         self.sessionLastVideoFrame = nil
         self.sessionLastAudioFrame = nil
@@ -247,7 +246,7 @@ public class NextLevelSession: NSObject {
         if let videoInput = self._videoInput {
             videoInput.expectsMediaDataInRealTime = true
             videoInput.transform = configuration.transform
-            self.videoConfiguration = configuration
+            self._videoConfiguration = configuration
             
             let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
             
@@ -263,7 +262,7 @@ public class NextLevelSession: NSObject {
         self._audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: settings, sourceFormatHint: formatDescription)
         if let audioInput = self._audioInput {
             audioInput.expectsMediaDataInRealTime = true
-            self.audioConfiguration = configuration
+            self._audioConfiguration = configuration
         }
         return self._audioInput != nil
     }
@@ -335,7 +334,7 @@ extension NextLevelSession {
         var frameDuration = minFrameDuration
         let offsetBufferTimestamp = timestamp - self.timeOffset
         
-        if let videoConfig = self.videoConfiguration, let timeScale = videoConfig.timeScale {
+        if let videoConfig = self._videoConfiguration, let timeScale = videoConfig.timeScale {
             if timeScale != 1.0 {
                 let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
                 if self.sessionCurrentClipDuration.value > 0 {
@@ -407,8 +406,8 @@ extension NextLevelSession {
             self._audioInput = nil
             self._pixelBufferAdapter = nil
             
-            self.videoConfiguration = nil
-            self.audioConfiguration = nil
+            self._videoConfiguration = nil
+            self._audioConfiguration = nil
             
             self.sessionLastVideoFrame = nil
             self.sessionLastAudioFrame = nil
