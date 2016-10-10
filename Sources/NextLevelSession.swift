@@ -549,9 +549,7 @@ extension NextLevelSession {
     
     public func mergeClips(usingPreset preset: String, completionHandler: @escaping NextLevelSessionMergeClipsCompletionHandler) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            let fileType = self.fileType
-            let fileExtension = self.fileExtension
-            let filename = "\(self.identifier)-NL-merged.\(fileExtension)"
+            let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
 
             let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directory: self.outputDirectory)
             var asset: AVAsset? = nil
@@ -565,7 +563,7 @@ extension NextLevelSession {
                     if let exportSession = AVAssetExportSession(asset: exportAsset, presetName: preset) {
                         exportSession.shouldOptimizeForNetworkUse = true
                         exportSession.outputURL = exportURL
-                        exportSession.outputFileType = fileType
+                        exportSession.outputFileType = self.fileType
                         exportSession.exportAsynchronously {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
                                 completionHandler(exportURL, exportSession.error)
