@@ -624,9 +624,9 @@ public class NextLevel: NSObject {
     internal var backInput: AVCaptureDeviceInput?
     internal var audioInput: AVCaptureDeviceInput?
     
-    internal var videoOutput: AVCaptureVideoDataOutput?
-    internal var audioOutput: AVCaptureAudioDataOutput?
-    internal var photoOutput: AVCapturePhotoOutput?
+    internal var _videoOutput: AVCaptureVideoDataOutput?
+    internal var _audioOutput: AVCaptureAudioDataOutput?
+    internal var _photoOutput: AVCapturePhotoOutput?
     
     internal var currentDevice: AVCaptureDevice?
     internal var requestedDevice: AVCaptureDevice?
@@ -1004,12 +1004,12 @@ extension NextLevel {
     
     private func addVideoOutput() -> Bool {
         
-        if self.videoOutput == nil {
-            self.videoOutput = AVCaptureVideoDataOutput()
-            self.videoOutput?.alwaysDiscardsLateVideoFrames = false
+        if self._videoOutput == nil {
+            self._videoOutput = AVCaptureVideoDataOutput()
+            self._videoOutput?.alwaysDiscardsLateVideoFrames = false
             
             var videoSettings = [String(kCVPixelBufferPixelFormatTypeKey):Int(kCVPixelFormatType_32BGRA)]
-            if let formatTypes = self.videoOutput?.availableVideoCVPixelFormatTypes as? [Int] {
+            if let formatTypes = self._videoOutput?.availableVideoCVPixelFormatTypes as? [Int] {
                 var supportsFullRange = false
                 var supportsVideoRange = false
                 for format: Int in formatTypes {
@@ -1026,10 +1026,10 @@ extension NextLevel {
                     videoSettings[String(kCVPixelBufferPixelFormatTypeKey)] = Int(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
                 }
             }
-            self.videoOutput?.videoSettings = videoSettings
+            self._videoOutput?.videoSettings = videoSettings
         }
 
-        if let session = self.captureSession, let videoOutput = self.videoOutput {
+        if let session = self.captureSession, let videoOutput = self._videoOutput {
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
                 videoOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
@@ -1043,11 +1043,11 @@ extension NextLevel {
     
     private func addAudioOuput() -> Bool {
         
-        if self.audioOutput == nil {
-            self.audioOutput = AVCaptureAudioDataOutput()
+        if self._audioOutput == nil {
+            self._audioOutput = AVCaptureAudioDataOutput()
         }
         
-        if let session = self.captureSession, let audioOutput = self.audioOutput {
+        if let session = self.captureSession, let audioOutput = self._audioOutput {
             if session.canAddOutput(audioOutput) {
                 session.addOutput(audioOutput)
                 audioOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
@@ -1061,11 +1061,11 @@ extension NextLevel {
     
     private func addPhotoOutput() -> Bool {
         
-        if self.photoOutput == nil {
-            self.photoOutput = AVCapturePhotoOutput()
+        if self._photoOutput == nil {
+            self._photoOutput = AVCapturePhotoOutput()
         }
         
-        if let session = self.captureSession, let photoOutput = self.photoOutput {
+        if let session = self.captureSession, let photoOutput = self._photoOutput {
             if session.canAddOutput(photoOutput) {
                 session.addOutput(photoOutput)
                 return true
@@ -1083,22 +1083,22 @@ extension NextLevel {
             case .video:
                 break
             case .photo:
-                if let audioOutput = self.audioOutput {
+                if let audioOutput = self._audioOutput {
                     if session.outputs.contains(where: { (audioOutput) -> Bool in
                         return true
                     }) {
                         session.removeOutput(audioOutput)
-                        self.audioOutput = nil
+                        self._audioOutput = nil
                     }
                 }
                 break
             case .audio:
-                if let videoOutput = self.videoOutput {
+                if let videoOutput = self._videoOutput {
                     if session.outputs.contains(where: { (videoOutput) -> Bool in
                         return true
                     }) {
                         session.removeOutput(videoOutput)
-                        self.videoOutput = nil
+                        self._videoOutput = nil
                     }
                 }
                 break
@@ -1154,7 +1154,7 @@ extension NextLevel {
                 do {
                     try device.lockForConfiguration()
                     
-                    if let settings = self.photoSettings, let output = self.photoOutput {
+                    if let settings = self.photoSettings, let output = self._photoOutput {
                         
                         if settings.flashMode != newValue.avfoundationType {
                             let modes = output.supportedFlashModes
@@ -1603,7 +1603,8 @@ extension NextLevel {
             return .off
         }
         set {
-            if let _ = self.captureSession, let videoOutput = self.videoOutput {
+            if let _ = self.captureSession,
+                let videoOutput = self._videoOutput {
 
                 switch newValue {
                 case .off:
@@ -1756,13 +1757,13 @@ extension NextLevel {
             }
         }
             
-        if let videoOutput = self.videoOutput, let videoConnection = videoOutput.connection(withMediaType: AVMediaTypeVideo) {
+        if let videoOutput = self._videoOutput, let videoConnection = videoOutput.connection(withMediaType: AVMediaTypeVideo) {
             if videoConnection.isVideoOrientationSupported {
                 videoConnection.videoOrientation = currentOrientation
             }
         }
         
-        if let photoOutput = self.photoOutput, let photoConnection = photoOutput.connection(withMediaType: AVMediaTypeVideo) {
+        if let photoOutput = self._photoOutput, let photoConnection = photoOutput.connection(withMediaType: AVMediaTypeVideo) {
             if photoConnection.isVideoOrientationSupported {
                 photoConnection.videoOrientation = currentOrientation
             }
@@ -1772,7 +1773,7 @@ extension NextLevel {
     }
     
     internal func updateVideoStabilization() {
-        if let videoOutput = self.videoOutput {
+        if let videoOutput = self._videoOutput {
             if let videoConnection = videoOutput.connection(withMediaType: AVMediaTypeVideo) {
                 if videoConnection.isVideoStabilizationSupported {
                     videoConnection.preferredVideoStabilizationMode = .standard
@@ -1944,7 +1945,7 @@ extension NextLevel {
     }
     
     public func capturePhoto() {
-        if let photoOutput = self.photoOutput, let _ = photoOutput.connection(withMediaType: AVMediaTypeVideo) {
+        if let photoOutput = self._photoOutput, let _ = photoOutput.connection(withMediaType: AVMediaTypeVideo) {
             if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
                 let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
                 photoOutput.capturePhoto(with: photoSettings, delegate: self)
@@ -2126,7 +2127,8 @@ extension NextLevel {
 extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     
     public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-        if let videoOutput = self.videoOutput, let audioOutput = self.audioOutput {
+        if let videoOutput = self._videoOutput,
+            let audioOutput = self._audioOutput {
             switch captureOutput {
             case videoOutput:
                 self.executeClosureAsyncOnMainQueueIfNecessary {
