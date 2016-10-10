@@ -41,11 +41,12 @@ class CameraViewController: UIViewController {
     internal var gestureView: UIView?
     internal var controlDockView: UIView?
 
-    internal var recordButton: UIButton?
+    internal var recordButton: UIImageView?
     internal var flipButton: UIButton?
     internal var flashButton: UIButton?
     internal var saveButton: UIButton?
 
+    internal var longPressGestureRecognizer: UILongPressGestureRecognizer?
     internal var focusTapGestureRecognizer: UITapGestureRecognizer?
     internal var zoomPanGestureRecognizer: UIPanGestureRecognizer?
     internal var flipDoubleTapGestureRecognizer: UITapGestureRecognizer?
@@ -86,11 +87,16 @@ class CameraViewController: UIViewController {
         }
         
         // buttons
-        self.recordButton = UIButton(type: .custom)
-        if let recordButton = self.recordButton {
-            recordButton.setImage(UIImage(named: "record_button"), for: .normal)
+        self.recordButton = UIImageView(image: UIImage(named: "record_button"))
+        self.longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGestureRecognizer(_:)))
+        if let recordButton = self.recordButton,
+            let longPressGestureRecognizer = self.longPressGestureRecognizer {
+            recordButton.isUserInteractionEnabled = true
             recordButton.sizeToFit()
-            recordButton.addTarget(self, action: #selector(handleRecordButton(_:)), for: .touchUpInside)
+            longPressGestureRecognizer.delegate = self
+            longPressGestureRecognizer.minimumPressDuration = 0.05
+            longPressGestureRecognizer.allowableMovement = 5.0
+            recordButton.addGestureRecognizer(longPressGestureRecognizer)
         }
         
         self.flipButton = UIButton(type: .custom)
@@ -173,23 +179,19 @@ class CameraViewController: UIViewController {
     
 }
 
-// MARK: - UIButton
+// MARK: - capture
 
 extension CameraViewController {
-
-    internal func handleFlipButton(_ button: UIButton) {
-        NextLevel.sharedInstance.flipCaptureDevicePosition()
+    
+    internal func startCapture() {
+        NextLevel.sharedInstance.record()
     }
     
-    internal func handleFlashModeButton(_ button: UIButton) {
-        
+    internal func pauseCapture() {
+        NextLevel.sharedInstance.pause()
     }
     
-    internal func handleRecordButton(_ button: UIButton) {
-        
-    }
-    
-    internal func handleDoneButton(_ button: UIButton) {
+    internal func endCapture() {
         NextLevel.sharedInstance.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
             if let _ = url {
                 //
@@ -201,12 +203,41 @@ extension CameraViewController {
     
 }
 
+// MARK: - UIButton
+
+extension CameraViewController {
+
+    internal func handleFlipButton(_ button: UIButton) {
+        NextLevel.sharedInstance.flipCaptureDevicePosition()
+    }
+    
+    internal func handleFlashModeButton(_ button: UIButton) {
+    }
+    
+    internal func handleDoneButton(_ button: UIButton) {
+        self.endCapture()
+    }
+    
+}
+
 // MARK: - UIGestureRecognizerDelegate
 
 extension CameraViewController: UIGestureRecognizerDelegate {
 
     internal func handleLongPressGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
-        
+        switch gestureRecognizer.state {
+        case .began:
+            self.startCapture()
+            break
+        case .ended:
+            fallthrough
+        case .cancelled:
+            fallthrough
+        case .failed:
+            fallthrough
+        default:
+            self.pauseCapture()
+        }
     }
     
     internal func handleFocusTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
