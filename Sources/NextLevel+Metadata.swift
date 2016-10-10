@@ -28,6 +28,8 @@ import Foundation
 import AVFoundation
 import ImageIO
 
+// MARK: - NextLevel extensions
+
 fileprivate let NextLevelMetadataTitle = "NextLevel"
 fileprivate let NextLevelMetadataArtist = "http://nextlevel.engineering/"
 
@@ -78,6 +80,8 @@ extension NextLevel {
 
 }
 
+// MARK: - Date extensions
+
 // http://nshipster.com/nsformatter/
 // http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
 extension Date {
@@ -92,6 +96,30 @@ extension Date {
     
     fileprivate func iso8601() -> String {
         return Date.iso8601DateFormatter().string(from: self)
+    }
+    
+}
+
+// MARK: - Data extensions
+
+extension Data {
+
+    public func jpegData(withMetadataDictionary metadata: [String: Any]) -> Data? {
+        var imageDataWithMetadata: Data? = nil
+        if let source = CGImageSourceCreateWithData(self as CFData, nil),
+            let sourceType = CGImageSourceGetType(source) {
+            let mutableData = NSMutableData()
+            if let destination = CGImageDestinationCreateWithData(mutableData, sourceType, 1, nil) {
+                CGImageDestinationAddImageFromSource(destination, source, 0, metadata as CFDictionary?)
+                let success = CGImageDestinationFinalize(destination)
+                if success == true {
+                    imageDataWithMetadata = mutableData as Data
+                } else {
+                    print("could not finalize image with metadata")
+                }
+            }
+        }
+        return imageDataWithMetadata
     }
     
 }
