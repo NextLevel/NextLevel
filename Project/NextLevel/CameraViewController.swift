@@ -47,6 +47,7 @@ class CameraViewController: UIViewController {
     internal var saveButton: UIButton?
 
     internal var longPressGestureRecognizer: UILongPressGestureRecognizer?
+    internal var photoTapGestureRecognizer: UITapGestureRecognizer?
     internal var focusTapGestureRecognizer: UITapGestureRecognizer?
     internal var zoomPanGestureRecognizer: UIPanGestureRecognizer?
     internal var flipDoubleTapGestureRecognizer: UITapGestureRecognizer?
@@ -202,6 +203,7 @@ extension CameraViewController {
     }
     
     internal func endCapture() {
+        self.photoTapGestureRecognizer?.isEnabled = true
         NextLevel.sharedInstance.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
             if let videoURL = url {
                 var album: PHObjectPlaceholder? = nil
