@@ -36,7 +36,7 @@ public class NextLevelClip: NSObject {
     
     public var url: URL? {
         didSet {
-            self.clipAsset = nil
+            self._asset = nil
         }
     }
     
@@ -53,10 +53,12 @@ public class NextLevelClip: NSObject {
     
     public var asset: AVAsset? {
         get {
-            if let url = self.url, let _ = self.clipAsset {
-                self.clipAsset = AVAsset(url: url)
+            if let url = self.url {
+                if self._asset == nil {
+                    self._asset = AVAsset(url: url)
+                }
             }
-            return self.clipAsset
+            return self._asset
         }
     }
     
@@ -72,9 +74,9 @@ public class NextLevelClip: NSObject {
     public var thumbnailImage: UIImage? {
         get {
             guard
-                self.clipThumbnailImage == nil
+                self._thumbnailImage == nil
             else {
-                return self.clipThumbnailImage
+                return self._thumbnailImage
             }
             
             if let asset = self.asset {
@@ -84,22 +86,22 @@ public class NextLevelClip: NSObject {
                 do {
                     let cgimage: CGImage = try imageGenerator.copyCGImage(at: kCMTimeZero, actualTime: nil)
                     let uiimage: UIImage = UIImage(cgImage: cgimage)
-                    self.clipThumbnailImage = uiimage
+                    self._thumbnailImage = uiimage
                 } catch {
                     print("NextLevel, unable to generate lastFrameImage for \(self.url)")
-                    self.clipThumbnailImage = nil
+                    self._thumbnailImage = nil
                 }
             }
-            return self.clipThumbnailImage
+            return self._thumbnailImage
         }
     }
     
     public var lastFrameImage: UIImage? {
         get {
             guard
-                self.clipLastFrameImage == nil
+                self._lastFrameImage == nil
             else {
-                return self.clipLastFrameImage
+                return self._lastFrameImage
             }
             
             if let asset = self.asset {
@@ -109,13 +111,13 @@ public class NextLevelClip: NSObject {
                 do {
                     let cgimage: CGImage = try imageGenerator.copyCGImage(at: self.duration, actualTime: nil)
                     let uiimage: UIImage = UIImage(cgImage: cgimage)
-                    self.clipLastFrameImage = uiimage
+                    self._lastFrameImage = uiimage
                 } catch {
                     print("NextLevel, unable to generate lastFrameImage for \(self.url)")
-                    self.clipLastFrameImage = nil
+                    self._lastFrameImage = nil
                 }
             }
-            return self.clipLastFrameImage
+            return self._lastFrameImage
         }
     }
     
@@ -135,10 +137,7 @@ public class NextLevelClip: NSObject {
     
     public var infoDict: [String: Any]? {
         get {
-            if let dict = self.clipInfoDict {
-                return dict
-            }
-            return nil
+            return self._infoDict
         }
     }
     
@@ -156,22 +155,21 @@ public class NextLevelClip: NSObject {
     
     // MARK: - private instance vars
     
-    internal var clipAsset: AVAsset?
-    internal var clipInfoDict: [String : Any]?
-    internal weak var clipThumbnailImage: UIImage?
-    internal weak var clipLastFrameImage: UIImage?
+    internal var _asset: AVAsset?
+    internal var _infoDict: [String : Any]?
+    internal weak var _thumbnailImage: UIImage?
+    internal weak var _lastFrameImage: UIImage?
     
     // MARK: - object lifecycle
     
     override init() {
-        
         super.init()
     }
     
     convenience init(url: URL?, infoDict: [String : Any]?) {
         self.init()
         self.url = url
-        self.clipInfoDict = infoDict
+        self._infoDict = infoDict
     }
     
     convenience init(dictionaryRep: [String : Any]?, directory: String) {
