@@ -274,21 +274,22 @@ extension CameraViewController: NextLevelDelegate {
     
     // configuration
     func nextLevel(_ nextLevel: NextLevel, didUpdateVideoConfiguration videoConfiguration: NextLevelVideoConfiguration) {
-        
     }
     
     func nextLevel(_ nextLevel: NextLevel, didUpdateAudioConfiguration audioConfiguration: NextLevelAudioConfiguration) {
-        
     }
     
     // session
     func nextLevelSessionWillStart(_ nextLevel: NextLevel) {
+        print("nextLevelSessionWillStart")
     }
     
     func nextLevelSessionDidStart(_ nextLevel: NextLevel) {
+        print("nextLevelSessionDidStart")
     }
     
     func nextLevelSessionDidStop(_ nextLevel: NextLevel) {
+        print("nextLevelSessionDidStop")
     }
     
     // device, mode, orientation
@@ -338,15 +339,12 @@ extension CameraViewController: NextLevelDelegate {
     }
     
     func nextLevelFlashActiveChanged(_ nextLevel: NextLevel) {
-        
     }
     
     func nextLevelTorchActiveChanged(_ nextLevel: NextLevel) {
-        
     }
     
     func nextLevelFlashAndTorchAvailabilityChanged(_ nextLevel: NextLevel) {
-        
     }
     
     // zoom
@@ -370,11 +368,11 @@ extension CameraViewController: NextLevelDelegate {
     
     // video recording session
     func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession) {
-        
+        print("video setup!")
     }
     
     func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession) {
-        
+        print("audio setup!")
     }
     
     func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession) {
@@ -386,19 +384,15 @@ extension CameraViewController: NextLevelDelegate {
     }
     
     func nextLevel(_ nextLevel: NextLevel, didAppendVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
-        
     }
     
     func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
-        
     }
     
     func nextLevel(_ nextLevel: NextLevel, didSkipVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
-        
     }
     
     func nextLevel(_ nextLevel: NextLevel, didSkipAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
-        
     }
     
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession) {
