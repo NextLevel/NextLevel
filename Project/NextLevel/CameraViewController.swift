@@ -93,6 +93,7 @@ class CameraViewController: UIViewController {
             let longPressGestureRecognizer = self.longPressGestureRecognizer {
             recordButton.isUserInteractionEnabled = true
             recordButton.sizeToFit()
+            
             longPressGestureRecognizer.delegate = self
             longPressGestureRecognizer.minimumPressDuration = 0.05
             longPressGestureRecognizer.allowableMovement = 10.0
@@ -184,19 +185,60 @@ class CameraViewController: UIViewController {
 extension CameraViewController {
     
     internal func startCapture() {
+        self.photoTapGestureRecognizer?.isEnabled = false
+        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
+            self.recordButton?.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
+        }) { (completed: Bool) in
+        }
         NextLevel.sharedInstance.record()
     }
     
     internal func pauseCapture() {
+        UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseOut, animations: {
+            self.recordButton?.transform = .identity
+        }) { (completed: Bool) in
+        }
         NextLevel.sharedInstance.pause()
     }
     
     internal func endCapture() {
         NextLevel.sharedInstance.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
-            if let _ = url {
-                //
+            if let videoURL = url {
+                var album: PHObjectPlaceholder? = nil
+                PHPhotoLibrary.shared().performChanges({
+                    
+                    let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: "Next Level")
+                    album = changeRequest.placeholderForCreatedAssetCollection
+                    
+                    }, completionHandler: { (success1: Bool, error1: Error?) in
+                        
+                        if success1 == true {
+                            if let photoAlbum = album {
+                                let fetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [photoAlbum.localIdentifier], options: nil)
+                                let assetCollection = fetchResult.firstObject
+                                
+                                PHPhotoLibrary.shared().performChanges({
+                                    if let collection = assetCollection,
+                                        let assetChangeRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL) {
+                                        let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: collection)
+                                        assetCollectionChangeRequest?.addAssets([assetChangeRequest.placeholderForCreatedAsset] as NSArray)
+                                    }
+                                    }, completionHandler: { (success2: Bool, error2: Error?) in
+                                        if success2 == true {
+                                            let alertController = UIAlertController(title: "Video Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
+                                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                                            alertController.addAction(okAction)
+                                            self.present(alertController, animated: true, completion: nil)
+                                        }
+                                })
+                            }
+                        } else if let _ = error1 {
+                            print("failure saving video \(error1)")
+                        }
+                        
+                })
             } else if let _ = error {
-                //
+                print("failed to merge clips at the end of capture \(error)")
             }
         })
     }
@@ -220,7 +262,7 @@ extension CameraViewController {
     
 }
 
-// MARK: - UIGestureRecognizerDelegate
+// MARK: - UIGestureRecognizer
 
 extension CameraViewController: UIGestureRecognizerDelegate {
 
@@ -234,9 +276,10 @@ extension CameraViewController: UIGestureRecognizerDelegate {
         case .cancelled:
             fallthrough
         case .failed:
+            self.pauseCapture()
             fallthrough
         default:
-            self.pauseCapture()
+            break
         }
     }
     
