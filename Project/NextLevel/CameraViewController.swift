@@ -253,15 +253,16 @@ extension CameraViewController {
                             PHPhotoLibrary.shared().performChanges({
                                 if let assetChangeRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL) {
                                     let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
-                                    assetCollectionChangeRequest?.addAssets([assetChangeRequest.placeholderForCreatedAsset] as NSArray)
+                                    let enumeration: NSArray = [assetChangeRequest.placeholderForCreatedAsset!]
+                                    assetCollectionChangeRequest?.addAssets(enumeration)
                                 }
                             }, completionHandler: { (success2: Bool, error2: Error?) in
-                                    if success2 == true {
-                                        let alertController = UIAlertController(title: "Video Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
-                                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                                        alertController.addAction(okAction)
-                                        self.present(alertController, animated: true, completion: nil)
-                                    }
+                                if success2 == true {
+                                    let alertController = UIAlertController(title: "Video Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
+                                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                                    alertController.addAction(okAction)
+                                    self.present(alertController, animated: true, completion: nil)
+                                }
                             })
                         }
                     } else if let _ = error1 {
@@ -498,7 +499,8 @@ extension CameraViewController: NextLevelDelegate {
                             if let photoImage = UIImage(data: photoData as! Data) {
                                 let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photoImage)
                                 let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
-                                assetCollectionChangeRequest?.addAssets([assetChangeRequest.placeholderForCreatedAsset] as NSArray)
+                                let enumeration: NSArray = [assetChangeRequest.placeholderForCreatedAsset!]
+                                assetCollectionChangeRequest?.addAssets(enumeration)
                             }
                         }, completionHandler: { (success2: Bool, error2: Error?) in
                             if success2 == true {
@@ -547,15 +549,16 @@ extension CameraViewController: NextLevelDelegate {
                             if let photoImage = UIImage(data: photoData as! Data) {
                                 let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photoImage)
                                 let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
-                                assetCollectionChangeRequest?.addAssets([assetChangeRequest.placeholderForCreatedAsset] as NSArray)
+                                let enumeration: NSArray = [assetChangeRequest.placeholderForCreatedAsset!]
+                                assetCollectionChangeRequest?.addAssets(enumeration)
                             }
                         }, completionHandler: { (success2: Bool, error2: Error?) in
-                                if success2 == true {
-                                    let alertController = UIAlertController(title: "Photo Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
-                                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                                    alertController.addAction(okAction)
-                                    self.present(alertController, animated: true, completion: nil)
-                                }
+                            if success2 == true {
+                                let alertController = UIAlertController(title: "Photo Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
+                                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                                alertController.addAction(okAction)
+                                self.present(alertController, animated: true, completion: nil)
+                            }
                         })
                     }
                 } else if let _ = error1 {
