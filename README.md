@@ -26,7 +26,7 @@ Currently initial **beta**, several features are being tested and have bugs – 
 
 # CocoaPods
 
-pod "NextLevel", "~> 0.0.1-beta.2"
+pod "NextLevel", "~> 0.0.1-beta.5"
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
@@ -38,7 +38,7 @@ end
 
 # Carthage
 
-github "nextlevel/NextLevel" ~> 0.0.1-beta.2
+github "nextlevel/NextLevel" ~> 0.0.1-beta.5
 
 # Swift PM
 
