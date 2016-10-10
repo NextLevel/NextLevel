@@ -108,6 +108,13 @@ class CameraViewController: UIViewController {
             flipButton.addTarget(self, action: #selector(handleFlipButton(_:)), for: .touchUpInside)
         }
         
+        self.saveButton = UIButton(type: .custom)
+        if let saveButton = self.saveButton {
+            saveButton.setImage(UIImage(named: "save_button"), for: .normal)
+            saveButton.sizeToFit()
+            saveButton.addTarget(self, action: #selector(handleSaveButton(_:)), for: .touchUpInside)
+        }
+        
         // capture control "dock"
         let controlDockHeight = screenBounds.height * 0.2
         self.controlDockView = UIView(frame: CGRect(x: 0, y: screenBounds.height - controlDockHeight, width: screenBounds.width, height: controlDockHeight))
@@ -124,6 +131,11 @@ class CameraViewController: UIViewController {
             if let flipButton = self.flipButton, let recordButton = self.recordButton {
                 flipButton.center = CGPoint(x: recordButton.center.x + controlDockView.bounds.width * 0.25 + flipButton.bounds.width * 0.5, y: recordButton.center.y)
                 controlDockView.addSubview(flipButton)
+            }
+            
+            if let saveButton = self.saveButton, let recordButton = self.recordButton {
+                saveButton.center = CGPoint(x: controlDockView.bounds.width * 0.25 - saveButton.bounds.width * 0.5, y: recordButton.center.y)
+                controlDockView.addSubview(saveButton)
             }
         }
         
@@ -258,7 +270,7 @@ extension CameraViewController {
     internal func handleFlashModeButton(_ button: UIButton) {
     }
     
-    internal func handleDoneButton(_ button: UIButton) {
+    internal func handleSaveButton(_ button: UIButton) {
         self.endCapture()
     }
     
