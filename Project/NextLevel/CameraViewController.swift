@@ -403,7 +403,8 @@ extension CameraViewController: NextLevelDelegate {
 
     func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String : Any]?) {
         
-        if let dictionary = photoDict, let photoData = dictionary[NextLevelPhotoJPEGKey] {
+        if let dictionary = photoDict,
+            let photoData = dictionary[NextLevelPhotoJPEGKey] {
             var album: PHObjectPlaceholder? = nil
             PHPhotoLibrary.shared().performChanges({ 
                 
@@ -417,27 +418,13 @@ extension CameraViewController: NextLevelDelegate {
                         let fetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [photoAlbum.localIdentifier], options: nil)
                         let assetCollection = fetchResult.firstObject
                         
-                        PHPhotoLibrary.shared() .performChanges({
-                            var photoImage: UIImage? = nil
-                            
-                            let data = photoData as! Data
-                            
-                            if let metadata = dictionary[NextLevelPhotoMetadataKey] {
-                                let md = metadata as! [String: Any]
-                                if let jpegDataWithMetaData = data.jpegData(withMetadataDictionary: md) {
-                                    photoImage = UIImage(data: jpegDataWithMetaData)
-                                } else {
-                                    photoImage = UIImage(data: data)
+                        PHPhotoLibrary.shared().performChanges({
+                            if let collection = assetCollection {
+                                if let photoImage = UIImage(data: photoData as! Data) {
+                                    let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photoImage)
+                                    let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: collection)
+                                    assetCollectionChangeRequest?.addAssets([assetChangeRequest.placeholderForCreatedAsset] as NSArray)
                                 }
-                            } else {
-                                photoImage = UIImage(data: data)
-                            }
-                            
-                            if let photo = photoImage, let collection = assetCollection {
-                                let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photo)
-                                let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: collection)
-                                let assetArray = NSArray(array: [assetChangeRequest.placeholderForCreatedAsset])
-                                assetCollectionChangeRequest?.addAssets(assetArray)
                             }
                         }, completionHandler: { (success2: Bool, error2: Error?) in
                             if success2 == true {
@@ -451,6 +438,7 @@ extension CameraViewController: NextLevelDelegate {
                 } else if let _ = error1 {
                     print("failure capturing photo from video frame \(error1)")
                 }
+                
             })
         }
         
@@ -464,7 +452,9 @@ extension CameraViewController: NextLevelDelegate {
     }
     
     func nextLevel(_ nextLevel: NextLevel, didProcessPhotoCaptureWith photoDict: [String : Any]?, photoConfiguration: NextLevelPhotoConfiguration) {
-        if let dictionary = photoDict, let photoData = dictionary[NextLevelPhotoJPEGKey] {
+        
+        if let dictionary = photoDict,
+            let photoData = dictionary[NextLevelPhotoJPEGKey] {
             var album: PHObjectPlaceholder? = nil
             PHPhotoLibrary.shared().performChanges({
                 
@@ -478,27 +468,13 @@ extension CameraViewController: NextLevelDelegate {
                             let fetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [photoAlbum.localIdentifier], options: nil)
                             let assetCollection = fetchResult.firstObject
                             
-                            PHPhotoLibrary.shared() .performChanges({
-                                var photoImage: UIImage? = nil
-                                
-                                let data = photoData as! Data
-                                
-                                if let metadata = dictionary[NextLevelPhotoMetadataKey] {
-                                    let md = metadata as! [String: Any]
-                                    if let jpegDataWithMetaData = data.jpegData(withMetadataDictionary: md) {
-                                        photoImage = UIImage(data: jpegDataWithMetaData)
-                                    } else {
-                                        photoImage = UIImage(data: data)
+                            PHPhotoLibrary.shared().performChanges({
+                                if let collection = assetCollection {
+                                    if let photoImage = UIImage(data: photoData as! Data) {
+                                        let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photoImage)
+                                        let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: collection)
+                                        assetCollectionChangeRequest?.addAssets([assetChangeRequest.placeholderForCreatedAsset] as NSArray)
                                     }
-                                } else {
-                                    photoImage = UIImage(data: data)
-                                }
-                                
-                                if let photo = photoImage, let collection = assetCollection {
-                                    let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photo)
-                                    let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: collection)
-                                    let assetArray = NSArray(array: [assetChangeRequest.placeholderForCreatedAsset])
-                                    assetCollectionChangeRequest?.addAssets(assetArray)
                                 }
                                 }, completionHandler: { (success2: Bool, error2: Error?) in
                                     if success2 == true {
@@ -512,8 +488,10 @@ extension CameraViewController: NextLevelDelegate {
                     } else if let _ = error1 {
                         print("failure capturing photo from video frame \(error1)")
                     }
+                    
             })
         }
+        
     }
     
     func nextLevel(_ nextLevel: NextLevel, didProcessRawPhotoCaptureWith photoDict: [String : Any]?, photoConfiguration: NextLevelPhotoConfiguration) {

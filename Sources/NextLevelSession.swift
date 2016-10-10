@@ -119,18 +119,6 @@ public class NextLevelSession: NSObject {
         }
     }
     
-    public var lastVideoFrame: CMSampleBuffer? {
-        get {
-            return self.sessionLastVideoFrame
-        }
-    }
-    
-    public var lastAudioFrame: CMSampleBuffer? {
-        get {
-            return self.sessionLastAudioFrame
-        }
-    }
-    
     public var asset: AVAsset? {
         get {
             var asset: AVAsset? = nil
@@ -184,9 +172,6 @@ public class NextLevelSession: NSObject {
     internal var lastAudioTimestamp: CMTime
     internal var lastVideoTimestamp: CMTime
     
-    internal weak var sessionLastVideoFrame: CMSampleBuffer?
-    internal weak var sessionLastAudioFrame: CMSampleBuffer?
-    
     private let NextLevelSessionAudioQueueIdentifier = "engineering.NextLevel.session.audioQueue"
     private let NextLevelSessionQueueIdentifier = "engineering.NextLevel.sessionQueue"
     private let NextLevelSessionSpecificKey = DispatchSpecificKey<NSObject>()
@@ -237,10 +222,7 @@ public class NextLevelSession: NSObject {
         self._pixelBufferAdapter = nil
         
         self._videoConfiguration = nil
-        self._audioConfiguration = nil
-    
-        self.sessionLastVideoFrame = nil
-        self.sessionLastAudioFrame = nil
+        self._audioConfiguration = nil    
     }
     
     // MARK: - functions
@@ -332,8 +314,6 @@ extension NextLevelSession {
     public typealias NextLevelSessionAppendSampleBufferCompletionHandler = (_: Bool) -> Void
     
     public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, imageBuffer: CVPixelBuffer?, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
-        self.sessionLastVideoFrame = sampleBuffer
-        
         let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         self.startSessionIfNecessary(timestamp: timestamp)
         
@@ -414,9 +394,6 @@ extension NextLevelSession {
             
             self._videoConfiguration = nil
             self._audioConfiguration = nil
-            
-            self.sessionLastVideoFrame = nil
-            self.sessionLastAudioFrame = nil
             
             self.sessionClipFilenameCount = 0
         }

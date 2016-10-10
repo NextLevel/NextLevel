@@ -41,11 +41,11 @@ extension NextLevel {
                  kCGImagePropertyTIFFDateTime as String : Date().iso8601() ]
     }
     
-    public class func metadataFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> [NSObject : Any]? {
+    public class func metadataFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> [String : Any]? {
      
         // add photo metadata (ie EXIF: Aperture, Brightness, Exposure, FocalLength, etc)
-        if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate) as CFDictionary! {
-            let metadata = cfmetadata as Dictionary
+        if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate) {
+            let metadata = cfmetadata as! [String : Any]
             return metadata
         }
         return nil

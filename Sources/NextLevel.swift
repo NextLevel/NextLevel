@@ -631,13 +631,15 @@ public class NextLevel: NSObject {
     internal var currentDevice: AVCaptureDevice?
     internal var requestedDevice: AVCaptureDevice?
 
-    internal var videoCustomContextRenderingEnabled: Bool
-    internal var sessionVideoCustomContextImageBuffer: CVPixelBuffer?
-    
+    internal var _lastVideoFrame: CMSampleBuffer?
+    internal var _lastAudioFrame: CMSampleBuffer?
+
     internal var recording: Bool
     internal var recordingSession: NextLevelSession?
     internal var lastVideoFrameTimeInterval: TimeInterval
     
+    internal var videoCustomContextRenderingEnabled: Bool
+    internal var sessionVideoCustomContextImageBuffer: CVPixelBuffer?
     internal var cicontext: CIContext?
     internal var currentError: Error?
     
@@ -1813,25 +1815,28 @@ extension NextLevel {
             
             var photoDict: [String: Any]? = nil
             
-            if let session = self.recordingSession, let videoFrame = session.lastVideoFrame {
+            if let _ = self.recordingSession, let videoFrame = self._lastVideoFrame {
             
                 let tiffMetadataAdditions = NextLevel.tiffMetadata()
                 
                 // append tiff metadata to buffer for proagation
-                //if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, kCGImagePropertyTIFFDictionary, kCMAttachmentMode_ShouldPropagate) {
-                //    var fullDict = tiffDict as Dictionary
-                //    for (key, value) in tiffMetadataAdditions {
-                //        fullDict.updateValue(value as AnyObject, forKey: key)
-                //    }
-                //    CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, fullDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
-                //} else {
-                CMSetAttachment(videoFrame, kCGImagePropertyTIFFDictionary, tiffMetadataAdditions as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
-                //}
+                if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, kCGImagePropertyTIFFDictionary, kCMAttachmentMode_ShouldPropagate) {
+                    let tiffNSDict = tiffDict as NSDictionary
+                    var metaDict: [String: Any] = [:]
+                    for (key, value) in tiffMetadataAdditions {
+                        metaDict.updateValue(value as AnyObject, forKey: key)
+                    }
+                    for (key, value) in tiffNSDict {
+                        let keyString = key as! String
+                        metaDict.updateValue(value as AnyObject, forKey: keyString)
+                    }
+                    CMSetAttachment(videoFrame, kCGImagePropertyTIFFDictionary, metaDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+                } else {
+                    CMSetAttachment(videoFrame, kCGImagePropertyTIFFDictionary, tiffMetadataAdditions as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+                }
                 
                 // add exif metadata
-                if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, videoFrame, kCMAttachmentMode_ShouldPropagate) {
-                    let metadata = cfmetadata as Dictionary
-                    
+                if let metadata = NextLevel.metadataFromSampleBuffer(sampleBuffer: videoFrame) {
                     if photoDict == nil {
                         photoDict = [:]
                     }
@@ -2040,7 +2045,7 @@ extension NextLevel {
                     })
 
                     if session.currentClipHasVideo == false && session.currentClipHasAudio == false {
-                        if let audioBuffer = session.lastAudioFrame {
+                        if let audioBuffer = self._lastAudioFrame {
                             let lastAudioEndTime = CMTimeAdd(CMSampleBufferGetPresentationTimeStamp(audioBuffer), CMSampleBufferGetDuration(audioBuffer))
                             let videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
                             
@@ -2127,11 +2132,13 @@ extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudi
                 self.executeClosureAsyncOnMainQueueIfNecessary {
                     self.delegate?.nextLevel(self, willProcessRawVideoSampleBuffer: sampleBuffer)
                 }
+                self._lastVideoFrame = sampleBuffer
                 if let session = self.recordingSession {
                     self.handleVideoOutput(sampleBuffer: sampleBuffer, session: session)
                 }
                 break
             case audioOutput:
+                self._lastAudioFrame = sampleBuffer
                 if let session = self.recordingSession {
                     self.handleAudioOutput(sampleBuffer: sampleBuffer, session: session)
                 }
@@ -2161,7 +2168,8 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
     }
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        if let sampleBuffer = photoSampleBuffer, let previewBuffer = previewPhotoSampleBuffer {
+        if let sampleBuffer = photoSampleBuffer,
+            let previewBuffer = previewPhotoSampleBuffer {
             
             // output dictionary
             var photoDict: [String: Any] = [:]
@@ -2169,19 +2177,23 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             let tiffMetadataAdditions = NextLevel.tiffMetadata()
 
             // append tiff metadata to buffer for proagation
-            //if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, kCGImagePropertyTIFFDictionary, kCMAttachmentMode_ShouldPropagate) {
-            //    var fullDict = tiffDict as Dictionary
-            //    for (key, value) in tiffMetadataAdditions {
-            //        fullDict.updateValue(value as AnyObject, forKey: key)
-            //    }
-            //    CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, fullDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
-            //} else {
+            if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, kCGImagePropertyTIFFDictionary, kCMAttachmentMode_ShouldPropagate) {
+                let tiffNSDict = tiffDict as NSDictionary
+                var metaDict: [String: Any] = [:]
+                for (key, value) in tiffMetadataAdditions {
+                    metaDict.updateValue(value as AnyObject, forKey: key)
+                }
+                for (key, value) in tiffNSDict {
+                    let keyString = key as! String
+                    metaDict.updateValue(value as AnyObject, forKey: keyString)
+                }
+                CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, metaDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+            } else {
                 CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, tiffMetadataAdditions as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
-            //}
+            }
             
             // add exif metadata
-            if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate) {
-                let metadata = cfmetadata as Dictionary
+            if let metadata = NextLevel.metadataFromSampleBuffer(sampleBuffer: sampleBuffer) {
                 photoDict[NextLevelPhotoMetadataKey] = metadata
             }
             
@@ -2212,19 +2224,23 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             let tiffMetadataAdditions = NextLevel.tiffMetadata()
             
             // append tiff metadata to buffer for proagation
-            //if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, kCGImagePropertyTIFFDictionary, kCMAttachmentMode_ShouldPropagate) {
-            //    var fullDict = tiffDict as Dictionary
-            //    for (key, value) in tiffMetadataAdditions {
-            //        fullDict.updateValue(value as AnyObject, forKey: key)
-            //    }
-            //    CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, fullDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
-            //} else {
-            CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, tiffMetadataAdditions as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
-            //}
-
+            if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, kCGImagePropertyTIFFDictionary, kCMAttachmentMode_ShouldPropagate) {
+                let tiffNSDict = tiffDict as NSDictionary
+                var metaDict: [String: Any] = [:]
+                for (key, value) in tiffMetadataAdditions {
+                    metaDict.updateValue(value as AnyObject, forKey: key)
+                }
+                for (key, value) in tiffNSDict {
+                    let keyString = key as! String
+                    metaDict.updateValue(value as AnyObject, forKey: keyString)
+                }
+                CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, metaDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+            } else {
+                CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, tiffMetadataAdditions as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+            }
+            
             // add exif metadata
-            if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate) {
-                let metadata = cfmetadata as Dictionary
+            if let metadata = NextLevel.metadataFromSampleBuffer(sampleBuffer: sampleBuffer) {
                 photoDict[NextLevelPhotoMetadataKey] = metadata
             }
             
