@@ -453,11 +453,9 @@ extension CameraViewController: NextLevelDelegate {
     }
     
     func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession) {
-        
     }
     
     func nextLevel(_ nextLevel: NextLevel, didCompleteClip clip: NextLevelClip, inSession session: NextLevelSession) {
-        
     }
     
     func nextLevel(_ nextLevel: NextLevel, didAppendVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
@@ -473,7 +471,8 @@ extension CameraViewController: NextLevelDelegate {
     }
     
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession) {
-        
+        // called when a configuration time limit is specified
+        self.endCapture()
     }
     
     // video frame photo
