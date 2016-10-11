@@ -163,7 +163,7 @@ class CameraViewController: UIViewController {
         
         // video configuration
         nextLevel.videoConfiguration.bitRate = 2000000
-        nextLevel.videoConfiguration.dimensions = CGSize(width: 1280, height: 720)
+//        nextLevel.videoConfiguration.dimensions = CGSize(width: 1280, height: 720)
         nextLevel.videoConfiguration.scalingMode = AVVideoScalingModeResizeAspectFill
         
         // audio configuration
@@ -315,6 +315,10 @@ extension CameraViewController: UIGestureRecognizerDelegate {
         default:
             break
         }
+    }
+    
+    internal func handlePhotoTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
+        NextLevel.sharedInstance.capturePhotoFromVideo()
     }
     
     internal func handleFocusTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
