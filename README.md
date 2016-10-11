@@ -2,8 +2,6 @@
 
 Next Level is a media capture camera library for iOS written in [Swift](https://developer.apple.com/swift/).
 
-Currently initial **beta**, several features are being tested and have bugs – these are being addressed.
-
 [![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) [![Pod Version](https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat)](http://cocoadocs.org/docsets/NextLevel/)
 
 ## Features
@@ -26,7 +24,7 @@ Currently initial **beta**, several features are being tested and have bugs – 
 
 # CocoaPods
 
-pod "NextLevel", "~> 0.0.1-beta.5"
+pod "NextLevel", "~> 0.0.1"
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
@@ -38,7 +36,7 @@ end
 
 # Carthage
 
-github "nextlevel/NextLevel" ~> 0.0.1-beta.5
+github "nextlevel/NextLevel" ~> 0.0.1
 
 # Swift PM
 
