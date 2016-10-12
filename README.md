@@ -6,17 +6,20 @@ Next Level is a media capture camera library for iOS written in [Swift](https://
 
 ## Features
 
-- [x] customizable camera user interface and gestural interaction
-- [x] “[Vine](http://vine.co)-like” video clip recording
-- [x] slow motion capture on supported hardware ([iPhone](https://www.apple.com/iphone/compare/), [iPad](https://www.apple.com/ipad/compare/))
-- [x] video zoom
-- [x] white balance, focus, and exposure adjustment
-- [x] flash/torch support
-- [x] dual camera, wide angle, telephoto device switching
-- [x] mirroring support
-- [x] photo capture
-- [x] simple and extensible API
-- [x] [Swift 3](https://developer.apple.com/swift/)
+|  | Features |
+|:---------:|:---------------------------------------------------------------|
+| &#127916; | “[Vine](http://vine.co)-like” video clip recording and editing |
+| &#128247; | photo capture (raw/jpeg) |
+| &#128070; | customizable gestural interaction and user interface |
+| &#128247; | dual camera, wide angle, telephoto device and switching support |
+| &#128034; | adjustable frame rate on supported hardware (ie fast/slow motion capture) |
+| &#128269; | video zoom |
+| &#9878; | white balance, focus, and exposure adjustment |
+| &#128294; | flash and torch support |
+| &#128111; | mirroring support |
+| &#9881; | configurable encoding and compression settings |
+| &#128736; | simple and extensible API |
+| &#128038; | [Swift 3](https://developer.apple.com/swift/) |
 
 ## Quick Start
 
