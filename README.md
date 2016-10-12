@@ -4,8 +4,6 @@ Next Level is a media capture camera library for iOS written in [Swift](https://
 
 [![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) [![Pod Version](https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat)](http://cocoadocs.org/docsets/NextLevel/)
 
-## Features
-
 |  | Features |
 |:---------:|:---------------------------------------------------------------|
 | &#127916; | “[Vine](http://vine.co)-like” video clip recording and editing |
@@ -56,6 +54,8 @@ Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/Ne
 ## Community
 
 NextLevel is a community – contributions and discussions are welcome!
+
+### Project
 
 - Feature idea? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
 - Found a bug? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
@@ -159,14 +159,15 @@ if let session = NextLevel.sharedInstance.session {
 
 }
 ```
+Videos can also be processed using the [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), a media transcoding in Swift.
 
 ## About
 
-Next Level is just a little weekend project that kept going.
+Next Level was a little weekend project that kept going.
 
-The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization on iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
+The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
 
-It's goal is to provide a good foundation for quick integration – allowing everyone to focus on the functionality that builds on this, such as image processing, computer vision methods including 3D photography, augmented reality, depth of field, or even new technology aided cinematographic techniques.
+It's goal is to provide a good foundation for quick integration – allowing everyone to focus on the functionality that can builds on this, such as image processing, computer vision methods like 3D photography, augmented reality, depth of field, or even new cinematographic recording techniques.
 
 ### Related Projects
 
