@@ -7,7 +7,7 @@ Next Level is a media capture camera library for iOS written in [Swift](https://
 |  | Features |
 |:---------:|:---------------------------------------------------------------|
 | &#127916; | “[Vine](http://vine.co)-like” video clip recording and editing |
-| &#128247; | photo capture (raw/jpeg) |
+| &#128247; | photo capture (raw, jpeg, and from a video frame) |
 | &#128070; | customizable gestural interaction and user interface |
 | &#128247; | dual camera, wide angle, telephoto device and switching support |
 | &#128034; | adjustable frame rate on supported hardware (ie fast/slow motion capture) |
@@ -63,7 +63,7 @@ NextLevel is a community – contributions and discussions are welcome!
 - Questions? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag 'nextlevel'.
 - Want to contribute? Submit a pull request.
 
-### Sticker
+### Stickers
 
 If you found this project to be helpful, check out the [Next Level sticker](https://www.stickermule.com/en/marketplace/15145-next-level).
 
@@ -73,7 +73,8 @@ If other projects have interest in providing something similar, this conforms to
 
 ## Overview
 
-### Record Video Clips
+### Recording Video Clips
+
 Import the library.
 
 ```swift
@@ -95,6 +96,7 @@ if let previewView = self.previewView {
 ```
 
 Configure the capture session.
+
 ```swift
 override func viewDidLoad() {
     NextLevel.sharedInstance.delegate = self
@@ -134,6 +136,8 @@ NextLevel.sharedInstance.record()
 NextLevel.sharedInstance.pause()
 ```
 
+### Editing
+
 Editing and finalizing the recorded session.
 ```swift
 
@@ -159,15 +163,13 @@ if let session = NextLevel.sharedInstance.session {
 
 }
 ```
-Videos can also be processed using the [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), a media transcoding in Swift.
+Videos can also be processed using the [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), a media transcoding library in Swift.
 
 ## About
 
-Next Level was a little weekend project that kept going.
+Next Level was a little weekend project that turned into something more useful. The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
 
-The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
-
-It's goal is to provide a good foundation for quick integration – allowing everyone to focus on the functionality that can builds on this, such as image processing, computer vision methods like 3D photography, augmented reality, depth of field, or even new cinematographic recording techniques.
+The goal is to continue to provide a good foundation for quick integration – allowing everyone to focus on the functionality that can builds on this. The API provides a means to perform realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.
 
 ### Related Projects
 
