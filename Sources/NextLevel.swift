@@ -1968,7 +1968,7 @@ extension NextLevel {
             
             // TODO better expose this or a sharegroup for custom context rendering support
             if self.cicontext == nil {
-                self.cicontext = CIContext(eaglContext: EAGLContext(api: .openGLES3))
+                self.cicontext = CIContext(eaglContext: EAGLContext(api: .openGLES2))
             }
             
             if let context = self.cicontext {
