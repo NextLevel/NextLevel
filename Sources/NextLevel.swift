@@ -1416,6 +1416,28 @@ extension NextLevel {
         }
     }
     
+    // focal length and principle point camera intrinsic parameters for OpenCV
+    // see Hartley's Mutiple View Geometry, Chapter 6
+    public func focalLengthAndPrinciplePoint(focalLengthX: inout Float, focalLengthY: inout Float, principlePointX: inout Float, principlePointY: inout Float) -> Bool {
+        if let device: AVCaptureDevice = self.currentDevice,
+            let formatDescription = device.activeFormat.formatDescription {
+            let dimensions = CMVideoFormatDescriptionGetPresentationDimensions(formatDescription, true, true)
+            
+            principlePointX = Float(dimensions.width) * 0.5
+            principlePointY = Float(dimensions.height) * 0.5
+            
+            let horizontalFieldOfView = device.activeFormat.videoFieldOfView
+            let verticalFieldOfView = (horizontalFieldOfView / principlePointX) * principlePointY
+            
+            focalLengthX = fabs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * Float(M_PI) / 2 )) )
+            focalLengthY = fabs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * Float(M_PI) / 2 )) )
+            
+
+            return true
+        }
+        return false
+    }
+    
     // private functions
     
     internal func adjustFocusExposureAndWhiteBalance() {
