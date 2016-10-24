@@ -800,10 +800,17 @@ extension NextLevel {
                 if session.isRunning == true {
                     session.stopRunning()
                 }
+
+                self.beginConfiguration()
+                self.removeInputs(session: session)
+                self.removeOutputsIfNecessary(session: session)
+                self.commitConfiguration()
+                
+                self.recordingSession = nil
+                self.captureSession = nil
+            
             }
         }
-        
-        self.recordingSession = nil
     }
     
     // private session functions
