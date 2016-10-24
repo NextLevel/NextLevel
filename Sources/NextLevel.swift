@@ -903,7 +903,7 @@ extension NextLevel {
         
             // setup preset and mode
             
-            self.removeOutputsIfNecessary()
+            self.removeOutputsIfNecessary(session: session)
             
             switch self.cameraMode {
             case .video:
@@ -999,6 +999,17 @@ extension NextLevel {
         }
         return false
     }
+    
+    internal func removeInputs(session: AVCaptureSession) {
+        for input in session.inputs as! [AVCaptureDeviceInput] {
+            session.removeInput(input)
+            if input.device.hasMediaType(AVMediaTypeVideo) {
+                self.removeKeyValueObservers()
+            }
+        }
+        self._videoInput = nil
+        self._audioInput = nil
+    }
 
     // outputs, only call within configuration lock
     
@@ -1076,33 +1087,31 @@ extension NextLevel {
         
     }
     
-    private func removeOutputsIfNecessary() {
+    internal func removeOutputsIfNecessary(session: AVCaptureSession) {
         
-        if let session = self.captureSession {
-            switch self.cameraMode {
-            case .video:
-                break
-            case .photo:
-                if let audioOutput = self._audioOutput {
-                    if session.outputs.contains(where: { (audioOutput) -> Bool in
-                        return true
-                    }) {
-                        session.removeOutput(audioOutput)
-                        self._audioOutput = nil
-                    }
+        switch self.cameraMode {
+        case .video:
+            break
+        case .photo:
+            if let audioOutput = self._audioOutput {
+                if session.outputs.contains(where: { (audioOutput) -> Bool in
+                    return true
+                }) {
+                    session.removeOutput(audioOutput)
+                    self._audioOutput = nil
                 }
-                break
-            case .audio:
-                if let videoOutput = self._videoOutput {
-                    if session.outputs.contains(where: { (videoOutput) -> Bool in
-                        return true
-                    }) {
-                        session.removeOutput(videoOutput)
-                        self._videoOutput = nil
-                    }
-                }
-                break
             }
+            break
+        case .audio:
+            if let videoOutput = self._videoOutput {
+                if session.outputs.contains(where: { (videoOutput) -> Bool in
+                    return true
+                }) {
+                    session.removeOutput(videoOutput)
+                    self._videoOutput = nil
+                }
+            }
+            break
         }
         
     }
