@@ -606,12 +606,6 @@ public class NextLevel: NSObject {
         }
     }
     
-    public var error: Error? {
-        get {
-            return self.currentError
-        }
-    }
-    
     // MARK: - private instance vars
     
     internal var captureSession: AVCaptureSession?
@@ -638,7 +632,6 @@ public class NextLevel: NSObject {
     internal var videoCustomContextRenderingEnabled: Bool
     internal var sessionVideoCustomContextImageBuffer: CVPixelBuffer?
     internal var cicontext: CIContext?
-    internal var currentError: Error?
     
     // MARK: - singleton
     
