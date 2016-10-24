@@ -620,9 +620,8 @@ public class NextLevel: NSObject {
 
     internal var photoSettings: AVCapturePhotoSettings?
 
-    internal var frontInput: AVCaptureDeviceInput?
-    internal var backInput: AVCaptureDeviceInput?
-    internal var audioInput: AVCaptureDeviceInput?
+    internal var _videoInput: AVCaptureDeviceInput?
+    internal var _audioInput: AVCaptureDeviceInput?
     
     internal var _videoOutput: AVCaptureVideoDataOutput?
     internal var _audioOutput: AVCaptureAudioDataOutput?
@@ -685,15 +684,18 @@ public class NextLevel: NSObject {
     }
     
     deinit {
-        // TODO do a better job at clean up
-        
         self.delegate = nil
-        
+
         self.removeApplicationObservers()
         self.removeSessionObservers()
         self.removeDeviceObservers()
         
-        // TODO self.removeKeyValueObservers() and IO
+        if let session = self.captureSession {
+            self.beginConfiguration()
+            self.removeInputs(session: session)
+            self.removeOutputsIfNecessary(session: session)
+            self.commitConfiguration()
+        }
 
         self.previewLayer.session = nil
             
@@ -976,7 +978,7 @@ extension NextLevel {
                     self.removeKeyValueObservers()
                 }
             }
-            // TODO prompts authorization here, add auth check prior
+
             let _ = self.addInput(session: session, device: captureDevice)
         }
     }
@@ -990,6 +992,9 @@ extension NextLevel {
                 if input.device.hasMediaType(AVMediaTypeVideo) {
                     self.addKeyValueObservers()
                     self.updateVideoOutputSettings()
+                    self._videoInput = input
+                } else {
+                    self._audioInput = input
                 }
                 
                 return true
