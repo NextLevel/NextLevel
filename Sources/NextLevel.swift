@@ -559,7 +559,7 @@ public class NextLevel: NSObject {
     public var videoStabilizationMode: NextLevelVideoStabilizationMode {
         didSet {
             self.beginConfiguration()
-            self.updateVideoStabilization()
+            self.updateVideoOutputSettings()
             self.commitConfiguration()
         }
     }
@@ -989,7 +989,7 @@ extension NextLevel {
                 
                 if input.device.hasMediaType(AVMediaTypeVideo) {
                     self.addKeyValueObservers()
-                    self.updateVideoStabilization()
+                    self.updateVideoOutputSettings()
                 }
                 
                 return true
@@ -1794,7 +1794,7 @@ extension NextLevel {
         self.delegate?.nextLevel(self, didChangeDeviceOrientation: currentOrientation.deviceOrientationNextLevelType())
     }
     
-    internal func updateVideoStabilization() {
+    internal func updateVideoOutputSettings() {
         if let videoOutput = self._videoOutput {
             if let videoConnection = videoOutput.connection(withMediaType: AVMediaTypeVideo) {
                 if videoConnection.isVideoStabilizationSupported {
