@@ -628,8 +628,8 @@ public class NextLevel: NSObject {
     internal var _audioOutput: AVCaptureAudioDataOutput?
     internal var _photoOutput: AVCapturePhotoOutput?
     
-    internal var currentDevice: AVCaptureDevice?
-    internal var requestedDevice: AVCaptureDevice?
+    internal var _currentDevice: AVCaptureDevice?
+    internal var _requestedDevice: AVCaptureDevice?
 
     internal var _lastVideoFrame: CMSampleBuffer?
     internal var _lastAudioFrame: CMSampleBuffer?
@@ -697,7 +697,7 @@ public class NextLevel: NSObject {
 
         self.previewLayer.session = nil
             
-        self.currentDevice = nil
+        self._currentDevice = nil
         self.cicontext = nil
         
         self.recordingSession = nil
@@ -848,17 +848,17 @@ extension NextLevel {
             if shouldConfigureVideo == true {
                 var captureDevice: AVCaptureDevice? = nil
                 
-                if let requestedDevice = self.requestedDevice {
+                if let requestedDevice = self._requestedDevice {
                     captureDevice = requestedDevice
                 } else if let videoDevice = AVCaptureDevice.primaryVideoDevice(forPosition: self.devicePosition.avfoundationType) {
                     captureDevice = videoDevice
                 }
                 
                 if let device = captureDevice {
-                    if device != self.currentDevice {
+                    if device != self._currentDevice {
                         self.configureDevice(captureDevice: device, mediaType: AVMediaTypeVideo)
                         
-                        let changingPosition = device.position != self.currentDevice?.position
+                        let changingPosition = device.position != self._currentDevice?.position
                         if changingPosition == true {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
                                 self.delegate?.nextLevelDevicePositionWillChange(self)
@@ -866,9 +866,9 @@ extension NextLevel {
                         }
                         
                         self.willChangeValue(forKey: "currentDevice")
-                        self.currentDevice = device
+                        self._currentDevice = device
                         self.didChangeValue(forKey: "currentDevice")
-                        self.requestedDevice = nil
+                        self._requestedDevice = nil
                         
                         if changingPosition == true {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
@@ -1130,7 +1130,7 @@ extension NextLevel {
     // flash and torch
     
     public var isFlashAvailable: Bool {
-        if let device: AVCaptureDevice = self.currentDevice {
+        if let device: AVCaptureDevice = self._currentDevice {
             return device.hasFlash
         }
         return false
@@ -1144,7 +1144,7 @@ extension NextLevel {
             return .off
         }
         set {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 guard
                     device.hasFlash
                 else {
@@ -1176,7 +1176,7 @@ extension NextLevel {
     
     public var isTorchAvailable: Bool {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return device.hasTorch
             }
             return false
@@ -1185,13 +1185,13 @@ extension NextLevel {
     
     public var torchMode: NextLevelTorchMode {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return device.torchModeNextLevelType()
             }
             return .off
         }
         set {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 guard
                     device.torchMode != newValue.avfoundationType,
                     device.hasTorch
@@ -1220,7 +1220,7 @@ extension NextLevel {
     
     public var isFocusPointOfInterestSupported: Bool {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return device.isFocusPointOfInterestSupported
             }
             return false
@@ -1229,7 +1229,7 @@ extension NextLevel {
     
     public var isFocusLockSupported: Bool {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return device.isFocusModeSupported(.locked)
             }
             return false
@@ -1238,7 +1238,7 @@ extension NextLevel {
     
     public var isAdjustingFocus: Bool {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return device.isAdjustingFocus
             }
             return false
@@ -1247,13 +1247,13 @@ extension NextLevel {
     
     public var focusMode: NextLevelFocusMode {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return device.focusModeNextLevelType()
             }
             return .locked
         }
         set {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 guard
                     device.focusMode != newValue.avfoundationType,
                     device.isFocusModeSupported(newValue.avfoundationType)
@@ -1275,7 +1275,7 @@ extension NextLevel {
     }
     
     public func focusExposeAndAdjustWhiteBalance(atAdjustedPoint adjustedPoint: CGPoint) {
-        if let device: AVCaptureDevice = self.currentDevice {
+        if let device: AVCaptureDevice = self._currentDevice {
             guard
                 !device.isAdjustingFocus,
                 !device.isAdjustingExposure
@@ -1315,7 +1315,7 @@ extension NextLevel {
     }
     
     public func focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint) {
-        if let device: AVCaptureDevice = self.currentDevice {
+        if let device: AVCaptureDevice = self._currentDevice {
             guard
                 !device.isAdjustingFocus,
                 !device.isAdjustingExposure
@@ -1344,7 +1344,7 @@ extension NextLevel {
     
     public var isExposureLockSupported: Bool {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return device.isExposureModeSupported(.locked)
             }
             return false
@@ -1353,7 +1353,7 @@ extension NextLevel {
     
     public var isAdjustingExposure: Bool {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return device.isAdjustingExposure
             }
             return false
@@ -1362,13 +1362,13 @@ extension NextLevel {
     
     public var exposureMode: NextLevelExposureMode {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return device.exposureModeNextLevelType()
             }
             return .locked
         }
         set {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 guard
                     device.exposureMode != newValue.avfoundationType,
                     device.isExposureModeSupported(exposureMode.avfoundationType)
@@ -1392,7 +1392,7 @@ extension NextLevel {
     }
     
     public func exposeAtAdjustedPointOfInterest(adjustedPoint: CGPoint) {
-        if let device: AVCaptureDevice = self.currentDevice {
+        if let device: AVCaptureDevice = self._currentDevice {
             guard
                 !device.isAdjustingExposure
             else {
@@ -1419,7 +1419,7 @@ extension NextLevel {
     // focal length and principle point camera intrinsic parameters for OpenCV
     // see Hartley's Mutiple View Geometry, Chapter 6
     public func focalLengthAndPrinciplePoint(focalLengthX: inout Float, focalLengthY: inout Float, principlePointX: inout Float, principlePointY: inout Float) -> Bool {
-        if let device: AVCaptureDevice = self.currentDevice,
+        if let device: AVCaptureDevice = self._currentDevice,
             let formatDescription = device.activeFormat.formatDescription {
             let dimensions = CMVideoFormatDescriptionGetPresentationDimensions(formatDescription, true, true)
             
@@ -1441,7 +1441,7 @@ extension NextLevel {
     // private functions
     
     internal func adjustFocusExposureAndWhiteBalance() {
-        if let device: AVCaptureDevice = self.currentDevice {
+        if let device: AVCaptureDevice = self._currentDevice {
             guard
                 !device.isAdjustingFocus,
                 !device.isAdjustingExposure
@@ -1456,7 +1456,7 @@ extension NextLevel {
     }
     
     internal func adjustWhiteBalanceForExposureMode(exposureMode: AVCaptureExposureMode) {
-        if let device = self.currentDevice {
+        if let device = self._currentDevice {
             let whiteBalanceMode = self.whiteBalanceModeBestForExposureMode(exposureMode: exposureMode)
             if device.isWhiteBalanceModeSupported(whiteBalanceMode) {
                 device.whiteBalanceMode = whiteBalanceMode
@@ -1466,7 +1466,7 @@ extension NextLevel {
     
     internal func whiteBalanceModeBestForExposureMode(exposureMode: AVCaptureExposureMode) -> AVCaptureWhiteBalanceMode {
         var whiteBalanceMode: AVCaptureWhiteBalanceMode = .continuousAutoWhiteBalance
-        if let device = self.currentDevice {
+        if let device = self._currentDevice {
             switch exposureMode {
             case .autoExpose:
                 if device.isWhiteBalanceModeSupported(.autoWhiteBalance) {
@@ -1495,7 +1495,7 @@ extension NextLevel {
     }
     
     internal func focusEnded() {
-        if let device = self.currentDevice {
+        if let device = self._currentDevice {
             guard
                 !device.isAdjustingFocus
             else {
@@ -1531,7 +1531,7 @@ extension NextLevel {
     }
     
     internal func exposureEnded() {
-        if let device = self.currentDevice {
+        if let device = self._currentDevice {
             guard
                 !device.isAdjustingFocus ||
                 !device.isAdjustingExposure
@@ -1573,7 +1573,7 @@ extension NextLevel {
     
     internal func flashActiveChanged() {
         // adjust white balance mode depending on the flash
-        if let device = self.currentDevice {
+        if let device = self._currentDevice {
             let exposureMode = device.exposureMode
             let whiteBalanceMode = self.whiteBalanceModeBestForExposureMode(exposureMode: exposureMode)
             let currentWhiteBalanceMode = device.whiteBalanceMode
@@ -1656,7 +1656,7 @@ extension NextLevel {
                     }
                     break
                 case .auto:
-                    if let vc = videoOutput.connection(withMediaType: AVMediaTypeVideo), let device = self.currentDevice {
+                    if let vc = videoOutput.connection(withMediaType: AVMediaTypeVideo), let device = self._currentDevice {
                         if vc.isVideoMirroringSupported {
                             vc.isVideoMirrored = (device.position == .front)
                         }
@@ -1677,13 +1677,13 @@ extension NextLevel {
     
     public var videoZoomFactor: Float {
         get {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 return Float(device.videoZoomFactor)
             }
             return 1.0 // prefer 1.0 instead of using an optional
         }
         set {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 do {
                     try device.lockForConfiguration()
                     
@@ -1719,7 +1719,7 @@ extension NextLevel {
             return frameRate
         }
         set {
-            if let device: AVCaptureDevice = self.currentDevice {
+            if let device: AVCaptureDevice = self._currentDevice {
                 guard
                     AVCaptureDevice.isCaptureDeviceFormat(inRange: device.activeFormat, frameRate: newValue)
                 else {
@@ -1759,7 +1759,7 @@ extension NextLevel {
         if deviceForUse == nil {
             throw NextLevelError.deviceNotAvailable
         } else {
-            self.requestedDevice = deviceForUse
+            self._requestedDevice = deviceForUse
             self.configureDevices()
         }
     }
@@ -2030,7 +2030,7 @@ extension NextLevel {
                     Thread.sleep(forTimeInterval: sleepDuration)
                 }
                 
-                if let device = self.currentDevice {
+                if let device = self._currentDevice {
                     
                     // check with the client to setup/maintain external render contexts
                     let imageBuffer = self.isVideoCustomContextRenderingEnabled == true ? CMSampleBufferGetImageBuffer(sampleBuffer) : nil
@@ -2078,7 +2078,7 @@ extension NextLevel {
                         }
                     }
                         
-                } // self.currentDevice
+                } // self._currentDevice
 
             }
 
