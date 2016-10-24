@@ -533,13 +533,13 @@ public class NextLevel: NSObject {
     public var cameraMode: NextLevelCaptureMode {
         didSet {
             self.configureSession()
-            self.configureDevices()
+            self.configureSessionDevices()
         }
     }
         
     public var devicePosition: NextLevelDevicePosition {
         didSet {
-            self.configureDevices()
+            self.configureSessionDevices()
         }
     }
     
@@ -780,7 +780,7 @@ extension NextLevel {
                 self.previewLayer.session = session
                 
                 self.configureSession()
-                self.configureDevices()
+                self.configureSessionDevices()
                 
                 self.updateVideoOrientation()
                 self.commitConfiguration()
@@ -825,7 +825,7 @@ extension NextLevel {
         }
     }
     
-    internal func configureDevices() {
+    internal func configureSessionDevices() {
         if self.captureSession != nil {
         
             self.beginConfiguration()
@@ -1760,7 +1760,7 @@ extension NextLevel {
             throw NextLevelError.deviceNotAvailable
         } else {
             self._requestedDevice = deviceForUse
-            self.configureDevices()
+            self.configureSessionDevices()
         }
     }
     
