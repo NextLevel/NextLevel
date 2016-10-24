@@ -618,8 +618,6 @@ public class NextLevel: NSObject {
     internal var sessionQueue: DispatchQueue
     internal var sessionConfigurationCount: Int
 
-    internal var photoSettings: AVCapturePhotoSettings?
-
     internal var _videoInput: AVCaptureDeviceInput?
     internal var _audioInput: AVCaptureDeviceInput?
     
@@ -659,7 +657,6 @@ public class NextLevel: NSObject {
         self.videoConfiguration = NextLevelVideoConfiguration()
         self.audioConfiguration = NextLevelAudioConfiguration()
         self.photoConfiguration = NextLevelPhotoConfiguration()
-        self.photoSettings = AVCapturePhotoSettings()
         
         self.cameraMode = .video
         
@@ -1159,10 +1156,7 @@ extension NextLevel {
     
     public var flashMode: NextLevelFlashMode {
         get {
-            if let settings = self.photoSettings {
-                return settings.flashModeNextLevelType()
-            }
-            return .off
+            return self.photoConfiguration.flashMode.flashModeNextLevelType()
         }
         set {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1175,13 +1169,12 @@ extension NextLevel {
                 do {
                     try device.lockForConfiguration()
                     
-                    if let settings = self.photoSettings, let output = self._photoOutput {
-                        
-                        if settings.flashMode != newValue.avfoundationType {
+                    if let output = self._photoOutput {
+                        if self.photoConfiguration.flashMode != newValue.avfoundationType {
                             let modes = output.supportedFlashModes
                             let numberMode: NSNumber = NSNumber(integerLiteral: Int(newValue.avfoundationType.rawValue))
                             if modes.contains(numberMode) {
-                                settings.flashMode = newValue.avfoundationType
+                                self.photoConfiguration.flashMode = newValue.avfoundationType
                             }
                         }
                     }
@@ -1496,10 +1489,8 @@ extension NextLevel {
                 break
             case .locked:
                 if device.isWhiteBalanceModeSupported(.locked) {
-                    if let settings = self.photoSettings {
-                        let flashActive: Bool = (settings.flashMode == .on) || (settings.flashMode == .auto)
-                        whiteBalanceMode = flashActive == true ? .continuousAutoWhiteBalance : .locked
-                    }
+                    let flashActive: Bool = (self.photoConfiguration.flashMode == .on) || (self.photoConfiguration.flashMode == .auto)
+                    whiteBalanceMode = flashActive == true ? .continuousAutoWhiteBalance : .locked
                 }
                 break
             default:

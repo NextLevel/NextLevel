@@ -204,6 +204,7 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     
     override init() {
         self.codec = AVVideoCodecJPEG
+        self.flashMode = .off
         super.init()
     }
     
@@ -218,5 +219,7 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
         }
     }
     
+    // change flashMode with NextLevel.flashMode
+    internal var flashMode: AVCaptureFlashMode
 }
 
