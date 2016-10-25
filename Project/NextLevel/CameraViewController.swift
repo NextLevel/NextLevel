@@ -258,6 +258,10 @@ extension CameraViewController {
                                 }
                             }, completionHandler: { (success2: Bool, error2: Error?) in
                                 if success2 == true {
+                                    // remove the session's clips, after saving (if desired)
+                                    NextLevel.sharedInstance.session?.removeAllClips()
+    
+                                    // prompt that the video has been saved
                                     let alertController = UIAlertController(title: "Video Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
                                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                                     alertController.addAction(okAction)
