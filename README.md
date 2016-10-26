@@ -67,9 +67,9 @@ NextLevel is a community – contributions and discussions are welcome!
 
 If you found this project to be helpful, check out the [Next Level sticker](https://www.stickermule.com/en/marketplace/15145-next-level).
 
-For a [$10 credit](https://www.stickermule.com/unlock?ref_id=1012370701), use this sign up [link](https://www.stickermule.com/unlock?ref_id=1012370701).
+For a $10 [credit](https://www.stickermule.com/unlock?ref_id=1012370701), use this sign up [link](https://www.stickermule.com/unlock?ref_id=1012370701).
 
-If other projects have interest in providing something similar, this conforms to the [sticker standard](https://terinjokes.github.io/StickerConstructorSpec/) which is also used by several node projects. 
+If other projects have interest in providing something similar, this conforms to the [sticker standard](https://terinjokes.github.io/StickerConstructorSpec/) used by several node projects. 
 
 ## Overview
 
