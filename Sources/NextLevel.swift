@@ -2198,8 +2198,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
     }
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        if let sampleBuffer = photoSampleBuffer,
-            let previewBuffer = previewPhotoSampleBuffer {
+        if let sampleBuffer = photoSampleBuffer {
             
             // output dictionary
             var photoDict: [String: Any] = [:]
@@ -2228,7 +2227,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             }
             
             // add JPEG, thumbnail
-            let imageData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: sampleBuffer, previewPhotoSampleBuffer: previewBuffer)
+            let imageData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: sampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
             if let data = imageData {
                 photoDict[NextLevelPhotoJPEGKey] = data
             }
@@ -2246,7 +2245,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
     }
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingRawPhotoSampleBuffer rawSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        if let sampleBuffer = rawSampleBuffer, let previewBuffer = previewPhotoSampleBuffer {
+        if let sampleBuffer = rawSampleBuffer {
             
             // output dictionary
             var photoDict: [String: Any] = [:]
@@ -2275,7 +2274,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             }
             
             // add Raw + thumbnail
-            let imageData = AVCapturePhotoOutput.dngPhotoDataRepresentation(forRawSampleBuffer: sampleBuffer, previewPhotoSampleBuffer: previewBuffer)
+            let imageData = AVCapturePhotoOutput.dngPhotoDataRepresentation(forRawSampleBuffer: sampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
             if let data = imageData {
                 photoDict[NextLevelPhotoRawImageKey] = data
             }
