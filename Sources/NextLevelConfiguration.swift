@@ -200,10 +200,13 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     
     public var codec: String        // AVVideoCodecKey
     
+    public var generateThumbnail: Bool
+    
     // MARK: - object lifecycle
     
     override init() {
         self.codec = AVVideoCodecJPEG
+        self.generateThumbnail = false
         self.flashMode = .off
         super.init()
     }
@@ -214,7 +217,13 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
         if let options = self.options {
             return options
         } else {
-            let config: [String: Any] = [AVVideoCodecKey: self.codec]
+            var config: [String: Any] = [AVVideoCodecKey: self.codec]
+            if generateThumbnail == true {
+                let settings = AVCapturePhotoSettings()
+                if settings.availablePreviewPhotoPixelFormatTypes.count > 0 {
+                    config[kCVPixelBufferPixelFormatTypeKey as String] = settings.availablePreviewPhotoPixelFormatTypes[0]
+                }
+            }
             return config
         }
     }
