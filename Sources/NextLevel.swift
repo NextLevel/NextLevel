@@ -2042,7 +2042,7 @@ extension NextLevel {
                     let imageBuffer = self.isVideoCustomContextRenderingEnabled == true ? CMSampleBufferGetImageBuffer(sampleBuffer) : nil
 
                     if let bufferRef = imageBuffer {
-                        if CVPixelBufferLockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0))) == kCVReturnSuccess {
+                        if CVPixelBufferLockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: .allZeros)) == kCVReturnSuccess {
                             // only called from captureQueue
                             self.delegate?.nextLevel(self, renderToCustomContextWithImageBuffer: bufferRef, onQueue: self._sessionQueue)
                         } else {
@@ -2055,7 +2055,7 @@ extension NextLevel {
                         // cleanup client rendering context
                         if self.isVideoCustomContextRenderingEnabled {
                             if let bufferRef = imageBuffer {
-                                CVPixelBufferUnlockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
+                                CVPixelBufferUnlockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: .allZeros))
                             }
                         }
                         
