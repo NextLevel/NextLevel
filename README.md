@@ -101,6 +101,8 @@ Configure the capture session.
 ```swift
 override func viewDidLoad() {
     NextLevel.sharedInstance.delegate = self
+    NextLevel.sharedInstance.videoDelegate = self
+    NextLevel.sharedInstance.photoDelegate = self
     
     // modify .videoConfiguration, .audioConfiguration, .photoConfiguration properties
     // Compression, resolution, and maximum recording time options are available

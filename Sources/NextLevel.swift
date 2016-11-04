@@ -403,16 +403,13 @@ public enum NextLevelError: Error, CustomStringConvertible {
 
 // MARK: - NextLevelDelegate Dictionary Keys
 
-// video keys
-
-// photography keys
 public let NextLevelPhotoMetadataKey = "NextLevelPhotoMetadataKey"
 public let NextLevelPhotoJPEGKey = "NextLevelPhotoJPEGKey"
 public let NextLevelPhotoRawImageKey = "NextLevelPhotoRawImageKey"
 public let NextLevelPhotoThumbnailKey = "NextLevelPhotoThumbnailKey"
 
 // MARK: - NextLevelDelegate
-// all methods are called on the MainQueue except nextLevel:renderToCustomContextWithSampleBuffer:onQueue
+
 public protocol NextLevelDelegate: NSObjectProtocol {
 
     // permission
@@ -466,6 +463,13 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevelWillStartPreview(_ nextLevel: NextLevel)
     func nextLevelDidStopPreview(_ nextLevel: NextLevel)
     
+}
+
+// MARK: - NextLevelVideoDelegate
+// all methods are called on the MainQueue except nextLevel:renderToCustomContextWithSampleBuffer:onQueue
+
+public protocol NextLevelVideoDelegate: NSObjectProtocol {
+
     // video processing
     func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer)
     func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue)
@@ -487,7 +491,12 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     // video frame photo
     func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String : Any]?)
     
-    // photo
+}
+
+// MARK: - NextLevelPhotoDelegate
+
+public protocol NextLevelPhotoDelegate: NSObjectProtocol {
+
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
     func nextLevel(_ nextLevel: NextLevel, didCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
     
@@ -508,7 +517,11 @@ private let NextLevelRequiredMinimumStorageSpaceInBytes: UInt64 = 49999872 // ~4
 
 public class NextLevel: NSObject {
     
+    // delegates
+    
     public weak var delegate: NextLevelDelegate?
+    public weak var videoDelegate: NextLevelVideoDelegate?
+    public weak var photoDelegate: NextLevelPhotoDelegate?
     
     // preview
     
@@ -1892,7 +1905,7 @@ extension NextLevel {
             }
 
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevel(self, didCompletePhotoCaptureFromVideoFrame: photoDict)
+                self.videoDelegate?.nextLevel(self, didCompletePhotoCaptureFromVideoFrame: photoDict)
             }
 
         }
@@ -1921,7 +1934,7 @@ extension NextLevel {
                     
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
-                            self.delegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
+                            self.videoDelegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
                             if let handler = completionHandler {
                                 handler()
                             }
@@ -1953,7 +1966,7 @@ extension NextLevel {
             if session.isClipReady == false {
                 session.beginClip()
                 self.executeClosureAsyncOnMainQueueIfNecessary {
-                    self.delegate?.nextLevel(self, didStartClipInSession: session)
+                    self.videoDelegate?.nextLevel(self, didStartClipInSession: session)
                 }
             }
         }
@@ -2023,7 +2036,7 @@ extension NextLevel {
                 }
                 
                 self.executeClosureAsyncOnMainQueueIfNecessary {
-                    self.delegate?.nextLevel(self, didSetupVideoInSession: session)
+                    self.videoDelegate?.nextLevel(self, didSetupVideoInSession: session)
                 }
             }
             
@@ -2044,7 +2057,7 @@ extension NextLevel {
                     if let bufferRef = imageBuffer {
                         if CVPixelBufferLockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: .allZeros)) == kCVReturnSuccess {
                             // only called from captureQueue
-                            self.delegate?.nextLevel(self, renderToCustomContextWithImageBuffer: bufferRef, onQueue: self._sessionQueue)
+                            self.videoDelegate?.nextLevel(self, renderToCustomContextWithImageBuffer: bufferRef, onQueue: self._sessionQueue)
                         } else {
                             self.sessionVideoCustomContextImageBuffer = nil
                         }
@@ -2063,12 +2076,12 @@ extension NextLevel {
                         self._lastVideoFrameTimeInterval = CACurrentMediaTime()
                         if success == true {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
-                                self.delegate?.nextLevel(self, didAppendVideoSampleBuffer: sampleBuffer, inSession: session)
+                                self.videoDelegate?.nextLevel(self, didAppendVideoSampleBuffer: sampleBuffer, inSession: session)
                             }
                             self.checkSessionDuration()
                         } else {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
-                                self.delegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBuffer, inSession: session)
+                                self.videoDelegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBuffer, inSession: session)
                             }
                         }
                     })
@@ -2103,7 +2116,7 @@ extension NextLevel {
                 }
                 
                 self.executeClosureAsyncOnMainQueueIfNecessary {
-                    self.delegate?.nextLevel(self, didSetupAudioInSession: session)
+                    self.videoDelegate?.nextLevel(self, didSetupAudioInSession: session)
                 }
             }
             
@@ -2113,12 +2126,12 @@ extension NextLevel {
                 session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool) -> Void in
                     if success {
                         self.executeClosureAsyncOnMainQueueIfNecessary {
-                            self.delegate?.nextLevel(self, didAppendAudioSampleBuffer: sampleBuffer, inSession: session)
+                            self.videoDelegate?.nextLevel(self, didAppendAudioSampleBuffer: sampleBuffer, inSession: session)
                         }
                         self.checkSessionDuration()
                     } else {
                         self.executeClosureAsyncOnMainQueueIfNecessary {
-                            self.delegate?.nextLevel(self, didSkipAudioSampleBuffer: sampleBuffer, inSession: session)
+                            self.videoDelegate?.nextLevel(self, didSkipAudioSampleBuffer: sampleBuffer, inSession: session)
                         }
                     }
                 })
@@ -2137,11 +2150,11 @@ extension NextLevel {
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
-                            self.delegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
+                            self.videoDelegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
                         } else if let _ = error {
                             // TODO report error
                         }
-                        self.delegate?.nextLevel(self, didCompleteSession: session)
+                        self.videoDelegate?.nextLevel(self, didCompleteSession: session)
                     })
                 }
             }
@@ -2160,7 +2173,7 @@ extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudi
             switch captureOutput {
             case videoOutput:
                 self.executeClosureAsyncOnMainQueueIfNecessary {
-                    self.delegate?.nextLevel(self, willProcessRawVideoSampleBuffer: sampleBuffer)
+                    self.videoDelegate?.nextLevel(self, willProcessRawVideoSampleBuffer: sampleBuffer)
                 }
                 self._lastVideoFrame = sampleBuffer
                 if let session = self._recordingSession {
@@ -2187,13 +2200,13 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, willCapturePhotoForResolvedSettings resolvedSettings: AVCaptureResolvedPhotoSettings) {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevel(self, willCapturePhotoWithConfiguration: self.photoConfiguration)
+            self.photoDelegate?.nextLevel(self, willCapturePhotoWithConfiguration: self.photoConfiguration)
         }
     }
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, didCapturePhotoForResolvedSettings resolvedSettings: AVCaptureResolvedPhotoSettings) {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevel(self, didCapturePhotoWithConfiguration: self.photoConfiguration)
+            self.photoDelegate?.nextLevel(self, didCapturePhotoWithConfiguration: self.photoConfiguration)
         }
     }
     
@@ -2239,7 +2252,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             //}
             
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevel(self, didProcessPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
+                self.photoDelegate?.nextLevel(self, didProcessPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
             }
         }
     }
@@ -2287,14 +2300,14 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             //}
             
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevel(self, didProcessPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
+                self.photoDelegate?.nextLevel(self, didProcessPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
             }
         }
     }
     
     public func capture(_ captureOutput: AVCapturePhotoOutput, didFinishCaptureForResolvedSettings resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevelDidCompletePhotoCapture(self)
+            self.photoDelegate?.nextLevelDidCompletePhotoCapture(self)
         }
     }
     

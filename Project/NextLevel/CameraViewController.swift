@@ -160,6 +160,8 @@ class CameraViewController: UIViewController {
         // Configure NextLevel by modifying the configuration ivars
         let nextLevel = NextLevel.sharedInstance
         nextLevel.delegate = self
+        nextLevel.videoDelegate = self
+        nextLevel.photoDelegate = self
         
         // video configuration
         nextLevel.videoConfiguration.bitRate = 2000000
@@ -442,7 +444,12 @@ extension CameraViewController: NextLevelDelegate {
     
     func nextLevelDidStopPreview(_ nextLevel: NextLevel) {
     }
-    
+}
+
+// MARK: - NextLevelVideoDelegate
+
+extension CameraViewController: NextLevelVideoDelegate {
+
     // video frame processing
     func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer) {
     }
@@ -528,6 +535,12 @@ extension CameraViewController: NextLevelDelegate {
         
     }
     
+}
+
+// MARK: - NextLevelPhotoDelegate
+
+extension CameraViewController: NextLevelPhotoDelegate {
+    
     // photo
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration) {
     }
@@ -582,4 +595,5 @@ extension CameraViewController: NextLevelDelegate {
 
     func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel) {
     }
+    
 }
