@@ -424,6 +424,10 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevelSessionDidStart(_ nextLevel: NextLevel)
     func nextLevelSessionDidStop(_ nextLevel: NextLevel)
     
+    // preview
+    func nextLevelWillStartPreview(_ nextLevel: NextLevel)
+    func nextLevelDidStopPreview(_ nextLevel: NextLevel)
+    
     // device, mode, orientation
     func nextLevelDevicePositionWillChange(_ nextLevel: NextLevel)
     func nextLevelDevicePositionDidChange(_ nextLevel: NextLevel)
@@ -445,8 +449,14 @@ public protocol NextLevelDelegate: NSObjectProtocol {
 
     func nextLevelWillChangeWhiteBalance(_ nextLevel: NextLevel)
     func nextLevelDidChangeWhiteBalance(_ nextLevel: NextLevel)
+    
+}
 
-    // torch, flash
+// MARK: - NextLevelFlashDelegate
+// flash and torch support
+
+public protocol NextLevelFlashDelegate: NSObjectProtocol {
+    
     func nextLevelDidChangeFlashMode(_ nextLevel: NextLevel)
     func nextLevelDidChangeTorchMode(_ nextLevel: NextLevel)
 
@@ -454,10 +464,6 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevelTorchActiveChanged(_ nextLevel: NextLevel)
     
     func nextLevelFlashAndTorchAvailabilityChanged(_ nextLevel: NextLevel)
-    
-    // preview
-    func nextLevelWillStartPreview(_ nextLevel: NextLevel)
-    func nextLevelDidStopPreview(_ nextLevel: NextLevel)
     
 }
 
@@ -519,6 +525,7 @@ public class NextLevel: NSObject {
     // delegates
     
     public weak var delegate: NextLevelDelegate?
+    public weak var flashDelegate: NextLevelFlashDelegate?
     public weak var videoDelegate: NextLevelVideoDelegate?
     public weak var photoDelegate: NextLevelPhotoDelegate?
     
@@ -687,6 +694,9 @@ public class NextLevel: NSObject {
     
     deinit {
         self.delegate = nil
+        self.flashDelegate = nil
+        self.videoDelegate = nil
+        self.photoDelegate = nil
 
         self.removeApplicationObservers()
         self.removeSessionObservers()
@@ -1610,19 +1620,19 @@ extension NextLevel {
         }
         
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevelFlashActiveChanged(self)
+            self.flashDelegate?.nextLevelFlashActiveChanged(self)
         }
     }
     
     internal func torchActiveChanged() {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevelTorchActiveChanged(self)
+            self.flashDelegate?.nextLevelTorchActiveChanged(self)
         }
     }
     
     internal func flashAndTorchAvailabilityChanged() {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevelFlashAndTorchAvailabilityChanged(self)
+            self.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(self)
         }
     }
     

@@ -160,6 +160,7 @@ class CameraViewController: UIViewController {
         // Configure NextLevel by modifying the configuration ivars
         let nextLevel = NextLevel.sharedInstance
         nextLevel.delegate = self
+        nextLevel.flashDelegate = self
         nextLevel.videoDelegate = self
         nextLevel.photoDelegate = self
         
@@ -379,7 +380,14 @@ extension CameraViewController: NextLevelDelegate {
         print("nextLevelSessionDidStop")
     }
     
-    // device, mode, orientation
+    // preview
+    func nextLevelWillStartPreview(_ nextLevel: NextLevel) {
+    }
+    
+    func nextLevelDidStopPreview(_ nextLevel: NextLevel) {
+    }
+    
+    // device position, mode, and orientation
     func nextLevelDevicePositionWillChange(_ nextLevel: NextLevel) {
     }
     
@@ -418,7 +426,12 @@ extension CameraViewController: NextLevelDelegate {
     func nextLevelDidChangeWhiteBalance(_ nextLevel: NextLevel) {
     }
     
-    // torch, flash
+}
+
+// MARK: - NextLevelFlashDelegate
+
+extension CameraViewController: NextLevelFlashDelegate {
+    
     func nextLevelDidChangeFlashMode(_ nextLevel: NextLevel) {
     }
     
@@ -433,13 +446,7 @@ extension CameraViewController: NextLevelDelegate {
     
     func nextLevelFlashAndTorchAvailabilityChanged(_ nextLevel: NextLevel) {
     }
-    
-    // preview
-    func nextLevelWillStartPreview(_ nextLevel: NextLevel) {
-    }
-    
-    func nextLevelDidStopPreview(_ nextLevel: NextLevel) {
-    }
+
 }
 
 // MARK: - NextLevelVideoDelegate
@@ -597,3 +604,26 @@ extension CameraViewController: NextLevelPhotoDelegate {
     }
     
 }
+
+// MARK: - KVO
+
+private var CameraViewControllerNextLevelCurrentDeviceObserverContext = "CameraViewControllerNextLevelCurrentDeviceObserverContext"
+
+extension CameraViewController {
+    
+    internal func addKeyValueObservers() {
+        self.addObserver(self, forKeyPath: "currentDevice", options: [.new], context: &CameraViewControllerNextLevelCurrentDeviceObserverContext)
+    }
+    
+    internal func removeKeyValueObservers() {
+        self.removeObserver(self, forKeyPath: "currentDevice")
+    }
+    
+    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if context == &CameraViewControllerNextLevelCurrentDeviceObserverContext {
+            //self.captureDeviceDidChange()
+        }
+    }
+    
+}
+
