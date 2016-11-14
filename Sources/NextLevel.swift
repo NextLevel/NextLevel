@@ -431,7 +431,6 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevelCaptureModeWillChange(_ nextLevel: NextLevel)
     func nextLevelCaptureModeDidChange(_ nextLevel: NextLevel)
     
-    // orientation
     func nextLevel(_ nextLevel: NextLevel, didChangeDeviceOrientation deviceOrientation: NextLevelDeviceOrientation)
     
     // aperture
@@ -456,9 +455,6 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     
     func nextLevelFlashAndTorchAvailabilityChanged(_ nextLevel: NextLevel)
     
-    // zoom
-    func nextLevel(_ nextLevel: NextLevel, didUpdateVideoZoomFactor videoZoomFactor: Float)
-    
     // preview
     func nextLevelWillStartPreview(_ nextLevel: NextLevel)
     func nextLevelDidStopPreview(_ nextLevel: NextLevel)
@@ -469,6 +465,9 @@ public protocol NextLevelDelegate: NSObjectProtocol {
 // all methods are called on the MainQueue except nextLevel:renderToCustomContextWithSampleBuffer:onQueue
 
 public protocol NextLevelVideoDelegate: NSObjectProtocol {
+
+    // video zoom
+    func nextLevel(_ nextLevel: NextLevel, didUpdateVideoZoomFactor videoZoomFactor: Float)
 
     // video processing
     func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer)
@@ -1718,7 +1717,7 @@ extension NextLevel {
     }
     
     internal func videoZoomFactorChanged() {
-        self.delegate?.nextLevel(self, didUpdateVideoZoomFactor: self.videoZoomFactor)
+        self.videoDelegate?.nextLevel(self, didUpdateVideoZoomFactor: self.videoZoomFactor)
     }
     
     // frame rate

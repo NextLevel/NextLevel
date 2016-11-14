@@ -434,10 +434,6 @@ extension CameraViewController: NextLevelDelegate {
     func nextLevelFlashAndTorchAvailabilityChanged(_ nextLevel: NextLevel) {
     }
     
-    // zoom
-    func nextLevel(_ nextLevel: NextLevel, didUpdateVideoZoomFactor videoZoomFactor: Float) {
-    }
-    
     // preview
     func nextLevelWillStartPreview(_ nextLevel: NextLevel) {
     }
@@ -449,6 +445,10 @@ extension CameraViewController: NextLevelDelegate {
 // MARK: - NextLevelVideoDelegate
 
 extension CameraViewController: NextLevelVideoDelegate {
+
+    // video zoom
+    func nextLevel(_ nextLevel: NextLevel, didUpdateVideoZoomFactor videoZoomFactor: Float) {
+    }
 
     // video frame processing
     func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer) {
