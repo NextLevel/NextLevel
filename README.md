@@ -26,7 +26,7 @@ Next Level is a media capture camera library for iOS written in [Swift](https://
 
 # CocoaPods
 
-pod "NextLevel", "~> 0.0.3"
+pod "NextLevel", "~> 0.1.0"
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
@@ -38,7 +38,7 @@ end
 
 # Carthage
 
-github "nextlevel/NextLevel" ~> 0.0.3
+github "nextlevel/NextLevel" ~> 0.1.0
 
 # Swift PM
 
@@ -101,6 +101,7 @@ Configure the capture session.
 ```swift
 override func viewDidLoad() {
     NextLevel.sharedInstance.delegate = self
+    NextLevel.sharedInstance.deviceDelegate = self
     NextLevel.sharedInstance.videoDelegate = self
     NextLevel.sharedInstance.photoDelegate = self
     

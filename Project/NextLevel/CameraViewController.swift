@@ -436,7 +436,7 @@ extension CameraViewController: NextLevelDeviceDelegate {
 
 // MARK: - NextLevelFlashDelegate
 
-extension CameraViewController: NextLevelFlashDelegate {
+extension CameraViewController: NextLevelFlashAndTorchDelegate {
     
     func nextLevelDidChangeFlashMode(_ nextLevel: NextLevel) {
     }

@@ -456,10 +456,10 @@ public protocol NextLevelDeviceDelegate: NSObjectProtocol {
     
 }
 
-// MARK: - NextLevelFlashDelegate
+// MARK: - NextLevelFlashAndTorchDelegate
 // flash and torch support
 
-public protocol NextLevelFlashDelegate: NSObjectProtocol {
+public protocol NextLevelFlashAndTorchDelegate: NSObjectProtocol {
     
     func nextLevelDidChangeFlashMode(_ nextLevel: NextLevel)
     func nextLevelDidChangeTorchMode(_ nextLevel: NextLevel)
@@ -530,7 +530,7 @@ public class NextLevel: NSObject {
     
     public weak var delegate: NextLevelDelegate?
     public weak var deviceDelegate: NextLevelDeviceDelegate?
-    public weak var flashDelegate: NextLevelFlashDelegate?
+    public weak var flashDelegate: NextLevelFlashAndTorchDelegate?
     public weak var videoDelegate: NextLevelVideoDelegate?
     public weak var photoDelegate: NextLevelPhotoDelegate?
     
