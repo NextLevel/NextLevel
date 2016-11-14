@@ -427,14 +427,18 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     // preview
     func nextLevelWillStartPreview(_ nextLevel: NextLevel)
     func nextLevelDidStopPreview(_ nextLevel: NextLevel)
-    
-    // device, mode, orientation
-    func nextLevelDevicePositionWillChange(_ nextLevel: NextLevel)
-    func nextLevelDevicePositionDidChange(_ nextLevel: NextLevel)
 
+    // mode
     func nextLevelCaptureModeWillChange(_ nextLevel: NextLevel)
     func nextLevelCaptureModeDidChange(_ nextLevel: NextLevel)
     
+}
+
+public protocol NextLevelDeviceDelegate: NSObjectProtocol {
+    
+    // position, orientation
+    func nextLevelDevicePositionWillChange(_ nextLevel: NextLevel)
+    func nextLevelDevicePositionDidChange(_ nextLevel: NextLevel)
     func nextLevel(_ nextLevel: NextLevel, didChangeDeviceOrientation deviceOrientation: NextLevelDeviceOrientation)
     
     // aperture
@@ -525,6 +529,7 @@ public class NextLevel: NSObject {
     // delegates
     
     public weak var delegate: NextLevelDelegate?
+    public weak var deviceDelegate: NextLevelDeviceDelegate?
     public weak var flashDelegate: NextLevelFlashDelegate?
     public weak var videoDelegate: NextLevelVideoDelegate?
     public weak var photoDelegate: NextLevelPhotoDelegate?
@@ -694,6 +699,7 @@ public class NextLevel: NSObject {
     
     deinit {
         self.delegate = nil
+        self.deviceDelegate = nil
         self.flashDelegate = nil
         self.videoDelegate = nil
         self.photoDelegate = nil
@@ -882,7 +888,7 @@ extension NextLevel {
                         let changingPosition = device.position != self._currentDevice?.position
                         if changingPosition == true {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
-                                self.delegate?.nextLevelDevicePositionWillChange(self)
+                                self.deviceDelegate?.nextLevelDevicePositionWillChange(self)
                             }
                         }
                         
@@ -893,7 +899,7 @@ extension NextLevel {
                         
                         if changingPosition == true {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
-                                self.delegate?.nextLevelDevicePositionDidChange(self)
+                                self.deviceDelegate?.nextLevelDevicePositionDidChange(self)
                             }
                         }
                     }
@@ -1478,7 +1484,7 @@ extension NextLevel {
                     return
             }
             
-            self.delegate?.nextLevelWillStartFocus(self)
+            self.deviceDelegate?.nextLevelWillStartFocus(self)
             
             self.focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint(x: 0.5, y: 0.5))
         }
@@ -1517,7 +1523,7 @@ extension NextLevel {
     
     internal func focusStarted() {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevelWillStartFocus(self)
+            self.deviceDelegate?.nextLevelWillStartFocus(self)
         }
     }
     
@@ -1545,7 +1551,7 @@ extension NextLevel {
             }
             
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevelDidStopFocus(self)
+                self.deviceDelegate?.nextLevelDidStopFocus(self)
             }
             
         }
@@ -1553,7 +1559,7 @@ extension NextLevel {
     
     internal func exposureStarted() {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevelWillChangeExposure(self)
+            self.deviceDelegate?.nextLevelWillChangeExposure(self)
         }
     }
     
@@ -1581,20 +1587,20 @@ extension NextLevel {
             }
 
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.delegate?.nextLevelDidChangeExposure(self)
+                self.deviceDelegate?.nextLevelDidChangeExposure(self)
             }
         }
     }
     
     internal func whiteBalanceStarted() {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevelWillChangeWhiteBalance(self)
+            self.deviceDelegate?.nextLevelWillChangeWhiteBalance(self)
         }
     }
     
     internal func whiteBalanceEnded() {
         self.executeClosureAsyncOnMainQueueIfNecessary {
-            self.delegate?.nextLevelDidChangeWhiteBalance(self)
+            self.deviceDelegate?.nextLevelDidChangeWhiteBalance(self)
         }
     }
     
@@ -1818,7 +1824,7 @@ extension NextLevel {
             }
         }
         
-        self.delegate?.nextLevel(self, didChangeDeviceOrientation: currentOrientation.deviceOrientationNextLevelType())
+        self.deviceDelegate?.nextLevel(self, didChangeDeviceOrientation: currentOrientation.deviceOrientationNextLevelType())
     }
     
     internal func updateVideoOutputSettings() {
@@ -2448,7 +2454,7 @@ extension NextLevel {
             if let input = inputPorts?.first as? AVCaptureInputPort {
                 if let formatDescription: CMFormatDescription = input.formatDescription {
                     let cleanAperture = CMVideoFormatDescriptionGetCleanAperture(formatDescription, true)
-                    self.delegate?.nextLevel(self, didChangeCleanAperture: cleanAperture)
+                    self.deviceDelegate?.nextLevel(self, didChangeCleanAperture: cleanAperture)
                 }
             }
         }

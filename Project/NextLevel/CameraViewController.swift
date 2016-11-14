@@ -160,6 +160,7 @@ class CameraViewController: UIViewController {
         // Configure NextLevel by modifying the configuration ivars
         let nextLevel = NextLevel.sharedInstance
         nextLevel.delegate = self
+        nextLevel.deviceDelegate = self
         nextLevel.flashDelegate = self
         nextLevel.videoDelegate = self
         nextLevel.photoDelegate = self
@@ -387,17 +388,22 @@ extension CameraViewController: NextLevelDelegate {
     func nextLevelDidStopPreview(_ nextLevel: NextLevel) {
     }
     
-    // device position, mode, and orientation
-    func nextLevelDevicePositionWillChange(_ nextLevel: NextLevel) {
-    }
-    
-    func nextLevelDevicePositionDidChange(_ nextLevel: NextLevel) {
-    }
-    
+    // mode
     func nextLevelCaptureModeWillChange(_ nextLevel: NextLevel) {
     }
     
     func nextLevelCaptureModeDidChange(_ nextLevel: NextLevel) {
+    }
+    
+}
+
+extension CameraViewController: NextLevelDeviceDelegate {
+
+    // position, orientation
+    func nextLevelDevicePositionWillChange(_ nextLevel: NextLevel) {
+    }
+    
+    func nextLevelDevicePositionDidChange(_ nextLevel: NextLevel) {
     }
     
     func nextLevel(_ nextLevel: NextLevel, didChangeDeviceOrientation deviceOrientation: NextLevelDeviceOrientation) {
