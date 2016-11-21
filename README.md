@@ -190,6 +190,7 @@ The goal is to continue to provide a good foundation for quick integration – a
 * [AV Foundation Programming Guide](https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html)
 * [AV Foundation Framework Reference](https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVFoundationFramework/)
 * [Swift Evolution](https://github.com/apple/swift-evolution)
+* [Player](https://github.com/piemonte/player), a simple iOS video player in Swift
 * [objc.io Camera and Photos](http://www.objc.io/issue-21/)
 * [objc.io Video](http://www.objc.io/issue-23/)
 * [Cameras, ecommerce and machine learning](http://ben-evans.com/benedictevans/2016/11/20/ku6omictaredoge4cao9cytspbz4jt)
