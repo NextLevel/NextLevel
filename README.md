@@ -171,7 +171,7 @@ Videos can also be processed using the [NextLevelSessionExporter](https://github
 
 ## About
 
-Next Level was a little weekend project that turned into something more useful. The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), [Vine](http://vine.co), [Peach](http://peach.cool), and others.
+Next Level was a little weekend project that turned into something more useful. The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
 
 The goal is to continue to provide a good foundation for quick integration – allowing everyone to focus on the functionality that can builds on this. The API provides a means to perform realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.
 
@@ -183,7 +183,6 @@ The goal is to continue to provide a good foundation for quick integration – a
 - [SCRecorder](https://github.com/rFlex/SCRecorder), obj-c capture library
 - [PBJVision](https://github.com/piemonte/PBJVision), obj-c capture library
 - [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), media transcoding in Swift
-- [SDAVAssetExportSession](https://github.com/rs/SDAVAssetExportSession), media transcoding in obj-c
 
 ## Resources
 
@@ -193,6 +192,7 @@ The goal is to continue to provide a good foundation for quick integration – a
 * [Swift Evolution](https://github.com/apple/swift-evolution)
 * [objc.io Camera and Photos](http://www.objc.io/issue-21/)
 * [objc.io Video](http://www.objc.io/issue-23/)
+* [Cameras, ecommerce and machine learning](http://ben-evans.com/benedictevans/2016/11/20/ku6omictaredoge4cao9cytspbz4jt)
 
 ## License
 
