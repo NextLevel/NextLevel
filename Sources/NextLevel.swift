@@ -1777,6 +1777,41 @@ extension NextLevel {
         }
     }
     
+    // device format
+    
+    public func updateDeviceFormat(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions) {
+        if let device: AVCaptureDevice = self._currentDevice,
+            let formats = device.formats {
+            
+            var updatedFormat: AVCaptureDeviceFormat? = nil
+            for format in formats as! [AVCaptureDeviceFormat] {
+                if AVCaptureDevice.isCaptureDeviceFormat(inRange: format, frameRate: frameRate, dimensions: dimensions) {
+                    updatedFormat = format
+                }
+            }
+            
+            if updatedFormat == nil {
+                // throw a proper error here
+                print("Nextlevel, could not find a current device format matching the requirements")
+                return
+            }
+            
+            let fps: CMTime = CMTimeMake(1, frameRate)
+            
+            do {
+                try device.lockForConfiguration()
+                
+                device.activeFormat = updatedFormat
+                device.activeVideoMaxFrameDuration = fps
+                device.activeVideoMinFrameDuration = fps
+                
+                device.unlockForConfiguration()
+            } catch {
+                print("NextLevel, flashMode failed to lock device for configuration")
+            }
+        }
+    }
+    
     // device switch
     
     public func flipCaptureDevicePosition() {
