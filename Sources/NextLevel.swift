@@ -826,7 +826,7 @@ extension NextLevel {
                 
                 self._recordingSession = nil
                 self._captureSession = nil
-            
+                self._currentDevice = nil
             }
         }
     }
@@ -1112,7 +1112,7 @@ extension NextLevel {
                 return true
             }
         }
-        print("NextLevel, couldn't add audio output to session")
+        print("NextLevel, couldn't add photo output to session")
         return false
         
     }
