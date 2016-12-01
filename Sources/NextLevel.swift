@@ -1119,7 +1119,7 @@ extension NextLevel {
 
     private func removeOutputs(session: AVCaptureSession) {
         guard let outputs = session.outputs as? [AVCaptureOutput] else {
-            fatalError("Expected outputs to be an array of AVCaptureOutput")
+            return
         }
 
         for output in outputs {
@@ -1133,7 +1133,7 @@ extension NextLevel {
 
     internal func removeOutputsIfNecessary(session: AVCaptureSession) {
         guard let currentOutputs = session.outputs as? [AVCaptureOutput] else {
-            fatalError("Expected outputs to be an array of AVCaptureOutput")
+            return
         }
 
         switch self.cameraMode {
