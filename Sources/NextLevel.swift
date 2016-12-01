@@ -821,7 +821,7 @@ extension NextLevel {
 
                 self.beginConfiguration()
                 self.removeInputs(session: session)
-                self.removeOutputsIfNecessary(session: session)
+                self.removeOutputs(session: session)
                 self.commitConfiguration()
                 
                 self._recordingSession = nil
@@ -1116,9 +1116,23 @@ extension NextLevel {
         return false
         
     }
+
+    private func removeOutputs(session: AVCaptureSession) {
+        guard let outputs = session.outputs as? [AVCaptureOutput] else {
+            fatalError("Expected outputs to be an array of AVCaptureOutput")
+        }
+
+        for output in outputs {
+            session.removeOutput(output)
+        }
+
+        self._videoOutput = nil
+        self._audioInput = nil
+        self._photoOutput = nil
+    }
     
     internal func removeOutputsIfNecessary(session: AVCaptureSession) {
-        
+
         switch self.cameraMode {
         case .video:
             break
