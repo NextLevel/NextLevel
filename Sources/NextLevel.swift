@@ -711,7 +711,7 @@ public class NextLevel: NSObject {
         if let session = self._captureSession {
             self.beginConfiguration()
             self.removeInputs(session: session)
-            self.removeOutputsIfNecessary(session: session)
+            self.removeOutputs(session: session)
             self.commitConfiguration()
         }
 
@@ -930,7 +930,7 @@ extension NextLevel {
         
             // setup preset and mode
             
-            self.removeOutputsIfNecessary(session: session)
+            self.removeUnusedOutputsForCurrentCameraMode(session: session)
             
             switch self.cameraMode {
             case .video:
@@ -1117,7 +1117,7 @@ extension NextLevel {
         
     }
 
-    private func removeOutputs(session: AVCaptureSession) {
+    internal func removeOutputs(session: AVCaptureSession) {
         guard let outputs = session.outputs as? [AVCaptureOutput] else {
             return
         }
@@ -1131,7 +1131,7 @@ extension NextLevel {
         self._photoOutput = nil
     }
 
-    internal func removeOutputsIfNecessary(session: AVCaptureSession) {
+    internal func removeUnusedOutputsForCurrentCameraMode(session: AVCaptureSession) {
         guard let currentOutputs = session.outputs as? [AVCaptureOutput] else {
             return
         }
