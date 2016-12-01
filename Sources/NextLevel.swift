@@ -1130,31 +1130,43 @@ extension NextLevel {
         self._audioInput = nil
         self._photoOutput = nil
     }
-    
+
     internal func removeOutputsIfNecessary(session: AVCaptureSession) {
+        guard let currentOutputs = session.outputs as? [AVCaptureOutput] else {
+            fatalError("Expected outputs to be an array of AVCaptureOutput")
+        }
 
         switch self.cameraMode {
         case .video:
+            if let photoOutput = self._photoOutput, currentOutputs.contains(photoOutput) {
+                session.removeOutput(photoOutput)
+                self._photoOutput = nil
+            }
+
             break
         case .photo:
-            if let audioOutput = self._audioOutput {
-                if session.outputs.contains(where: { (audioOutput) -> Bool in
-                    return true
-                }) {
-                    session.removeOutput(audioOutput)
-                    self._audioOutput = nil
-                }
+            if let videoOutput = self._videoOutput, currentOutputs.contains(videoOutput) {
+                session.removeOutput(videoOutput)
+                self._videoOutput = nil
             }
+
+            if let audioOutput = self._audioOutput, currentOutputs.contains(audioOutput) {
+                session.removeOutput(audioOutput)
+                self._audioOutput = nil
+            }
+
             break
         case .audio:
-            if let videoOutput = self._videoOutput {
-                if session.outputs.contains(where: { (videoOutput) -> Bool in
-                    return true
-                }) {
-                    session.removeOutput(videoOutput)
-                    self._videoOutput = nil
-                }
+            if let videoOutput = self._videoOutput, currentOutputs.contains(videoOutput) {
+                session.removeOutput(videoOutput)
+                self._videoOutput = nil
             }
+
+            if let photoOutput = self._photoOutput, currentOutputs.contains(photoOutput) {
+                session.removeOutput(photoOutput)
+                self._photoOutput = nil
+            }
+
             break
         }
         
