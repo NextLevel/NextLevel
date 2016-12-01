@@ -556,6 +556,10 @@ public class NextLevel: NSObject {
 
     public var cameraMode: NextLevelCaptureMode {
         didSet {
+            guard self.cameraMode != oldValue else {
+                return
+            }
+
             self.configureSession()
             self.configureSessionDevices()
         }
