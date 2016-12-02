@@ -1841,6 +1841,8 @@ extension NextLevel {
             } catch {
                 print("NextLevel, flashMode failed to lock device for configuration")
             }
+        } else {
+            print("NextLevel, could not apply active format, there was no current device!")
         }
     }
     
