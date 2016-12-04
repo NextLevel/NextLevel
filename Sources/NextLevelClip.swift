@@ -27,21 +27,22 @@ import UIKit
 import Foundation
 import AVFoundation
 
+// NextLevelClip dictionary representation keys
+
 public let NextLevelClipFilenameKey = "NextLevelClipFilenameKey"
 public let NextLevelClipInfoDictKey = "NextLevelClipInfoDictKey"
 
+/// NextLevelClip, an object for managing a single media clip
 public class NextLevelClip: NSObject {
 
-    // config
-    
+    /// URL of the clip
     public var url: URL? {
         didSet {
             self._asset = nil
         }
     }
     
-    // state
-    
+    /// True, if the clip's file exists
     public var fileExists: Bool {
         get {
             if let url = self.url {
@@ -51,6 +52,7 @@ public class NextLevelClip: NSObject {
         }
     }
     
+    /// `AVAsset` of the clip
     public var asset: AVAsset? {
         get {
             if let url = self.url {
@@ -62,6 +64,7 @@ public class NextLevelClip: NSObject {
         }
     }
     
+    /// Duration of the clip, otherwise invalid.
     public var duration: CMTime {
         get {
             if let asset = self.asset {
@@ -71,6 +74,7 @@ public class NextLevelClip: NSObject {
         }
     }
     
+    /// If it doesn't already exist, generates a thumbnail image of the clip.
     public var thumbnailImage: UIImage? {
         get {
             guard
@@ -96,6 +100,7 @@ public class NextLevelClip: NSObject {
         }
     }
     
+    /// If it doesn't already exist, generates an image for the last frame of the clip.
     public var lastFrameImage: UIImage? {
         get {
             guard
@@ -121,6 +126,7 @@ public class NextLevelClip: NSObject {
         }
     }
     
+    /// Frame rate at which the asset was recorded.
     public var frameRate: Float {
         get {
             if let asset = self.asset {
@@ -135,20 +141,47 @@ public class NextLevelClip: NSObject {
         }
     }
     
+    /// Dictionary containing metadata about the clip.
     public var infoDict: [String: Any]? {
         get {
             return self._infoDict
         }
     }
     
+    /// Dictionary containing data for re-initialization of the clip.
+    public var representationDict: [String:Any]? {
+        get {
+            if let infoDict = self.infoDict, let url = self.url {
+                return [NextLevelClipFilenameKey:url.lastPathComponent,
+                        NextLevelClipInfoDictKey:infoDict]
+            } else if let url = self.url {
+                return [NextLevelClipFilenameKey:url.lastPathComponent]
+            } else {
+                return nil
+            }
+        }
+    }
+    
     // MARK: - class functions
     
-    public class func clipURL(withFilename filename: String, directory: String) -> URL? {
-        var clipURL: URL = URL(fileURLWithPath: directory)
+    /// Class method initializer for a clip URL
+    ///
+    /// - Parameters:
+    ///   - filename: Filename for the media asset
+    ///   - directoryPath: Directory path for the media asset
+    /// - Returns: Returns a URL for the designated clip, otherwise nil
+    public class func clipURL(withFilename filename: String, directoryPath: String) -> URL? {
+        var clipURL: URL = URL(fileURLWithPath: directoryPath)
         clipURL.appendPathComponent(filename)
         return clipURL
     }
     
+    /// Class method initializer for a NextLevelClip
+    ///
+    /// - Parameters:
+    ///   - url: URL of the media asset
+    ///   - infoDict: Dictionary containing metadata about the clip
+    /// - Returns: Returns a NextLevelClip
     public class func clip(withUrl url: URL?, infoDict: [String: Any]?) -> NextLevelClip {
         return NextLevelClip(url: url, infoDict: infoDict)
     }
@@ -166,16 +199,26 @@ public class NextLevelClip: NSObject {
         super.init()
     }
     
+    /// Initialize a clip from a URL and dictionary.
+    ///
+    /// - Parameters:
+    ///   - url: URL and filename of the specified media asset
+    ///   - infoDict: Dictionary with NextLevelClip metadata information
     convenience init(url: URL?, infoDict: [String : Any]?) {
         self.init()
         self.url = url
         self._infoDict = infoDict
     }
     
-    convenience init(dictionaryRep: [String : Any]?, directory: String) {
-        if let clipDict = dictionaryRep,
+    /// Initialize a clip from a dictionary representation and directory name
+    ///
+    /// - Parameters:
+    ///   - directoryPath: Directory where the media asset is located
+    ///   - representationDict: Dictionary containing defining metadata about the clip
+    convenience init(directoryPath: String, representationDict: [String : Any]?) {
+        if let clipDict = representationDict,
            let filename = clipDict[NextLevelClipFilenameKey] as? String,
-           let url: URL = NextLevelClip.clipURL(withFilename: filename, directory: directory) {
+           let url: URL = NextLevelClip.clipURL(withFilename: filename, directoryPath: directoryPath) {
             let infoDict = clipDict[NextLevelClipInfoDictKey] as? [String : Any]
             self.init(url: url, infoDict: infoDict)
         } else {
@@ -188,6 +231,7 @@ public class NextLevelClip: NSObject {
     
     // MARK: - functions
     
+    /// Removes the associated file representation on disk.
     public func removeFile()  {
         do {
             if let url = self.url {
@@ -196,17 +240,6 @@ public class NextLevelClip: NSObject {
             }
         } catch {
             print("NextLevel, error deleting a clip's file \(self.url)")
-        }
-    }
-    
-    public func dictionaryRep() -> [String : Any]? {
-        if let infoDict = self.infoDict, let url = self.url {
-            return [NextLevelClipFilenameKey:url.lastPathComponent,
-                    NextLevelClipInfoDictKey:infoDict]
-        } else if let url = self.url {
-            return [NextLevelClipFilenameKey:url.lastPathComponent]
-        } else {
-            return nil
         }
     }
     

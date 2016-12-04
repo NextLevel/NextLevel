@@ -57,7 +57,7 @@ public class NextLevelSession: NSObject {
     public var url: URL? {
         get {
             let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
-            if let url = NextLevelClip.clipURL(withFilename: filename, directory: self.outputDirectory) {
+            if let url = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory) {
                 return url
             } else {
                 return nil
@@ -551,7 +551,7 @@ extension NextLevelSession {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
 
-            let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directory: self.outputDirectory)
+            let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory)
             var asset: AVAsset? = nil
             
             if self._clips.count > 0 {
@@ -676,7 +676,7 @@ extension NextLevelSession {
     
     internal func nextFileURL() -> URL? {
         let filename = "\(self.identifier)-NL-clip.\(self._clipFilenameCount).\(self.fileExtension)"
-        if let url = NextLevelClip.clipURL(withFilename: filename, directory: self.outputDirectory) {
+        if let url = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory) {
             self.removeFile(fileUrl: url)
             self._clipFilenameCount += 1
             return url
