@@ -35,21 +35,25 @@ fileprivate let NextLevelMetadataArtist = "http://nextlevel.engineering/"
 
 extension NextLevel {
     
-    public class func tiffMetadata() -> [String: Any] {
-        return [ kCGImagePropertyTIFFSoftware as String : NextLevelMetadataTitle,
-                 kCGImagePropertyTIFFArtist as String : NextLevelMetadataArtist,
-                 kCGImagePropertyTIFFDateTime as String : Date().iso8601() ]
-    }
-    
+    /// Extracts the metadata dictionary from a `CMSampleBuffer`.
+    ///  (ie EXIF: Aperture, Brightness, Exposure, FocalLength, etc)
+    ///
+    /// - Parameter sampleBuffer: sample buffer to be processed
+    /// - Returns: metadata dictionary from the provided sample buffer
     public class func metadataFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> [String : Any]? {
      
-        // add photo metadata (ie EXIF: Aperture, Brightness, Exposure, FocalLength, etc)
         if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate) {
             let metadata = cfmetadata as! [String : Any]
             return metadata
         }
         return nil
         
+    }
+    
+    internal class func tiffMetadata() -> [String: Any] {
+        return [ kCGImagePropertyTIFFSoftware as String : NextLevelMetadataTitle,
+                 kCGImagePropertyTIFFArtist as String : NextLevelMetadataArtist,
+                 kCGImagePropertyTIFFDateTime as String : Date().iso8601() ]
     }
     
     internal class func assetWriterMetadata() -> [AVMutableMetadataItem] {
@@ -82,8 +86,6 @@ extension NextLevel {
 
 // MARK: - Date extensions
 
-// http://nshipster.com/nsformatter/
-// http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
 extension Date {
     
     static let dateFormatter: DateFormatter = iso8601DateFormatter()
@@ -93,7 +95,9 @@ extension Date {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
         return formatter
     }
-    
+
+    // http://nshipster.com/nsformatter/
+    // http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
     fileprivate func iso8601() -> String {
         return Date.iso8601DateFormatter().string(from: self)
     }
@@ -104,6 +108,10 @@ extension Date {
 
 extension Data {
 
+    /// Outputs a `Data` object with the desired metadata dictionary
+    ///
+    /// - Parameter metadata: metadata dictionary to be added
+    /// - Returns: JPEG formatted image data
     public func jpegData(withMetadataDictionary metadata: [String: Any]) -> Data? {
         var imageDataWithMetadata: Data? = nil
         if let source = CGImageSourceCreateWithData(self as CFData, nil),

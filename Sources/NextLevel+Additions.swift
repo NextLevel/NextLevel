@@ -27,9 +27,13 @@ import Foundation
 import AVFoundation
 
 extension NextLevel {
-        
-    // MARK: frame rate
     
+    /// Returns the maximum capable framerate for the desired capture format and minimum, otherwise zero.
+    ///
+    /// - Parameters:
+    ///   - format: Capture format to evaluate for a specific framerate.
+    ///   - minFrameRate: Lower bound time scale or minimum desired framerate.
+    /// - Returns: Maximum capable framerate within the desired format and minimum constraints.
     public class func maxFrameRate(forFormat format: AVCaptureDeviceFormat, minFrameRate: CMTimeScale) -> CMTimeScale {
         var lowestTimeScale: CMTimeScale = 0
         let videoSupportedFrameRateRanges: [AVFrameRateRange] = format.videoSupportedFrameRateRanges as! [AVFrameRateRange]
@@ -41,8 +45,13 @@ extension NextLevel {
         return lowestTimeScale
     }
     
-    // MARK: sampleBuffer offset adjustment
-
+    /// Creates an offset `CMSampleBuffer` for the given time offset and duration.
+    ///
+    /// - Parameters:
+    ///   - sampleBuffer: Input sample buffer to copy and offset.
+    ///   - timeOffset: Time offset for the output sample buffer.
+    ///   - duration: Optional duration for the output sample buffer.
+    /// - Returns: Sample buffer with the desired time offset and duration, otherwise nil.
     public class func sampleBufferOffset(withSampleBuffer sampleBuffer: CMSampleBuffer, timeOffset: CMTime, duration: CMTime?) -> CMSampleBuffer? {
         var itemCount: CMItemCount = 0
         var status = CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, 0, nil, &itemCount)
@@ -79,8 +88,9 @@ extension NextLevel {
         }
     }
     
-    // MARK: storage
-    
+    /// Returns the available user designated storage space in bytes.
+    ///
+    /// - Returns: Number of available bytes in storage.
     public class func availableStorageSpaceInBytes() -> UInt64 {
         do {
             if let lastPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last {

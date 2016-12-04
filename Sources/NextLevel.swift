@@ -524,6 +524,7 @@ private let NextLevelRequiredMinimumStorageSpaceInBytes: UInt64 = 49999872 // ~4
 
 // MARK: - NextLevel state
 
+/// ⬆️ NextLevel, Rad Media Capture in Swift (http://nextlevel.engineering)
 public class NextLevel: NSObject {
     
     // delegates
