@@ -2055,7 +2055,7 @@ extension NextLevel {
     
     internal func beginRecordingNewClipIfNecessary() {
         if let session = self._recordingSession {
-            if session.isClipReady == false {
+            if session.isReady == false {
                 session.beginClip()
                 self.executeClosureAsyncOnMainQueueIfNecessary {
                     self.videoDelegate?.nextLevel(self, didStartClipInSession: session)

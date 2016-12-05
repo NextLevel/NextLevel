@@ -28,32 +28,33 @@ import AVFoundation
 
 // MARK: - NextLevelSession
 
+/// NextLevelSession, a powerful object for managing and editing a set of recorded media clips.
 public class NextLevelSession: NSObject {
     
-    // config
-    
+    /// Output directory for a session.
     public var outputDirectory: String
     
-    // see AVMediaFormat.h for file type and extension
-    
+    /// Output file type for a session, see AVMediaFormat.h for supported types.
     public var fileType: String
     
+    /// Output file extension for a session, see AVMediaFormat.h for supported extensions.
     public var fileExtension: String
     
-    // state
-
+    /// Unique identifier for a session.
     public var identifier: String {
         get {
             return self._identifier
         }
     }
     
+    /// Creation date for a session.
     public var date: Date {
         get {
             return self._date
         }
     }
     
+    /// Creates a URL for session output, otherwise nil
     public var url: URL? {
         get {
             let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
@@ -65,60 +66,70 @@ public class NextLevelSession: NSObject {
         }
     }
 
+    /// Checks if the session is setup for recording video
     public var isVideoReady: Bool {
         get {
             return self._videoInput != nil
         }
     }
     
+    /// Checks if the session is setup for recording audio
     public var isAudioReady: Bool {
         get {
             return self._audioInput != nil
         }
     }
 
+    /// Recorded clips for the session.
     public var clips: [NextLevelClip] {
         get {
             return self._clips
         }
     }
-    
+
+    /// Duration of a session, the sum of all recorded clips.
     public var duration: CMTime {
         get {
             return self._duration
         }
     }
 
-    public var isClipReady: Bool {
+    /// Checks if the session's asset writer is ready for data.
+    public var isReady: Bool {
         get {
             return self._writer != nil
         }
     }
     
+    /// True if the current clip recording has been started.
     public var clipStarted: Bool {
         get {
             return self._clipStarted
         }
     }
-
+    
+    /// Duration of the current clip.
     public var currentClipDuration: CMTime {
         get {
             return self._currentClipDuration
         }
     }
 
+    /// Checks if the current clip has video.
     public var currentClipHasVideo: Bool {
         get {
             return self._currentClipHasVideo
         }
     }
 
+    /// Checks if the current clip has audio.
     public var currentClipHasAudio: Bool {
         get {
             return self._currentClipHasAudio
         }
     }
     
+    /// `AVAsset` of the session.
     public var asset: AVAsset? {
         get {
             var asset: AVAsset? = nil
@@ -135,6 +146,7 @@ public class NextLevelSession: NSObject {
         }
     }
     
+    /// Shared pool where by which all media is allocated.
     public var pixelBufferPool: CVPixelBufferPool? {
         get {
             return self._pixelBufferAdapter?.pixelBufferPool
@@ -178,12 +190,19 @@ public class NextLevelSession: NSObject {
     
     // MARK: - object lifecycle
     
+    /// Initialize using a specific dispatch queue.
+    ///
+    /// - Parameters:
+    ///   - queue: Queue for a session operations
+    ///   - queueKey: Key for re-calling the session queue from the system
     convenience init(queue: DispatchQueue, queueKey: DispatchSpecificKey<NSObject>) {
         self.init()
         self._sessionQueue = queue
         self._sessionQueueKey = queueKey
     }
     
+    
+    /// Initialize.
     override init() {
         self._identifier = NSUUID().uuidString
         self._date = Date()
@@ -225,10 +244,19 @@ public class NextLevelSession: NSObject {
         self._audioConfiguration = nil    
     }
     
-    // MARK: - functions
+}
+
+// MARK: - setup
+
+extension NextLevelSession {
     
-    // setup
-    
+    /// Prepares a session for recording video.
+    ///
+    /// - Parameters:
+    ///   - settings: AVFoundation video settings dictionary
+    ///   - configuration: Video configuration for video output
+    ///   - formatDescription: sample buffer format description
+    /// - Returns: True when setup completes successfully
     public func setupVideo(withSettings settings: [String : Any]?, configuration: NextLevelVideoConfiguration, formatDescription: CMFormatDescription) -> Bool {
         self._videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: settings, sourceFormatHint: formatDescription)
         if let videoInput = self._videoInput {
@@ -246,6 +274,13 @@ public class NextLevelSession: NSObject {
         return self._videoInput != nil
     }
     
+    /// Prepares a session for recording audio.
+    ///
+    /// - Parameters:
+    ///   - settings: AVFoundation audio settings dictionary
+    ///   - configuration: Audio configuration for audio output
+    ///   - formatDescription: sample buffer format description
+    /// - Returns: True when setup completes successfully
     public func setupAudio(withSettings settings: [String : Any]?, configuration: NextLevelAudioConfiguration, formatDescription: CMFormatDescription) -> Bool {
         self._audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: settings, sourceFormatHint: formatDescription)
         if let audioInput = self._audioInput {
@@ -305,14 +340,20 @@ public class NextLevelSession: NSObject {
     }
 }
 
-// MARK: - recording/editing
+// MARK: - recording
 
 extension NextLevelSession {
     
-    // recording
-    
+    /// Completion handler type for appending a sample buffer
     public typealias NextLevelSessionAppendSampleBufferCompletionHandler = (_: Bool) -> Void
     
+    /// Append video sample buffer frames to a session for recording.
+    ///
+    /// - Parameters:
+    ///   - sampleBuffer: Sample buffer input to be appended, unless an image buffer is also provided
+    ///   - imageBuffer: Optional image buffer input for writing a custom buffer
+    ///   - minFrameDuration: Current active minimum frame duration
+    ///   - completionHandler: Handler when a frame appending operation completes or fails
     public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, imageBuffer: CVPixelBuffer?, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
         let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         self.startSessionIfNecessary(timestamp: timestamp)
@@ -357,6 +398,11 @@ extension NextLevelSession {
         completionHandler(false)
     }
     
+    /// Append audio sample buffer to a session for recording.
+    ///
+    /// - Parameters:
+    ///   - sampleBuffer: Sample buffer input to be appended
+    ///   - completionHandler: Handler when a frame appending operation completes or fails
     public func appendAudio(withSampleBuffer sampleBuffer: CMSampleBuffer, completionHandler: @escaping NextLevelSessionAppendSampleBufferCompletionHandler) {
         self.startSessionIfNecessary(timestamp: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
         
@@ -385,6 +431,7 @@ extension NextLevelSession {
         }
     }
     
+    /// Resets a session to the initial state.
     public func reset() {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             self.endClip(completionHandler: nil)
@@ -410,8 +457,10 @@ extension NextLevelSession {
     
     // create
     
+    /// Completion handler type for ending a clip
     public typealias NextLevelSessionEndClipCompletionHandler = (_: NextLevelClip?, _: Error?) -> Void
     
+    /// Starts a clip
     public func beginClip() {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             if self._writer == nil {
@@ -425,6 +474,9 @@ extension NextLevelSession {
         }
     }
     
+    /// Finalizes the recording of a clip.
+    ///
+    /// - Parameter completionHandler: Handler for when a clip is finalized or finalization fails
     public func endClip(completionHandler: NextLevelSessionEndClipCompletionHandler?) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             self._audioQueue.sync {
@@ -478,9 +530,15 @@ extension NextLevelSession {
             }
         }
     }
+}
+
+// MARK: - clip editing
+
+extension NextLevelSession {
     
-    // edit
-    
+    /// Adds a specific clip to a session.
+    ///
+    /// - Parameter clip: Clip to be added
     public func add(clip: NextLevelClip) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             self._clips.append(clip)
@@ -488,6 +546,11 @@ extension NextLevelSession {
         }
     }
     
+    /// Adds a specific clip to a session at the desired index.
+    ///
+    /// - Parameters:
+    ///   - clip: Clip to be added
+    ///   - idx: Index at which to add the clip
     public func add(clip: NextLevelClip, at idx: Int) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             self._clips.insert(clip, at: idx)
@@ -495,6 +558,9 @@ extension NextLevelSession {
         }
     }
     
+    /// Removes a specific clip from a session.
+    ///
+    /// - Parameter clip: Clip to be removed
     public func remove(clip: NextLevelClip) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             if let idx = self._clips.index(of: clip) {
@@ -504,6 +570,11 @@ extension NextLevelSession {
         }
     }
     
+    /// Removes a clip from a session at the desired index.
+    ///
+    /// - Parameters:
+    ///   - idx: Index of the clip to remove
+    ///   - removeFile: True to remove the associated file with the clip
     public func remove(clipAt idx: Int, removeFile: Bool) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             if self._clips.indices.contains(idx) {
@@ -516,10 +587,14 @@ extension NextLevelSession {
         }
     }
     
+    /// Removes and destroys all clips for a session, as well as deleting their associated files.
     public func removeAllClips() {
         self.removeAllClips(removeFiles: true)
     }
     
+    /// Removes and destroys all clips for a session.
+    ///
+    /// - Parameter removeFiles: When true, associated files are also removed.
     public func removeAllClips(removeFiles: Bool) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             while self._clips.count > 0 {
@@ -534,6 +609,7 @@ extension NextLevelSession {
         }
     }
 
+    /// Removes the last recorded clip for a session, "Undo".
     public func removeLastClip() {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             if self.clips.count > 0 {
@@ -545,8 +621,14 @@ extension NextLevelSession {
         }
     }
     
+    /// Completion handler type for merging clips, optionals indicate success or failure when nil
     public typealias NextLevelSessionMergeClipsCompletionHandler = (_: URL?, _: Error?) -> Void
     
+    /// Merges all existing recorded clips in the session and exports to a file.
+    ///
+    /// - Parameters:
+    ///   - preset: AVAssetExportSession preset name for export
+    ///   - completionHandler: Handler for when the merging process completes
     public func mergeClips(usingPreset preset: String, completionHandler: @escaping NextLevelSessionMergeClipsCompletionHandler) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
@@ -581,7 +663,7 @@ extension NextLevelSession {
     }
 }
 
-// MARK: - compositions
+// MARK: - composition
 
 extension NextLevelSession {
 
