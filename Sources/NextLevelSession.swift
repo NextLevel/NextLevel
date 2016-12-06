@@ -361,7 +361,7 @@ extension NextLevelSession {
         var frameDuration = minFrameDuration
         let offsetBufferTimestamp = timestamp - self._timeOffset
         
-        if let videoConfig = self._videoConfiguration, let timeScale = videoConfig.timeScale {
+        if let videoConfig = self._videoConfiguration, let timeScale = videoConfig.timescale {
             if timeScale != 1.0 {
                 let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
                 if self._currentClipDuration.value > 0 {

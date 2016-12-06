@@ -457,7 +457,6 @@ public protocol NextLevelDeviceDelegate: NSObjectProtocol {
 }
 
 // MARK: - NextLevelFlashAndTorchDelegate
-// flash and torch support
 
 public protocol NextLevelFlashAndTorchDelegate: NSObjectProtocol {
     
