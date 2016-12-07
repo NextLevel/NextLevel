@@ -554,7 +554,7 @@ public class NextLevel: NSObject {
         return UIImagePickerController .isCameraDeviceAvailable(cameraDevice.uikitType)
     }
 
-    public var cameraMode: NextLevelCaptureMode {
+    public var captureMode: NextLevelCaptureMode {
         didSet {
             guard self.captureMode != oldValue else {
                 return
@@ -681,7 +681,7 @@ public class NextLevel: NSObject {
         self.audioConfiguration = NextLevelAudioConfiguration()
         self.photoConfiguration = NextLevelPhotoConfiguration()
         
-        self.cameraMode = .video
+        self.captureMode = .video
         
         self.photoStabilizationEnabled = false
         self.videoStabilizationMode = .auto
@@ -761,7 +761,7 @@ extension NextLevel {
     }
     
     internal func authorizationStatusForCurrentCameraMode() -> NextLevelAuthorizationStatus {
-        switch self.cameraMode {
+        switch self.captureMode {
         case .audio:
             return self.authorizationStatus(forMediaType: AVMediaTypeAudio)
         case .video:
@@ -869,7 +869,7 @@ extension NextLevel {
             
             var shouldConfigureVideo = false
             var shouldConfigureAudio = false
-            switch self.cameraMode {
+            switch self.captureMode {
             case .photo:
                 shouldConfigureVideo = true
                 break
@@ -942,7 +942,7 @@ extension NextLevel {
             
             self.removeUnusedOutputsForCurrentCameraMode(session: session)
             
-            switch self.cameraMode {
+            switch self.captureMode {
             case .video:
                 if session.sessionPreset != self.videoConfiguration.preset {
                     if session.canSetSessionPreset(self.videoConfiguration.preset) {
@@ -1146,7 +1146,7 @@ extension NextLevel {
             return
         }
 
-        switch self.cameraMode {
+        switch self.captureMode {
         case .video:
             if let photoOutput = self._photoOutput, currentOutputs.contains(photoOutput) {
                 session.removeOutput(photoOutput)
