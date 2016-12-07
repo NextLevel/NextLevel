@@ -556,7 +556,7 @@ public class NextLevel: NSObject {
 
     public var cameraMode: NextLevelCaptureMode {
         didSet {
-            guard self.cameraMode != oldValue else {
+            guard self.captureMode != oldValue else {
                 return
             }
 
@@ -2059,8 +2059,6 @@ extension NextLevel {
         }
     }
     
-    // private
-    
     internal func beginRecordingNewClipIfNecessary() {
         if let session = self._recordingSession {
             if session.isReady == false {
@@ -2491,6 +2489,7 @@ extension NextLevel {
     internal func handleSessionDidStartRunning(_ notification: Notification) {
         //self.performRecoveryCheckIfNecessary()
         // TODO
+        
         self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelSessionDidStart(self)
         }
@@ -2505,14 +2504,17 @@ extension NextLevel {
     internal func handleSessionRuntimeError(_ notification: Notification) {
         //handleSessionRuntimeError
         // TODO
+        print("NextLevel, TODO, session runtime error.")
     }
     
     internal func handleSessionInterruption(_ notification: Notification) {
         // TODO
+        print("NextLevel, TODO, session interrupted started.")
     }
     
     internal func handleSessionInterruptionEnded(_ notification: Notification) {
         // TODO
+        print("NextLevel, TODO, session interrupted ended.")
     }
     
     // device
