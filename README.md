@@ -197,6 +197,7 @@ If other projects have interest in providing a similar hex sticker, it conforms 
 * [objc.io Camera and Photos](http://www.objc.io/issue-21/)
 * [objc.io Video](http://www.objc.io/issue-23/)
 * [Cameras, ecommerce and machine learning](http://ben-evans.com/benedictevans/2016/11/20/ku6omictaredoge4cao9cytspbz4jt)
+* [Again, iPhone is the default camera](http://om.co/2016/12/07/again-iphone-is-the-default-camera/)
 
 ## License
 
