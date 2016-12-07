@@ -52,22 +52,6 @@ let package = Package(
 
 Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/NextLevel/tree/master/Sources) or project file into your Xcode project.
 
-## Community
-
-NextLevel is a community – contributions and discussions are welcome!
-
-### Project
-
-- Feature idea? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
-- Found a bug? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
-- Need help? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag ’nextlevel’.
-- Questions? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag 'nextlevel'.
-- Want to contribute? Submit a pull request.
-
-## Documentation
-
-You can find [the docs here](https://nextlevel.github.io/NextLevel). Documentation is generated with [jazzy](https://github.com/realm/jazzy) and hosted on [GitHub-Pages](https://pages.github.com).
-
 ## Overview
 
 ### Recording Video Clips
@@ -165,19 +149,15 @@ if let session = NextLevel.sharedInstance.session {
 ```
 Videos can also be processed using the [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), a media transcoding library in Swift.
 
+## Documentation
+
+You can find [the docs here](https://nextlevel.github.io/NextLevel). Documentation is generated with [jazzy](https://github.com/realm/jazzy) and hosted on [GitHub-Pages](https://pages.github.com).
+
 ## About
 
 Next Level was a little weekend project that turned into something more useful. The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
 
 The goal is to continue to provide a good foundation for quick integration – allowing everyone to focus on the functionality that can builds on this. The API provides a means to perform realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.
-
-### Stickers
-
-If you found this project to be helpful, check out the [Next Level stickers](https://www.stickermule.com/en/user/1070732101/stickers).
-
-You can use this sign up [link](https://www.stickermule.com/unlock?ref_id=1012370701) for a $10 [credit](https://www.stickermule.com/unlock?ref_id=1012370701).
-
-If other projects have interest in providing a similar hex sticker, it conforms to the [sticker standard](https://terinjokes.github.io/StickerConstructorSpec/) used by several node projects. 
 
 ### Related Projects
 
@@ -187,6 +167,26 @@ If other projects have interest in providing a similar hex sticker, it conforms 
 - [SCRecorder](https://github.com/rFlex/SCRecorder), obj-c capture library
 - [PBJVision](https://github.com/piemonte/PBJVision), obj-c capture library
 - [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), media transcoding in Swift
+
+## Community
+
+NextLevel is a community – contributions and discussions are welcome!
+
+### Project
+
+- Feature idea? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
+- Found a bug? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
+- Need help? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag ’nextlevel’.
+- Questions? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag 'nextlevel'.
+- Want to contribute? Submit a pull request.
+
+### Stickers
+
+If you found this project to be helpful, check out the [Next Level stickers](https://www.stickermule.com/en/user/1070732101/stickers).
+
+You can use this sign up [link](https://www.stickermule.com/unlock?ref_id=1012370701) for a $10 [credit](https://www.stickermule.com/unlock?ref_id=1012370701).
+
+If other projects have interest in providing a similar hex sticker, it conforms to the [sticker standard](https://terinjokes.github.io/StickerConstructorSpec/) used by several node projects. 
 
 ## Resources
 
