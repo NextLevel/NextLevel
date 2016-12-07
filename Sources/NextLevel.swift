@@ -368,8 +368,10 @@ public enum NextLevelVideoStabilizationMode: Int, CustomStringConvertible {
 
 // MARK: - error types
 
+/// Error domain for all Next Level errors.
 public let NextLevelErrorDomain = "NextLevelErrorDomain"
 
+/// Error types.
 public enum NextLevelError: Error, CustomStringConvertible {
     case unknown
     case started
@@ -403,13 +405,21 @@ public enum NextLevelError: Error, CustomStringConvertible {
 
 // MARK: - NextLevelDelegate Dictionary Keys
 
+/// Delegate callback dictionary key for photo metadata
 public let NextLevelPhotoMetadataKey = "NextLevelPhotoMetadataKey"
+
+/// Delegate callback dictionary key for JPEG data
 public let NextLevelPhotoJPEGKey = "NextLevelPhotoJPEGKey"
+
+/// Delegate callback dictionary key for raw image data
 public let NextLevelPhotoRawImageKey = "NextLevelPhotoRawImageKey"
+
+/// Delegate callback dictionary key for a photo thumbnail
 public let NextLevelPhotoThumbnailKey = "NextLevelPhotoThumbnailKey"
 
 // MARK: - NextLevelDelegate
 
+/// NextLevel delegate, provides updates for authorization, configuration changes, session state, preview state, and mode changes.
 public protocol NextLevelDelegate: NSObjectProtocol {
 
     // permission
@@ -434,6 +444,7 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     
 }
 
+/// Device delegate, provides updates on device position, orientation, clean aperture, focus, exposure, and white balances changes.
 public protocol NextLevelDeviceDelegate: NSObjectProtocol {
     
     // position, orientation
@@ -458,6 +469,7 @@ public protocol NextLevelDeviceDelegate: NSObjectProtocol {
 
 // MARK: - NextLevelFlashAndTorchDelegate
 
+/// Flash and torch delegate, provides updates on active flash and torch related changes.
 public protocol NextLevelFlashAndTorchDelegate: NSObjectProtocol {
     
     func nextLevelDidChangeFlashMode(_ nextLevel: NextLevel)
@@ -471,8 +483,9 @@ public protocol NextLevelFlashAndTorchDelegate: NSObjectProtocol {
 }
 
 // MARK: - NextLevelVideoDelegate
-// all methods are called on the MainQueue except nextLevel:renderToCustomContextWithSampleBuffer:onQueue
 
+/// Video delegate, provides updates on video related recording and capture functionality.
+/// All methods are called on the main queue with the exception of nextLevel:renderToCustomContextWithSampleBuffer:onQueue.
 public protocol NextLevelVideoDelegate: NSObjectProtocol {
 
     // video zoom
@@ -503,6 +516,7 @@ public protocol NextLevelVideoDelegate: NSObjectProtocol {
 
 // MARK: - NextLevelPhotoDelegate
 
+/// Photo delegate, provides updates on photo related capture functionality.
 public protocol NextLevelPhotoDelegate: NSObjectProtocol {
 
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
@@ -536,24 +550,36 @@ public class NextLevel: NSObject {
     
     // preview
     
+    /// Live camera preview, add as a sublayer to the UIView's primary layer.
     public var previewLayer: AVCaptureVideoPreviewLayer
     
     // capture configuration
-    
+
+    /// Configuration property to modify for video
     public var videoConfiguration: NextLevelVideoConfiguration
+    
+    /// Configuration property to modify for audio
     public var audioConfiguration: NextLevelAudioConfiguration
+    
+    /// Configuration property to modify for photos
     public var photoConfiguration: NextLevelPhotoConfiguration
     
     // audio configuration
-    
+
+    /// Indicates whether the capture session automatically changes settings in the app’s shared audio session. By default, is `true`.
     public var automaticallyConfiguresApplicationAudioSession: Bool
     
     // camera configuration
 
-    public func isCameraDeviceAvailable(cameraDevice: NextLevelDevicePosition) -> Bool {
-        return UIImagePickerController .isCameraDeviceAvailable(cameraDevice.uikitType)
+    /// Checks if a camera device is available for a position.
+    ///
+    /// - Parameter devicePosition: Camera device position to query.
+    /// - Returns: `true` if the camera device exists, otherwise false.
+    public func isCameraDeviceAvailable(withDevicePosition devicePosition: NextLevelDevicePosition) -> Bool {
+        return UIImagePickerController .isCameraDeviceAvailable(devicePosition.uikitType)
     }
 
+    /// The current capture mode of the device.
     public var captureMode: NextLevelCaptureMode {
         didSet {
             guard self.captureMode != oldValue else {
@@ -565,7 +591,8 @@ public class NextLevel: NSObject {
             self.updateVideoOrientation()
         }
     }
-        
+    
+    /// The current device position.
     public var devicePosition: NextLevelDevicePosition {
         didSet {
             self.configureSessionDevices()
@@ -573,8 +600,10 @@ public class NextLevel: NSObject {
         }
     }
     
+    /// When `true` actives device orientation updates
     public var automaticallyUpdatesDeviceOrientation: Bool
     
+    /// The current orientation of the device.
     public var deviceOrientation: NextLevelDeviceOrientation {
         didSet {
             self.automaticallyUpdatesDeviceOrientation = false
@@ -584,8 +613,10 @@ public class NextLevel: NSObject {
     
     // stabilization
     
+    /// When `true`, enables photo capture stabilization.
     public var photoStabilizationEnabled: Bool
     
+    /// Video stabilization mode
     public var videoStabilizationMode: NextLevelVideoStabilizationMode {
         didSet {
             self.beginConfiguration()
@@ -596,12 +627,15 @@ public class NextLevel: NSObject {
     
     // state
     
+    /// Checks if the system is recording.
     public var isRecording: Bool {
         get {
             return self._recording
         }
     }
     
+    /// The current recording session, a powerful means for modifying and editing previously recorded clips.
+    /// The session provides features such as 'undo'.
     public var session: NextLevelSession? {
         get {
             return self._recordingSession
@@ -637,6 +671,7 @@ public class NextLevel: NSObject {
     
     // MARK: - singleton
     
+    /// Method for providing a NextLevel singleton. This isn't required for use.
     public static let sharedInstance: NextLevel = NextLevel()
     
     // MARK: - object lifecycle
@@ -707,6 +742,10 @@ public class NextLevel: NSObject {
 
 extension NextLevel {
     
+    /// Checks the current authorization status for the desired media type.
+    ///
+    /// - Parameter mediaType: Specified media type (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
+    /// - Returns: Authorization status for the desired media type.
     public func authorizationStatus(forMediaType mediaType: String) -> NextLevelAuthorizationStatus {
         let status = AVCaptureDevice.authorizationStatus(forMediaType: mediaType)
         var nextLevelStatus: NextLevelAuthorizationStatus = .notDetermined
@@ -723,6 +762,9 @@ extension NextLevel {
         return nextLevelStatus
     }
     
+    /// Requests authorization permission.
+    ///
+    /// - Parameter mediaType: Specified media type (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
     public func requestAuthorization(forMediaType mediaType: String) {
         AVCaptureDevice.requestAccess(forMediaType: mediaType) { (granted: Bool) in
             let status: NextLevelAuthorizationStatus = (granted == true) ? .authorized : .notAuthorized
@@ -750,6 +792,9 @@ extension NextLevel {
 
 extension NextLevel {
     
+    /// Starts the current recording session.
+    ///
+    /// - Throws: 'NextLevelError.authorization' when permissions are not authorized, 'NextLevelError.started' when the session has already started.
     public func start() throws {
         guard
             self._captureSession == nil
@@ -790,6 +835,7 @@ extension NextLevel {
         }
     }
     
+    /// Stops the current recording session.
     public func stop() {
         if let session = self._captureSession {
             self._sessionQueue.async {
@@ -1162,12 +1208,14 @@ extension NextLevel {
     
     // preview
     
+    /// Freezes the live camera preview layer.
     public func freezePreview() {
         if let previewConnection = self.previewLayer.connection {
             previewConnection.isEnabled = false
         }
     }
     
+    /// Un-freezes the live camera preview layer.
     public func unfreezePreview() {
         if let previewConnection = self.previewLayer.connection {
             previewConnection.isEnabled = true
@@ -1176,6 +1224,7 @@ extension NextLevel {
     
     // flash and torch
     
+    /// Checks if a flash is available.
     public var isFlashAvailable: Bool {
         if let device: AVCaptureDevice = self._currentDevice {
             return device.hasFlash
@@ -1183,6 +1232,7 @@ extension NextLevel {
         return false
     }
     
+    /// The flash mode of the device.
     public var flashMode: NextLevelFlashMode {
         get {
             return self.photoConfiguration.flashMode.flashModeNextLevelType()
@@ -1217,6 +1267,7 @@ extension NextLevel {
         }
     }
     
+    /// Checks if a torch is available.
     public var isTorchAvailable: Bool {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1225,7 +1276,8 @@ extension NextLevel {
             return false
         }
     }
-    
+
+    /// Torch mode of the device.
     public var torchMode: NextLevelTorchMode {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1261,6 +1313,7 @@ extension NextLevel {
     // focus, exposure, and white balance
     // note: focus and exposure modes change when adjusting on point
     
+    /// Checks if focusing at a point of interest is supported.
     public var isFocusPointOfInterestSupported: Bool {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1270,6 +1323,7 @@ extension NextLevel {
         }
     }
     
+    /// Checks if focus lock is supported.
     public var isFocusLockSupported: Bool {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1279,6 +1333,7 @@ extension NextLevel {
         }
     }
     
+    /// Checks if focus adjustment is in progress.
     public var isAdjustingFocus: Bool {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1288,6 +1343,7 @@ extension NextLevel {
         }
     }
     
+    /// The focus mode of the device.
     public var focusMode: NextLevelFocusMode {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1317,6 +1373,9 @@ extension NextLevel {
         }
     }
     
+    /// Focuses, exposures, and adjusts white balanace at the point of interest.
+    ///
+    /// - Parameter adjustedPoint: The point of interest.
     public func focusExposeAndAdjustWhiteBalance(atAdjustedPoint adjustedPoint: CGPoint) {
         if let device: AVCaptureDevice = self._currentDevice {
             guard
@@ -1357,6 +1416,9 @@ extension NextLevel {
         }
     }
     
+    /// Changes focus at adjusted point of interest.
+    ///
+    /// - Parameter adjustedPoint: The point of interest for focus
     public func focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint) {
         if let device: AVCaptureDevice = self._currentDevice {
             guard
@@ -1385,6 +1447,7 @@ extension NextLevel {
     
     // exposure
     
+    /// Checks if exposure lock is supported.
     public var isExposureLockSupported: Bool {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1394,6 +1457,7 @@ extension NextLevel {
         }
     }
     
+    /// Checks if an exposure adjustment is progress.
     public var isAdjustingExposure: Bool {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1403,6 +1467,7 @@ extension NextLevel {
         }
     }
     
+    /// The exposure mode of the device.
     public var exposureMode: NextLevelExposureMode {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1428,12 +1493,15 @@ extension NextLevel {
                     device.unlockForConfiguration()
                 }
                 catch {
-                    print("NextLevel, exposeAtAdjustedPointOfInterest failed to lock device for configuration")
+                    print("NextLevel, exposureMode failed to lock device for configuration")
                 }
             }
         }
     }
     
+    /// Changes exposure at adjusted point of interest.
+    ///
+    /// - Parameter adjustedPoint: The point of interest for exposure.
     public func exposeAtAdjustedPointOfInterest(adjustedPoint: CGPoint) {
         if let device: AVCaptureDevice = self._currentDevice {
             guard
@@ -1459,8 +1527,8 @@ extension NextLevel {
         }
     }
     
-    // focal length and principle point camera intrinsic parameters for OpenCV
-    // see Hartley's Mutiple View Geometry, Chapter 6
+    /// Calculates focal length and principle point camera intrinsic parameters for OpenCV.
+    /// (see Hartley's Mutiple View Geometry, Chapter 6)
     public func focalLengthAndPrinciplePoint(focalLengthX: inout Float, focalLengthY: inout Float, principlePointX: inout Float, principlePointY: inout Float) -> Bool {
         if let device: AVCaptureDevice = self._currentDevice,
             let formatDescription = device.activeFormat.formatDescription {
@@ -1652,6 +1720,7 @@ extension NextLevel {
     
     // mirroring
     
+    /// Changes the current capture device's mirroring mode.
     public var mirroringMode: NextLevelMirroringMode {
         get {
             if let pc = self.previewLayer.connection {
@@ -1716,6 +1785,7 @@ extension NextLevel {
     
     // frame rate
     
+    /// Changes the current device frame rate.
     public var frameRate: CMTimeScale {
         get {
             var frameRate: CMTimeScale = 0
@@ -1757,6 +1827,11 @@ extension NextLevel {
     
     // device format
     
+    /// Changes the current device frame rate within the desired dimensions.
+    ///
+    /// - Parameters:
+    ///   - frameRate: Desired frame rate.
+    ///   - dimensions: Desired video dimensions.
     public func updateDeviceFormat(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions) {
         if let device: AVCaptureDevice = self._currentDevice,
             let formats = device.formats {
@@ -1797,8 +1872,7 @@ extension NextLevel {
 
 extension NextLevel {
     
-    // device switch
-    
+    /// Triggers a camera device position change.
     public func flipCaptureDevicePosition() {
         if self.devicePosition == .back {
             self.devicePosition = .front
@@ -1807,6 +1881,7 @@ extension NextLevel {
         }
     }
     
+    /// Changes capture device if the desired device is available.
     public func changeCaptureDeviceIfAvailable(captureDevice: NextLevelDeviceType) throws {
         let deviceForUse = AVCaptureDevice.captureDevice(withType: captureDevice.avfoundationType, forPosition: .back)
         if deviceForUse == nil {
@@ -1868,11 +1943,8 @@ extension NextLevel {
 // MARK: - video capture
 
 extension NextLevel {
-    
-    // properties
-    
-    // use pause/resume if a session is in progress, end finalizes that recording session
-    
+
+    /// Checks if video capture is supported by the hardware.
     public var supportsVideoCapture: Bool {
         get {
             let deviceTypes: [AVCaptureDeviceType] = [.builtInWideAngleCamera, .builtInTelephotoCamera, .builtInDuoCamera]
@@ -1884,6 +1956,7 @@ extension NextLevel {
         }
     }
 
+    /// Checks if video capture is available, based on available storage and supported hardware functionality.
     public var canCaptureVideo: Bool {
         get {
             return self.supportsVideoCapture && (NextLevel.availableStorageSpaceInBytes() > NextLevelRequiredMinimumStorageSpaceInBytes)
@@ -1921,6 +1994,7 @@ extension NextLevel {
         self.videoDelegate?.nextLevel(self, didUpdateVideoZoomFactor: self.videoZoomFactor)
     }
     
+    /// Triggers a photo capture from the last video frame.
     public func capturePhotoFromVideo() {
         
         self._sessionQueue.async {
@@ -2012,6 +2086,7 @@ extension NextLevel {
         }
     }
     
+    /// Initiates video recording, managed as a clip within the 'NextLevelSession'
     public func record() {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             self._recording = true
@@ -2021,10 +2096,14 @@ extension NextLevel {
         }
     }
     
+    /// Pauses video recording, preparing 'NextLevel' to start a new clip with 'record()'
     public func pause() {
         self.pause(withCompletionHandler: nil)
     }
     
+    /// Pauses video recording, preparing 'NextLevel' to start a new clip with 'record()' with completion handler.
+    ///
+    /// - Parameter completionHandler: Completion handler for when pause completes
     public func pause(withCompletionHandler completionHandler: (() -> Void)?) {
         self._recording = false
         
@@ -2076,6 +2155,7 @@ extension NextLevel {
 
 extension NextLevel {
     
+    /// Checks if a photo capture operation can be performed, based on available storage space and supported hardware functionality.
     public var canCapturePhoto: Bool {
         get {
             let canCapturePhoto: Bool = (self._captureSession?.isRunning == true)
@@ -2083,6 +2163,7 @@ extension NextLevel {
         }
     }
     
+    /// Triggers a photo capture.
     public func capturePhoto() {
         if let photoOutput = self._photoOutput, let _ = photoOutput.connection(withMediaType: AVMediaTypeVideo) {
             if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
