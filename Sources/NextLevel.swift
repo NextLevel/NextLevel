@@ -594,34 +594,6 @@ public class NextLevel: NSObject {
         }
     }
     
-    // custom video rendering
-    
-    // property enables callbacks for rendering into a custom context
-    public var isVideoCustomContextRenderingEnabled: Bool {
-        get {
-            return self.videoCustomContextRenderingEnabled
-        }
-        set {
-            self.executeClosureSyncOnSessionQueueIfNecessary {
-                self.videoCustomContextRenderingEnabled = newValue
-                self.sessionVideoCustomContextImageBuffer = nil
-            }
-        }
-    }
-    
-    // if you want to record the modified frame from isVideoCustomContextRenderingEnabled, set this property
-    // if you do not want to record the modified frame, keep or set it to nil
-    public var videoCustomContextImageBuffer: CVPixelBuffer? {
-        get {
-            return self.sessionVideoCustomContextImageBuffer
-        }
-        set {
-            self.executeClosureSyncOnSessionQueueIfNecessary {
-                self.sessionVideoCustomContextImageBuffer = newValue
-            }
-        }
-    }
-    
     // state
     
     public var isRecording: Bool {
@@ -1742,36 +1714,6 @@ extension NextLevel {
         }
     }
     
-    // zoom
-    
-    public var videoZoomFactor: Float {
-        get {
-            if let device: AVCaptureDevice = self._currentDevice {
-                return Float(device.videoZoomFactor)
-            }
-            return 1.0 // prefer 1.0 instead of using an optional
-        }
-        set {
-            if let device: AVCaptureDevice = self._currentDevice {
-                do {
-                    try device.lockForConfiguration()
-                    
-                    let zoom: Float = max(1, min(newValue, Float(device.activeFormat.videoMaxZoomFactor)))
-                    device.videoZoomFactor = CGFloat(zoom)
-                    
-                    device.unlockForConfiguration()
-                }
-                catch {
-                    print("NextLevel, zoomFactor failed to lock device for configuration")
-                }
-            }
-        }
-    }
-    
-    internal func videoZoomFactorChanged() {
-        self.videoDelegate?.nextLevel(self, didUpdateVideoZoomFactor: self.videoZoomFactor)
-    }
-    
     // frame rate
     
     public var frameRate: CMTimeScale {
@@ -1948,7 +1890,36 @@ extension NextLevel {
         }
     }
     
-    // functions
+    // zoom
+    
+    /// Updates video capture zoom factor.
+    public var videoZoomFactor: Float {
+        get {
+            if let device: AVCaptureDevice = self._currentDevice {
+                return Float(device.videoZoomFactor)
+            }
+            return 1.0 // prefer 1.0 instead of using an optional
+        }
+        set {
+            if let device: AVCaptureDevice = self._currentDevice {
+                do {
+                    try device.lockForConfiguration()
+                    
+                    let zoom: Float = max(1, min(newValue, Float(device.activeFormat.videoMaxZoomFactor)))
+                    device.videoZoomFactor = CGFloat(zoom)
+                    
+                    device.unlockForConfiguration()
+                }
+                catch {
+                    print("NextLevel, zoomFactor failed to lock device for configuration")
+                }
+            }
+        }
+    }
+    
+    internal func videoZoomFactorChanged() {
+        self.videoDelegate?.nextLevel(self, didUpdateVideoZoomFactor: self.videoZoomFactor)
+    }
     
     public func capturePhotoFromVideo() {
         
@@ -2010,6 +1981,35 @@ extension NextLevel {
 
         }
         
+    }
+    
+    // custom video rendering
+    
+    /// Enables delegate callbacks for rendering into a custom context.
+    /// videoDelegate, func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue)
+    public var isVideoCustomContextRenderingEnabled: Bool {
+        get {
+            return self.videoCustomContextRenderingEnabled
+        }
+        set {
+            self.executeClosureSyncOnSessionQueueIfNecessary {
+                self.videoCustomContextRenderingEnabled = newValue
+                self.sessionVideoCustomContextImageBuffer = nil
+            }
+        }
+    }
+    
+    /// Settings this property passes a modified buffer into the session for writing.
+    /// The property is only observed when 'isVideoCustomContextRenderingEnabled' is enabled. Setting it to nil avoids modification for a frame.
+    public var videoCustomContextImageBuffer: CVPixelBuffer? {
+        get {
+            return self.sessionVideoCustomContextImageBuffer
+        }
+        set {
+            self.executeClosureSyncOnSessionQueueIfNecessary {
+                self.sessionVideoCustomContextImageBuffer = newValue
+            }
+        }
     }
     
     public func record() {
