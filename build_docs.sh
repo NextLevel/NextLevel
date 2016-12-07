@@ -14,4 +14,4 @@ jazzy \
     --module 'NextLevel' \
     --framework-root . \
     --readme README.md \
-    --output Documentation/
+    --output docs/
