@@ -774,7 +774,7 @@ extension NextLevel {
     }
 }
 
-// MARK: - encoding configuration
+// MARK: - session start/stop
 
 extension NextLevel {
     
@@ -837,7 +837,11 @@ extension NextLevel {
         }
     }
     
-    // private session functions
+}
+
+// MARK: - NextLevel private session configuration support
+
+extension NextLevel {
     
     // re-entrant configuration lock, thanks to SCRecorder
     internal func beginConfiguration() {
@@ -1180,7 +1184,7 @@ extension NextLevel {
     
 }
 
-// MARK: - current capture mode and device state
+// MARK: - capture mode and device settings (flash, torch, focus, exposure, white balance, and frame rate)
 
 extension NextLevel {
     
@@ -1845,6 +1849,11 @@ extension NextLevel {
             print("NextLevel, could not apply active format, there was no current device!")
         }
     }
+}
+
+// MARK: - capture device switching
+
+extension NextLevel {
     
     // device switch
     
