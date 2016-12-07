@@ -64,13 +64,9 @@ NextLevel is a community – contributions and discussions are welcome!
 - Questions? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag 'nextlevel'.
 - Want to contribute? Submit a pull request.
 
-### Stickers
+## Documentation
 
-If you found this project to be helpful, check out the [Next Level stickers](https://www.stickermule.com/en/user/1070732101/stickers).
-
-You can use this sign up [link](https://www.stickermule.com/unlock?ref_id=1012370701) for a $10 [credit](https://www.stickermule.com/unlock?ref_id=1012370701).
-
-If other projects have interest in providing a similar hex sticker, it conforms to the [sticker standard](https://terinjokes.github.io/StickerConstructorSpec/) used by several node projects. 
+You can find [the docs here](https://nextlevel.github.io/NextLevel). Documentation is generated with [jazzy](https://github.com/realm/jazzy) and hosted on [GitHub-Pages](https://pages.github.com).
 
 ## Overview
 
@@ -174,6 +170,14 @@ Videos can also be processed using the [NextLevelSessionExporter](https://github
 Next Level was a little weekend project that turned into something more useful. The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
 
 The goal is to continue to provide a good foundation for quick integration – allowing everyone to focus on the functionality that can builds on this. The API provides a means to perform realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.
+
+### Stickers
+
+If you found this project to be helpful, check out the [Next Level stickers](https://www.stickermule.com/en/user/1070732101/stickers).
+
+You can use this sign up [link](https://www.stickermule.com/unlock?ref_id=1012370701) for a $10 [credit](https://www.stickermule.com/unlock?ref_id=1012370701).
+
+If other projects have interest in providing a similar hex sticker, it conforms to the [sticker standard](https://terinjokes.github.io/StickerConstructorSpec/) used by several node projects. 
 
 ### Related Projects
 
