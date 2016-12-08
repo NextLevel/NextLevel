@@ -1845,25 +1845,21 @@ extension NextLevel {
                 }
             }
             
-            if updatedFormat == nil {
-                // throw a proper error here
+            if let format = updatedFormat {
+                let fps: CMTime = CMTimeMake(1, frameRate)
+                do {
+                    try device.lockForConfiguration()
+                    device.activeFormat = format
+                    device.activeVideoMaxFrameDuration = fps
+                    device.activeVideoMinFrameDuration = fps
+                    device.unlockForConfiguration()
+                } catch {
+                    print("NextLevel, flashMode failed to lock device for configuration")
+                }
+            } else {
                 print("Nextlevel, could not find a current device format matching the requirements")
-                return
             }
             
-            let fps: CMTime = CMTimeMake(1, frameRate)
-            
-            do {
-                try device.lockForConfiguration()
-                
-                device.activeFormat = updatedFormat
-                device.activeVideoMaxFrameDuration = fps
-                device.activeVideoMinFrameDuration = fps
-                
-                device.unlockForConfiguration()
-            } catch {
-                print("NextLevel, flashMode failed to lock device for configuration")
-            }
         } else {
             print("NextLevel, could not apply active format, there was no current device!")
         }

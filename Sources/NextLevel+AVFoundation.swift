@@ -147,7 +147,7 @@ extension AVCaptureDevice {
     
     // MARK: device format
     
-    /// Checks if the specified capture device format is within and supports a framerate range.
+    /// Checks if the specified capture device format supports a desired framerate.
     ///
     /// - Parameters:
     ///   - format: Specified capture device format to evaluate
@@ -157,17 +157,16 @@ extension AVCaptureDevice {
         return AVCaptureDevice.isCaptureDeviceFormat(inRange: format, frameRate: frameRate, dimensions: CMVideoDimensions(width: 0, height: 0))
     }
     
-    /// Checks if the specified capture device format is within and supports a framerate range and dimensions.
+    /// Checks if the specified capture device format supports a desired framerate and dimensions.
     ///
     /// - Parameters:
-    ///   - format: Specified capture device format to evaluate
-    ///   - frameRate: Specified capture frame rate
-    ///   - dimensions: Specified video dimensions
-    /// - Returns: True if the capture device format supports the given criteria, otherwise false
+    ///   - format: Capture device format to evaluate
+    ///   - frameRate: Desired frame rate
+    ///   - dimensions: Desired video dimensions
+    /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
     public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale, dimensions: CMVideoDimensions) -> Bool {
         let formatDimensions: CMVideoDimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
-        
-        if (formatDimensions.width >= dimensions.width && formatDimensions.height >= dimensions.height) {
+        if (formatDimensions.width == dimensions.width && formatDimensions.height == dimensions.height) {
             let videoSupportedFrameRateRanges: [AVFrameRateRange] = format.videoSupportedFrameRateRanges as! [AVFrameRateRange]
             for frameRateRange in videoSupportedFrameRateRanges {
                 if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
