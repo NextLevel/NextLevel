@@ -150,9 +150,9 @@ extension AVCaptureDevice {
     /// Checks if the specified capture device format supports a desired framerate.
     ///
     /// - Parameters:
-    ///   - format: Specified capture device format to evaluate
-    ///   - frameRate: Specified capture frame rate
-    /// - Returns: True if the capture device format supports the given criteria, otherwise false
+    ///   - format: Capture device format to evaluate
+    ///   - frameRate: Desired frame rate
+    /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
     public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale) -> Bool {
         return AVCaptureDevice.isCaptureDeviceFormat(inRange: format, frameRate: frameRate, dimensions: CMVideoDimensions(width: 0, height: 0))
     }
