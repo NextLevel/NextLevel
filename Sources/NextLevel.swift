@@ -1531,6 +1531,13 @@ extension NextLevel {
     
     /// Calculates focal length and principle point camera intrinsic parameters for OpenCV.
     /// (see Hartley's Mutiple View Geometry, Chapter 6)
+    ///
+    /// - Parameters:
+    ///   - focalLengthX: focal length along the x-axis
+    ///   - focalLengthY: focal length along the y-axis
+    ///   - principlePointX: principle point x-coordinate
+    ///   - principlePointY: principle point y-coordinate
+    /// - Returns: `true` when the focal length and principle point parameters are successfully calculated.
     public func focalLengthAndPrinciplePoint(focalLengthX: inout Float, focalLengthY: inout Float, principlePointX: inout Float, principlePointY: inout Float) -> Bool {
         if let device: AVCaptureDevice = self._currentDevice,
             let formatDescription = device.activeFormat.formatDescription {
@@ -1544,8 +1551,6 @@ extension NextLevel {
             
             focalLengthX = fabs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * Float(M_PI) / 2 )) )
             focalLengthY = fabs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * Float(M_PI) / 2 )) )
-            
-
             return true
         }
         return false
