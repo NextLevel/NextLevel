@@ -82,8 +82,8 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     /// Video scaling mode, AV dictionary key AVVideoScalingModeKey
     public var scalingMode: String?
 
-    /// Maximum interval between frame keys, AV dictionary key AVVideoMaxKeyFrameIntervalKey
-    public var maxFrameRate: CMTimeScale?
+    /// Maximum interval between key frames, 1 meaning key frames only, AV dictionary key AVVideoMaxKeyFrameIntervalKey
+    public var maxKeyFrameInterval: Int?
 
     /// Video time scale, value/timescale = seconds
     public var timescale: Float64?
@@ -137,9 +137,10 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             if let profileLevel = self.profileLevel {
                 compressionDict[AVVideoProfileLevelKey] = (profileLevel as NSString)
             }
-            if let maxFrameRate = self.maxFrameRate {
-                compressionDict[AVVideoMaxKeyFrameIntervalKey] = NSNumber(value: maxFrameRate)
+            if let maxKeyFrameInterval = self.maxKeyFrameInterval {
+                compressionDict[AVVideoMaxKeyFrameIntervalKey] = NSNumber(value: Int(maxKeyFrameInterval))
             }
+
             config[AVVideoCompressionPropertiesKey] = (compressionDict as NSDictionary)
             return config
         }
