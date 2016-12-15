@@ -167,7 +167,6 @@ class CameraViewController: UIViewController {
         
         // video configuration
         nextLevel.videoConfiguration.bitRate = 2000000
-//        nextLevel.videoConfiguration.dimensions = CGSize(width: 1280, height: 720)
         nextLevel.videoConfiguration.scalingMode = AVVideoScalingModeResizeAspectFill
         
         // audio configuration
@@ -239,52 +238,70 @@ extension CameraViewController {
     
     internal func endCapture() {
         self.photoTapGestureRecognizer?.isEnabled = true
-        NextLevel.sharedInstance.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
-            if let videoURL = url {
-                
-                PHPhotoLibrary.shared().performChanges({
-
-                    let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewControllerAlbumTitle)
-                    if albumAssetCollection == nil {
-                        let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: CameraViewControllerAlbumTitle)
-                        let _ = changeRequest.placeholderForCreatedAssetCollection
+        
+        if let session = NextLevel.sharedInstance.session {
+            
+            if session.clips.count > 1 {
+                NextLevel.sharedInstance.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
+                    if let videoUrl = url {
+                        self.saveVideo(withURL: videoUrl)
+                    } else if let _ = error {
+                        print("failed to merge clips at the end of capture \(error)")
                     }
-                        
-                }, completionHandler: { (success1: Bool, error1: Error?) in
-                    
-                    if success1 == true {
-                        if let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewControllerAlbumTitle) {
-                            PHPhotoLibrary.shared().performChanges({
-                                if let assetChangeRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL) {
-                                    let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
-                                    let enumeration: NSArray = [assetChangeRequest.placeholderForCreatedAsset!]
-                                    assetCollectionChangeRequest?.addAssets(enumeration)
-                                }
-                            }, completionHandler: { (success2: Bool, error2: Error?) in
-                                if success2 == true {
-                                    // remove the session's clips, after saving (if desired)
-                                    NextLevel.sharedInstance.session?.removeAllClips()
-    
-                                    // prompt that the video has been saved
-                                    let alertController = UIAlertController(title: "Video Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
-                                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                                    alertController.addAction(okAction)
-                                    self.present(alertController, animated: true, completion: nil)
-                                }
-                            })
-                        }
-                    } else if let _ = error1 {
-                        print("failure saving video \(error1)")
-                    }
-                    
                 })
+            } else {
                 
-            } else if let _ = error {
-                print("failed to merge clips at the end of capture \(error)")
+            }
+        
+        } else {
+            
+            if let videoUrl = NextLevel.sharedInstance.session?.lastClipUrl {
+                self.saveVideo(withURL: videoUrl)
+            } else {
+                // prompt that the video has been saved
+                let alertController = UIAlertController(title: "Something failed!", message: "Something failed!", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
+            
+        }
+
+        
+    }
+    
+    internal func saveVideo(withURL url: URL) {
+        PHPhotoLibrary.shared().performChanges({
+            let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewControllerAlbumTitle)
+            if albumAssetCollection == nil {
+                let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: CameraViewControllerAlbumTitle)
+                let _ = changeRequest.placeholderForCreatedAssetCollection
+            }}, completionHandler: { (success1: Bool, error1: Error?) in
+                if let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewControllerAlbumTitle) {
+                    PHPhotoLibrary.shared().performChanges({
+                        if let assetChangeRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) {
+                            let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
+                            let enumeration: NSArray = [assetChangeRequest.placeholderForCreatedAsset!]
+                            assetCollectionChangeRequest?.addAssets(enumeration)
+                        }
+                    }, completionHandler: { (success2: Bool, error2: Error?) in
+                    if success2 == true {
+                        // prompt that the video has been saved
+                        let alertController = UIAlertController(title: "Video Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alertController.addAction(okAction)
+                        self.present(alertController, animated: true, completion: nil)
+                    } else {
+                        // prompt that the video has been saved
+                        let alertController = UIAlertController(title: "Something failed!", message: "Something failed!", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alertController.addAction(okAction)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                })
             }
         })
     }
-    
 }
 
 // MARK: - UIButton
