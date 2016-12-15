@@ -656,6 +656,11 @@ extension NextLevelSession {
             var asset: AVAsset? = nil
             
             if self._clips.count > 0 {
+                
+                if self._clips.count == 1 {
+                    debugPrint("NextLevel, warning, a merge was requested for a single clip, use lastClipUrl instead")
+                }
+                
                 asset = self.asset
 
                 if let exportAsset = asset, let exportURL = outputURL {
