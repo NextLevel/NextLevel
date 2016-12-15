@@ -536,6 +536,25 @@ extension NextLevelSession {
 
 extension NextLevelSession {
     
+    /// Helper function that provides the location of the last recorded clip.
+    /// This is helpful when merging multiple segments isn't desired.
+    ///
+    /// - Returns: URL path to the last recorded clip.
+    public var lastClipUrl: URL? {
+        get {
+            var lastClipUrl: URL? = nil
+            if self._clips.count > 0 {
+                self.executeClosureSyncOnSessionQueueIfNecessary {
+                    if let lastClip: NextLevelClip = self.clips.last,
+                        let clipURL = lastClip.url {
+                        lastClipUrl = clipURL
+                    }
+                }
+            }
+            return lastClipUrl
+        }
+    }
+    
     /// Adds a specific clip to a session.
     ///
     /// - Parameter clip: Clip to be added
