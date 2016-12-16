@@ -201,7 +201,6 @@ public class NextLevelSession: NSObject {
         self._sessionQueueKey = queueKey
     }
     
-    
     /// Initialize.
     override init() {
         self._identifier = NSUUID().uuidString
@@ -544,11 +543,9 @@ extension NextLevelSession {
         get {
             var lastClipUrl: URL? = nil
             if self._clips.count > 0 {
-                self.executeClosureSyncOnSessionQueueIfNecessary {
-                    if let lastClip: NextLevelClip = self.clips.last,
-                        let clipURL = lastClip.url {
-                        lastClipUrl = clipURL
-                    }
+                if let lastClip: NextLevelClip = self.clips.last,
+                    let clipURL = lastClip.url {
+                    lastClipUrl = clipURL
                 }
             }
             return lastClipUrl
