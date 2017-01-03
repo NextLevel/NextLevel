@@ -23,7 +23,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Next Level uses the microphone for audio capture.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Next Level saves photos to your library.</string>
+	<string>Next Level saves photos and videos to your library.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>
