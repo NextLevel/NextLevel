@@ -114,13 +114,13 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             var config: [String : Any] = [:]
             
             if let dimensions = self.dimensions {
-                config[AVVideoWidthKey] = NSNumber(value: Float(dimensions.width))
-                config[AVVideoHeightKey] = NSNumber(value: Float(dimensions.height))
+                config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(dimensions.width))
+                config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(dimensions.height))
             } else if let buffer = sampleBuffer {
                 if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(buffer) {
                     let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
-                    config[AVVideoWidthKey] = NSNumber(value: Float(videoDimensions.width))
-                    config[AVVideoHeightKey] = NSNumber(value: Float(videoDimensions.height))
+                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
+                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.height))
                 }
             }
 
@@ -131,14 +131,14 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             }
             
             var compressionDict: [String : Any] = [:]
-            compressionDict[AVVideoAverageBitRateKey] = NSNumber(value: self.bitRate)
+            compressionDict[AVVideoAverageBitRateKey] = NSNumber(integerLiteral: self.bitRate)
             compressionDict[AVVideoAllowFrameReorderingKey] = NSNumber(value: false)
-            compressionDict[AVVideoExpectedSourceFrameRateKey] = NSNumber(value: Int(30))
+            compressionDict[AVVideoExpectedSourceFrameRateKey] = NSNumber(integerLiteral: 30)
             if let profileLevel = self.profileLevel {
                 compressionDict[AVVideoProfileLevelKey] = (profileLevel as NSString)
             }
             if let maxKeyFrameInterval = self.maxKeyFrameInterval {
-                compressionDict[AVVideoMaxKeyFrameIntervalKey] = NSNumber(value: Int(maxKeyFrameInterval))
+                compressionDict[AVVideoMaxKeyFrameIntervalKey] = NSNumber(integerLiteral: maxKeyFrameInterval)
             }
 
             config[AVVideoCompressionPropertiesKey] = (compressionDict as NSDictionary)
@@ -187,7 +187,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
         if let options = self.options {
             return options
         } else {
-            var config: [String : Any] = [AVEncoderBitRateKey : NSNumber(value: self.bitRate)]
+            var config: [String : Any] = [AVEncoderBitRateKey : NSNumber(integerLiteral: self.bitRate)]
             
             if let buffer = sampleBuffer {
                 if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(buffer) {
@@ -213,9 +213,9 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
             }
                 
             if let channels = self.channelsCount {
-                config[AVNumberOfChannelsKey] = channels == 0 ? NSNumber(value: NextLevelAudioConfigurationDefaultChannelsCount) : NSNumber(value: channels)
+                config[AVNumberOfChannelsKey] = channels == 0 ? NSNumber(integerLiteral: NextLevelAudioConfigurationDefaultChannelsCount) : NSNumber(integerLiteral: channels)
             } else {
-                config[AVNumberOfChannelsKey] = NSNumber(value: NextLevelAudioConfigurationDefaultChannelsCount)
+                config[AVNumberOfChannelsKey] = NSNumber(integerLiteral: NextLevelAudioConfigurationDefaultChannelsCount)
             }
             
             config[AVFormatIDKey] = NSNumber(value: self.format as UInt32)
