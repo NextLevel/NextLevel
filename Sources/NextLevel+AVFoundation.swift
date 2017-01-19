@@ -167,10 +167,11 @@ extension AVCaptureDevice {
     public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale, dimensions: CMVideoDimensions) -> Bool {
         let formatDimensions: CMVideoDimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
         if (formatDimensions.width == dimensions.width && formatDimensions.height == dimensions.height) {
-            let videoSupportedFrameRateRanges: [AVFrameRateRange] = format.videoSupportedFrameRateRanges as! [AVFrameRateRange]
-            for frameRateRange in videoSupportedFrameRateRanges {
-                if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
-                    return true
+            if let videoSupportedFrameRateRanges: [AVFrameRateRange] = format.videoSupportedFrameRateRanges as? [AVFrameRateRange] {
+                for frameRateRange in videoSupportedFrameRateRanges {
+                    if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
+                        return true
+                    }
                 }
             }
         }
