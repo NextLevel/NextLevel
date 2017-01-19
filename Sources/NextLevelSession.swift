@@ -646,7 +646,7 @@ extension NextLevelSession {
     ///   - preset: AVAssetExportSession preset name for export
     ///   - completionHandler: Handler for when the merging process completes
     public func mergeClips(usingPreset preset: String, completionHandler: @escaping NextLevelSessionMergeClipsCompletionHandler) {
-        self.executeClosureSyncOnSessionQueueIfNecessary {
+        self.executeClosureAsyncOnSessionQueueIfNecessary {
             let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
 
             let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory)
@@ -809,6 +809,10 @@ extension NextLevelSession {
         } else {
             DispatchQueue.main.async(execute: closure)
         }
+    }
+    
+    internal func executeClosureAsyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
+        self._sessionQueue.async(execute: closure)
     }
     
     internal func executeClosureSyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {

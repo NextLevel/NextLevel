@@ -2500,11 +2500,7 @@ extension NextLevel {
     }
 
     internal func executeClosureAsyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
-        if DispatchQueue.getSpecific(key: NextLevelCaptureSessionSpecificKey) == self._sessionQueue {
-            closure()
-        } else {
-            self._sessionQueue.async(execute: closure)
-        }
+        self._sessionQueue.async(execute: closure)
     }
     
     internal func executeClosureSyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
