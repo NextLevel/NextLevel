@@ -43,8 +43,9 @@ extension NextLevel {
     public class func metadataFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> [String : Any]? {
      
         if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate) {
-            let metadata = cfmetadata as! [String : Any]
-            return metadata
+            if let metadata = cfmetadata as? [String : Any] {
+                return metadata
+            }
         }
         return nil
         
