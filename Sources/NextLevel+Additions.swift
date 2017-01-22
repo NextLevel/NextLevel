@@ -36,10 +36,11 @@ extension NextLevel {
     /// - Returns: Maximum capable framerate within the desired format and minimum constraints.
     public class func maxFrameRate(forFormat format: AVCaptureDeviceFormat, minFrameRate: CMTimeScale) -> CMTimeScale {
         var lowestTimeScale: CMTimeScale = 0
-        let videoSupportedFrameRateRanges: [AVFrameRateRange] = format.videoSupportedFrameRateRanges as! [AVFrameRateRange]
-        for range in videoSupportedFrameRateRanges {
-            if range.minFrameDuration.timescale >= minFrameRate && (lowestTimeScale == 0 || range.minFrameDuration.timescale < lowestTimeScale) {
-                lowestTimeScale = range.minFrameDuration.timescale
+        if let videoSupportedFrameRateRanges = format.videoSupportedFrameRateRanges as? [AVFrameRateRange] {
+            for range in videoSupportedFrameRateRanges {
+                if range.minFrameDuration.timescale >= minFrameRate && (lowestTimeScale == 0 || range.minFrameDuration.timescale < lowestTimeScale) {
+                    lowestTimeScale = range.minFrameDuration.timescale
+                }
             }
         }
         return lowestTimeScale
