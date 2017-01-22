@@ -535,7 +535,8 @@ extension CameraViewController: NextLevelVideoDelegate {
                 if success1 == true {
                     if let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewControllerAlbumTitle) {
                         PHPhotoLibrary.shared().performChanges({
-                            if let photoImage = UIImage(data: photoData as! Data) {
+                            if let data = photoData as? Data,
+                                let photoImage = UIImage(data: data) {
                                 let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photoImage)
                                 let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
                                 let enumeration: NSArray = [assetChangeRequest.placeholderForCreatedAsset!]
@@ -591,7 +592,8 @@ extension CameraViewController: NextLevelPhotoDelegate {
                 if success1 == true {
                     if let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewControllerAlbumTitle) {
                         PHPhotoLibrary.shared().performChanges({
-                            if let photoImage = UIImage(data: photoData as! Data) {
+                            if let data = photoData as? Data,
+                               let photoImage = UIImage(data: data) {
                                 let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photoImage)
                                 let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
                                 let enumeration: NSArray = [assetChangeRequest.placeholderForCreatedAsset!]
