@@ -2400,8 +2400,9 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
                     metaDict.updateValue(value as AnyObject, forKey: key)
                 }
                 for (key, value) in tiffNSDict {
-                    let keyString = key as! String
-                    metaDict.updateValue(value as AnyObject, forKey: keyString)
+                    if let keyString = key as? String {
+                        metaDict.updateValue(value as AnyObject, forKey: keyString)
+                    }
                 }
                 CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, metaDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
             } else {
@@ -2447,8 +2448,9 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
                     metaDict.updateValue(value as AnyObject, forKey: key)
                 }
                 for (key, value) in tiffNSDict {
-                    let keyString = key as! String
-                    metaDict.updateValue(value as AnyObject, forKey: keyString)
+                    if let keyString = key as? String {
+                        metaDict.updateValue(value as AnyObject, forKey: keyString)
+                    }
                 }
                 CMSetAttachment(sampleBuffer, kCGImagePropertyTIFFDictionary, metaDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
             } else {
