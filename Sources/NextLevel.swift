@@ -1061,14 +1061,16 @@ extension NextLevel {
     }
     
     internal func removeInputs(session: AVCaptureSession) {
-        for input in session.inputs as! [AVCaptureDeviceInput] {
-            session.removeInput(input)
-            if input.device.hasMediaType(AVMediaTypeVideo) {
-                self.removeKeyValueObservers()
+        if let inputs = session.inputs as? [AVCaptureDeviceInput] {
+            for input in inputs {
+                session.removeInput(input)
+                if input.device.hasMediaType(AVMediaTypeVideo) {
+                    self.removeKeyValueObservers()
+                }
             }
+            self._videoInput = nil
+            self._audioInput = nil
         }
-        self._videoInput = nil
-        self._audioInput = nil
     }
 
     // outputs, only call within configuration lock
@@ -1796,8 +1798,9 @@ extension NextLevel {
     public var frameRate: CMTimeScale {
         get {
             var frameRate: CMTimeScale = 0
-            if let session = self._captureSession {
-                for input in session.inputs as! [AVCaptureDeviceInput] {
+            if let session = self._captureSession,
+                let inputs = session.inputs as? [AVCaptureDeviceInput] {
+                for input in inputs {
                     if input.device.hasMediaType(AVMediaTypeVideo) {
                         frameRate = input.device.activeVideoMaxFrameDuration.timescale
                         break
@@ -1841,10 +1844,10 @@ extension NextLevel {
     ///   - dimensions: Desired video dimensions.
     public func updateDeviceFormat(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions) {
         if let device: AVCaptureDevice = self._currentDevice,
-            let formats = device.formats {
+            let formats = device.formats as? [AVCaptureDeviceFormat] {
             
             var updatedFormat: AVCaptureDeviceFormat? = nil
-            for format in formats as! [AVCaptureDeviceFormat] {
+            for format in formats {
                 if AVCaptureDevice.isCaptureDeviceFormat(inRange: format, frameRate: frameRate, dimensions: dimensions) {
                     updatedFormat = format
                 }
@@ -2017,8 +2020,9 @@ extension NextLevel {
                         metaDict.updateValue(value as AnyObject, forKey: key)
                     }
                     for (key, value) in tiffNSDict {
-                        let keyString = key as! String
-                        metaDict.updateValue(value as AnyObject, forKey: keyString)
+                        if let keyString = key as? String {
+                            metaDict.updateValue(value as AnyObject, forKey: keyString)
+                        }
                     }
                     CMSetAttachment(videoFrame, kCGImagePropertyTIFFDictionary, metaDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
                 } else {
@@ -2670,29 +2674,32 @@ extension NextLevel {
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &NextLevelFocusObserverContext {
             
-            let isFocusing = (change?[.newKey] as! Bool)
-            if isFocusing {
-                self.focusStarted()
-            } else {
-                self.focusEnded()
+            if let isFocusing = (change?[.newKey] as? Bool) {
+                if isFocusing {
+                    self.focusStarted()
+                } else {
+                    self.focusEnded()
+                }
             }
             
         } else if context == &NextLevelExposureObserverContext {
             
-            let isChangingExposure = (change?[.newKey] as! Bool)
-            if isChangingExposure {
-                self.exposureStarted()
-            } else {
-                self.exposureEnded()
+            if let isChangingExposure = (change?[.newKey] as? Bool) {
+                if isChangingExposure {
+                    self.exposureStarted()
+                } else {
+                    self.exposureEnded()
+                }
             }
             
         } else if context == &NextLevelWhiteBalanceObserverContext {
             
-            let isChangingWhiteBalance = (change?[.newKey] as! Bool)
-            if isChangingWhiteBalance {
-                self.whiteBalanceStarted()
-            } else {
-                self.whiteBalanceEnded()
+            if let isChangingWhiteBalance = (change?[.newKey] as? Bool) {
+                if isChangingWhiteBalance {
+                    self.whiteBalanceStarted()
+                } else {
+                    self.whiteBalanceEnded()
+                }
             }
             
         } else if context == &NextLevelFlashAvailabilityObserverContext ||
