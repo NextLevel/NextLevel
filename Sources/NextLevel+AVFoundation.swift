@@ -36,10 +36,11 @@ extension AVCaptureDeviceInput {
     ///   - captureSession: Capture session for which to query
     /// - Returns: Desired capture device input for the associated media type, otherwise nil
     public class func deviceInput(withMediaType mediaType: String, captureSession: AVCaptureSession) -> AVCaptureDeviceInput? {
-        let inputs = captureSession.inputs as! [AVCaptureDeviceInput]
-        for deviceInput in inputs {
-            if deviceInput.device.hasMediaType(mediaType) {
-                return deviceInput
+        if let inputs = captureSession.inputs as? [AVCaptureDeviceInput] {
+            for deviceInput in inputs {
+                if deviceInput.device.hasMediaType(mediaType) {
+                    return deviceInput
+                }
             }
         }
         return nil
