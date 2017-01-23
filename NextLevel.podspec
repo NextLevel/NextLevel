@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'NextLevel'
-  s.version = '0.2.3'
+  s.version = '0.3.0'
   s.license = 'MIT'
   s.summary = 'Rad Media Capture in Swift'
   s.homepage = 'https://github.com/nextlevel/NextLevel'
