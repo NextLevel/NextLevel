@@ -52,6 +52,9 @@
               <li class="nav-group-task">
                 <a href="../Classes/NextLevelVideoConfiguration.html">NextLevelVideoConfiguration</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Classes/NextLevelVideoConfiguration/OutputAspectRatio.html">– OutputAspectRatio</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -131,7 +134,13 @@
                 <a href="../Extensions/AVCaptureDevice.html">AVCaptureDevice</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Extensions/AVCaptureDeviceFormat.html">AVCaptureDeviceFormat</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Extensions/AVCaptureDeviceInput.html">AVCaptureDeviceInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/CMSampleBuffer.html">CMSampleBuffer</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Extensions/Data.html">Data</a>
@@ -772,83 +781,6 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFC9NextLevel9NextLevel12maxFrameRateFT9forFormatCSo21AVCaptureDeviceFormat12minFrameRateVs5Int32_S2_"></a>
-                    <a name="//apple_ref/swift/Method/maxFrameRate(forFormat:minFrameRate:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFC9NextLevel9NextLevel12maxFrameRateFT9forFormatCSo21AVCaptureDeviceFormat12minFrameRateVs5Int32_S2_">maxFrameRate(forFormat:minFrameRate:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Returns the maximum capable framerate for the desired capture format and minimum, otherwise zero.</p>
-
-<p><li>Parameters:</p>
-
-<p><ul>
-<li>format: Capture format to evaluate for a specific framerate.</li>
-<li>minFrameRate: Lower bound time scale or minimum desired framerate.</li>
-</ul></li>
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    Maximum capable framerate within the desired format and minimum constraints.</p>
-
-<p></div></p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">maxFrameRate</span><span class="p">(</span><span class="n">forFormat</span> <span class="nv">format</span><span class="p">:</span> <span class="kt">AVCaptureDeviceFormat</span><span class="p">,</span> <span class="nv">minFrameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CMTimeScale</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>format</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Capture format to evaluate for a specific framerate.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>minFrameRate</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Lower bound time scale or minimum desired framerate.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Maximum capable framerate within the desired format and minimum constraints.</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:ZFC9NextLevel9NextLevel18sampleBufferOffsetFT16withSampleBufferCSo14CMSampleBuffer10timeOffsetVSC6CMTime8durationGSqS2___GSqS1__"></a>
                     <a name="//apple_ref/swift/Method/sampleBufferOffset(withSampleBuffer:timeOffset:duration:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:ZFC9NextLevel9NextLevel18sampleBufferOffsetFT16withSampleBufferCSo14CMSampleBuffer10timeOffsetVSC6CMTime8durationGSqS2___GSqS1__">sampleBufferOffset(withSampleBuffer:timeOffset:duration:)</a>
@@ -940,70 +872,6 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFC9NextLevel9NextLevel11pixelBufferFT11withCGImageCSo7CGImage15pixelFormatTypeVs6UInt32_GSqCSo8CVBuffer_"></a>
-                    <a name="//apple_ref/swift/Method/pixelBuffer(withCGImage:pixelFormatType:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFC9NextLevel9NextLevel11pixelBufferFT11withCGImageCSo7CGImage15pixelFormatTypeVs6UInt32_GSqCSo8CVBuffer_">pixelBuffer(withCGImage:pixelFormatType:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Converts CGImage to a CVPixelBuffer.</p>
-
-<div class="aside aside-parameter">
-    <p class="aside-title">Parameter</p>
-    Parameter cgImage: CGImage as input
-
-</div>
-
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    Resulting CVPixelBuffer from the CGImage, otherwise nil
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">pixelBuffer</span><span class="p">(</span><span class="n">withCGImage</span> <span class="nv">cgImage</span><span class="p">:</span> <span class="kt">CGImage</span><span class="p">,</span> <span class="nv">pixelFormatType</span><span class="p">:</span> <span class="kt">OSType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CVPixelBuffer</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>cgImage</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>CGImage as input</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Resulting CVPixelBuffer from the CGImage, otherwise nil</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:ZFC9NextLevel9NextLevel28availableStorageSpaceInBytesFT_Vs6UInt64"></a>
                     <a name="//apple_ref/swift/Method/availableStorageSpaceInBytes()" class="dashAnchor"></a>
                     <a class="token" href="#/s:ZFC9NextLevel9NextLevel28availableStorageSpaceInBytesFT_Vs6UInt64">availableStorageSpaceInBytes()</a>
@@ -1034,75 +902,6 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Number of available bytes in storage.</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFC9NextLevel9NextLevel24metadataFromSampleBufferFT12sampleBufferCSo14CMSampleBuffer_GSqGVs10DictionarySSP___"></a>
-                    <a name="//apple_ref/swift/Method/metadataFromSampleBuffer(sampleBuffer:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFC9NextLevel9NextLevel24metadataFromSampleBufferFT12sampleBufferCSo14CMSampleBuffer_GSqGVs10DictionarySSP___">metadataFromSampleBuffer(sampleBuffer:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Extracts the metadata dictionary from a <code>CMSampleBuffer</code>.
- (ie EXIF: Aperture, Brightness, Exposure, FocalLength, etc)</p>
-
-<div class="aside aside-parameter">
-    <p class="aside-title">Parameter</p>
-    Parameter sampleBuffer: sample buffer to be processed
-
-</div>
-
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    metadata dictionary from the provided sample buffer
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">metadataFromSampleBuffer</span><span class="p">(</span><span class="nv">sampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>sampleBuffer</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>sample buffer to be processed</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>metadata dictionary from the provided sample buffer</p>
 
                       </div>
                     </section>
@@ -2633,7 +2432,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2016-12-15)</p>
+          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-01-22)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

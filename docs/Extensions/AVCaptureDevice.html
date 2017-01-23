@@ -52,6 +52,9 @@
               <li class="nav-group-task">
                 <a href="../Classes/NextLevelVideoConfiguration.html">NextLevelVideoConfiguration</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Classes/NextLevelVideoConfiguration/OutputAspectRatio.html">– OutputAspectRatio</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -131,7 +134,13 @@
                 <a href="../Extensions/AVCaptureDevice.html">AVCaptureDevice</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Extensions/AVCaptureDeviceFormat.html">AVCaptureDeviceFormat</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Extensions/AVCaptureDeviceInput.html">AVCaptureDeviceInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/CMSampleBuffer.html">CMSampleBuffer</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Extensions/Data.html">Data</a>
@@ -530,189 +539,10 @@
                 </li>
               </ul>
             </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/device%20format"></a>
-                <a name="//apple_ref/swift/Section/device format" class="dashAnchor"></a>
-                <a href="#/device%20format">
-                  <h3 class="section-name">device format</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFE9NextLevelCSo15AVCaptureDevice21isCaptureDeviceFormatFT7inRangeCSo21AVCaptureDeviceFormat9frameRateVs5Int32_Sb"></a>
-                    <a name="//apple_ref/swift/Method/isCaptureDeviceFormat(inRange:frameRate:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFE9NextLevelCSo15AVCaptureDevice21isCaptureDeviceFormatFT7inRangeCSo21AVCaptureDeviceFormat9frameRateVs5Int32_Sb">isCaptureDeviceFormat(inRange:frameRate:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Checks if the specified capture device format supports a desired framerate.</p>
-
-<p><li>Parameters:</p>
-
-<p><ul>
-<li>format: Capture device format to evaluate</li>
-<li>frameRate: Desired frame rate</li>
-</ul></li>
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    <code>true</code> if the capture device format supports the given criteria, otherwise false</p>
-
-<p></div></p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">isCaptureDeviceFormat</span><span class="p">(</span><span class="n">inRange</span> <span class="nv">format</span><span class="p">:</span> <span class="kt">AVCaptureDeviceFormat</span><span class="p">,</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>format</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Capture device format to evaluate</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>frameRate</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Desired frame rate</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p><code>true</code> if the capture device format supports the given criteria, otherwise false</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFE9NextLevelCSo15AVCaptureDevice21isCaptureDeviceFormatFT7inRangeCSo21AVCaptureDeviceFormat9frameRateVs5Int3210dimensionsVSC17CMVideoDimensions_Sb"></a>
-                    <a name="//apple_ref/swift/Method/isCaptureDeviceFormat(inRange:frameRate:dimensions:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFE9NextLevelCSo15AVCaptureDevice21isCaptureDeviceFormatFT7inRangeCSo21AVCaptureDeviceFormat9frameRateVs5Int3210dimensionsVSC17CMVideoDimensions_Sb">isCaptureDeviceFormat(inRange:frameRate:dimensions:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Checks if the specified capture device format supports a desired framerate and dimensions.</p>
-
-<p><li>Parameters:</p>
-
-<p><ul>
-<li>format: Capture device format to evaluate</li>
-<li>frameRate: Desired frame rate</li>
-<li>dimensions: Desired video dimensions</li>
-</ul></li>
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    <code>true</code> if the capture device format supports the given criteria, otherwise false</p>
-
-<p></div></p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">isCaptureDeviceFormat</span><span class="p">(</span><span class="n">inRange</span> <span class="nv">format</span><span class="p">:</span> <span class="kt">AVCaptureDeviceFormat</span><span class="p">,</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">,</span> <span class="nv">dimensions</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>format</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Capture device format to evaluate</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>frameRate</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Desired frame rate</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>dimensions</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Desired video dimensions</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p><code>true</code> if the capture device format supports the given criteria, otherwise false</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2016-12-15)</p>
+          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-01-22)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

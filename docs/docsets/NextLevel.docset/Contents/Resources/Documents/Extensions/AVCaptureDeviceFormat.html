@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>NextLevelFlashAndTorchDelegate Protocol Reference</title>
+    <title>AVCaptureDeviceFormat Extension Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/NextLevelFlashAndTorchDelegate" class="dashAnchor"></a>
-    <a title="NextLevelFlashAndTorchDelegate Protocol Reference"></a>
+    <a name="//apple_ref/swift/Extension/AVCaptureDeviceFormat" class="dashAnchor"></a>
+    <a title="AVCaptureDeviceFormat Extension Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">NextLevel Docs</a> (62% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">NextLevel Reference</a>
         <img id="carat" src="../img/carat.png" />
-        NextLevelFlashAndTorchDelegate Protocol Reference
+        AVCaptureDeviceFormat Extension Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -172,15 +172,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>NextLevelFlashAndTorchDelegate</h1>
+            <h1>AVCaptureDeviceFormat</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelFlashAndTorchDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">class</span> <span class="kt">AVCaptureDeviceFormat</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
 
                 </div>
               </div>
-            <p>Flash and torch delegate, provides updates on active flash and torch related changes.</p>
-
+            
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -188,9 +187,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP9NextLevel30NextLevelFlashAndTorchDelegate27nextLevelDidChangeFlashModeFCS_9NextLevelT_"></a>
-                    <a name="//apple_ref/swift/Method/nextLevelDidChangeFlashMode(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP9NextLevel30NextLevelFlashAndTorchDelegate27nextLevelDidChangeFlashModeFCS_9NextLevelT_">nextLevelDidChangeFlashMode(_:)</a>
+                    <a name="/s:ZFE9NextLevelCSo21AVCaptureDeviceFormat12maxFrameRateFT9forFormatS0_12minFrameRateVs5Int32_S1_"></a>
+                    <a name="//apple_ref/swift/Method/maxFrameRate(forFormat:minFrameRate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFE9NextLevelCSo21AVCaptureDeviceFormat12maxFrameRateFT9forFormatS0_12minFrameRateVs5Int32_S1_">maxFrameRate(forFormat:minFrameRate:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -198,16 +197,66 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Returns the maximum capable framerate for the desired capture format and minimum, otherwise zero.</p>
+
+<p><li>Parameters:</p>
+
+<p><ul>
+<li>format: Capture format to evaluate for a specific framerate.</li>
+<li>minFrameRate: Lower bound time scale or minimum desired framerate.</li>
+</ul></li>
+<div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    Maximum capable framerate within the desired format and minimum constraints.</p>
+
+<p></div></p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelFlashAndTorchDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">maxFrameRate</span><span class="p">(</span><span class="n">forFormat</span> <span class="nv">format</span><span class="p">:</span> <span class="kt">AVCaptureDeviceFormat</span><span class="p">,</span> <span class="nv">minFrameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CMTimeScale</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>format</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Capture format to evaluate for a specific framerate.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>minFrameRate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Lower bound time scale or minimum desired framerate.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Maximum capable framerate within the desired format and minimum constraints.</p>
+
                       </div>
                     </section>
                   </div>
@@ -215,9 +264,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP9NextLevel30NextLevelFlashAndTorchDelegate27nextLevelDidChangeTorchModeFCS_9NextLevelT_"></a>
-                    <a name="//apple_ref/swift/Method/nextLevelDidChangeTorchMode(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP9NextLevel30NextLevelFlashAndTorchDelegate27nextLevelDidChangeTorchModeFCS_9NextLevelT_">nextLevelDidChangeTorchMode(_:)</a>
+                    <a name="/s:FE9NextLevelCSo21AVCaptureDeviceFormat11isSupportedFT13withFrameRateVs5Int32_Sb"></a>
+                    <a name="//apple_ref/swift/Method/isSupported(withFrameRate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE9NextLevelCSo21AVCaptureDeviceFormat11isSupportedFT13withFrameRateVs5Int32_Sb">isSupported(withFrameRate:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -225,16 +274,52 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Checks if the specified capture device format supports a desired framerate.</p>
+
+<p><li>Parameters:</p>
+
+<p><ul>
+<li>frameRate: Desired frame rate</li>
+</ul></li>
+<div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    <code>true</code> if the capture device format supports the given criteria, otherwise false</p>
+
+<p></div></p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelFlashAndTorchDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">isSupported</span><span class="p">(</span><span class="n">withFrameRate</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>frameRate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Desired frame rate</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the capture device format supports the given criteria, otherwise false</p>
+
                       </div>
                     </section>
                   </div>
@@ -242,9 +327,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP9NextLevel30NextLevelFlashAndTorchDelegate27nextLevelFlashActiveChangedFCS_9NextLevelT_"></a>
-                    <a name="//apple_ref/swift/Method/nextLevelFlashActiveChanged(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP9NextLevel30NextLevelFlashAndTorchDelegate27nextLevelFlashActiveChangedFCS_9NextLevelT_">nextLevelFlashActiveChanged(_:)</a>
+                    <a name="/s:FE9NextLevelCSo21AVCaptureDeviceFormat11isSupportedFT13withFrameRateVs5Int3210dimensionsVSC17CMVideoDimensions_Sb"></a>
+                    <a name="//apple_ref/swift/Method/isSupported(withFrameRate:dimensions:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE9NextLevelCSo21AVCaptureDeviceFormat11isSupportedFT13withFrameRateVs5Int3210dimensionsVSC17CMVideoDimensions_Sb">isSupported(withFrameRate:dimensions:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -252,70 +337,66 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Checks if the specified capture device format supports a desired framerate and dimensions.</p>
+
+<p><li>Parameters:</p>
+
+<p><ul>
+<li>frameRate: Desired frame rate</li>
+<li>dimensions: Desired video dimensions</li>
+</ul></li>
+<div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    <code>true</code> if the capture device format supports the given criteria, otherwise false</p>
+
+<p></div></p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelFlashAndTorchDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">isSupported</span><span class="p">(</span><span class="n">withFrameRate</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">,</span> <span class="nv">dimensions</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP9NextLevel30NextLevelFlashAndTorchDelegate27nextLevelTorchActiveChangedFCS_9NextLevelT_"></a>
-                    <a name="//apple_ref/swift/Method/nextLevelTorchActiveChanged(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP9NextLevel30NextLevelFlashAndTorchDelegate27nextLevelTorchActiveChangedFCS_9NextLevelT_">nextLevelTorchActiveChanged(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>frameRate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Desired frame rate</p>
 
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dimensions</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Desired video dimensions</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelFlashAndTorchDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the capture device format supports the given criteria, otherwise false</p>
 
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP9NextLevel30NextLevelFlashAndTorchDelegate41nextLevelFlashAndTorchAvailabilityChangedFCS_9NextLevelT_"></a>
-                    <a name="//apple_ref/swift/Method/nextLevelFlashAndTorchAvailabilityChanged(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP9NextLevel30NextLevelFlashAndTorchDelegate41nextLevelFlashAndTorchAvailabilityChangedFCS_9NextLevelT_">nextLevelFlashAndTorchAvailabilityChanged(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelFlashAndTorchDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
-
-                        </div>
                       </div>
                     </section>
                   </div>
