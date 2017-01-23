@@ -1812,7 +1812,7 @@ extension NextLevel {
         set {
             if let device: AVCaptureDevice = self._currentDevice {
                 guard
-                    AVCaptureDevice.isCaptureDeviceFormat(inRange: device.activeFormat, frameRate: newValue)
+                    device.activeFormat.isSupported(withFrameRate: newValue)
                 else {
                     print("unsupported frame rate for current device format config, \(newValue) fps")
                     return
@@ -1847,9 +1847,28 @@ extension NextLevel {
             let formats = device.formats as? [AVCaptureDeviceFormat] {
             
             var updatedFormat: AVCaptureDeviceFormat? = nil
-            for format in formats {
-                if AVCaptureDevice.isCaptureDeviceFormat(inRange: format, frameRate: frameRate, dimensions: dimensions) {
-                    updatedFormat = format
+            
+            for currentFormat in formats {
+                if currentFormat.isSupported(withFrameRate: frameRate, dimensions: dimensions) {
+                    if updatedFormat == nil {
+                        updatedFormat = currentFormat
+                    } else if let updated = updatedFormat {
+                        let currentDimensions = CMVideoFormatDescriptionGetDimensions(currentFormat.formatDescription)
+                        let updatedDimensions = CMVideoFormatDescriptionGetDimensions(updated.formatDescription)
+                        
+                        if currentDimensions.width < updatedDimensions.width && currentDimensions.height < updatedDimensions.height {
+                            updatedFormat = currentFormat
+                        } else if currentDimensions.width == updatedDimensions.width && currentDimensions.height == updatedDimensions.height {
+                            
+                            let currentFrameRate = AVCaptureDeviceFormat.maxFrameRate(forFormat: currentFormat, minFrameRate: frameRate)
+                            let updatedFrameRate = AVCaptureDeviceFormat.maxFrameRate(forFormat: updated, minFrameRate: frameRate)
+                            
+                            if updatedFrameRate > currentFrameRate {
+                                updatedFormat = currentFormat
+                            }
+                        }
+                        
+                    }
                 }
             }
             

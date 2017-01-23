@@ -146,39 +146,6 @@ extension AVCaptureDevice {
         return AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio)
     }
     
-    // MARK: device format
-    
-    /// Checks if the specified capture device format supports a desired framerate.
-    ///
-    /// - Parameters:
-    ///   - format: Capture device format to evaluate
-    ///   - frameRate: Desired frame rate
-    /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
-    public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale) -> Bool {
-        return AVCaptureDevice.isCaptureDeviceFormat(inRange: format, frameRate: frameRate, dimensions: CMVideoDimensions(width: 0, height: 0))
-    }
-    
-    /// Checks if the specified capture device format supports a desired framerate and dimensions.
-    ///
-    /// - Parameters:
-    ///   - format: Capture device format to evaluate
-    ///   - frameRate: Desired frame rate
-    ///   - dimensions: Desired video dimensions
-    /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
-    public class func isCaptureDeviceFormat(inRange format: AVCaptureDeviceFormat, frameRate: CMTimeScale, dimensions: CMVideoDimensions) -> Bool {
-        let formatDimensions: CMVideoDimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
-        if (formatDimensions.width == dimensions.width && formatDimensions.height == dimensions.height) {
-            if let videoSupportedFrameRateRanges: [AVFrameRateRange] = format.videoSupportedFrameRateRanges as? [AVFrameRateRange] {
-                for frameRateRange in videoSupportedFrameRateRanges {
-                    if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
-                        return true
-                    }
-                }
-            }
-        }
-        return false
-    }
-    
     // MARK: NextLevel types
     
     internal func torchModeNextLevelType() -> NextLevelTorchMode {
@@ -230,6 +197,57 @@ extension AVCaptureDevice {
             break
         }
         return nextLevelMode
+    }
+    
+}
+
+extension AVCaptureDeviceFormat {
+    
+    /// Returns the maximum capable framerate for the desired capture format and minimum, otherwise zero.
+    ///
+    /// - Parameters:
+    ///   - format: Capture format to evaluate for a specific framerate.
+    ///   - minFrameRate: Lower bound time scale or minimum desired framerate.
+    /// - Returns: Maximum capable framerate within the desired format and minimum constraints.
+    public class func maxFrameRate(forFormat format: AVCaptureDeviceFormat, minFrameRate: CMTimeScale) -> CMTimeScale {
+        var lowestTimeScale: CMTimeScale = 0
+        if let videoSupportedFrameRateRanges = format.videoSupportedFrameRateRanges as? [AVFrameRateRange] {
+            for range in videoSupportedFrameRateRanges {
+                if range.minFrameDuration.timescale >= minFrameRate && (lowestTimeScale == 0 || range.minFrameDuration.timescale < lowestTimeScale) {
+                    lowestTimeScale = range.minFrameDuration.timescale
+                }
+            }
+        }
+        return lowestTimeScale
+    }
+    
+    /// Checks if the specified capture device format supports a desired framerate.
+    ///
+    /// - Parameters:
+    ///   - frameRate: Desired frame rate
+    /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
+    public func isSupported(withFrameRate frameRate: CMTimeScale) -> Bool {
+        return self.isSupported(withFrameRate: frameRate, dimensions: CMVideoDimensions(width: 0, height: 0))
+    }
+    
+    /// Checks if the specified capture device format supports a desired framerate and dimensions.
+    ///
+    /// - Parameters:
+    ///   - frameRate: Desired frame rate
+    ///   - dimensions: Desired video dimensions
+    /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
+    public func isSupported(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions) -> Bool {
+        let formatDimensions = CMVideoFormatDescriptionGetDimensions(self.formatDescription)
+        if (formatDimensions.width >= dimensions.width && formatDimensions.height >= dimensions.height) {
+            if let videoSupportedFrameRateRanges: [AVFrameRateRange] = self.videoSupportedFrameRateRanges as? [AVFrameRateRange] {
+                for frameRateRange in videoSupportedFrameRateRanges {
+                    if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
     }
     
 }

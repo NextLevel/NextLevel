@@ -28,24 +28,6 @@ import AVFoundation
 
 extension NextLevel {
     
-    /// Returns the maximum capable framerate for the desired capture format and minimum, otherwise zero.
-    ///
-    /// - Parameters:
-    ///   - format: Capture format to evaluate for a specific framerate.
-    ///   - minFrameRate: Lower bound time scale or minimum desired framerate.
-    /// - Returns: Maximum capable framerate within the desired format and minimum constraints.
-    public class func maxFrameRate(forFormat format: AVCaptureDeviceFormat, minFrameRate: CMTimeScale) -> CMTimeScale {
-        var lowestTimeScale: CMTimeScale = 0
-        if let videoSupportedFrameRateRanges = format.videoSupportedFrameRateRanges as? [AVFrameRateRange] {
-            for range in videoSupportedFrameRateRanges {
-                if range.minFrameDuration.timescale >= minFrameRate && (lowestTimeScale == 0 || range.minFrameDuration.timescale < lowestTimeScale) {
-                    lowestTimeScale = range.minFrameDuration.timescale
-                }
-            }
-        }
-        return lowestTimeScale
-    }
-    
     /// Creates an offset `CMSampleBuffer` for the given time offset and duration.
     ///
     /// - Parameters:
