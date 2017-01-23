@@ -64,11 +64,37 @@ let NextLevelVideoConfigurationDefaultBitRate: Int = 2000000
 /// NextLevelVideoConfiguration, video capture configuration object
 public class NextLevelVideoConfiguration: NextLevelConfiguration {
 
+    /// Output aspect ratio, specifies dimensions for video output automatically
+    public enum OutputAspectRatio: Int, CustomStringConvertible {
+        case active      // active preset or specified dimensions (default)
+        case standard    // 4:3
+        case square      // 1:1
+        case widescreen  // 16:9
+        
+        public var description: String {
+            get {
+                switch self {
+                case .active:
+                    return "Active"
+                case .standard:
+                    return "Standard"
+                case .square:
+                    return "Square"
+                case .widescreen:
+                    return "Widescreen"
+                }
+            }
+        }
+    }
+    
     /// Average video bit rate (bits per second), AV dictionary key AVVideoAverageBitRateKey
     public var bitRate: Int
 
     /// Dimensions for video output, AV dictionary keys AVVideoWidthKey, AVVideoHeightKey
     public var dimensions: CGSize?
+
+    /// Output aspect ratio automatically sizes output dimensions, `active` indicates NextLevelVideoConfiguration.preset or NextLevelVideoConfiguration.dimensions
+    public var aspectRatio: OutputAspectRatio
 
     /// Video output transform for display
     public var transform: CGAffineTransform
@@ -95,6 +121,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     
     override init() {
         self.bitRate = NextLevelVideoConfigurationDefaultBitRate
+        self.aspectRatio = .active
         self.transform = CGAffineTransform.identity
         self.codec = AVVideoCodecH264
         self.scalingMode = AVVideoScalingModeResizeAspectFill
@@ -116,11 +143,29 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             if let dimensions = self.dimensions {
                 config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(dimensions.width))
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(dimensions.height))
-            } else if let buffer = sampleBuffer {
-                if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(buffer) {
-                    let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
+            } else if let buffer = sampleBuffer,
+                      let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(buffer) {
+                let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
+                switch self.aspectRatio {
+                case .standard:
+                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
+                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * 3 / 4))
+                    break
+                case .widescreen:
+                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
+                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * 9 / 16))
+                    break
+                case .square:
+                    let min = Swift.min(videoDimensions.width, videoDimensions.height)
+                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(min))
+                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(min))
+                    break
+                case .active:
+                    fallthrough
+                default:
                     config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
                     config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.height))
+                    break
                 }
             }
 
