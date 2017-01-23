@@ -1407,7 +1407,6 @@ extension NextLevel {
                 }
                 
                 if device.isWhiteBalanceModeSupported(whiteBalanceMode) {
-                    device.focusPointOfInterest = adjustedPoint
                     device.whiteBalanceMode = whiteBalanceMode
                 }
                 
