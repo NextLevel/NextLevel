@@ -170,7 +170,7 @@ class CameraViewController: UIViewController {
         nextLevel.videoConfiguration.scalingMode = AVVideoScalingModeResizeAspectFill
         
         // audio configuration
-        nextLevel.audioConfiguration.bitRate = 128000
+        nextLevel.audioConfiguration.bitRate = 96000
     }
 
     override func viewWillAppear(_ animated: Bool) {
