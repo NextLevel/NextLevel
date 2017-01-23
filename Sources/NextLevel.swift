@@ -2030,7 +2030,7 @@ extension NextLevel {
                 }
                 
                 // add exif metadata
-                if let metadata = NextLevel.metadataFromSampleBuffer(sampleBuffer: videoFrame) {
+                if let metadata = videoFrame.metadata() {
                     if photoDict == nil {
                         photoDict = [:]
                     }
@@ -2414,7 +2414,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             }
             
             // add exif metadata
-            if let metadata = NextLevel.metadataFromSampleBuffer(sampleBuffer: sampleBuffer) {
+            if let metadata = sampleBuffer.metadata() {
                 photoDict[NextLevelPhotoMetadataKey] = metadata
             }
             
@@ -2462,7 +2462,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
             }
             
             // add exif metadata
-            if let metadata = NextLevel.metadataFromSampleBuffer(sampleBuffer: sampleBuffer) {
+            if let metadata = sampleBuffer.metadata() {
                 photoDict[NextLevelPhotoMetadataKey] = metadata
             }
             

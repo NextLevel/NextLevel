@@ -26,23 +26,19 @@
 import UIKit
 import Foundation
 import AVFoundation
+import CoreMedia
 import ImageIO
 
-// MARK: - NextLevel extensions
-
-fileprivate let NextLevelMetadataTitle = "NextLevel"
-fileprivate let NextLevelMetadataArtist = "http://nextlevel.engineering/"
-
-extension NextLevel {
+extension CMSampleBuffer {
     
     /// Extracts the metadata dictionary from a `CMSampleBuffer`.
     ///  (ie EXIF: Aperture, Brightness, Exposure, FocalLength, etc)
     ///
     /// - Parameter sampleBuffer: sample buffer to be processed
     /// - Returns: metadata dictionary from the provided sample buffer
-    public class func metadataFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> [String : Any]? {
-     
-        if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate) {
+    public func metadata() -> [String : Any]? {
+        
+        if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, self, kCMAttachmentMode_ShouldPropagate) {
             if let metadata = cfmetadata as? [String : Any] {
                 return metadata
             }
@@ -50,6 +46,13 @@ extension NextLevel {
         return nil
         
     }
+    
+}
+
+fileprivate let NextLevelMetadataTitle = "NextLevel"
+fileprivate let NextLevelMetadataArtist = "http://nextlevel.engineering/"
+
+extension NextLevel {
     
     internal class func tiffMetadata() -> [String: Any] {
         return [ kCGImagePropertyTIFFSoftware as String : NextLevelMetadataTitle,
