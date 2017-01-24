@@ -177,10 +177,10 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             
             var compressionDict: [String : Any] = [:]
             compressionDict[AVVideoAverageBitRateKey] = NSNumber(integerLiteral: self.bitRate)
-            compressionDict[AVVideoAllowFrameReorderingKey] = NSNumber(value: false)
+            compressionDict[AVVideoAllowFrameReorderingKey] = NSNumber(booleanLiteral: false)
             compressionDict[AVVideoExpectedSourceFrameRateKey] = NSNumber(integerLiteral: 30)
             if let profileLevel = self.profileLevel {
-                compressionDict[AVVideoProfileLevelKey] = (profileLevel as NSString)
+                compressionDict[AVVideoProfileLevelKey] = profileLevel
             }
             if let maxKeyFrameInterval = self.maxKeyFrameInterval {
                 compressionDict[AVVideoMaxKeyFrameIntervalKey] = NSNumber(integerLiteral: maxKeyFrameInterval)
