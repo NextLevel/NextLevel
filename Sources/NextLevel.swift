@@ -29,6 +29,7 @@ import AVFoundation
 import CoreImage
 import CoreVideo
 import ImageIO
+import Metal
 
 // MARK: - types
 
