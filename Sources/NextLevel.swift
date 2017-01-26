@@ -2209,23 +2209,21 @@ extension NextLevel {
     
     internal func uiimageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
         var sampleBufferImage: UIImage? = nil
-        
         if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-            
-            // TODO better expose this or a sharegroup for custom context rendering support
             if self.cicontext == nil {
-                self.cicontext = CIContext(eaglContext: EAGLContext(api: .openGLES2))
+                if let device = MTLCreateSystemDefaultDevice() {
+                    self.cicontext = CIContext(mtlDevice: device)
+                } else {
+                    self.cicontext = CIContext(eaglContext: EAGLContext(api: .openGLES2))
+                }
             }
-            
             if let context = self.cicontext {
                 let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
                 if let cgimage = context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
                     sampleBufferImage = UIImage(cgImage: cgimage)
                 }
             }
-            
         }
-        
         return sampleBufferImage
     }
     
