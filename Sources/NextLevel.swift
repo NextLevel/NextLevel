@@ -665,9 +665,9 @@ public class NextLevel: NSObject {
     internal var _recordingSession: NextLevelSession?
     internal var _lastVideoFrameTimeInterval: TimeInterval
     
-    internal var videoCustomContextRenderingEnabled: Bool
-    internal var sessionVideoCustomContextImageBuffer: CVPixelBuffer?
-    internal var cicontext: CIContext?
+    internal var _videoCustomContextRenderingEnabled: Bool
+    internal var _sessionVideoCustomContextImageBuffer: CVPixelBuffer?
+    internal var _ciContext: CIContext?
     
     // MARK: - singleton
     
@@ -692,7 +692,7 @@ public class NextLevel: NSObject {
         
         self.photoStabilizationEnabled = false
         self.videoStabilizationMode = .auto
-        self.videoCustomContextRenderingEnabled = false
+        self._videoCustomContextRenderingEnabled = false
         
         self._recording = false
         self._lastVideoFrameTimeInterval = 0
@@ -731,7 +731,7 @@ public class NextLevel: NSObject {
         self.previewLayer.session = nil
             
         self._currentDevice = nil
-        self.cicontext = nil
+        self._ciContext = nil
         
         self._recordingSession = nil
         self._captureSession = nil
@@ -2089,12 +2089,12 @@ extension NextLevel {
     /// videoDelegate, func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue)
     public var isVideoCustomContextRenderingEnabled: Bool {
         get {
-            return self.videoCustomContextRenderingEnabled
+            return self._videoCustomContextRenderingEnabled
         }
         set {
             self.executeClosureSyncOnSessionQueueIfNecessary {
-                self.videoCustomContextRenderingEnabled = newValue
-                self.sessionVideoCustomContextImageBuffer = nil
+                self._videoCustomContextRenderingEnabled = newValue
+                self._sessionVideoCustomContextImageBuffer = nil
             }
         }
     }
@@ -2103,11 +2103,11 @@ extension NextLevel {
     /// The property is only observed when 'isVideoCustomContextRenderingEnabled' is enabled. Setting it to nil avoids modification for a frame.
     public var videoCustomContextImageBuffer: CVPixelBuffer? {
         get {
-            return self.sessionVideoCustomContextImageBuffer
+            return self._sessionVideoCustomContextImageBuffer
         }
         set {
             self.executeClosureSyncOnSessionQueueIfNecessary {
-                self.sessionVideoCustomContextImageBuffer = newValue
+                self._sessionVideoCustomContextImageBuffer = newValue
             }
         }
     }
@@ -2210,14 +2210,14 @@ extension NextLevel {
     internal func uiimageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
         var sampleBufferImage: UIImage? = nil
         if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-            if self.cicontext == nil {
+            if self._ciContext == nil {
                 if let device = MTLCreateSystemDefaultDevice() {
-                    self.cicontext = CIContext(mtlDevice: device)
+                    self._ciContext = CIContext(mtlDevice: device)
                 } else {
-                    self.cicontext = CIContext(eaglContext: EAGLContext(api: .openGLES2))
+                    self._ciContext = CIContext(eaglContext: EAGLContext(api: .openGLES2))
                 }
             }
-            if let context = self.cicontext {
+            if let context = self._ciContext {
                 let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
                 if let cgimage = context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
                     sampleBufferImage = UIImage(cgImage: cgimage)
@@ -2260,13 +2260,13 @@ extension NextLevel {
                         // only called from captureQueue
                         self.videoDelegate?.nextLevel(self, renderToCustomContextWithImageBuffer: bufferRef, onQueue: self._sessionQueue)
                     } else {
-                        self.sessionVideoCustomContextImageBuffer = nil
+                        self._sessionVideoCustomContextImageBuffer = nil
                     }
                 }
                 
                 // when clients modify a frame using their rendering context, the resulting CVPixelBuffer is then passed in here with the original sampleBuffer for recording
                 let minFrameDuration = device.activeVideoMinFrameDuration
-                session.appendVideo(withSampleBuffer: sampleBuffer, imageBuffer: self.sessionVideoCustomContextImageBuffer, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
+                session.appendVideo(withSampleBuffer: sampleBuffer, imageBuffer: self._sessionVideoCustomContextImageBuffer, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
                     // cleanup client rendering context
                     if self.isVideoCustomContextRenderingEnabled {
                         if let bufferRef = imageBuffer {
