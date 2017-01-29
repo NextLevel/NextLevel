@@ -1958,7 +1958,7 @@ extension NextLevel {
         if let videoOutput = self._videoOutput {
             if let videoConnection = videoOutput.connection(withMediaType: AVMediaTypeVideo) {
                 if videoConnection.isVideoStabilizationSupported {
-                    videoConnection.preferredVideoStabilizationMode = .standard
+                    videoConnection.preferredVideoStabilizationMode = self.videoStabilizationMode.avfoundationType
                 }
             }
         }
