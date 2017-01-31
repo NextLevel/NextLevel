@@ -47,6 +47,29 @@ extension CMSampleBuffer {
         
     }
     
+    /// Appends the provided metadata dictionary key/value pairs.
+    ///
+    /// - Parameter metadataAdditions: Metadata key/value pairs to be appended.
+    public func append(metadataAdditions: [String: Any]) {
+        
+        // append tiff metadata to buffer for proagation
+        if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, kCGImagePropertyTIFFDictionary, kCMAttachmentMode_ShouldPropagate) {
+            let tiffNSDict = tiffDict as NSDictionary
+            var metaDict: [String: Any] = [:]
+            for (key, value) in metadataAdditions {
+                metaDict.updateValue(value as AnyObject, forKey: key)
+            }
+            for (key, value) in tiffNSDict {
+                if let keyString = key as? String {
+                    metaDict.updateValue(value as AnyObject, forKey: keyString)
+                }
+            }
+            CMSetAttachment(self, kCGImagePropertyTIFFDictionary, metaDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+        } else {
+            CMSetAttachment(self, kCGImagePropertyTIFFDictionary, metadataAdditions as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+        }
+    }
+    
 }
 
 fileprivate let NextLevelMetadataTitle = "NextLevel"
