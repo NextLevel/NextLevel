@@ -393,6 +393,13 @@ extension CameraViewController: NextLevelDelegate {
         print("nextLevelSessionDidStop")
     }
     
+    // interruption
+    func nextLevelSessionWasInterrupted(_ nextLevel: NextLevel) {
+    }
+    
+    func nextLevelSessionInterruptionEnded(_ nextLevel: NextLevel) {
+    }
+
     // preview
     func nextLevelWillStartPreview(_ nextLevel: NextLevel) {
     }

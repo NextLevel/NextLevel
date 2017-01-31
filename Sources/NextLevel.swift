@@ -435,6 +435,10 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevelSessionDidStart(_ nextLevel: NextLevel)
     func nextLevelSessionDidStop(_ nextLevel: NextLevel)
     
+    // session interruption
+    func nextLevelSessionWasInterrupted(_ nextLevel: NextLevel)
+    func nextLevelSessionInterruptionEnded(_ nextLevel: NextLevel)
+    
     // preview
     func nextLevelWillStartPreview(_ nextLevel: NextLevel)
     func nextLevelDidStopPreview(_ nextLevel: NextLevel)
@@ -442,7 +446,6 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     // mode
     func nextLevelCaptureModeWillChange(_ nextLevel: NextLevel)
     func nextLevelCaptureModeDidChange(_ nextLevel: NextLevel)
-    
 }
 
 /// Device delegate, provides updates on device position, orientation, clean aperture, focus, exposure, and white balances changes.
@@ -2569,7 +2572,7 @@ extension NextLevel {
         NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleSessionDidStartRunning(_:)), name: .AVCaptureSessionDidStartRunning, object: self._captureSession)
         NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleSessionDidStopRunning(_:)), name: .AVCaptureSessionDidStopRunning, object: self._captureSession)
         NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleSessionRuntimeError(_:)), name: .AVCaptureSessionRuntimeError, object: self._captureSession)
-        NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleSessionInterruption(_:)), name: .AVCaptureSessionWasInterrupted, object: self._captureSession)
+        NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleSessionWasInterrupted(_:)), name: .AVCaptureSessionWasInterrupted, object: self._captureSession)
         NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleSessionInterruptionEnded(_:)), name: .AVCaptureSessionInterruptionEnded, object: self._captureSession)
     }
     
@@ -2597,19 +2600,53 @@ extension NextLevel {
     }
     
     internal func handleSessionRuntimeError(_ notification: Notification) {
-        //handleSessionRuntimeError
-        // TODO
-        print("NextLevel, TODO, session runtime error.")
+        self._sessionQueue.async {
+            if let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError {
+                switch error.code {
+                case .deviceIsNotAvailableInBackground:
+                    print("NextLevel, error, media services are not available in the background")
+                    break
+                case .mediaServicesWereReset:
+                    fallthrough
+                default:
+                    // TODO reset capture
+                    break
+                }
+            }
+        }
     }
     
-    internal func handleSessionInterruption(_ notification: Notification) {
-        // TODO
-        print("NextLevel, TODO, session interrupted started.")
+    internal func handleSessionWasInterrupted(_ notification: Notification) {
+        self.executeClosureAsyncOnMainQueueIfNecessary {
+            if self._recording == true {
+                self.delegate?.nextLevelSessionDidStop(self)
+            }
+         
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                self.delegate?.nextLevelSessionWasInterrupted(self)
+            }
+            
+//            if let reason = notification.userInfo?[AVCaptureSessionInterruptionReasonKey] as? AVCaptureSessionInterruptionReason {
+//                switch reason {
+//                case .audioDeviceInUseByAnotherClient:
+//                    fallthrough
+//                case .videoDeviceInUseByAnotherClient:
+//                    // TODO
+//                    break
+//                case .videoDeviceNotAvailableWithMultipleForegroundApps:
+//                    // TODO
+//                    break
+//                default:
+//                    break
+//                }
+//            }
+        }
     }
     
     internal func handleSessionInterruptionEnded(_ notification: Notification) {
-        // TODO
-        print("NextLevel, TODO, session interrupted ended.")
+        self.executeClosureAsyncOnMainQueueIfNecessary {
+            self.delegate?.nextLevelSessionInterruptionEnded(self)
+        }
     }
     
     // device
