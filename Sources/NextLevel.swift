@@ -2518,11 +2518,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
 extension NextLevel {
     
     internal func executeClosureAsyncOnMainQueueIfNecessary(withClosure closure: @escaping () -> Void) {
-        if Thread.isMainThread {
-            closure()
-        } else {
-            DispatchQueue.main.async(execute: closure)
-        }
+        DispatchQueue.main.async(execute: closure)
     }
 
     internal func executeClosureAsyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
