@@ -2038,39 +2038,50 @@ extension NextLevel {
             
             var photoDict: [String: Any]? = nil
             
-            if let _ = self._recordingSession,
-                let videoFrame = self._lastVideoFrame {
-
-                // append tiff metadata
-                videoFrame.append(metadataAdditions: NextLevel.tiffMetadata())
+            if let customFrame = self._sessionVideoCustomContextImageBuffer {
                 
-                // add exif metadata
+                // TODO append exif metadata
+                
+                // add JPEG, thumbnail
+                if let photo = self.uiimage(fromPixelBuffer: customFrame),
+                    let imageData = UIImageJPEGRepresentation(photo, 0) {
+                
+                    if photoDict == nil {
+                        photoDict = [:]
+                    }
+                    photoDict?[NextLevelPhotoJPEGKey] = imageData
+                }
+                
+            } else if let videoFrame = self._lastVideoFrame {
+
+                // append exif metadata
+                videoFrame.append(metadataAdditions: NextLevel.tiffMetadata())
                 if let metadata = videoFrame.metadata() {
                     if photoDict == nil {
                         photoDict = [:]
                     }
                     photoDict?[NextLevelPhotoMetadataKey] = metadata
                 }
-                
-                if let photo = self.uiimageFromSampleBuffer(sampleBuffer: videoFrame) {
-                    
-                    // add JPEG, thumbnail
-                    let imageData = UIImageJPEGRepresentation(photo, 0)
-                    if let data = imageData {
-                        if photoDict == nil {
-                            photoDict = [:]
-                        }
-                        photoDict?[NextLevelPhotoJPEGKey] = data
-                    }
-                    
-                    // add explicit thumbnail
-                    //let thumbnailData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: previewBuffer, previewPhotoSampleBuffer: nil)
-                    //if let tData = thumbnailData {
-                    //    photoDict[NextLevelPhotoThumbnailKey] = tData
-                    //}
-                }
-            }
 
+                // add JPEG, thumbnail
+                if let photo = self.uiimage(fromSampleBuffer: videoFrame),
+                    let imageData = UIImageJPEGRepresentation(photo, 0) {
+                
+                    if photoDict == nil {
+                        photoDict = [:]
+                    }
+                    photoDict?[NextLevelPhotoJPEGKey] = imageData
+                }
+                
+            }
+            
+            // TODO, if photoDict?[NextLevelPhotoJPEGKey]
+            // add explicit thumbnail
+            //let thumbnailData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: previewBuffer, previewPhotoSampleBuffer: nil)
+            //if let tData = thumbnailData {
+            //    photoDict[NextLevelPhotoThumbnailKey] = tData
+            //}
+            
             self.executeClosureAsyncOnMainQueueIfNecessary {
                 self.videoDelegate?.nextLevel(self, didCompletePhotoCaptureFromVideoFrame: photoDict)
             }
