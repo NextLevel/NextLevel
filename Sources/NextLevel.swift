@@ -586,7 +586,9 @@ public class NextLevel: NSObject {
     /// The current capture mode of the device.
     public var captureMode: NextLevelCaptureMode {
         didSet {
-            guard self.captureMode != oldValue else {
+            guard
+                self.captureMode != oldValue
+            else {
                 return
             }
 
@@ -1154,7 +1156,9 @@ extension NextLevel {
     }
 
     internal func removeOutputs(session: AVCaptureSession) {
-        guard let outputs = session.outputs as? [AVCaptureOutput] else {
+        guard
+            let outputs = session.outputs as? [AVCaptureOutput]
+        else {
             return
         }
 
@@ -2026,6 +2030,11 @@ extension NextLevel {
     public func capturePhotoFromVideo() {
         
         self._sessionQueue.async {
+            guard
+                self._recordingSession != nil
+            else {
+                return
+            }
             
             var photoDict: [String: Any]? = nil
             
