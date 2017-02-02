@@ -2197,13 +2197,11 @@ extension NextLevel {
     
 }
 
-// MARK: - NextLevelSession and sample buffer processing
+// MARK: - buffer conversion funcs
 
 extension NextLevel {
     
-    // sample buffer processing
-    
-    internal func uiimageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
+    internal func uiimage(fromSampleBuffer sampleBuffer: CMSampleBuffer) -> UIImage? {
         var sampleBufferImage: UIImage? = nil
         if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
             if self._ciContext == nil {
@@ -2213,6 +2211,7 @@ extension NextLevel {
                     self._ciContext = CIContext(eaglContext: EAGLContext(api: .openGLES2))
                 }
             }
+            
             if let context = self._ciContext {
                 let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
                 if let cgimage = context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
@@ -2222,6 +2221,36 @@ extension NextLevel {
         }
         return sampleBufferImage
     }
+    
+    internal func uiimage(fromPixelBuffer pixelBuffer: CVPixelBuffer) -> UIImage? {
+        if self._ciContext == nil {
+            if let device = MTLCreateSystemDefaultDevice() {
+                self._ciContext = CIContext(mtlDevice: device)
+            } else {
+                self._ciContext = CIContext(eaglContext: EAGLContext(api: .openGLES2))
+            }
+        }
+
+        var pixelBufferImage: UIImage? = nil
+        if let context = self._ciContext {
+            if CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: .allZeros)) == kCVReturnSuccess {
+                let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
+                if let cgimage = context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
+                    pixelBufferImage = UIImage(cgImage: cgimage)
+                }
+                CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: .allZeros))
+            }
+        }
+        return pixelBufferImage
+    }
+    
+}
+
+// MARK: - NextLevelSession and sample buffer processing
+
+extension NextLevel {
+    
+    // sample buffer processing
     
     internal func handleVideoOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         if session.isVideoReady == false {
