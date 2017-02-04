@@ -803,15 +803,20 @@ extension NextLevel {
     /// - Throws: 'NextLevelError.authorization' when permissions are not authorized, 'NextLevelError.started' when the session has already started.
     public func start() throws {
         guard
-            self._captureSession == nil
-        else {
-            throw NextLevelError.started
-        }
-        
-        guard
             self.authorizationStatusForCurrentCameraMode() == .authorized
         else {
             throw NextLevelError.authorization
+        }
+        
+        guard
+            self._captureSession == nil
+        else {
+            self._sessionQueue.sync {
+                if self._captureSession?.isRunning == false {
+                    self._captureSession?.startRunning()
+                }
+            }
+            throw NextLevelError.started
         }
         
         // Note: sync is required on start in order to ensure a device is available for configuration
