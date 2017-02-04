@@ -2036,6 +2036,17 @@ extension NextLevel {
                 return
             }
             
+            if self.isVideoCustomContextRenderingEnabled {
+                if let videoFrame = self._lastVideoFrame,
+                    let bufferRef = CMSampleBufferGetImageBuffer(videoFrame) {
+                    if CVPixelBufferLockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: .allZeros)) == kCVReturnSuccess {
+                        // only called from captureQueue, populates self._sessionVideoCustomContextImageBuffer
+                        self.videoDelegate?.nextLevel(self, renderToCustomContextWithImageBuffer: bufferRef, onQueue: self._sessionQueue)
+                        CVPixelBufferUnlockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: .allZeros))
+                    }
+                }
+            }
+            
             var photoDict: [String: Any]? = nil
             
             if let customFrame = self._sessionVideoCustomContextImageBuffer {
