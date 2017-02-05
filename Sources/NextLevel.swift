@@ -837,6 +837,7 @@ extension NextLevel {
                 self.commitConfiguration()
                 
                 if session.isRunning == false {
+                    self.delegate?.nextLevelSessionWillStart(self)
                     session.startRunning()
                 }
             }
