@@ -595,10 +595,11 @@ extension NextLevelSession {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             if self._clips.indices.contains(idx) {
                 let clip = self._clips.remove(at: idx)
+                self._duration = self._duration - clip.duration
+                
                 if removeFile {
                     clip.removeFile()
                 }
-                self._duration = self._duration - clip.duration
             }
         }
     }

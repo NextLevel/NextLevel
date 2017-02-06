@@ -70,7 +70,7 @@ public class NextLevelClip: NSObject {
             if let asset = self.asset {
                 return asset.duration
             }
-            return kCMTimeInvalid
+            return kCMTimeZero
         }
     }
     
