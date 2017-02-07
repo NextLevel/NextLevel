@@ -627,7 +627,6 @@ extension NextLevelSession {
             if self.clips.count > 0 {
                 if let clipToRemove = self.clips.last {
                     self.remove(clip: clipToRemove)
-                    self._duration = self._duration - clipToRemove.duration
                 }
             }
         }
