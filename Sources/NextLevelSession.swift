@@ -604,15 +604,10 @@ extension NextLevelSession {
         }
     }
     
-    /// Removes and destroys all clips for a session, as well as deleting their associated files.
-    public func removeAllClips() {
-        self.removeAllClips(removeFiles: true)
-    }
-    
     /// Removes and destroys all clips for a session.
     ///
     /// - Parameter removeFiles: When true, associated files are also removed.
-    public func removeAllClips(removeFiles: Bool) {
+    public func removeAllClips(removeFiles: Bool = true) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             while self._clips.count > 0 {
                 if removeFiles {
