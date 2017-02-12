@@ -608,7 +608,7 @@ extension NextLevelSession {
     ///
     /// - Parameter removeFiles: When true, associated files are also removed.
     public func removeAllClips(removeFiles: Bool = true) {
-        self.executeClosureSyncOnSessionQueueIfNecessary {
+        self.executeClosureAsyncOnSessionQueueIfNecessary {
             while self._clips.count > 0 {
                 if removeFiles {
                     if let clipToRemove = self._clips.first {
