@@ -25,23 +25,13 @@ Next Level is a media capture camera library for iOS written in [Swift](https://
 ```ruby
 
 # CocoaPods
-
+swift_version = "3.0"
 pod "NextLevel", "~> 0.1.0"
 
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['SWIFT_VERSION'] = '3.0'
-    end
-  end
-end
-
 # Carthage
-
 github "nextlevel/NextLevel" ~> 0.1.0
 
 # Swift PM
-
 let package = Package(
     dependencies: [
         .Package(url: "https://github.com/nextlevel/NextLevel", majorVersion: 0)
