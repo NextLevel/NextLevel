@@ -169,7 +169,7 @@ Another optional hook for reading buffers for modification, `imageBuffer`. This 
 ```swift
 extension CameraViewController: NextLevelVideoDelegate {
 
-		// ...
+    // ...
 
     // enabled by isCustomContextVideoRenderingEnabled
     public func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue) {
@@ -183,7 +183,7 @@ extension CameraViewController: NextLevelVideoDelegate {
 NextLevel will check this property when writing buffers to a destination file. This works for both video and photos with `capturePhotoFromVideo`.
 
 ```swift
-		nextLevel.videoCustomContextImageBuffer
+nextLevel.videoCustomContextImageBuffer = modifiedFrame
 ```
 
 ## Documentation
