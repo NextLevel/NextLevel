@@ -110,7 +110,7 @@ NextLevel.sharedInstance.record()
 NextLevel.sharedInstance.pause()
 ```
 
-### Editing
+### Editing Recorded Clips
 
 Editing and finalizing the recorded session.
 ```swift
@@ -138,6 +138,53 @@ if let session = NextLevel.sharedInstance.session {
 }
 ```
 Videos can also be processed using the [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), a media transcoding library in Swift.
+
+## Custom Buffer Rendering
+
+‘NextLevel’ was designed for sample buffer analysis and custom modification in real-time along side a rich set of camera features. 
+
+Just to note, modifications performed on a buffer and provided back to NextLevel may potentially effect frame rate.
+
+Enable custom rendering.
+
+```swift
+NextLevel.sharedInstance.isVideoCustomContextRenderingEnabled = true
+```
+
+Optional hook that allows reading `sampleBuffer` for analysis.
+
+```swift
+extension CameraViewController: NextLevelVideoDelegate {
+    
+    // ...
+
+    // video frame processing
+    public func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer) {
+        // Use the sampleBuffer parameter in your system for continual analysis
+    }
+```
+
+Another optional hook for reading buffers for modification, `imageBuffer`. This is also the recommended place to provide the buffer back to NextLevel for recording.
+
+```swift
+extension CameraViewController: NextLevelVideoDelegate {
+
+		// ...
+
+    // enabled by isCustomContextVideoRenderingEnabled
+    public func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue) {
+		    // provide the frame back to NextLevel for recording
+        if let frame = self._availableFrameBuffer {
+            nextLevel.videoCustomContextImageBuffer = frame
+        }
+    }
+```
+
+NextLevel will check this property when writing buffers to a destination file. This works for both video and photos with `capturePhotoFromVideo`.
+
+```swift
+		nextLevel.videoCustomContextImageBuffer
+```
 
 ## Documentation
 
