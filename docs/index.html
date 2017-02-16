@@ -13,7 +13,7 @@
     <a title="NextLevel  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">NextLevel Docs</a> (62% documented)</p>
+        <p><a href="index.html">NextLevel Docs</a> (61% documented)</p>
         <p class="header-right"><a href="https://github.com/NextLevel/NextLevel"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -240,23 +240,13 @@
 <a href='#quick-start' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='quick-start'>Quick Start</h2>
 <pre class="highlight ruby"><code>
 <span class="c1"># CocoaPods</span>
-
+<span class="n">swift_version</span> <span class="o">=</span> <span class="s2">"3.0"</span>
 <span class="n">pod</span> <span class="s2">"NextLevel"</span><span class="p">,</span> <span class="s2">"~&gt; 0.1.0"</span>
 
-<span class="n">post_install</span> <span class="k">do</span> <span class="o">|</span><span class="n">installer</span><span class="o">|</span>
-  <span class="n">installer</span><span class="p">.</span><span class="nf">pods_project</span><span class="p">.</span><span class="nf">targets</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">target</span><span class="o">|</span>
-    <span class="n">target</span><span class="p">.</span><span class="nf">build_configurations</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-      <span class="n">config</span><span class="p">.</span><span class="nf">build_settings</span><span class="p">[</span><span class="s1">'SWIFT_VERSION'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'3.0'</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
 <span class="c1"># Carthage</span>
-
 <span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span>
 
 <span class="c1"># Swift PM</span>
-
 <span class="n">let</span> <span class="n">package</span> <span class="o">=</span> <span class="no">Package</span><span class="p">(</span>
     <span class="ss">dependencies: </span><span class="p">[</span>
         <span class="o">.</span><span class="no">Package</span><span class="p">(</span><span class="ss">url: </span><span class="s2">"https://github.com/nextlevel/NextLevel"</span><span class="p">,</span> <span class="ss">majorVersion: </span><span class="mi">0</span><span class="p">)</span>
@@ -320,7 +310,7 @@
 <span class="c1">// pause</span>
 <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="nf">pause</span><span class="p">()</span>
 </code></pre>
-<a href='#editing' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='editing'>Editing</h3>
+<a href='#editing-recorded-clips' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='editing-recorded-clips'>Editing Recorded Clips</h3>
 
 <p>Editing and finalizing the recorded session.
 &ldquo;`swift</p>
@@ -348,6 +338,44 @@ session.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHan
 <p>}
 &rdquo;`
 Videos can also be processed using the <a href="https://github.com/NextLevel/NextLevelSessionExporter">NextLevelSessionExporter</a>, a media transcoding library in Swift.</p>
+<a href='#custom-buffer-rendering' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='custom-buffer-rendering'>Custom Buffer Rendering</h2>
+
+<p>‘NextLevel’ was designed for sample buffer analysis and custom modification in real-time along side a rich set of camera features. </p>
+
+<p>Just to note, modifications performed on a buffer and provided back to NextLevel may potentially effect frame rate.</p>
+
+<p>Enable custom rendering.</p>
+<pre class="highlight swift"><code><span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">isVideoCustomContextRenderingEnabled</span> <span class="o">=</span> <span class="kc">true</span>
+</code></pre>
+
+<p>Optional hook that allows reading <code>sampleBuffer</code> for analysis.</p>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">CameraViewController</span><span class="p">:</span> <span class="kt">NextLevelVideoDelegate</span> <span class="p">{</span>
+
+    <span class="c1">// ...</span>
+
+    <span class="c1">// video frame processing</span>
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt">NextLevel</span><span class="p">,</span> <span class="n">willProcessRawVideoSampleBuffer</span> <span class="nv">sampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Use the sampleBuffer parameter in your system for continual analysis</span>
+    <span class="p">}</span>
+</code></pre>
+
+<p>Another optional hook for reading buffers for modification, <code>imageBuffer</code>. This is also the recommended place to provide the buffer back to NextLevel for recording.</p>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">CameraViewController</span><span class="p">:</span> <span class="kt">NextLevelVideoDelegate</span> <span class="p">{</span>
+
+        <span class="c1">// ...</span>
+
+    <span class="c1">// enabled by isCustomContextVideoRenderingEnabled</span>
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt">NextLevel</span><span class="p">,</span> <span class="n">renderToCustomContextWithImageBuffer</span> <span class="nv">imageBuffer</span><span class="p">:</span> <span class="kt">CVPixelBuffer</span><span class="p">,</span> <span class="n">onQueue</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// provide the frame back to NextLevel for recording</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">frame</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">_availableFrameBuffer</span> <span class="p">{</span>
+            <span class="n">nextLevel</span><span class="o">.</span><span class="n">videoCustomContextImageBuffer</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+
+<p>NextLevel will check this property when writing buffers to a destination file. This works for both video and photos with <code>capturePhotoFromVideo</code>.</p>
+<pre class="highlight swift"><code>        <span class="n">nextLevel</span><span class="o">.</span><span class="n">videoCustomContextImageBuffer</span>
+</code></pre>
 <a href='#documentation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='documentation'>Documentation</h2>
 
 <p>You can find <a href="https://nextlevel.github.io/NextLevel">the docs here</a>. Documentation is generated with <a href="https://github.com/realm/jazzy">jazzy</a> and hosted on <a href="https://pages.github.com">GitHub-Pages</a>.</p>
@@ -405,7 +433,7 @@ Videos can also be processed using the <a href="https://github.com/NextLevel/Nex
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-01-22)</p>
+          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-02-16)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
