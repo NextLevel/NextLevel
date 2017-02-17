@@ -44,6 +44,15 @@ Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/Ne
 
 ## Overview
 
+Before starting, ensure that permission keys have been added to your app's `Info.plist`.
+
+```xml
+<key>NSCameraUsageDescription</key>
+    <string>Allowing access to the camera lets you take photos and videos.</string>
+<key>NSMicrophoneUsageDescription</key>
+    <string>Allowing access to the microphone lets you record audio.</string>
+```
+
 ### Recording Video Clips
 
 Import the library.
