@@ -176,7 +176,7 @@
 
 <p>Next Level is a media capture camera library for iOS written in <a href="https://developer.apple.com/swift/">Swift</a>.</p>
 
-<p><a href="https://travis-ci.org/NextLevel/NextLevel"><img src="https://travis-ci.org/NextLevel/NextLevel.svg?branch=master" alt="Build Status"></a> <a href="http://cocoadocs.org/docsets/NextLevel/"><img src="https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat" alt="Pod Version"></a></p>
+<p><a href="https://travis-ci.org/NextLevel/NextLevel"><img src="https://travis-ci.org/NextLevel/NextLevel.svg?branch=master" alt="Build Status"></a> <a href="http://cocoadocs.org/docsets/NextLevel/"><img src="https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat" alt="Pod Version"></a> <a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/language-swift%203.0-brightgreen.svg" alt="Swift Version"></a> <a href="https://github.com/NextLevel/NextLevel/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="GitHub license"></a></p>
 
 <table><thead>
 <tr>
@@ -221,6 +221,14 @@
 <td style="text-align: left">mirroring support</td>
 </tr>
 <tr>
+<td style="text-align: center">&#9728;</td>
+<td style="text-align: left">low light boost</td>
+</tr>
+<tr>
+<td style="text-align: center">&#128374;</td>
+<td style="text-align: left">smooth auto-focus</td>
+</tr>
+<tr>
 <td style="text-align: center">&#9881;</td>
 <td style="text-align: left">configurable encoding and compression settings</td>
 </tr>
@@ -257,6 +265,13 @@
 
 <p>Alternatively, drop the NextLevel <a href="https://github.com/NextLevel/NextLevel/tree/master/Sources">source files</a> or project file into your Xcode project.</p>
 <a href='#overview' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='overview'>Overview</h2>
+
+<p>Before starting, ensure that permission keys have been added to your app&rsquo;s <code>Info.plist</code>.</p>
+<pre class="highlight xml"><code><span class="nt">&lt;key&gt;</span>NSCameraUsageDescription<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>Allowing access to the camera lets you take photos and videos.<span class="nt">&lt;/string&gt;</span>
+<span class="nt">&lt;key&gt;</span>NSMicrophoneUsageDescription<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>Allowing access to the microphone lets you record audio.<span class="nt">&lt;/string&gt;</span>
+</code></pre>
 <a href='#recording-video-clips' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='recording-video-clips'>Recording Video Clips</h3>
 
 <p>Import the library.</p>
@@ -362,7 +377,7 @@ Videos can also be processed using the <a href="https://github.com/NextLevel/Nex
 <p>Another optional hook for reading buffers for modification, <code>imageBuffer</code>. This is also the recommended place to provide the buffer back to NextLevel for recording.</p>
 <pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">CameraViewController</span><span class="p">:</span> <span class="kt">NextLevelVideoDelegate</span> <span class="p">{</span>
 
-        <span class="c1">// ...</span>
+    <span class="c1">// ...</span>
 
     <span class="c1">// enabled by isCustomContextVideoRenderingEnabled</span>
     <span class="kd">public</span> <span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt">NextLevel</span><span class="p">,</span> <span class="n">renderToCustomContextWithImageBuffer</span> <span class="nv">imageBuffer</span><span class="p">:</span> <span class="kt">CVPixelBuffer</span><span class="p">,</span> <span class="n">onQueue</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">)</span> <span class="p">{</span>
@@ -374,7 +389,7 @@ Videos can also be processed using the <a href="https://github.com/NextLevel/Nex
 </code></pre>
 
 <p>NextLevel will check this property when writing buffers to a destination file. This works for both video and photos with <code>capturePhotoFromVideo</code>.</p>
-<pre class="highlight swift"><code>        <span class="n">nextLevel</span><span class="o">.</span><span class="n">videoCustomContextImageBuffer</span>
+<pre class="highlight swift"><code><span class="n">nextLevel</span><span class="o">.</span><span class="n">videoCustomContextImageBuffer</span> <span class="o">=</span> <span class="n">modifiedFrame</span>
 </code></pre>
 <a href='#documentation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='documentation'>Documentation</h2>
 
@@ -433,7 +448,7 @@ Videos can also be processed using the <a href="https://github.com/NextLevel/Nex
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-02-16)</p>
+          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-02-17)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
