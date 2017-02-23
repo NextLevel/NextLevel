@@ -249,10 +249,10 @@
 <pre class="highlight ruby"><code>
 <span class="c1"># CocoaPods</span>
 <span class="n">swift_version</span> <span class="o">=</span> <span class="s2">"3.0"</span>
-<span class="n">pod</span> <span class="s2">"NextLevel"</span><span class="p">,</span> <span class="s2">"~&gt; 0.1.0"</span>
+<span class="n">pod</span> <span class="s2">"NextLevel"</span><span class="p">,</span> <span class="s2">"~&gt; 0.3.3"</span>
 
 <span class="c1"># Carthage</span>
-<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">3</span>
 
 <span class="c1"># Swift PM</span>
 <span class="n">let</span> <span class="n">package</span> <span class="o">=</span> <span class="no">Package</span><span class="p">(</span>
@@ -284,53 +284,53 @@
 <span class="k">if</span> <span class="k">let</span> <span class="nv">previewView</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">previewView</span> <span class="p">{</span>
     <span class="n">previewView</span><span class="o">.</span><span class="n">autoresizingMask</span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="n">flexibleWidth</span><span class="p">,</span> <span class="o">.</span><span class="n">flexibleHeight</span><span class="p">]</span>
     <span class="n">previewView</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="kt">UIColor</span><span class="o">.</span><span class="n">black</span>
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">previewLayer</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">previewView</span><span class="o">.</span><span class="n">bounds</span>
-    <span class="n">previewView</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="nf">addSublayer</span><span class="p">(</span><span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">previewLayer</span><span class="p">)</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">previewLayer</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">previewView</span><span class="o">.</span><span class="n">bounds</span>
+    <span class="n">previewView</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="nf">addSublayer</span><span class="p">(</span><span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">previewLayer</span><span class="p">)</span>
     <span class="k">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="nf">addSubview</span><span class="p">(</span><span class="n">previewView</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre>
 
 <p>Configure the capture session.</p>
 <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">deviceDelegate</span> <span class="o">=</span> <span class="k">self</span>
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">videoDelegate</span> <span class="o">=</span> <span class="k">self</span>
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">photoDelegate</span> <span class="o">=</span> <span class="k">self</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">deviceDelegate</span> <span class="o">=</span> <span class="k">self</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">videoDelegate</span> <span class="o">=</span> <span class="k">self</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">photoDelegate</span> <span class="o">=</span> <span class="k">self</span>
 
     <span class="c1">// modify .videoConfiguration, .audioConfiguration, .photoConfiguration properties</span>
     <span class="c1">// Compression, resolution, and maximum recording time options are available</span>
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">videoConfiguration</span><span class="o">.</span><span class="n">maxRecordDuration</span> <span class="o">=</span> <span class="kt">CMTimeMakeWithSeconds</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">audioConfiguration</span><span class="o">.</span><span class="n">bitRate</span> <span class="o">=</span> <span class="mi">44000</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">videoConfiguration</span><span class="o">.</span><span class="n">maxRecordDuration</span> <span class="o">=</span> <span class="kt">CMTimeMakeWithSeconds</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">audioConfiguration</span><span class="o">.</span><span class="n">bitRate</span> <span class="o">=</span> <span class="mi">44000</span>
  <span class="p">}</span>
 </code></pre>
 
-<p>Start/stop the session when appropriate. These methods create a new <q>session</q> instance for &lsquo;NextLevel.sharedInstance.session&rsquo; when called.</p>
+<p>Start/stop the session when appropriate. These methods create a new <q>session</q> instance for &lsquo;NextLevel.shared.session&rsquo; when called.</p>
 <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">viewWillAppear</span><span class="p">(</span><span class="n">_</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">super</span><span class="o">.</span><span class="nf">viewWillAppear</span><span class="p">(</span><span class="n">animated</span><span class="p">)</span>     
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">start</span><span class="p">()</span>
     <span class="c1">// …</span>
 <span class="p">}</span>
 </code></pre>
 <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">viewWillDisappear</span><span class="p">(</span><span class="n">_</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">super</span><span class="o">.</span><span class="nf">viewWillDisappear</span><span class="p">(</span><span class="n">animated</span><span class="p">)</span>        
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="nf">stop</span><span class="p">()</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">stop</span><span class="p">()</span>
     <span class="c1">// …</span>
 <span class="p">}</span>
 </code></pre>
 
 <p>Video record/pause.</p>
 <pre class="highlight swift"><code><span class="c1">// record</span>
-<span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="nf">record</span><span class="p">()</span>
+<span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">record</span><span class="p">()</span>
 
 <span class="c1">// pause</span>
-<span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="nf">pause</span><span class="p">()</span>
+<span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">pause</span><span class="p">()</span>
 </code></pre>
 <a href='#editing-recorded-clips' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='editing-recorded-clips'>Editing Recorded Clips</h3>
 
 <p>Editing and finalizing the recorded session.
 &ldquo;`swift</p>
 
-<p>if let session = NextLevel.sharedInstance.session {</p>
+<p>if let session = NextLevel.shared.session {</p>
 <pre class="highlight plaintext"><code>//..
 
 // undo
@@ -360,7 +360,7 @@ Videos can also be processed using the <a href="https://github.com/NextLevel/Nex
 <p>Just to note, modifications performed on a buffer and provided back to NextLevel may potentially effect frame rate.</p>
 
 <p>Enable custom rendering.</p>
-<pre class="highlight swift"><code><span class="kt">NextLevel</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="n">isVideoCustomContextRenderingEnabled</span> <span class="o">=</span> <span class="kc">true</span>
+<pre class="highlight swift"><code><span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">isVideoCustomContextRenderingEnabled</span> <span class="o">=</span> <span class="kc">true</span>
 </code></pre>
 
 <p>Optional hook that allows reading <code>sampleBuffer</code> for analysis.</p>
@@ -448,7 +448,7 @@ Videos can also be processed using the <a href="https://github.com/NextLevel/Nex
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-02-17)</p>
+          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-02-23)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
