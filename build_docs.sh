@@ -5,8 +5,8 @@
 # ------------------------------
 
 jazzy \
-	--clean \
-	--author 'Patrick Piemonte' \
+    --clean \
+    --author 'Patrick Piemonte' \
     --author_url 'https://nextlevel.engineering' \
     --github_url 'https://github.com/NextLevel/NextLevel' \
     --sdk iphonesimulator \
