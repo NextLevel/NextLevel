@@ -84,8 +84,8 @@ class CameraViewController: UIViewController {
         if let previewView = self.previewView {
             previewView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             previewView.backgroundColor = UIColor.black
-            NextLevel.sharedInstance.previewLayer.frame = previewView.bounds
-            previewView.layer.addSublayer(NextLevel.sharedInstance.previewLayer)
+            NextLevel.shared.previewLayer.frame = previewView.bounds
+            previewView.layer.addSublayer(NextLevel.shared.previewLayer)
             self.view.addSubview(previewView)
         }
         
@@ -158,7 +158,7 @@ class CameraViewController: UIViewController {
         }
         
         // Configure NextLevel by modifying the configuration ivars
-        let nextLevel = NextLevel.sharedInstance
+        let nextLevel = NextLevel.shared
         nextLevel.delegate = self
         nextLevel.deviceDelegate = self
         nextLevel.flashDelegate = self
@@ -176,7 +176,7 @@ class CameraViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let nextLevel = NextLevel.sharedInstance
+        let nextLevel = NextLevel.shared
         if nextLevel.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized &&
             nextLevel.authorizationStatus(forMediaType: AVMediaTypeAudio) == .authorized {
             do {
@@ -193,7 +193,7 @@ class CameraViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        NextLevel.sharedInstance.stop()
+        NextLevel.shared.stop()
     }
     
 }
@@ -225,7 +225,7 @@ extension CameraViewController {
             self.recordButton?.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         }) { (completed: Bool) in
         }
-        NextLevel.sharedInstance.record()
+        NextLevel.shared.record()
     }
     
     internal func pauseCapture() {
@@ -233,16 +233,16 @@ extension CameraViewController {
             self.recordButton?.transform = .identity
         }) { (completed: Bool) in
         }
-        NextLevel.sharedInstance.pause()
+        NextLevel.shared.pause()
     }
     
     internal func endCapture() {
         self.photoTapGestureRecognizer?.isEnabled = true
         
-        if let session = NextLevel.sharedInstance.session {
+        if let session = NextLevel.shared.session {
             
             if session.clips.count > 1 {
-                NextLevel.sharedInstance.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
+                NextLevel.shared.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
                     if let videoUrl = url {
                         self.saveVideo(withURL: videoUrl)
                     } else if let _ = error {
@@ -250,7 +250,7 @@ extension CameraViewController {
                     }
                 })
             } else {
-                if let videoUrl = NextLevel.sharedInstance.session?.lastClipUrl {
+                if let videoUrl = NextLevel.shared.session?.lastClipUrl {
                     self.saveVideo(withURL: videoUrl)
                 } else {
                     // prompt that the video has been saved
@@ -304,7 +304,7 @@ extension CameraViewController {
 extension CameraViewController {
 
     internal func handleFlipButton(_ button: UIButton) {
-        NextLevel.sharedInstance.flipCaptureDevicePosition()
+        NextLevel.shared.flipCaptureDevicePosition()
     }
     
     internal func handleFlashModeButton(_ button: UIButton) {
@@ -338,7 +338,7 @@ extension CameraViewController: UIGestureRecognizerDelegate {
     }
     
     internal func handlePhotoTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
-        NextLevel.sharedInstance.capturePhotoFromVideo()
+        NextLevel.shared.capturePhotoFromVideo()
     }
     
     internal func handleFocusTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
@@ -346,9 +346,9 @@ extension CameraViewController: UIGestureRecognizerDelegate {
 
         // TODO: create focus view and animate
         
-        let previewLayer = NextLevel.sharedInstance.previewLayer
+        let previewLayer = NextLevel.shared.previewLayer
         let adjustedPoint = previewLayer.captureDevicePointOfInterest(for: tapPoint)
-        NextLevel.sharedInstance.focusExposeAndAdjustWhiteBalance(atAdjustedPoint: adjustedPoint)
+        NextLevel.shared.focusExposeAndAdjustWhiteBalance(atAdjustedPoint: adjustedPoint)
     }
     
 }

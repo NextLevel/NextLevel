@@ -676,10 +676,13 @@ public class NextLevel: NSObject {
     internal var _ciContext: CIContext?
     
     // MARK: - singleton
-    
+
     /// Method for providing a NextLevel singleton. This isn't required for use.
-    public static let sharedInstance: NextLevel = NextLevel()
-    
+    public static let shared = NextLevel()
+
+    /// Deprecating, use shared instead
+    public static let sharedInstance = NextLevel()
+
     // MARK: - object lifecycle
     
     override init() {

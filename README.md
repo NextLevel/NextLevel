@@ -71,8 +71,8 @@ self.previewView = UIView(frame: screenBounds)
 if let previewView = self.previewView {
     previewView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     previewView.backgroundColor = UIColor.black
-    NextLevel.sharedInstance.previewLayer.frame = previewView.bounds
-    previewView.layer.addSublayer(NextLevel.sharedInstance.previewLayer)
+    NextLevel.shared.previewLayer.frame = previewView.bounds
+    previewView.layer.addSublayer(NextLevel.shared.previewLayer)
     self.view.addSubview(previewView)
 }
 ```
@@ -81,24 +81,24 @@ Configure the capture session.
 
 ```swift
 override func viewDidLoad() {
-    NextLevel.sharedInstance.delegate = self
-    NextLevel.sharedInstance.deviceDelegate = self
-    NextLevel.sharedInstance.videoDelegate = self
-    NextLevel.sharedInstance.photoDelegate = self
+    NextLevel.shared.delegate = self
+    NextLevel.shared.deviceDelegate = self
+    NextLevel.shared.videoDelegate = self
+    NextLevel.shared.photoDelegate = self
     
     // modify .videoConfiguration, .audioConfiguration, .photoConfiguration properties
     // Compression, resolution, and maximum recording time options are available
-    NextLevel.sharedInstance.videoConfiguration.maxRecordDuration = CMTimeMakeWithSeconds(5, 600)
-    NextLevel.sharedInstance.audioConfiguration.bitRate = 44000
+    NextLevel.shared.videoConfiguration.maxRecordDuration = CMTimeMakeWithSeconds(5, 600)
+    NextLevel.shared.audioConfiguration.bitRate = 44000
  }
 ```
 
-Start/stop the session when appropriate. These methods create a new "session" instance for 'NextLevel.sharedInstance.session' when called.
+Start/stop the session when appropriate. These methods create a new "session" instance for 'NextLevel.shared.session' when called.
 
 ```swift
 override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)     
-    NextLevel.sharedInstance.start()
+    NextLevel.shared.start()
     // …
 }
 ```
@@ -106,7 +106,7 @@ override func viewWillAppear(_ animated: Bool) {
 ```swift
 override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)        
-    NextLevel.sharedInstance.stop()
+    NextLevel.shared.stop()
     // …
 }
 ```
@@ -115,10 +115,10 @@ Video record/pause.
 
 ```swift
 // record
-NextLevel.sharedInstance.record()
+NextLevel.shared.record()
 
 // pause
-NextLevel.sharedInstance.pause()
+NextLevel.shared.pause()
 ```
 
 ### Editing Recorded Clips
@@ -126,7 +126,7 @@ NextLevel.sharedInstance.pause()
 Editing and finalizing the recorded session.
 ```swift
 
-if let session = NextLevel.sharedInstance.session {
+if let session = NextLevel.shared.session {
 
     //..
 
@@ -159,7 +159,7 @@ Just to note, modifications performed on a buffer and provided back to NextLevel
 Enable custom rendering.
 
 ```swift
-NextLevel.sharedInstance.isVideoCustomContextRenderingEnabled = true
+NextLevel.shared.isVideoCustomContextRenderingEnabled = true
 ```
 
 Optional hook that allows reading `sampleBuffer` for analysis.
