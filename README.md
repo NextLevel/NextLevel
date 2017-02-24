@@ -205,7 +205,7 @@ You can find [the docs here](https://nextlevel.github.io/NextLevel). Documentati
 
 Next Level was a little weekend project that turned into something more useful. The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
 
-The goal is to continue to provide a good foundation for quick integration – allowing everyone to focus on the functionality that can builds on this. The API provides a means to perform realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.
+The goal is to continue to provide a good foundation for quick integration (taking you to the next level) – allowing everyone to focus on the app functionality that matters most. My hope is the app functionality that matters most whether is be realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques benefit from how this library is structured.
 
 ### Related Projects
 
