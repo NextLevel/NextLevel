@@ -1032,7 +1032,7 @@ extension NextLevel {
                 captureDevice.unlockForConfiguration()
             }
             catch {
-                print("NextLevel, flashMode failed to lock device for configuration")
+                print("NextLevel, low light failed to lock device for configuration")
             }
         }
         
@@ -1320,7 +1320,7 @@ extension NextLevel {
                     device.unlockForConfiguration()
                 }
                 catch {
-                    print("NextLevel, flashMode failed to lock device for configuration")
+                    print("NextLevel, torchMode failed to lock device for configuration")
                 }
             }
         }
@@ -1839,7 +1839,7 @@ extension NextLevel {
                     
                     device.unlockForConfiguration()
                 } catch {
-                    print("NextLevel, flashMode failed to lock device for configuration")
+                    print("NextLevel, frame rate failed to lock device for configuration")
                 }
                 
             }
@@ -1892,7 +1892,7 @@ extension NextLevel {
                     device.activeVideoMinFrameDuration = fps
                     device.unlockForConfiguration()
                 } catch {
-                    print("NextLevel, flashMode failed to lock device for configuration")
+                    print("NextLevel, active device format failed to lock device for configuration")
                 }
             } else {
                 print("Nextlevel, could not find a current device format matching the requirements")
