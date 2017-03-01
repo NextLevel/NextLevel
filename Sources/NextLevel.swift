@@ -2207,6 +2207,7 @@ extension NextLevel {
         if let photoOutput = self._photoOutput, let _ = photoOutput.connection(withMediaType: AVMediaTypeVideo) {
             if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
                 let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
+                photoSettings.flashMode = self.photoConfiguration.flashMode
                 photoOutput.capturePhoto(with: photoSettings, delegate: self)
             }
         }
