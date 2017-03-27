@@ -32,7 +32,7 @@ import AVFoundation
 /// NextLevelConfiguration, media capture configuration object
 public class NextLevelConfiguration: NSObject {
 
-    /// AVFoundation configuration preset.
+    /// AVFoundation configuration preset, see AVCaptureSession.h
     public var preset: String
     
     /// Setting an options dictionary overrides all other properties set on a configuration object but allows full customization
