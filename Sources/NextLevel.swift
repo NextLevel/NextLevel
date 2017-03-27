@@ -685,7 +685,7 @@ public class NextLevel: NSObject {
 
     // MARK: - object lifecycle
     
-    override init() {
+    public override init() {
         self.previewLayer = AVCaptureVideoPreviewLayer()
         self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         
