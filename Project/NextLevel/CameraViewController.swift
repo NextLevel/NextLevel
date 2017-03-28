@@ -246,7 +246,7 @@ extension CameraViewController {
                     if let videoUrl = url {
                         self.saveVideo(withURL: videoUrl)
                     } else if let _ = error {
-                        print("failed to merge clips at the end of capture \(error)")
+                        print("failed to merge clips at the end of capture \(String(describing: error))")
                     }
                 })
             } else {
@@ -559,7 +559,7 @@ extension CameraViewController: NextLevelVideoDelegate {
                         })
                     }
                 } else if let _ = error1 {
-                    print("failure capturing photo from video frame \(error1)")
+                    print("failure capturing photo from video frame \(String(describing: error1))")
                 }
                 
             })
@@ -616,7 +616,7 @@ extension CameraViewController: NextLevelPhotoDelegate {
                         })
                     }
                 } else if let _ = error1 {
-                    print("failure capturing photo from video frame \(error1)")
+                    print("failure capturing photo from video frame \(String(describing: error1))")
                 }
                     
             })

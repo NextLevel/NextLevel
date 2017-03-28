@@ -318,7 +318,7 @@ extension NextLevelSession {
                         self._timeOffset = kCMTimeZero
                         self._startTimestamp = kCMTimeInvalid
                     } else {
-                        print("NextLevel, writer encountered an error \(writer.error)")
+                        print("NextLevel, writer encountered an error \(String(describing: writer.error))")
                         self._writer = nil
                     }
                 }
