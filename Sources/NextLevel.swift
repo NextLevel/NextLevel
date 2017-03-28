@@ -1553,8 +1553,8 @@ extension NextLevel {
             let horizontalFieldOfView = device.activeFormat.videoFieldOfView
             let verticalFieldOfView = (horizontalFieldOfView / principlePointX) * principlePointY
             
-            focalLengthX = fabs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * Float(M_PI) / 2 )) )
-            focalLengthY = fabs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * Float(M_PI) / 2 )) )
+            focalLengthX = fabs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * .pi / 2 )) )
+            focalLengthY = fabs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * .pi / 2 )) )
             return true
         }
         return false
