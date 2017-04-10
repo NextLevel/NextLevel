@@ -2315,7 +2315,7 @@ extension NextLevel {
             }
         }
         
-        if self._recording && session.isAudioReady && session.clipStarted {
+        if self._recording && (session.isAudioReady || self.captureMode == .videoWithoutAudio) && session.clipStarted {
             self.beginRecordingNewClipIfNecessary()
                 
             let minTimeBetweenFrames = 0.004
@@ -2363,7 +2363,7 @@ extension NextLevel {
                 })
                 
 
-                if session.currentClipHasVideo == false && session.currentClipHasAudio == false {
+                if session.currentClipHasVideo == false && (session.currentClipHasAudio == false || self.captureMode == .videoWithoutAudio) {
                     if let audioBuffer = self._lastAudioFrame {
                         let lastAudioEndTime = CMTimeAdd(CMSampleBufferGetPresentationTimeStamp(audioBuffer), CMSampleBufferGetDuration(audioBuffer))
                         let videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
@@ -2439,7 +2439,17 @@ extension NextLevel {
 extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     
     public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-        if let videoOutput = self._videoOutput,
+        if self.captureMode == .videoWithoutAudio && captureOutput == self._videoOutput {
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                self.videoDelegate?.nextLevel(self, willProcessRawVideoSampleBuffer: sampleBuffer)
+            }
+            self._lastVideoFrame = sampleBuffer
+            if let session = self._recordingSession {
+                self.handleVideoOutput(sampleBuffer: sampleBuffer, session: session)
+            }
+
+        }
+        else if let videoOutput = self._videoOutput,
             let audioOutput = self._audioOutput {
             switch captureOutput {
             case videoOutput:
