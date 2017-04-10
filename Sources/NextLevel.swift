@@ -125,12 +125,15 @@ public enum NextLevelCaptureMode: Int, CustomStringConvertible {
     case video = 0
     case photo
     case audio
+    case videoWithoutAudio
     
     public var description: String {
         get {
             switch self {
             case .video:
                 return "Video"
+            case .videoWithoutAudio:
+                return "Video without audio"
             case .photo:
                 return "Photo"
             case .audio:
@@ -787,6 +790,9 @@ extension NextLevel {
         switch self.captureMode {
         case .audio:
             return self.authorizationStatus(forMediaType: AVMediaTypeAudio)
+        case .videoWithoutAudio:
+            let videoStatus = self.authorizationStatus(forMediaType: AVMediaTypeVideo)
+            return (videoStatus == .authorized) ? .authorized : .notAuthorized
         case .video:
             let audioStatus = self.authorizationStatus(forMediaType: AVMediaTypeAudio)
             let videoStatus = self.authorizationStatus(forMediaType: AVMediaTypeVideo)
@@ -910,6 +916,9 @@ extension NextLevel {
                 shouldConfigureVideo = true
                 shouldConfigureAudio = true
                 break
+            case .videoWithoutAudio:
+                shouldConfigureVideo = true
+                break
             }
             
             if shouldConfigureVideo == true {
@@ -983,6 +992,16 @@ extension NextLevel {
                 }
 
                 let _ = self.addAudioOuput()
+                let _ = self.addVideoOutput()
+                break
+            case .videoWithoutAudio:
+                if session.sessionPreset != self.videoConfiguration.preset {
+                    if session.canSetSessionPreset(self.videoConfiguration.preset) {
+                        session.sessionPreset = self.videoConfiguration.preset
+                    } else {
+                        print("NextLevel, could not set preset on session")
+                    }
+                }
                 let _ = self.addVideoOutput()
                 break
             case .photo:
@@ -1187,6 +1206,18 @@ extension NextLevel {
                 self._photoOutput = nil
             }
 
+            break
+        case .videoWithoutAudio:
+            if let photoOutput = self._photoOutput, currentOutputs.contains(photoOutput) {
+                session.removeOutput(photoOutput)
+                self._photoOutput = nil
+            }
+            
+            if let audioOutput = self._audioOutput, currentOutputs.contains(audioOutput) {
+                session.removeOutput(audioOutput)
+                self._audioOutput = nil
+            }
+            
             break
         case .photo:
             if let videoOutput = self._videoOutput, currentOutputs.contains(videoOutput) {
@@ -2330,6 +2361,7 @@ extension NextLevel {
                         }
                     }
                 })
+                
 
                 if session.currentClipHasVideo == false && session.currentClipHasAudio == false {
                     if let audioBuffer = self._lastAudioFrame {
@@ -2344,6 +2376,7 @@ extension NextLevel {
             } // self._currentDevice
         }
     }
+
     
     internal func handleAudioOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         if session.isAudioReady == false {
