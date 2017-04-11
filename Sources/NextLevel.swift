@@ -791,8 +791,7 @@ extension NextLevel {
         case .audio:
             return self.authorizationStatus(forMediaType: AVMediaTypeAudio)
         case .videoWithoutAudio:
-            let videoStatus = self.authorizationStatus(forMediaType: AVMediaTypeVideo)
-            return (videoStatus == .authorized) ? .authorized : .notAuthorized
+            return self.authorizationStatus(forMediaType: AVMediaTypeVideo)
         case .video:
             let audioStatus = self.authorizationStatus(forMediaType: AVMediaTypeAudio)
             let videoStatus = self.authorizationStatus(forMediaType: AVMediaTypeVideo)
