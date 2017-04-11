@@ -1758,8 +1758,8 @@ extension NextLevel {
                     }
                     if let pc = self.previewLayer.connection {
                         if pc.isVideoMirroringSupported {
-                            pc.isVideoMirrored = false
                             pc.automaticallyAdjustsVideoMirroring = false
+                            pc.isVideoMirrored = false
                         }
                     }
                     break
@@ -1771,8 +1771,8 @@ extension NextLevel {
                     }
                     if let pc = self.previewLayer.connection {
                         if pc.isVideoMirroringSupported {
-                            pc.isVideoMirrored = true
                             pc.automaticallyAdjustsVideoMirroring = false
+                            pc.isVideoMirrored = true
                         }
                     }
                     break
@@ -1784,7 +1784,6 @@ extension NextLevel {
                     }
                     if let pc = self.previewLayer.connection {
                         if pc.isVideoMirroringSupported {
-                            pc.isVideoMirrored = true
                             pc.automaticallyAdjustsVideoMirroring = true
                         }
                     }
