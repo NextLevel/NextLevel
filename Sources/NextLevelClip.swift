@@ -190,8 +190,8 @@ public class NextLevelClip: NSObject {
     
     internal var _asset: AVAsset?
     internal var _infoDict: [String : Any]?
-    internal weak var _thumbnailImage: UIImage?
-    internal weak var _lastFrameImage: UIImage?
+    internal var _thumbnailImage: UIImage?
+    internal var _lastFrameImage: UIImage?
     
     // MARK: - object lifecycle
     
