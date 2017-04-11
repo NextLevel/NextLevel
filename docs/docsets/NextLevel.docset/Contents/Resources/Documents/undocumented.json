@@ -730,49 +730,56 @@
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2416,
+      "line": 688,
+      "symbol": "NextLevel.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
+      "line": 2407,
       "symbol": "NextLevel.captureOutput(_:didOutputSampleBuffer:from:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2447,
+      "line": 2438,
       "symbol": "NextLevel.capture(_:willCapturePhotoForResolvedSettings:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2453,
+      "line": 2444,
       "symbol": "NextLevel.capture(_:didCapturePhotoForResolvedSettings:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2459,
+      "line": 2450,
       "symbol": "NextLevel.capture(_:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2491,
+      "line": 2482,
       "symbol": "NextLevel.capture(_:didFinishProcessingRawPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2524,
+      "line": 2515,
       "symbol": "NextLevel.capture(_:didFinishCaptureForResolvedSettings:error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2740,
+      "line": 2731,
       "symbol": "NextLevel.observeValue(forKeyPath:of:change:context:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
