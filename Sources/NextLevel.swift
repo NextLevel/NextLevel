@@ -1243,7 +1243,7 @@ extension NextLevel {
     /// Checks if a flash is available.
     public var isFlashAvailable: Bool {
         if let device: AVCaptureDevice = self._currentDevice {
-            return device.hasFlash
+            return device.hasFlash && device.isFlashAvailable
         }
         return false
     }
@@ -2206,7 +2206,9 @@ extension NextLevel {
         if let photoOutput = self._photoOutput, let _ = photoOutput.connection(withMediaType: AVMediaTypeVideo) {
             if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
                 let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
-                photoSettings.flashMode = self.photoConfiguration.flashMode
+                if self.isFlashAvailable {
+                    photoSettings.flashMode = self.photoConfiguration.flashMode
+                }
                 photoOutput.capturePhoto(with: photoSettings, delegate: self)
             }
         }
