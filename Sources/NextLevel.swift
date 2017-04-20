@@ -955,11 +955,15 @@ extension NextLevel {
             self.commitConfiguration()
             
             if shouldConfigureVideo == true {
-                self.delegate?.nextLevel(self, didUpdateVideoConfiguration: self.videoConfiguration)
+                self.executeClosureAsyncOnMainQueueIfNecessary {
+                    self.delegate?.nextLevel(self, didUpdateVideoConfiguration: self.videoConfiguration)
+                }
             }
             
             if shouldConfigureAudio == true {
-                self.delegate?.nextLevel(self, didUpdateAudioConfiguration: self.audioConfiguration)
+                self.executeClosureAsyncOnMainQueueIfNecessary {
+                    self.delegate?.nextLevel(self, didUpdateAudioConfiguration: self.audioConfiguration)
+                }
             }
         }
     }
@@ -2087,7 +2091,7 @@ extension NextLevel {
             //    photoDict[NextLevelPhotoThumbnailKey] = tData
             //}
             
-            self.executeClosureAsyncOnMainQueueIfNecessary {
+            self.executeClosureSyncOnMainQueue {
                 self.videoDelegate?.nextLevel(self, didCompletePhotoCaptureFromVideoFrame: photoDict)
             }
 
@@ -2151,7 +2155,9 @@ extension NextLevel {
                     
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
-                            self.videoDelegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
+                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                                self.videoDelegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
+                            }
                             if let handler = completionHandler {
                                 handler()
                             }
@@ -2280,7 +2286,7 @@ extension NextLevel {
                 }
             }
             
-            self.executeClosureAsyncOnMainQueueIfNecessary {
+            self.executeClosureSyncOnMainQueue {
                 self.videoDelegate?.nextLevel(self, didSetupVideoInSession: session)
             }
         }
@@ -2321,12 +2327,12 @@ extension NextLevel {
                     // process frame
                     self._lastVideoFrameTimeInterval = CACurrentMediaTime()
                     if success == true {
-                        self.executeClosureAsyncOnMainQueueIfNecessary {
+                        self.executeClosureSyncOnMainQueue {
                             self.videoDelegate?.nextLevel(self, didAppendVideoSampleBuffer: sampleBuffer, inSession: session)
                         }
                         self.checkSessionDuration()
                     } else {
-                        self.executeClosureAsyncOnMainQueueIfNecessary {
+                        self.executeClosureSyncOnMainQueue {
                             self.videoDelegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBuffer, inSession: session)
                         }
                     }
@@ -2389,11 +2395,15 @@ extension NextLevel {
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
-                            self.videoDelegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
+                            self.executeClosureSyncOnMainQueue {
+                                self.videoDelegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
+                            }
                         } else if let _ = error {
                             // TODO report error
                         }
-                        self.videoDelegate?.nextLevel(self, didCompleteSession: session)
+                        self.executeClosureSyncOnMainQueue {
+                            self.videoDelegate?.nextLevel(self, didCompleteSession: session)
+                        }
                     })
                 }
             }
@@ -2525,11 +2535,15 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
 // MARK: - queues
 
 extension NextLevel {
-    
+
     internal func executeClosureAsyncOnMainQueueIfNecessary(withClosure closure: @escaping () -> Void) {
         DispatchQueue.main.async(execute: closure)
     }
 
+    internal func executeClosureSyncOnMainQueue(withClosure closure: @escaping () -> Void) {
+        DispatchQueue.main.sync(execute: closure)
+    }
+    
     internal func executeClosureAsyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
         self._sessionQueue.async(execute: closure)
     }
