@@ -2357,12 +2357,12 @@ extension NextLevel {
                     // process frame
                     self._lastVideoFrameTimeInterval = CACurrentMediaTime()
                     if success == true {
-                        self.executeClosureSyncOnMainQueue {
+                        self.executeClosureAsyncOnMainQueueIfNecessary {
                             self.videoDelegate?.nextLevel(self, didAppendVideoSampleBuffer: sampleBuffer, inSession: session)
                         }
                         self.checkSessionDuration()
                     } else {
-                        self.executeClosureSyncOnMainQueue {
+                        self.executeClosureAsyncOnMainQueueIfNecessary {
                             self.videoDelegate?.nextLevel(self, didSkipVideoSampleBuffer: sampleBuffer, inSession: session)
                         }
                     }
