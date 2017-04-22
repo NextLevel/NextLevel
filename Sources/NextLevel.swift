@@ -692,7 +692,7 @@ public class NextLevel: NSObject {
         self.previewLayer = AVCaptureVideoPreviewLayer()
         self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         
-        self._sessionQueue = DispatchQueue(label: NextLevelCaptureSessionIdentifier, qos: .userInitiated, target: DispatchQueue.global())
+        self._sessionQueue = DispatchQueue(label: NextLevelCaptureSessionIdentifier, qos: .userInteractive, target: DispatchQueue.global())
         self._sessionQueue.setSpecific(key: NextLevelCaptureSessionSpecificKey, value: self._sessionQueue)
         self._sessionConfigurationCount = 0
         
