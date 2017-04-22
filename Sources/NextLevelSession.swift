@@ -90,7 +90,7 @@ public class NextLevelSession: NSObject {
     /// Duration of a session, the sum of all recorded clips.
     public var duration: CMTime {
         get {
-            return self._duration
+            return self._duration + self._currentClipDuration
         }
     }
 
@@ -158,7 +158,7 @@ public class NextLevelSession: NSObject {
     internal var _identifier: String
     internal var _date: Date
     
-    internal var _duration: CMTime
+    internal var _duration: CMTime = kCMTimeZero
     internal var _clips: [NextLevelClip]
     internal var _clipFilenameCount: Int
 
@@ -174,7 +174,7 @@ public class NextLevelSession: NSObject {
     internal var _sessionQueue: DispatchQueue
     internal var _sessionQueueKey: DispatchSpecificKey<NSObject>
     
-    internal var _currentClipDuration: CMTime
+    internal var _currentClipDuration: CMTime = kCMTimeZero
     internal var _currentClipHasAudio: Bool
     internal var _currentClipHasVideo: Bool
 
@@ -211,7 +211,6 @@ public class NextLevelSession: NSObject {
         
         self._clips = []
         self._clipFilenameCount = 0
-        self._duration = kCMTimeZero
      
         self._audioQueue = DispatchQueue(label: NextLevelSessionAudioQueueIdentifier)
 
@@ -220,7 +219,6 @@ public class NextLevelSession: NSObject {
         self._sessionQueue.setSpecific(key: NextLevelSessionSpecificKey, value: self._sessionQueue)
         self._sessionQueueKey = NextLevelSessionSpecificKey
 
-        self._currentClipDuration = kCMTimeZero
         self._currentClipHasAudio = false
         self._currentClipHasVideo = false
         
