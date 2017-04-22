@@ -2182,7 +2182,6 @@ extension NextLevel {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let session = self._recordingSession {
                 if session.clipStarted {
-                    
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
@@ -2198,7 +2197,6 @@ extension NextLevel {
                             }
                         }
                     })
-                    
                 } else {
                     if let handler = completionHandler {
                         self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: handler)
@@ -2426,13 +2424,13 @@ extension NextLevel {
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
-                            self.executeClosureSyncOnMainQueue {
+                            self.executeClosureAsyncOnMainQueueIfNecessary {
                                 self.videoDelegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
                             }
                         } else if let _ = error {
                             // TODO report error
                         }
-                        self.executeClosureSyncOnMainQueue {
+                        self.executeClosureAsyncOnMainQueueIfNecessary {
                             self.videoDelegate?.nextLevel(self, didCompleteSession: session)
                         }
                     })
