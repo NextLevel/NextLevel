@@ -1048,7 +1048,6 @@ extension NextLevel {
                 
                 captureDevice.isSubjectAreaChangeMonitoringEnabled = true
                 
-                // only supported on iPhone 5 and iPhone 5C
                 if captureDevice.isLowLightBoostSupported {
                     captureDevice.automaticallyEnablesLowLightBoostWhenAvailable = true
                 }
