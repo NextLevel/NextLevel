@@ -338,6 +338,7 @@ extension CameraViewController: UIGestureRecognizerDelegate {
     }
     
     internal func handlePhotoTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
+        AudioServicesPlaySystemSoundWithCompletion(SystemSoundID(1108), nil)
         NextLevel.shared.capturePhotoFromVideo()
     }
     
