@@ -1042,8 +1042,19 @@ extension NextLevel {
             do {
                 try captureDevice.lockForConfiguration()
                 
-                if captureDevice.isSmoothAutoFocusSupported {
-                    captureDevice.isSmoothAutoFocusEnabled = true
+                if captureDevice.isFocusModeSupported(.continuousAutoFocus) {
+                    captureDevice.focusMode = .continuousAutoFocus
+                    if captureDevice.isSmoothAutoFocusSupported {
+                        captureDevice.isSmoothAutoFocusEnabled = true
+                    }
+                }
+                
+                if captureDevice.isExposureModeSupported(.continuousAutoExposure) {
+                    captureDevice.exposureMode = .continuousAutoExposure
+                }
+                
+                if captureDevice.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance) {
+                    captureDevice.whiteBalanceMode = .continuousAutoWhiteBalance
                 }
                 
                 captureDevice.isSubjectAreaChangeMonitoringEnabled = true
@@ -1428,7 +1439,7 @@ extension NextLevel {
             do {
                 try device.lockForConfiguration()
                 
-                let focusMode: AVCaptureFocusMode = .autoFocus // .continuousAutoFocus
+                let focusMode: AVCaptureFocusMode = .autoFocus
                 let exposureMode: AVCaptureExposureMode = .continuousAutoExposure
                 let whiteBalanceMode: AVCaptureWhiteBalanceMode = .continuousAutoWhiteBalance
                 
