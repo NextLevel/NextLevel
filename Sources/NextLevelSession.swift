@@ -438,8 +438,6 @@ extension NextLevelSession {
             
             self._videoConfiguration = nil
             self._audioConfiguration = nil
-            
-            self._clipFilenameCount = 0
         }
     }
     
