@@ -819,9 +819,8 @@ extension NextLevel {
             throw NextLevelError.authorization
         }
         
-        // Note: sync is required on start in order to ensure a device is available for configuration
-        // This could be parameterized, if necessary
-        self._sessionQueue.sync {
+        // Note: use nextLevelSessionDidStart to ensure a device and session are available for configuration or format changes
+        self._sessionQueue.async {
             // setup AV capture sesssion
             self._captureSession = AVCaptureSession()
             self._sessionConfigurationCount = 0
