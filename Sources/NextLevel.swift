@@ -459,6 +459,9 @@ public protocol NextLevelDeviceDelegate: NSObjectProtocol {
     func nextLevelDevicePositionDidChange(_ nextLevel: NextLevel)
     func nextLevel(_ nextLevel: NextLevel, didChangeDeviceOrientation deviceOrientation: NextLevelDeviceOrientation)
     
+    // format
+    func nextLevel(_ nextLevel: NextLevel, didChangeDeviceFormat deviceFormat: AVCaptureDeviceFormat)
+    
     // aperture
     func nextLevel(_ nextLevel: NextLevel, didChangeCleanAperture cleanAperture: CGRect)
     
@@ -1922,6 +1925,7 @@ extension NextLevel {
                     device.activeVideoMaxFrameDuration = fps
                     device.activeVideoMinFrameDuration = fps
                     device.unlockForConfiguration()
+                    self.deviceDelegate?.nextLevel(self, didChangeDeviceFormat: format)
                 } catch {
                     print("NextLevel, active device format failed to lock device for configuration")
                 }

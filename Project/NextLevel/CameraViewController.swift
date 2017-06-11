@@ -470,6 +470,10 @@ extension CameraViewController: NextLevelDeviceDelegate {
     func nextLevel(_ nextLevel: NextLevel, didChangeDeviceOrientation deviceOrientation: NextLevelDeviceOrientation) {
     }
     
+    // format
+    func nextLevel(_ nextLevel: NextLevel, didChangeDeviceFormat deviceFormat: AVCaptureDeviceFormat) {
+    }
+    
     // aperture
     func nextLevel(_ nextLevel: NextLevel, didChangeCleanAperture cleanAperture: CGRect) {
     }
