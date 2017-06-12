@@ -29,6 +29,7 @@ import Photos
 
 let CameraViewControllerAlbumTitle = "Next Level"
 
+@objcMembers
 class CameraViewController: UIViewController {
 
     // MARK: - UIViewController
@@ -190,16 +191,16 @@ class CameraViewController: UIViewController {
         super.viewWillAppear(animated)
         
         let nextLevel = NextLevel.shared
-        if nextLevel.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized &&
-            nextLevel.authorizationStatus(forMediaType: AVMediaTypeAudio) == .authorized {
+        if nextLevel.authorizationStatus(forMediaType: AVMediaType.video.rawValue) == .authorized &&
+            nextLevel.authorizationStatus(forMediaType: AVMediaType.audio.rawValue) == .authorized {
             do {
                 try nextLevel.start()
             } catch {
                 print("NextLevel, failed to start camera session")
             }
         } else {
-            nextLevel.requestAuthorization(forMediaType: AVMediaTypeVideo)
-            nextLevel.requestAuthorization(forMediaType: AVMediaTypeAudio)
+            nextLevel.requestAuthorization(forMediaType: AVMediaType.video.rawValue)
+            nextLevel.requestAuthorization(forMediaType: AVMediaType.audio.rawValue)
         }
     }
     
@@ -389,7 +390,7 @@ extension CameraViewController {
             focusView.startAnimation()
         }
         
-        let adjustedPoint = NextLevel.shared.previewLayer.captureDevicePointOfInterest(for: tapPoint)
+        let adjustedPoint = NextLevel.shared.previewLayer.captureDevicePointConverted(fromLayerPoint: tapPoint)
         NextLevel.shared.focusExposeAndAdjustWhiteBalance(atAdjustedPoint: adjustedPoint)
     }
     
@@ -402,8 +403,8 @@ extension CameraViewController: NextLevelDelegate {
     // permission
     func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: String) {
         print("NextLevel, authorization updated for media \(mediaType) status \(status)")
-        if nextLevel.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized &&
-            nextLevel.authorizationStatus(forMediaType: AVMediaTypeAudio) == .authorized {
+        if nextLevel.authorizationStatus(forMediaType: AVMediaType.video.rawValue) == .authorized &&
+            nextLevel.authorizationStatus(forMediaType: AVMediaType.audio.rawValue) == .authorized {
             do {
                 try nextLevel.start()
             } catch {
@@ -471,7 +472,7 @@ extension CameraViewController: NextLevelDeviceDelegate {
     }
     
     // format
-    func nextLevel(_ nextLevel: NextLevel, didChangeDeviceFormat deviceFormat: AVCaptureDeviceFormat) {
+    func nextLevel(_ nextLevel: NextLevel, didChangeDeviceFormat deviceFormat: AVCaptureDevice.Format) {
     }
     
     // aperture

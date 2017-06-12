@@ -41,7 +41,7 @@ public class NextLevelConfiguration: NSObject {
     // MARK: - object lifecycle
     
     override init() {
-        self.preset = AVCaptureSessionPresetHigh
+        self.preset = AVCaptureSession.Preset.high.rawValue
         self.options = nil
         super.init()
     }
@@ -313,6 +313,6 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     }
     
     // change flashMode with NextLevel.flashMode
-    internal var flashMode: AVCaptureFlashMode
+    internal var flashMode: AVCaptureDevice.FlashMode
 }
 

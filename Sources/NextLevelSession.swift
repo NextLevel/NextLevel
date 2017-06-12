@@ -206,7 +206,7 @@ public class NextLevelSession: NSObject {
         self._identifier = NSUUID().uuidString
         self._date = Date()
         self.outputDirectory = NSTemporaryDirectory()
-        self.fileType = AVFileTypeMPEG4
+        self.fileType = AVFileType.mp4.rawValue
         self.fileExtension = "mp4"
         
         self._clips = []
@@ -255,7 +255,7 @@ extension NextLevelSession {
     ///   - formatDescription: sample buffer format description
     /// - Returns: True when setup completes successfully
     public func setupVideo(withSettings settings: [String : Any]?, configuration: NextLevelVideoConfiguration, formatDescription: CMFormatDescription) -> Bool {
-        self._videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: settings, sourceFormatHint: formatDescription)
+        self._videoInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: settings, sourceFormatHint: formatDescription)
         if let videoInput = self._videoInput {
             videoInput.expectsMediaDataInRealTime = true
             videoInput.transform = configuration.transform
@@ -279,7 +279,7 @@ extension NextLevelSession {
     ///   - formatDescription: sample buffer format description
     /// - Returns: True when setup completes successfully
     public func setupAudio(withSettings settings: [String : Any]?, configuration: NextLevelAudioConfiguration, formatDescription: CMFormatDescription) -> Bool {
-        self._audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: settings, sourceFormatHint: formatDescription)
+        self._audioInput = AVAssetWriterInput(mediaType: AVMediaType.audio, outputSettings: settings, sourceFormatHint: formatDescription)
         if let audioInput = self._audioInput {
             audioInput.expectsMediaDataInRealTime = true
             self._audioConfiguration = configuration
@@ -290,7 +290,7 @@ extension NextLevelSession {
     internal func setupWriter() {
         if let url = self.nextFileURL() {
             do {
-                self._writer = try AVAssetWriter(url: url, fileType: self.fileType)
+                self._writer = try AVAssetWriter(url: url, fileType: AVFileType(rawValue: self.fileType))
                 if let writer = self._writer {
                     writer.shouldOptimizeForNetworkUse = true
                     writer.metadata = NextLevel.assetWriterMetadata()
@@ -657,7 +657,7 @@ extension NextLevelSession {
                     if let exportSession = AVAssetExportSession(asset: exportAsset, presetName: preset) {
                         exportSession.shouldOptimizeForNetworkUse = true
                         exportSession.outputURL = exportURL
-                        exportSession.outputFileType = self.fileType
+                        exportSession.outputFileType = AVFileType(rawValue: self.fileType)
                         exportSession.exportAsynchronously {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
                                 completionHandler(exportURL, exportSession.error)
@@ -692,19 +692,19 @@ extension NextLevelSession {
             
             for clip: NextLevelClip in self._clips {
                 if let asset = clip.asset {
-                    let videoAssetTracks = asset.tracks(withMediaType: AVMediaTypeVideo)
-                    let audioAssetTracks = asset.tracks(withMediaType: AVMediaTypeAudio)
+                    let videoAssetTracks = asset.tracks(withMediaType: AVMediaType.video)
+                    let audioAssetTracks = asset.tracks(withMediaType: AVMediaType.audio)
                  
                     var maxRange = kCMTimeInvalid
                     
                     var videoTime = currentTime
                     for videoAssetTrack in videoAssetTracks {
                         if videoTrack == nil {
-                            let videoTracks = composition.tracks(withMediaType: AVMediaTypeVideo)
+                            let videoTracks = composition.tracks(withMediaType: AVMediaType.video)
                             if videoTracks.count > 0 {
                                 videoTrack = videoTracks.first
                             } else {
-                                videoTrack = composition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
+                                videoTrack = composition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
                                 videoTrack?.preferredTransform = videoAssetTrack.preferredTransform
                             }
                         }
@@ -719,12 +719,12 @@ extension NextLevelSession {
                       var audioTime = currentTime
                       for audioAssetTrack in audioAssetTracks {
                         if audioTrack == nil {
-                          let audioTracks = composition.tracks(withMediaType: AVMediaTypeAudio)
+                          let audioTracks = composition.tracks(withMediaType: AVMediaType.audio)
                           
                           if audioTracks.count > 0 {
                             audioTrack = audioTracks.first
                           } else {
-                            audioTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: kCMPersistentTrackID_Invalid)
+                            audioTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
                           }
                           
                         }

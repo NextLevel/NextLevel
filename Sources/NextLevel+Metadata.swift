@@ -87,23 +87,23 @@ extension NextLevel {
         let currentDevice = UIDevice.current
         
         let modelItem = AVMutableMetadataItem()
-        modelItem.keySpace = AVMetadataKeySpaceCommon
-        modelItem.key = AVMetadataCommonKeyModel as (NSCopying & NSObjectProtocol)
+        modelItem.keySpace = AVMetadataKeySpace.common
+        modelItem.key = AVMetadataKey.commonKeyModel as (NSCopying & NSObjectProtocol)
         modelItem.value = currentDevice.localizedModel as (NSCopying & NSObjectProtocol)
         
         let softwareItem = AVMutableMetadataItem()
-        softwareItem.keySpace = AVMetadataKeySpaceCommon
-        softwareItem.key = AVMetadataCommonKeySoftware as (NSCopying & NSObjectProtocol)
+        softwareItem.keySpace = AVMetadataKeySpace.common
+        softwareItem.key = AVMetadataKey.commonKeySoftware as (NSCopying & NSObjectProtocol)
         softwareItem.value = NextLevelMetadataTitle as (NSCopying & NSObjectProtocol)
         
         let artistItem = AVMutableMetadataItem()
-        artistItem.keySpace = AVMetadataKeySpaceCommon
-        artistItem.key = AVMetadataCommonKeyArtist as (NSCopying & NSObjectProtocol)
+        artistItem.keySpace = AVMetadataKeySpace.common
+        artistItem.key = AVMetadataKey.commonKeyArtist as (NSCopying & NSObjectProtocol)
         artistItem.value = NextLevelMetadataArtist as (NSCopying & NSObjectProtocol)
         
         let creationDateItem = AVMutableMetadataItem()
-        creationDateItem.keySpace = AVMetadataKeySpaceCommon
-        creationDateItem.key = AVMetadataCommonKeyCreationDate as (NSCopying & NSObjectProtocol)
+        creationDateItem.keySpace = AVMetadataKeySpace.common
+        creationDateItem.key = AVMetadataKey.commonKeyCreationDate as (NSCopying & NSObjectProtocol)
         creationDateItem.value = Date().iso8601() as (NSCopying & NSObjectProtocol)
         
         return [modelItem, softwareItem, artistItem, creationDateItem]
