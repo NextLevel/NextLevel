@@ -714,24 +714,26 @@ extension NextLevelSession {
                             maxRange = videoTime
                         }
                     }
-                    
-                    var audioTime = currentTime
-                    for audioAssetTrack in audioAssetTracks {
+                  
+                    if !clip.isMutedOnMerge {
+                      var audioTime = currentTime
+                      for audioAssetTrack in audioAssetTracks {
                         if audioTrack == nil {
-                            let audioTracks = composition.tracks(withMediaType: AVMediaTypeAudio)
-                            
-                            if audioTracks.count > 0 {
-                                audioTrack = audioTracks.first
-                            } else {
-                                audioTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: kCMPersistentTrackID_Invalid)
-                            }
-                            
+                          let audioTracks = composition.tracks(withMediaType: AVMediaTypeAudio)
+                          
+                          if audioTracks.count > 0 {
+                            audioTrack = audioTracks.first
+                          } else {
+                            audioTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: kCMPersistentTrackID_Invalid)
+                          }
+                          
                         }
                         if let foundTrack = audioTrack {
-                            audioTime = self.appendTrack(track: audioAssetTrack, toCompositionTrack: foundTrack, withStartTime: audioTime, range: maxRange)
+                          audioTime = self.appendTrack(track: audioAssetTrack, toCompositionTrack: foundTrack, withStartTime: audioTime, range: maxRange)
                         }
+                      }
                     }
-                    
+
                     currentTime = composition.duration
                 }
             }

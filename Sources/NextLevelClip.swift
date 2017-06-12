@@ -73,7 +73,10 @@ public class NextLevelClip: NSObject {
             return kCMTimeZero
         }
     }
-    
+  
+    /// Set to true if the clip's audio should be muted in the merged file
+    public var isMutedOnMerge = false
+  
     /// If it doesn't already exist, generates a thumbnail image of the clip.
     public var thumbnailImage: UIImage? {
         get {
