@@ -53,11 +53,10 @@ class CameraViewController: UIViewController {
     internal var longPressGestureRecognizer: UILongPressGestureRecognizer?
     internal var photoTapGestureRecognizer: UITapGestureRecognizer?
     internal var focusTapGestureRecognizer: UITapGestureRecognizer?
-    internal var zoomPanGestureRecognizer: UIPanGestureRecognizer?
     internal var flipDoubleTapGestureRecognizer: UITapGestureRecognizer?
     
-    internal var panStartPoint: CGPoint = .zero
-    internal var panStartZoom: CGFloat = 0.0
+    internal var _panStartPoint: CGPoint = .zero
+    internal var _panStartZoom: CGFloat = 0.0
     
     // MARK: - object lifecycle
     
@@ -161,13 +160,6 @@ class CameraViewController: UIViewController {
                 focusTapGestureRecognizer.delegate = self
                 focusTapGestureRecognizer.numberOfTapsRequired = 1
                 gestureView.addGestureRecognizer(focusTapGestureRecognizer)
-            }
-            
-            self.zoomPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGestureRecognizer(_:)))
-            if let zoomPanGestureRecognizer = self.zoomPanGestureRecognizer {
-                zoomPanGestureRecognizer.minimumNumberOfTouches = 1
-                zoomPanGestureRecognizer.maximumNumberOfTouches = 1
-                //self.recordButton?.addGestureRecognizer(zoomPanGestureRecognizer)
             }
         }
         
@@ -338,6 +330,14 @@ extension CameraViewController: UIGestureRecognizerDelegate {
         switch gestureRecognizer.state {
         case .began:
             self.startCapture()
+            self._panStartPoint = gestureRecognizer.location(in: self.view)
+            self._panStartZoom = CGFloat(NextLevel.shared.videoZoomFactor)
+            break
+        case .changed:
+            let newPoint = gestureRecognizer.location(in: self.view)
+            let scale = (self._panStartPoint.y / newPoint.y)
+            let newZoom = (scale * self._panStartZoom)
+            NextLevel.shared.videoZoomFactor = Float(newZoom)
             break
         case .ended:
             fallthrough
@@ -353,23 +353,6 @@ extension CameraViewController: UIGestureRecognizerDelegate {
 }
 
 extension CameraViewController {
-    
-    internal func handlePanGestureRecognizer(_ gestureRecognizer: UIPinchGestureRecognizer) {
-        switch gestureRecognizer.state {
-        case .began:
-            self.panStartPoint = gestureRecognizer.location(in: self.view)
-            self.panStartZoom = CGFloat(NextLevel.shared.videoZoomFactor)
-            break
-        case .changed:
-            let newPoint = gestureRecognizer.location(in: self.view)
-            let scale = (self.panStartPoint.y / newPoint.y)
-            let newZoom = (scale * self.panStartZoom)
-            NextLevel.shared.videoZoomFactor = Float(newZoom)
-            break
-        default:
-            break
-        }
-    }
 
     internal func handlePhotoTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
         // play system camera shutter sound
