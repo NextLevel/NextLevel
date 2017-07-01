@@ -1299,8 +1299,7 @@ extension NextLevel {
         }
         set {
             if let device: AVCaptureDevice = self._currentDevice {
-                guard
-                    device.hasFlash
+                guard device.hasFlash
                 else {
                     return
                 }
@@ -1321,7 +1320,7 @@ extension NextLevel {
     /// Checks if a torch is available.
     public var isTorchAvailable: Bool {
         get {
-            if let device: AVCaptureDevice = self._currentDevice {
+            if let device = self._currentDevice {
                 return device.hasTorch
             }
             return false
@@ -1367,7 +1366,7 @@ extension NextLevel {
     /// Checks if focusing at a point of interest is supported.
     public var isFocusPointOfInterestSupported: Bool {
         get {
-            if let device: AVCaptureDevice = self._currentDevice {
+            if let device = self._currentDevice {
                 return device.isFocusPointOfInterestSupported
             }
             return false
@@ -2325,7 +2324,7 @@ extension NextLevel {
     internal func handleVideoOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         if session.isVideoReady == false {
             if let settings = self.videoConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
-                    let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+                let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 if !session.setupVideo(withSettings: settings, configuration: self.videoConfiguration, formatDescription: formatDescription) {
                     print("NextLevel, could not setup video session")
                 }
@@ -2402,7 +2401,7 @@ extension NextLevel {
     internal func handleAudioOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         if session.isAudioReady == false {
             if let settings = self.audioConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
-                    let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+                let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 if !session.setupAudio(withSettings: settings, configuration: self.audioConfiguration, formatDescription: formatDescription) {
                     print("NextLevel, could not setup audio session")
                 }
