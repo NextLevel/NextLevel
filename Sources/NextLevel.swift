@@ -1336,25 +1336,24 @@ extension NextLevel {
             return .off
         }
         set {
-            if let device: AVCaptureDevice = self._currentDevice {
-                guard
-                    device.torchMode != newValue.avfoundationType,
-                    device.hasTorch
-                else {
-                    return
-                }
-                
-                do {
-                    try device.lockForConfiguration()
-                    
-                    if device.isTorchModeSupported(newValue.avfoundationType) {
-                        device.torchMode = newValue.avfoundationType
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
+                if let device = self._currentDevice {
+                    guard
+                        device.torchMode != newValue.avfoundationType,
+                        device.hasTorch
+                        else {
+                            return
                     }
                     
-                    device.unlockForConfiguration()
-                }
-                catch {
-                    print("NextLevel, torchMode failed to lock device for configuration")
+                    do {
+                        try device.lockForConfiguration()
+                        if device.isTorchModeSupported(newValue.avfoundationType) {
+                            device.torchMode = newValue.avfoundationType
+                        }
+                        device.unlockForConfiguration()
+                    } catch {
+                        print("NextLevel, torchMode failed to lock device for configuration")
+                    }
                 }
             }
         }
@@ -1412,9 +1411,7 @@ extension NextLevel {
             
                 do {
                     try device.lockForConfiguration()
-                    
                     device.focusMode = newValue.avfoundationType
-                    
                     device.unlockForConfiguration()
                 } catch {
                     print("NextLevel, focusMode failed to lock device for configuration")
