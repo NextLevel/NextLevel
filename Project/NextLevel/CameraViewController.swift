@@ -522,7 +522,7 @@ extension CameraViewController: NextLevelVideoDelegate {
     }
 
     // video frame processing
-    func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer) {
+    func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer, onQueue queue: DispatchQueue) {
     }
     
     // enabled by isCustomContextVideoRenderingEnabled
