@@ -2326,8 +2326,7 @@ extension NextLevel {
                     print("NextLevel, could not setup video session")
                 }
             }
-            
-            self.executeClosureAsyncOnMainQueue {
+            self.executeClosureAsyncOnMainQueueIfNecessary {
                 self.videoDelegate?.nextLevel(self, didSetupVideoInSession: session)
             }
         }
