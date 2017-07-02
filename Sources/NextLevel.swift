@@ -502,7 +502,7 @@ public protocol NextLevelVideoDelegate: NSObjectProtocol {
     func nextLevel(_ nextLevel: NextLevel, didUpdateVideoZoomFactor videoZoomFactor: Float)
     
     // video processing
-    func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer)
+    func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer, onQueue queue: DispatchQueue)
     func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue)
     
     // video recording session
@@ -1300,8 +1300,8 @@ extension NextLevel {
         set {
             if let device: AVCaptureDevice = self._currentDevice {
                 guard device.hasFlash
-                else {
-                    return
+                    else {
+                        return
                 }
                 
                 if let output = self._photoOutput {
@@ -2327,7 +2327,7 @@ extension NextLevel {
                 }
             }
             
-            self.executeClosureSyncOnMainQueue {
+            self.executeClosureAsyncOnMainQueue {
                 self.videoDelegate?.nextLevel(self, didSetupVideoInSession: session)
             }
         }
@@ -2460,9 +2460,7 @@ extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudi
     
     public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         if self.captureMode == .videoWithoutAudio && captureOutput == self._videoOutput {
-            self.executeClosureAsyncOnMainQueueIfNecessary {
-                self.videoDelegate?.nextLevel(self, willProcessRawVideoSampleBuffer: sampleBuffer)
-            }
+            self.videoDelegate?.nextLevel(self, willProcessRawVideoSampleBuffer: sampleBuffer, onQueue: self._sessionQueue)
             self._lastVideoFrame = sampleBuffer
             if let session = self._recordingSession {
                 self.handleVideoOutput(sampleBuffer: sampleBuffer, session: session)
@@ -2473,9 +2471,7 @@ extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudi
             let audioOutput = self._audioOutput {
             switch captureOutput {
             case videoOutput:
-                self.executeClosureAsyncOnMainQueueIfNecessary {
-                    self.videoDelegate?.nextLevel(self, willProcessRawVideoSampleBuffer: sampleBuffer)
-                }
+                self.videoDelegate?.nextLevel(self, willProcessRawVideoSampleBuffer: sampleBuffer, onQueue: self._sessionQueue)
                 self._lastVideoFrame = sampleBuffer
                 if let session = self._recordingSession {
                     self.handleVideoOutput(sampleBuffer: sampleBuffer, session: session)
