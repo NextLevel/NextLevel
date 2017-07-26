@@ -2096,7 +2096,7 @@ extension NextLevel {
                 
                 // add JPEG, thumbnail
                 if let photo = self.uiimage(fromPixelBuffer: customFrame),
-                    let imageData = UIImageJPEGRepresentation(photo, 0) {
+                    let imageData = UIImageJPEGRepresentation(photo, 1) {
                     
                     if photoDict == nil {
                         photoDict = [:]
@@ -2117,7 +2117,7 @@ extension NextLevel {
                 
                 // add JPEG, thumbnail
                 if let photo = self.uiimage(fromSampleBuffer: videoFrame),
-                    let imageData = UIImageJPEGRepresentation(photo, 0) {
+                    let imageData = UIImageJPEGRepresentation(photo, 1) {
                     
                     if photoDict == nil {
                         photoDict = [:]
