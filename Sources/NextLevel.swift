@@ -598,17 +598,21 @@ public class NextLevel: NSObject {
                     return
             }
             
-            self.configureSession()
-            self.configureSessionDevices()
-            self.updateVideoOrientation()
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
+                self.configureSession()
+                self.configureSessionDevices()
+                self.updateVideoOrientation()
+            }
         }
     }
     
     /// The current device position.
     public var devicePosition: NextLevelDevicePosition {
         didSet {
-            self.configureSessionDevices()
-            self.updateVideoOrientation()
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
+                self.configureSessionDevices()
+                self.updateVideoOrientation()
+            }
         }
     }
     
@@ -631,9 +635,11 @@ public class NextLevel: NSObject {
     /// Video stabilization mode
     public var videoStabilizationMode: NextLevelVideoStabilizationMode {
         didSet {
-            self.beginConfiguration()
-            self.updateVideoOutputSettings()
-            self.commitConfiguration()
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
+                self.beginConfiguration()
+                self.updateVideoOutputSettings()
+                self.commitConfiguration()
+            }
         }
     }
     
@@ -854,7 +860,7 @@ extension NextLevel {
     /// Stops the current recording session.
     public func stop() {
         if let session = self._captureSession {
-            self._sessionQueue.async {
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
                 if session.isRunning == true {
                     session.stopRunning()
                 }
@@ -1927,9 +1933,6 @@ extension NextLevel {
                             self.deviceDelegate?.nextLevel(self, didChangeDeviceFormat: format)
                         }
                     } catch {
-                        self.executeClosureAsyncOnMainQueueIfNecessary {
-                            
-                        }
                         print("NextLevel, active device format failed to lock device for configuration")
                     }
                 } else {
@@ -1960,9 +1963,11 @@ extension NextLevel {
         if deviceForUse == nil {
             throw NextLevelError.deviceNotAvailable
         } else {
-            self._requestedDevice = deviceForUse
-            self.configureSessionDevices()
-            self.updateVideoOrientation()
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
+                self._requestedDevice = deviceForUse
+                self.configureSessionDevices()
+                self.updateVideoOrientation()
+            }
         }
     }
     
@@ -2070,7 +2075,7 @@ extension NextLevel {
     /// Triggers a photo capture from the last video frame.
     public func capturePhotoFromVideo() {
         
-        self._sessionQueue.async {
+        self.executeClosureAsyncOnSessionQueueIfNecessary {
             guard
                 self._recordingSession != nil
                 else {
@@ -2625,7 +2630,7 @@ extension NextLevel {
     }
     
     internal func handleApplicationDidEnterBackground(_ notification: Notification) {
-        self._sessionQueue.async {
+        self.executeClosureAsyncOnSessionQueueIfNecessary {
             if self.isRecording {
                 self.pause()
             }
@@ -2666,7 +2671,7 @@ extension NextLevel {
     }
     
     internal func handleSessionRuntimeError(_ notification: Notification) {
-        self._sessionQueue.async {
+        self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError {
                 switch error.code {
                 case .deviceIsNotAvailableInBackground:
