@@ -1125,7 +1125,7 @@ extension NextLevel {
             self._videoOutput?.alwaysDiscardsLateVideoFrames = false
             
             var videoSettings = [String(kCVPixelBufferPixelFormatTypeKey):Int(kCVPixelFormatType_32BGRA)]
-            if let formatTypes = self._videoOutput?.availableVideoCVPixelFormatTypes as? [Int] {
+            if let formatTypes = self._videoOutput?.__availableVideoCVPixelFormatTypes as? [Int] {
                 var supportsFullRange = false
                 var supportsVideoRange = false
                 for format: Int in formatTypes {
@@ -1307,9 +1307,9 @@ extension NextLevel {
                 
                 if let output = self._photoOutput {
                     if self.photoConfiguration.flashMode != newValue.avfoundationType {
-                        let modes = output.supportedFlashModes
+                        let modes = output.__supportedFlashModes
                         let numberMode = NSNumber(integerLiteral: Int(newValue.avfoundationType.rawValue))
-                        if modes.contains(numberMode) {
+                        if modes.contains(NSNumber(integerLiteral: AVCaptureDevice.FlashMode(rawValue: Int(truncating: numberMode))!.rawValue)) {
                             self.photoConfiguration.flashMode = newValue.avfoundationType
                         }
                     }

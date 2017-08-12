@@ -302,8 +302,8 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
             var config: [String: Any] = [AVVideoCodecKey: self.codec]
             if generateThumbnail == true {
                 let settings = AVCapturePhotoSettings()
-                if settings.availablePreviewPhotoPixelFormatTypes.count > 0 {
-                    if let formatType = settings.availablePreviewPhotoPixelFormatTypes.first {
+                if settings.__availablePreviewPhotoPixelFormatTypes.count > 0 {
+                    if let formatType = settings.__availablePreviewPhotoPixelFormatTypes.first {
                         config[kCVPixelBufferPixelFormatTypeKey as String] = formatType
                     }
                 }
