@@ -1531,7 +1531,7 @@ extension NextLevel {
             if let device: AVCaptureDevice = self._currentDevice {
                 guard
                     device.exposureMode != newValue.avfoundationType,
-                    device.isExposureModeSupported(exposureMode.avfoundationType)
+                    device.isExposureModeSupported(newValue.avfoundationType)
                     else {
                         return
                 }
@@ -1539,8 +1539,8 @@ extension NextLevel {
                 do {
                     try device.lockForConfiguration()
                     
-                    device.exposureMode = exposureMode.avfoundationType
-                    self.adjustWhiteBalanceForExposureMode(exposureMode: exposureMode.avfoundationType)
+                    device.exposureMode = newValue.avfoundationType
+                    self.adjustWhiteBalanceForExposureMode(exposureMode: newValue.avfoundationType)
                     
                     device.unlockForConfiguration()
                 }
