@@ -606,8 +606,8 @@ extension NextLevelSession {
     public func removeAllClips(removeFiles: Bool = true) {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             while self._clips.count > 0 {
-                if removeFiles {
-                    if let clipToRemove = self._clips.first {
+                if let clipToRemove = self._clips.first {
+                    if removeFiles {
                         clipToRemove.removeFile()
                     }
                     self._clips.removeFirst()
