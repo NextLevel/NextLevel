@@ -1616,10 +1616,10 @@ extension NextLevel {
                 else {
                     return
             }
-            
-            self.deviceDelegate?.nextLevelWillStartFocus(self)
-            
-            self.focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint(x: 0.5, y: 0.5))
+            if self.focusMode != .locked {
+                self.deviceDelegate?.nextLevelWillStartFocus(self)
+                self.focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint(x: 0.5, y: 0.5))
+            }
         }
     }
     
