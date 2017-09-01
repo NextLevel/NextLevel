@@ -134,9 +134,6 @@
                 <a href="../Extensions/AVCaptureDevice.html">AVCaptureDevice</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Extensions/AVCaptureDeviceFormat.html">AVCaptureDeviceFormat</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Extensions/AVCaptureDeviceInput.html">AVCaptureDeviceInput</a>
               </li>
               <li class="nav-group-task">
@@ -215,9 +212,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC9NextLevel16NextLevelSession8fileTypeSS"></a>
+                    <a name="/s:vC9NextLevel16NextLevelSession8fileTypeERR"></a>
                     <a name="//apple_ref/swift/Property/fileType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC9NextLevel16NextLevelSession8fileTypeSS">fileType</a>
+                    <a class="token" href="#/s:vC9NextLevel16NextLevelSession8fileTypeERR">fileType</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -232,7 +229,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fileType</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fileType</span><span class="p">:</span> <span class="kt">AVFileType</span></code></pre>
 
                         </div>
                       </div>
@@ -934,33 +931,6 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C9NextLevel16NextLevelSession51NextLevelSessionAppendSampleBufferCompletionHandler"></a>
-                    <a name="//apple_ref/swift/Alias/NextLevelSessionAppendSampleBufferCompletionHandler" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C9NextLevel16NextLevelSession51NextLevelSessionAppendSampleBufferCompletionHandler">NextLevelSessionAppendSampleBufferCompletionHandler</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Completion handler type for appending a sample buffer</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">NextLevelSessionAppendSampleBufferCompletionHandler</span> <span class="o">=</span> <span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:C9NextLevel16NextLevelSession40NextLevelSessionEndClipCompletionHandler"></a>
                     <a name="//apple_ref/swift/Alias/NextLevelSessionEndClipCompletionHandler" class="dashAnchor"></a>
                     <a class="token" href="#/s:C9NextLevel16NextLevelSession40NextLevelSessionEndClipCompletionHandler">NextLevelSessionEndClipCompletionHandler</a>
@@ -979,6 +949,33 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">NextLevelSessionEndClipCompletionHandler</span> <span class="o">=</span> <span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelClip.html">NextLevelClip</a></span><span class="p">?,</span> <span class="nv">_</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C9NextLevel16NextLevelSession51NextLevelSessionAppendSampleBufferCompletionHandler"></a>
+                    <a name="//apple_ref/swift/Alias/NextLevelSessionAppendSampleBufferCompletionHandler" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C9NextLevel16NextLevelSession51NextLevelSessionAppendSampleBufferCompletionHandler">NextLevelSessionAppendSampleBufferCompletionHandler</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Completion handler type for appending a sample buffer</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">NextLevelSessionAppendSampleBufferCompletionHandler</span> <span class="o">=</span> <span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
 
                         </div>
                       </div>
@@ -1629,7 +1626,7 @@ This is helpful when merging multiple segments isn&rsquo;t desired.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-06-12)</p>
+          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-08-31)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
