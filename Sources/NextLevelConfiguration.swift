@@ -33,7 +33,7 @@ import AVFoundation
 public class NextLevelConfiguration: NSObject {
 
     /// AVFoundation configuration preset, see AVCaptureSession.h
-    public var preset: String
+    public var preset: AVCaptureSession.Preset
     
     /// Setting an options dictionary overrides all other properties set on a configuration object but allows full customization
     public var options: [String: Any]?
@@ -41,7 +41,7 @@ public class NextLevelConfiguration: NSObject {
     // MARK: - object lifecycle
     
     override init() {
-        self.preset = AVCaptureSessionPresetHigh
+        self.preset = AVCaptureSession.Preset.high
         self.options = nil
         super.init()
     }
@@ -313,6 +313,6 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     }
     
     // change flashMode with NextLevel.flashMode
-    internal var flashMode: AVCaptureFlashMode
+    internal var flashMode: AVCaptureDevice.FlashMode
 }
 

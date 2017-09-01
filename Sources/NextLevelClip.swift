@@ -133,7 +133,7 @@ public class NextLevelClip: NSObject {
     public var frameRate: Float {
         get {
             if let asset = self.asset {
-                let tracks: [AVAssetTrack] = asset.tracks(withMediaType: AVMediaTypeVideo)
+                let tracks: [AVAssetTrack] = asset.tracks(withMediaType: AVMediaType.video)
                 if tracks.count > 0 {
                     if let videoTrack = tracks.first {
                         return videoTrack.nominalFrameRate

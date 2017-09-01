@@ -182,16 +182,16 @@ class CameraViewController: UIViewController {
         super.viewWillAppear(animated)
         
         let nextLevel = NextLevel.shared
-        if nextLevel.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized &&
-            nextLevel.authorizationStatus(forMediaType: AVMediaTypeAudio) == .authorized {
+        if nextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
+            nextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
             do {
                 try nextLevel.start()
             } catch {
                 print("NextLevel, failed to start camera session")
             }
         } else {
-            nextLevel.requestAuthorization(forMediaType: AVMediaTypeVideo)
-            nextLevel.requestAuthorization(forMediaType: AVMediaTypeAudio)
+            nextLevel.requestAuthorization(forMediaType: AVMediaType.video)
+            nextLevel.requestAuthorization(forMediaType: AVMediaType.audio)
         }
     }
     
@@ -308,14 +308,14 @@ extension CameraViewController {
 
 extension CameraViewController {
 
-    internal func handleFlipButton(_ button: UIButton) {
+    @objc internal func handleFlipButton(_ button: UIButton) {
         NextLevel.shared.flipCaptureDevicePosition()
     }
     
     internal func handleFlashModeButton(_ button: UIButton) {
     }
     
-    internal func handleSaveButton(_ button: UIButton) {
+    @objc internal func handleSaveButton(_ button: UIButton) {
         self.endCapture()
     }
     
@@ -325,7 +325,7 @@ extension CameraViewController {
 
 extension CameraViewController: UIGestureRecognizerDelegate {
 
-    internal func handleLongPressGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
+    @objc internal func handleLongPressGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
         switch gestureRecognizer.state {
         case .began:
             self.startCapture()
@@ -359,7 +359,7 @@ extension CameraViewController {
         NextLevel.shared.capturePhotoFromVideo()
     }
     
-    internal func handleFocusTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
+    @objc internal func handleFocusTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
         let tapPoint = gestureRecognizer.location(in: self.previewView)
 
         if let focusView = self.focusView {
@@ -372,7 +372,7 @@ extension CameraViewController {
             focusView.startAnimation()
         }
         
-        let adjustedPoint = NextLevel.shared.previewLayer.captureDevicePointOfInterest(for: tapPoint)
+        let adjustedPoint = NextLevel.shared.previewLayer.captureDevicePointConverted(fromLayerPoint: tapPoint)
         NextLevel.shared.focusExposeAndAdjustWhiteBalance(atAdjustedPoint: adjustedPoint)
     }
     
@@ -383,10 +383,10 @@ extension CameraViewController {
 extension CameraViewController: NextLevelDelegate {
 
     // permission
-    func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: String) {
+    func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: AVMediaType) {
         print("NextLevel, authorization updated for media \(mediaType) status \(status)")
-        if nextLevel.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized &&
-            nextLevel.authorizationStatus(forMediaType: AVMediaTypeAudio) == .authorized {
+        if nextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
+            nextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
             do {
                 try nextLevel.start()
             } catch {
@@ -454,7 +454,7 @@ extension CameraViewController: NextLevelDeviceDelegate {
     }
     
     // format
-    func nextLevel(_ nextLevel: NextLevel, didChangeDeviceFormat deviceFormat: AVCaptureDeviceFormat) {
+    func nextLevel(_ nextLevel: NextLevel, didChangeDeviceFormat deviceFormat: AVCaptureDevice.Format) {
     }
     
     // aperture

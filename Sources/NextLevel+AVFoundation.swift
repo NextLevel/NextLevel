@@ -35,7 +35,7 @@ extension AVCaptureDeviceInput {
     ///   - mediaType: Specified media type. (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
     ///   - captureSession: Capture session for which to query
     /// - Returns: Desired capture device input for the associated media type, otherwise nil
-    public class func deviceInput(withMediaType mediaType: String, captureSession: AVCaptureSession) -> AVCaptureDeviceInput? {
+    public class func deviceInput(withMediaType mediaType: AVMediaType, captureSession: AVCaptureSession) -> AVCaptureDeviceInput? {
         if let inputs = captureSession.inputs as? [AVCaptureDeviceInput] {
             for deviceInput in inputs {
                 if deviceInput.device.hasMediaType(mediaType) {
@@ -56,13 +56,11 @@ extension AVCaptureConnection {
     ///   - mediaType: Specified media type. (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
     ///   - connections: Array of `AVCaptureConnection` objects to search
     /// - Returns: Capture connection for the desired media type, otherwise nil
-    public class func connection(withMediaType mediaType:String, fromConnections connections: [AVCaptureConnection]) -> AVCaptureConnection? {
+    public class func connection(withMediaType mediaType: AVMediaType, fromConnections connections: [AVCaptureConnection]) -> AVCaptureConnection? {
         for connection: AVCaptureConnection in connections {
-            if let inputPorts = connection.inputPorts as? [AVCaptureInputPort] {
-                for port: AVCaptureInputPort in inputPorts {
-                    if port.mediaType == mediaType {
-                        return connection
-                    }
+            for port: AVCaptureInput.Port in connection.inputPorts {
+                if port.mediaType == mediaType {
+                    return connection
                 }
             }
         }
@@ -82,10 +80,10 @@ extension AVCaptureDevice {
     ///   - deviceType: Specified capture device type, (i.e. builtInMicrophone, builtInWideAngleCamera, etc.)
     ///   - position: Desired position of device
     /// - Returns: Capture device for the specified type and position, otherwise nil
-    public class func captureDevice(withType deviceType: AVCaptureDeviceType, forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
-        let deviceTypes: [AVCaptureDeviceType] = [deviceType]
-        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
-            return discoverySession.devices.first
+    public class func captureDevice(withType deviceType: AVCaptureDevice.DeviceType, forPosition position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        let deviceTypes: [AVCaptureDevice.DeviceType] = [deviceType]
+        if let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: position).devices.first {
+            return discoverySession
         }
         return nil
     }
@@ -94,10 +92,10 @@ extension AVCaptureDevice {
     ///
     /// - Parameter position: Desired position of the device
     /// - Returns: Wide angle video capture device, otherwise nil
-    public class func wideAngleVideoDevice(forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
-        let deviceTypes: [AVCaptureDeviceType] = [.builtInWideAngleCamera]
-        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
-            return discoverySession.devices.first
+    public class func wideAngleVideoDevice(forPosition position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        let deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInWideAngleCamera]
+        if let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: position).devices.first {
+            return discoverySession
         }
         return nil
     }
@@ -106,10 +104,10 @@ extension AVCaptureDevice {
     ///
     /// - Parameter position: Desired position of the device
     /// - Returns: Telephoto video capture device, otherwise nil
-    public class func telephotoVideoDevice(forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
-        let deviceTypes: [AVCaptureDeviceType] = [.builtInTelephotoCamera]
-        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
-            return discoverySession.devices.first
+    public class func telephotoVideoDevice(forPosition position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        let deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInTelephotoCamera]
+        if let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: position).devices.first {
+            return discoverySession
         }
         return nil
     }
@@ -118,32 +116,30 @@ extension AVCaptureDevice {
     ///
     /// - Parameter position: Desired position of the device
     /// - Returns: Primary video capture device found, otherwise nil
-    public class func primaryVideoDevice(forPosition position: AVCaptureDevicePosition) -> AVCaptureDevice? {
-        let deviceTypes: [AVCaptureDeviceType] = [.builtInDuoCamera, .builtInWideAngleCamera]
-        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position) {
-            // prioritize duo camera systems before wide angle
-            for device in discoverySession.devices {
-                if (device.deviceType == .builtInDuoCamera) {
-                    return device
-                }
+    public class func primaryVideoDevice(forPosition position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        let deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInDuoCamera, AVCaptureDevice.DeviceType.builtInWideAngleCamera]
+        // prioritize duo camera systems before wide angle
+        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: position)
+        for device in discoverySession.devices {
+            if (device.deviceType == AVCaptureDevice.DeviceType.builtInDuoCamera) {
+                return device
             }
-            return discoverySession.devices.first
         }
-        return nil
+        return discoverySession.devices.first
     }
     
     /// Returns the default video capture device, otherwise nil.
     ///
     /// - Returns: Default video capture device, otherwise nil
     public class func videoDevice() -> AVCaptureDevice? {
-        return AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        return AVCaptureDevice.default(for: AVMediaType.video)
     }
     
     /// Returns the default audio capture device, otherwise nil.
     ///
     /// - Returns: default audio capture device, otherwise nil
     public class func audioDevice() -> AVCaptureDevice? {
-        return AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio)
+        return AVCaptureDevice.default(for: AVMediaType.audio)
     }
     
     // MARK: NextLevel types
@@ -201,7 +197,7 @@ extension AVCaptureDevice {
     
 }
 
-extension AVCaptureDeviceFormat {
+extension AVCaptureDevice.Format {
     
     /// Returns the maximum capable framerate for the desired capture format and minimum, otherwise zero.
     ///
@@ -209,13 +205,11 @@ extension AVCaptureDeviceFormat {
     ///   - format: Capture format to evaluate for a specific framerate.
     ///   - minFrameRate: Lower bound time scale or minimum desired framerate.
     /// - Returns: Maximum capable framerate within the desired format and minimum constraints.
-    public class func maxFrameRate(forFormat format: AVCaptureDeviceFormat, minFrameRate: CMTimeScale) -> CMTimeScale {
+    public class func maxFrameRate(forFormat format: AVCaptureDevice.Format, minFrameRate: CMTimeScale) -> CMTimeScale {
         var lowestTimeScale: CMTimeScale = 0
-        if let videoSupportedFrameRateRanges = format.videoSupportedFrameRateRanges as? [AVFrameRateRange] {
-            for range in videoSupportedFrameRateRanges {
-                if range.minFrameDuration.timescale >= minFrameRate && (lowestTimeScale == 0 || range.minFrameDuration.timescale < lowestTimeScale) {
-                    lowestTimeScale = range.minFrameDuration.timescale
-                }
+        for range in format.videoSupportedFrameRateRanges {
+            if range.minFrameDuration.timescale >= minFrameRate && (lowestTimeScale == 0 || range.minFrameDuration.timescale < lowestTimeScale) {
+                lowestTimeScale = range.minFrameDuration.timescale
             }
         }
         return lowestTimeScale
@@ -239,11 +233,9 @@ extension AVCaptureDeviceFormat {
     public func isSupported(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions) -> Bool {
         let formatDimensions = CMVideoFormatDescriptionGetDimensions(self.formatDescription)
         if (formatDimensions.width >= dimensions.width && formatDimensions.height >= dimensions.height) {
-            if let videoSupportedFrameRateRanges: [AVFrameRateRange] = self.videoSupportedFrameRateRanges as? [AVFrameRateRange] {
-                for frameRateRange in videoSupportedFrameRateRanges {
-                    if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
-                        return true
-                    }
+            for frameRateRange in self.videoSupportedFrameRateRanges {
+                if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
+                    return true
                 }
             }
         }
@@ -296,7 +288,7 @@ extension AVCaptureVideoOrientation {
     
 }
 
-extension AVCaptureFlashMode {
+extension AVCaptureDevice.FlashMode {
     
     // MARK: NextLevel types
     
