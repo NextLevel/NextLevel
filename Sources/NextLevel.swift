@@ -1078,7 +1078,7 @@ extension NextLevel {
             if let currentDeviceInput = AVCaptureDeviceInput.deviceInput(withMediaType: mediaType, captureSession: session) {
                 session.removeInput(currentDeviceInput)
                 if currentDeviceInput.device.hasMediaType(AVMediaType.video) {
-                    self.removeKeyValueObservers()
+                    self.removeKeyValueObservers(currentDeviceInput.device)
                 }
             }
             
@@ -1093,7 +1093,7 @@ extension NextLevel {
                 session.addInput(input)
                 
                 if input.device.hasMediaType(AVMediaType.video) {
-                    self.addKeyValueObservers()
+                    self.addKeyValueObservers(input.device)
                     self.updateVideoOutputSettings()
                     self._videoInput = input
                 } else {
@@ -1113,7 +1113,7 @@ extension NextLevel {
             for input in inputs {
                 session.removeInput(input)
                 if input.device.hasMediaType(AVMediaType.video) {
-                    self.removeKeyValueObservers()
+                    self.removeKeyValueObservers(input.device)
                 }
             }
             self._videoInput = nil
@@ -1598,11 +1598,9 @@ extension NextLevel {
     
     internal func adjustFocusExposureAndWhiteBalance() {
         if let device: AVCaptureDevice = self._currentDevice {
-            guard
-                !device.isAdjustingFocus,
-                !device.isAdjustingExposure
-                else {
-                    return
+            guard !device.isAdjustingFocus, !device.isAdjustingExposure
+            else {
+                return
             }
             if self.focusMode != .locked {
                 self.deviceDelegate?.nextLevelWillStartFocus(self)
@@ -1650,10 +1648,9 @@ extension NextLevel {
     
     internal func focusEnded() {
         if let device = self._currentDevice {
-            guard
-                !device.isAdjustingFocus
-                else {
-                    return
+            guard !device.isAdjustingFocus
+            else {
+                return
             }
             
             let isAutoFocusEnabled: Bool = (device.focusMode == .autoFocus ||
@@ -2758,26 +2755,26 @@ private var NextLevelVideoZoomFactorObserverContext = "NextLevelVideoZoomFactorO
 
 extension NextLevel {
     
-    internal func addKeyValueObservers() {
-        self.addObserver(self, forKeyPath: "currentDevice.adjustingFocus", options: [.new], context: &NextLevelFocusObserverContext)
-        self.addObserver(self, forKeyPath: "currentDevice.adjustingExposure", options: [.new], context: &NextLevelExposureObserverContext)
-        self.addObserver(self, forKeyPath: "currentDevice.adjustingWhiteBalance", options: [.new], context: &NextLevelWhiteBalanceObserverContext)
-        self.addObserver(self, forKeyPath: "currentDevice.flashAvailable", options: [.new], context: &NextLevelFlashAvailabilityObserverContext)
-        self.addObserver(self, forKeyPath: "currentDevice.torchAvailable", options: [.new], context: &NextLevelTorchAvailabilityObserverContext)
-        self.addObserver(self, forKeyPath: "currentDevice.flashActive", options: [.new], context: &NextLevelFlashActiveObserverContext)
-        self.addObserver(self, forKeyPath: "currentDevice.torchActive", options: [.new], context: &NextLevelTorchActiveObserverContext)
-        self.addObserver(self, forKeyPath: "currentDevice.videoZoomFactor", options: [.new], context: &NextLevelVideoZoomFactorObserverContext)
+    internal func addKeyValueObservers(_ currentDevice: AVCaptureDevice) {
+        currentDevice.addObserver(self, forKeyPath: "adjustingFocus", options: [.new], context: &NextLevelFocusObserverContext)
+        currentDevice.addObserver(self, forKeyPath: "adjustingExposure", options: [.new], context: &NextLevelExposureObserverContext)
+        currentDevice.addObserver(self, forKeyPath: "adjustingWhiteBalance", options: [.new], context: &NextLevelWhiteBalanceObserverContext)
+        currentDevice.addObserver(self, forKeyPath: "flashAvailable", options: [.new], context: &NextLevelFlashAvailabilityObserverContext)
+        currentDevice.addObserver(self, forKeyPath: "torchAvailable", options: [.new], context: &NextLevelTorchAvailabilityObserverContext)
+        currentDevice.addObserver(self, forKeyPath: "flashActive", options: [.new], context: &NextLevelFlashActiveObserverContext)
+        currentDevice.addObserver(self, forKeyPath: "torchActive", options: [.new], context: &NextLevelTorchActiveObserverContext)
+        currentDevice.addObserver(self, forKeyPath: "videoZoomFactor", options: [.new], context: &NextLevelVideoZoomFactorObserverContext)
     }
     
-    internal func removeKeyValueObservers() {
-        self.removeObserver(self, forKeyPath: "currentDevice.adjustingFocus")
-        self.removeObserver(self, forKeyPath: "currentDevice.adjustingExposure")
-        self.removeObserver(self, forKeyPath: "currentDevice.adjustingWhiteBalance")
-        self.removeObserver(self, forKeyPath: "currentDevice.flashAvailable")
-        self.removeObserver(self, forKeyPath: "currentDevice.torchAvailable")
-        self.removeObserver(self, forKeyPath: "currentDevice.flashActive")
-        self.removeObserver(self, forKeyPath: "currentDevice.torchActive")
-        self.removeObserver(self, forKeyPath: "currentDevice.videoZoomFactor")
+    internal func removeKeyValueObservers(_ currentDevice: AVCaptureDevice) {
+        currentDevice.removeObserver(self, forKeyPath: "adjustingFocus")
+        currentDevice.removeObserver(self, forKeyPath: "adjustingExposure")
+        currentDevice.removeObserver(self, forKeyPath: "adjustingWhiteBalance")
+        currentDevice.removeObserver(self, forKeyPath: "flashAvailable")
+        currentDevice.removeObserver(self, forKeyPath: "torchAvailable")
+        currentDevice.removeObserver(self, forKeyPath: "flashActive")
+        currentDevice.removeObserver(self, forKeyPath: "torchActive")
+        currentDevice.removeObserver(self, forKeyPath: "videoZoomFactor")
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
