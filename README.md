@@ -44,7 +44,7 @@ let package = Package(
 
 Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/NextLevel/tree/master/Sources) or project file into your Xcode project.
 
-Need Swift 3? Use release `0.6.3'.
+Need Swift 3? Use release `0.6.3`.
 
 ## Overview
 
