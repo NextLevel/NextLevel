@@ -44,6 +44,8 @@ let package = Package(
 
 Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/NextLevel/tree/master/Sources) or project file into your Xcode project.
 
+Need Swift 3? Use release `0.6.3'.
+
 ## Overview
 
 Before starting, ensure that permission keys have been added to your app's `Info.plist`.
