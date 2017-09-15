@@ -56,7 +56,7 @@ public enum NextLevelDevicePosition: Int, CustomStringConvertible {
     case back = 0
     case front
     
-    var uikitType: UIImagePickerControllerCameraDevice {
+    public var uikitType: UIImagePickerControllerCameraDevice {
         switch self {
         case .back:
             return .rear
@@ -65,7 +65,7 @@ public enum NextLevelDevicePosition: Int, CustomStringConvertible {
         }
     }
     
-    var avfoundationType: AVCaptureDevice.Position {
+    public var avfoundationType: AVCaptureDevice.Position {
         switch self {
         case .back:
             return .back
@@ -92,7 +92,7 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
     case telephotoCamera
     case duoCamera
     
-    var avfoundationType: AVCaptureDevice.DeviceType {
+    public var avfoundationType: AVCaptureDevice.DeviceType {
         switch self {
         case .microphone:
             return AVCaptureDevice.DeviceType.builtInMicrophone
@@ -149,7 +149,7 @@ public enum NextLevelDeviceOrientation: Int, CustomStringConvertible {
     case landscapeRight
     case landscapeLeft
     
-    var uikitType: UIDeviceOrientation {
+    public var uikitType: UIDeviceOrientation {
         switch self {
         case .portrait:
             return .portrait
@@ -162,7 +162,7 @@ public enum NextLevelDeviceOrientation: Int, CustomStringConvertible {
         }
     }
     
-    var avfoundationType: AVCaptureVideoOrientation {
+    public var avfoundationType: AVCaptureVideoOrientation {
         switch self {
         case .portrait:
             return .portrait
@@ -196,7 +196,7 @@ public enum NextLevelFocusMode: Int, CustomStringConvertible {
     case autoFocus
     case continuousAutoFocus
     
-    var avfoundationType: AVCaptureDevice.FocusMode {
+    public var avfoundationType: AVCaptureDevice.FocusMode {
         switch self {
         case .locked:
             return .locked
@@ -227,7 +227,7 @@ public enum NextLevelExposureMode: Int, CustomStringConvertible {
     case continuousAutoExposure
     case custom
     
-    var avfoundationType: AVCaptureDevice.ExposureMode {
+    public var avfoundationType: AVCaptureDevice.ExposureMode {
         switch self {
         case .locked:
             return .locked
@@ -261,7 +261,7 @@ public enum NextLevelFlashMode: Int, CustomStringConvertible {
     case on
     case auto
     
-    var avfoundationType: AVCaptureDevice.FlashMode {
+    public var avfoundationType: AVCaptureDevice.FlashMode {
         switch self {
         case .off:
             return .off
@@ -291,7 +291,7 @@ public enum NextLevelTorchMode: Int, CustomStringConvertible {
     case on
     case auto
     
-    var avfoundationType: AVCaptureDevice.TorchMode {
+    public var avfoundationType: AVCaptureDevice.TorchMode {
         switch self {
         case .off:
             return .off
@@ -341,7 +341,7 @@ public enum NextLevelVideoStabilizationMode: Int, CustomStringConvertible {
     case cinematic
     case auto
     
-    var avfoundationType: AVCaptureVideoStabilizationMode {
+    public var avfoundationType: AVCaptureVideoStabilizationMode {
         switch self {
         case .off:
             return .off
