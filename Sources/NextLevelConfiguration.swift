@@ -300,10 +300,12 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
             return options
         } else {
             var config: [String: Any] = [AVVideoCodecKey: self.codec]
-            if generateThumbnail == true {
+            if self.generateThumbnail {
                 let settings = AVCapturePhotoSettings()
-                if settings.availablePreviewPhotoPixelFormatTypes.count > 0 {
-                    if let formatType = settings.availablePreviewPhotoPixelFormatTypes.first {
+                // iOS 11 GM fix
+                // https://forums.developer.apple.com/thread/86810
+                if settings.__availablePreviewPhotoPixelFormatTypes.count > 0 {
+                    if let formatType = settings.__availablePreviewPhotoPixelFormatTypes.first {
                         config[kCVPixelBufferPixelFormatTypeKey as String] = formatType
                     }
                 }
