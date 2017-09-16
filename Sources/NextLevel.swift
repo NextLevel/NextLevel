@@ -1845,15 +1845,13 @@ extension NextLevel {
         }
         set {
             if let device: AVCaptureDevice = self._currentDevice {
-                guard
-                    device.activeFormat.isSupported(withFrameRate: newValue)
-                    else {
-                        print("unsupported frame rate for current device format config, \(newValue) fps")
-                        return
+                guard device.activeFormat.isSupported(withFrameRate: newValue)
+                else {
+                    print("unsupported frame rate for current device format config, \(newValue) fps")
+                    return
                 }
                 
                 let fps: CMTime = CMTimeMake(1, newValue)
-                
                 do {
                     try device.lockForConfiguration()
                     
@@ -1907,12 +1905,14 @@ extension NextLevel {
                 }
                 
                 if let format = updatedFormat {
-                    let fps: CMTime = CMTimeMake(1, frameRate)
                     do {
                         try device.lockForConfiguration()
                         device.activeFormat = format
-                        device.activeVideoMaxFrameDuration = fps
-                        device.activeVideoMinFrameDuration = fps
+                        if device.activeFormat.isSupported(withFrameRate: frameRate) {
+                            let fps: CMTime = CMTimeMake(1, frameRate)
+                            device.activeVideoMaxFrameDuration = fps
+                            device.activeVideoMinFrameDuration = fps
+                        }
                         device.unlockForConfiguration()
                         
                         self.executeClosureAsyncOnMainQueueIfNecessary {
