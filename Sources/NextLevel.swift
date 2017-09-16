@@ -1879,7 +1879,6 @@ extension NextLevel {
             if let device: AVCaptureDevice = self._currentDevice {
                 
                 var updatedFormat: AVCaptureDevice.Format? = nil
-                
                 for currentFormat in device.formats {
                     if currentFormat.isSupported(withFrameRate: frameRate, dimensions: dimensions) {
                         if updatedFormat == nil {
