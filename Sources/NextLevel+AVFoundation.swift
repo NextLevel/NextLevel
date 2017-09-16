@@ -215,22 +215,13 @@ extension AVCaptureDevice.Format {
         return lowestTimeScale
     }
     
-    /// Checks if the specified capture device format supports a desired framerate.
-    ///
-    /// - Parameters:
-    ///   - frameRate: Desired frame rate
-    /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
-    public func isSupported(withFrameRate frameRate: CMTimeScale) -> Bool {
-        return self.isSupported(withFrameRate: frameRate, dimensions: CMVideoDimensions(width: 0, height: 0))
-    }
-    
     /// Checks if the specified capture device format supports a desired framerate and dimensions.
     ///
     /// - Parameters:
     ///   - frameRate: Desired frame rate
     ///   - dimensions: Desired video dimensions
     /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
-    public func isSupported(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions) -> Bool {
+    public func isSupported(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions = CMVideoDimensions(width: 0, height: 0)) -> Bool {
         let formatDimensions = CMVideoFormatDescriptionGetDimensions(self.formatDescription)
         if (formatDimensions.width >= dimensions.width && formatDimensions.height >= dimensions.height) {
             for frameRateRange in self.videoSupportedFrameRateRanges {
