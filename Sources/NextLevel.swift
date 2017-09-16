@@ -829,13 +829,11 @@ extension NextLevel {
         guard self._captureSession == nil
         else {
             throw NextLevelError.started
-            return
         }
         
         guard self.authorizationStatusForCurrentCameraMode() == .authorized
         else {
             throw NextLevelError.authorization
-            return
         }
         
         // Note: use nextLevelSessionDidStart to ensure a device and session are available for configuration or format changes
