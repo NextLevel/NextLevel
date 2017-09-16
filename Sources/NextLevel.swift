@@ -2068,10 +2068,9 @@ extension NextLevel {
     public func capturePhotoFromVideo() {
         
         self.executeClosureAsyncOnSessionQueueIfNecessary {
-            guard
-                self._recordingSession != nil
-                else {
-                    return
+            guard self._recordingSession != nil
+            else {
+                return
             }
             
             if self.isVideoCustomContextRenderingEnabled {
