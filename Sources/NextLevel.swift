@@ -652,6 +652,16 @@ public class NextLevel: NSObject {
         }
     }
     
+    /// Checks if the current capture session is running
+    public var isRunning: Bool {
+        get {
+            if let session = self._captureSession {
+                return session.isRunning
+            }
+            return false
+        }
+    }
+    
     /// The current recording session, a powerful means for modifying and editing previously recorded clips.
     /// The session provides features such as 'undo'.
     public var session: NextLevelSession? {
