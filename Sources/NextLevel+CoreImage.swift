@@ -49,7 +49,7 @@ extension CIContext {
     ///
     /// - Parameter pixelBuffer: Pixel buffer input
     /// - Returns: UIImage from the pixel buffer, otherwise nil
-    public  func uiimage(withPixelBuffer pixelBuffer: CVPixelBuffer) -> UIImage? {
+    public func uiimage(withPixelBuffer pixelBuffer: CVPixelBuffer) -> UIImage? {
         var pixelBufferImage: UIImage? = nil
         if CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly) == kCVReturnSuccess {
             let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
@@ -60,5 +60,28 @@ extension CIContext {
         }
         return pixelBufferImage
     }
-    
+
+    /// Orient a pixel buffer using an exif orientation value.
+    ///
+    /// - Parameters:
+    ///   - pixelBuffer: Pixel buffer input
+    ///   - orientation: Exif orientation for the new pixel buffer
+    ///   - pixelBufferPool: Pixel buffer pool at which to allocate the new buffer
+    /// - Returns: Oriented pixel buffer, otherwise nil
+    public func createPixelBuffer(fromPixelBuffer pixelBuffer: CVPixelBuffer, withExifOrientation orientation: Int32, pixelBufferPool: CVPixelBufferPool) -> CVPixelBuffer? {
+        var updatedPixelBuffer: CVPixelBuffer? = nil
+        if CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess {
+            CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+            let ciImage = CIImage(cvPixelBuffer: pixelBuffer, options: nil)
+      
+            let orientedImage = ciImage.oriented(forExifOrientation: orientation)
+            self.render(orientedImage, to: updatedPixelBuffer!)
+        
+            // Note: it's possible to apply CoreImage filters here
+            
+            CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+            return updatedPixelBuffer
+        }
+        return nil
+    }
 }
