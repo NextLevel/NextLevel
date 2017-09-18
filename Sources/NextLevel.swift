@@ -2085,10 +2085,12 @@ extension NextLevel {
             // create a render context
             
             if self._ciContext == nil {
+                let options : [String : AnyObject] = [kCIContextWorkingColorSpace : CGColorSpaceCreateDeviceRGB(),
+                                                      kCIContextUseSoftwareRenderer : NSNumber(booleanLiteral: false)]
                 if let device = MTLCreateSystemDefaultDevice() {
-                    self._ciContext = CIContext(mtlDevice: device)
+                    self._ciContext = CIContext(mtlDevice: device, options: options)
                 } else if let eaglContext = EAGLContext(api: .openGLES2) {
-                    self._ciContext = CIContext(eaglContext: eaglContext)
+                    self._ciContext = CIContext(eaglContext: eaglContext, options: options)
                 }
             }
             
