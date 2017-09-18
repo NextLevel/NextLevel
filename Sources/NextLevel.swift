@@ -2027,7 +2027,7 @@ extension NextLevel {
     /// Checks if video capture is available, based on available storage and supported hardware functionality.
     public var canCaptureVideo: Bool {
         get {
-            return self.supportsVideoCapture && (NextLevel.availableStorageSpaceInBytes() > NextLevelRequiredMinimumStorageSpaceInBytes)
+            return self.supportsVideoCapture && (FileManager.availableStorageSpaceInBytes() > NextLevelRequiredMinimumStorageSpaceInBytes)
         }
     }
     
@@ -2249,7 +2249,7 @@ extension NextLevel {
     public var canCapturePhoto: Bool {
         get {
             let canCapturePhoto: Bool = (self._captureSession?.isRunning == true)
-            return canCapturePhoto && NextLevel.availableStorageSpaceInBytes() > NextLevelRequiredMinimumStorageSpaceInBytes
+            return canCapturePhoto && FileManager.availableStorageSpaceInBytes() > NextLevelRequiredMinimumStorageSpaceInBytes
         }
     }
     

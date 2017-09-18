@@ -404,7 +404,7 @@ extension NextLevelSession {
         self.startSessionIfNecessary(timestamp: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
         
         let duration = CMSampleBufferGetDuration(sampleBuffer)
-        if let adjustedBuffer = NextLevel.sampleBufferOffset(withSampleBuffer: sampleBuffer, timeOffset: self._timeOffset, duration: duration) {
+        if let adjustedBuffer = CMSampleBuffer.createSampleBuffer(fromSampleBuffer: sampleBuffer, withTimeOffset: self._timeOffset, duration: duration) {
             let presentationTimestamp = CMSampleBufferGetPresentationTimeStamp(adjustedBuffer)
             let lastTimestamp = presentationTimestamp + duration
             
