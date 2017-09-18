@@ -117,13 +117,11 @@
 		06AECC841AC3892A00EFCD03 /* NextLevel */ = {
 			isa = PBXGroup;
 			children = (
+				06CF9CE41F7047B20011CE09 /* Extensions */,
 				06AECC871AC38B3700EFCD03 /* NextLevel.swift */,
+				060D50F31D5C4D5A00247AD0 /* NextLevelClip.swift */,
 				060D50F01D5BF09F00247AD0 /* NextLevelConfiguration.swift */,
 				060D50EE1D5BC77E00247AD0 /* NextLevelSession.swift */,
-				060D50F31D5C4D5A00247AD0 /* NextLevelClip.swift */,
-				0699B4BC1D7942D4005958BC /* NextLevel+Additions.swift */,
-				06BA97681D7FFDF200CD20D7 /* NextLevel+Metadata.swift */,
-				06C86E381D81DD5800A43411 /* NextLevel+AVFoundation.swift */,
 			);
 			name = NextLevel;
 			sourceTree = "<group>";
@@ -136,6 +134,16 @@
 			);
 			name = Framework;
 			path = NextLevel;
+			sourceTree = "<group>";
+		};
+		06CF9CE41F7047B20011CE09 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0699B4BC1D7942D4005958BC /* NextLevel+Additions.swift */,
+				06C86E381D81DD5800A43411 /* NextLevel+AVFoundation.swift */,
+				06BA97681D7FFDF200CD20D7 /* NextLevel+Metadata.swift */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
