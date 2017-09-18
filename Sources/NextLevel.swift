@@ -2082,14 +2082,24 @@ extension NextLevel {
                 }
             }
             
-            var photoDict: [String: Any]? = nil
+            // create a render context
             
+            if self._ciContext == nil {
+                if let device = MTLCreateSystemDefaultDevice() {
+                    self._ciContext = CIContext(mtlDevice: device)
+                } else if let eaglContext = EAGLContext(api: .openGLES2) {
+                    self._ciContext = CIContext(eaglContext: eaglContext)
+                }
+            }
+            
+            var photoDict: [String: Any]? = nil
             if let customFrame = self._sessionVideoCustomContextImageBuffer {
                 
                 // TODO append exif metadata
                 
                 // add JPEG, thumbnail
-                if let photo = self.uiimage(fromPixelBuffer: customFrame),
+                if let context = self._ciContext,
+                    let photo = context.uiimage(withPixelBuffer: customFrame),
                     let imageData = UIImageJPEGRepresentation(photo, 1) {
                     
                     if photoDict == nil {
@@ -2110,7 +2120,8 @@ extension NextLevel {
                 }
                 
                 // add JPEG, thumbnail
-                if let photo = self.uiimage(fromSampleBuffer: videoFrame),
+                if let context = self._ciContext,
+                    let photo = context.uiimage(withSampleBuffer: videoFrame),
                     let imageData = UIImageJPEGRepresentation(photo, 1) {
                     
                     if photoDict == nil {
@@ -2253,55 +2264,6 @@ extension NextLevel {
                 photoOutput.capturePhoto(with: photoSettings, delegate: self)
             }
         }
-    }
-    
-}
-
-// MARK: - buffer conversion funcs
-
-extension NextLevel {
-    
-    internal func uiimage(fromSampleBuffer sampleBuffer: CMSampleBuffer) -> UIImage? {
-        var sampleBufferImage: UIImage? = nil
-        if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-            if self._ciContext == nil {
-                if let device = MTLCreateSystemDefaultDevice() {
-                    self._ciContext = CIContext(mtlDevice: device)
-                } else if let eaglContext = EAGLContext(api: .openGLES2) {
-                    self._ciContext = CIContext(eaglContext: eaglContext)
-                }
-            }
-            
-            if let context = self._ciContext {
-                let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
-                if let cgimage = context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
-                    sampleBufferImage = UIImage(cgImage: cgimage)
-                }
-            }
-        }
-        return sampleBufferImage
-    }
-    
-    internal func uiimage(fromPixelBuffer pixelBuffer: CVPixelBuffer) -> UIImage? {
-        if self._ciContext == nil {
-            if let device = MTLCreateSystemDefaultDevice() {
-                self._ciContext = CIContext(mtlDevice: device)
-            } else if let eaglContext = EAGLContext(api: .openGLES2) {
-                self._ciContext = CIContext(eaglContext: eaglContext)
-            }
-        }
-        
-        var pixelBufferImage: UIImage? = nil
-        if let context = self._ciContext {
-            if CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0)) == kCVReturnSuccess {
-                let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
-                if let cgimage = context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
-                    pixelBufferImage = UIImage(cgImage: cgimage)
-                }
-                CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-            }
-        }
-        return pixelBufferImage
     }
     
 }

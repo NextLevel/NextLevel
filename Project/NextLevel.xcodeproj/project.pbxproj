@@ -27,6 +27,8 @@
 		06C86E391D81DD5800A43411 /* NextLevel+AVFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C86E381D81DD5800A43411 /* NextLevel+AVFoundation.swift */; };
 		06C86E531D8208D900A43411 /* NextLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = 06C86E511D8208D900A43411 /* NextLevel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06C86E5B1D83857500A43411 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06C86E591D83857500A43411 /* LaunchScreen.storyboard */; };
+		06CF9CE61F7064170011CE09 /* NextLevel+CoreImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CF9CE51F7064170011CE09 /* NextLevel+CoreImage.swift */; };
+		06CF9CE71F7064170011CE09 /* NextLevel+CoreImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CF9CE51F7064170011CE09 /* NextLevel+CoreImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,7 @@
 		06C86E511D8208D900A43411 /* NextLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NextLevel.h; path = ../../Sources/NextLevel.h; sourceTree = "<group>"; };
 		06C86E521D8208D900A43411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		06C86E5A1D83857500A43411 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = NextLevel/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		06CF9CE51F7064170011CE09 /* NextLevel+CoreImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NextLevel+CoreImage.swift"; path = "../Sources/NextLevel+CoreImage.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +144,7 @@
 			children = (
 				0699B4BC1D7942D4005958BC /* NextLevel+Additions.swift */,
 				06C86E381D81DD5800A43411 /* NextLevel+AVFoundation.swift */,
+				06CF9CE51F7064170011CE09 /* NextLevel+CoreImage.swift */,
 				06BA97681D7FFDF200CD20D7 /* NextLevel+Metadata.swift */,
 			);
 			name = Extensions;
@@ -268,6 +272,7 @@
 				06AECC881AC38B3700EFCD03 /* NextLevel.swift in Sources */,
 				06BA97691D7FFDF200CD20D7 /* NextLevel+Metadata.swift in Sources */,
 				06AECC651AC3830800EFCD03 /* AppDelegate.swift in Sources */,
+				06CF9CE61F7064170011CE09 /* NextLevel+CoreImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +283,7 @@
 				06250AA01D8C57AF0008C903 /* NextLevelClip.swift in Sources */,
 				06250A9E1D8C57AA0008C903 /* NextLevelConfiguration.swift in Sources */,
 				06250AA11D8C57B20008C903 /* NextLevel+Additions.swift in Sources */,
+				06CF9CE71F7064170011CE09 /* NextLevel+CoreImage.swift in Sources */,
 				06250A9F1D8C57AD0008C903 /* NextLevelSession.swift in Sources */,
 				06250AA21D8C57B50008C903 /* NextLevel+Metadata.swift in Sources */,
 				06250A9D1D8C57A60008C903 /* NextLevel.swift in Sources */,
