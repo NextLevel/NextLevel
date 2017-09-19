@@ -565,13 +565,13 @@ public class NextLevel: NSObject {
     
     // capture configuration
     
-    /// Configuration property to modify for video
+    /// Configuration for video
     public var videoConfiguration: NextLevelVideoConfiguration
     
-    /// Configuration property to modify for audio
+    /// Configuration for audio
     public var audioConfiguration: NextLevelAudioConfiguration
     
-    /// Configuration property to modify for photos
+    /// Configuration for photos
     public var photoConfiguration: NextLevelPhotoConfiguration
     
     // audio configuration

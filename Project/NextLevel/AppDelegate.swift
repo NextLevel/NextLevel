@@ -24,6 +24,8 @@
 
 import UIKit
 
+let NextLevelAlbumTitle = "NextLevel"
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
