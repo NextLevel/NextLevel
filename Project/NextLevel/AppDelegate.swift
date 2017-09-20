@@ -37,9 +37,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame:UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.black
         
-        let viewController = CameraViewController()
+        // ARSession-based recording sample or AVFoundation-based sample (uncomment for iOS 11 example)
+        //self.window?.rootViewController = MixedRealityViewController()
+        self.window?.rootViewController = CameraViewController()
         
-        self.window?.rootViewController = viewController
         self.window?.makeKeyAndVisible()
         return true
     }

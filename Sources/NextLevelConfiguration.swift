@@ -26,6 +26,7 @@
 import UIKit
 import Foundation
 import AVFoundation
+import ARKit
 
 // MARK: - MediaTypeConfiguration
 
@@ -318,3 +319,17 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     internal var flashMode: AVCaptureDevice.FlashMode
 }
 
+@available(iOS 11.0, *)
+/// NextLevelARConfiguration, augmented reality configuration object
+public class NextLevelARConfiguration : NextLevelConfiguration {
+    
+    /// ARKit configuration
+    public var config: ARConfiguration?
+    
+    /// ARKit session
+    public var session: ARSession?
+    
+    /// Session run options
+    public var runOptions: ARSession.RunOptions?
+    
+}
