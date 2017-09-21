@@ -989,11 +989,11 @@ extension NextLevel {
                     captureDevice = videoDevice
                 }
                 
-                if let device = captureDevice {
-                    if device != self._currentDevice {
-                        self.configureDevice(captureDevice: device, mediaType: AVMediaType.video)
+                if let captureDevice = captureDevice {
+                    if captureDevice != self._currentDevice {
+                        self.configureDevice(captureDevice: captureDevice, mediaType: AVMediaType.video)
                         
-                        let changingPosition = device.position != self._currentDevice?.position
+                        let changingPosition = captureDevice.position != self._currentDevice?.position
                         if changingPosition == true {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
                                 self.deviceDelegate?.nextLevelDevicePositionWillChange(self)
@@ -1001,7 +1001,7 @@ extension NextLevel {
                         }
                         
                         self.willChangeValue(forKey: "currentDevice")
-                        self._currentDevice = device
+                        self._currentDevice = captureDevice
                         self.didChangeValue(forKey: "currentDevice")
                         self._requestedDevice = nil
                         
