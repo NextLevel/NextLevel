@@ -2620,6 +2620,10 @@ extension NextLevel {
     }
     
     public func arSession(_ session: ARSession, didOutputAudioSampleBuffer audioSampleBuffer: CMSampleBuffer) {
+        self._lastAudioFrame = audioSampleBuffer
+        if let session = self._recordingSession {
+            self.handleAudioOutput(sampleBuffer: audioSampleBuffer, session: session)
+        }
     }
     
 }
