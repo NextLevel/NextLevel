@@ -104,7 +104,7 @@ class MixedRealityViewController: UIViewController {
             self.view.addSubview(arView)
         }
         
-        self.focusView = FocusIndicatorView(frame: .zero)
+        //self.focusView = FocusIndicatorView(frame: .zero)
         
         // buttons
         self.recordButton = UIImageView(image: UIImage(named: "record_button"))
@@ -376,20 +376,20 @@ extension MixedRealityViewController: UIGestureRecognizerDelegate {
 extension MixedRealityViewController {
     
     @objc internal func handleFocusTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
-        let tapPoint = gestureRecognizer.location(in: self.arView)
-        
-        if let focusView = self.focusView {
-            var focusFrame = focusView.frame
-            focusFrame.origin.x = CGFloat((tapPoint.x - (focusFrame.size.width * 0.5)).rounded())
-            focusFrame.origin.y = CGFloat((tapPoint.y - (focusFrame.size.height * 0.5)).rounded())
-            focusView.frame = focusFrame
-            
-            self.arView?.addSubview(focusView)
-            focusView.startAnimation()
-        }
-        
-        let adjustedPoint = NextLevel.shared.previewLayer.captureDevicePointConverted(fromLayerPoint: tapPoint)
-        NextLevel.shared.focusExposeAndAdjustWhiteBalance(atAdjustedPoint: adjustedPoint)
+//        let tapPoint = gestureRecognizer.location(in: self.arView)
+//
+//        if let focusView = self.focusView {
+//            var focusFrame = focusView.frame
+//            focusFrame.origin.x = CGFloat((tapPoint.x - (focusFrame.size.width * 0.5)).rounded())
+//            focusFrame.origin.y = CGFloat((tapPoint.y - (focusFrame.size.height * 0.5)).rounded())
+//            focusView.frame = focusFrame
+//
+//            self.arView?.addSubview(focusView)
+//            focusView.startAnimation()
+//        }
+//
+//        let adjustedPoint = NextLevel.shared.previewLayer.captureDevicePointConverted(fromLayerPoint: tapPoint)
+//        NextLevel.shared.focusExposeAndAdjustWhiteBalance(atAdjustedPoint: adjustedPoint)
     }
     
 }
@@ -527,22 +527,22 @@ extension MixedRealityViewController: NextLevelDeviceDelegate {
     }
     
     func nextLevelDidStopFocus(_  nextLevel: NextLevel) {
-        if let focusView = self.focusView {
-            if focusView.superview != nil {
-                focusView.stopAnimation()
-            }
-        }
+//        if let focusView = self.focusView {
+//            if focusView.superview != nil {
+//                focusView.stopAnimation()
+//            }
+//        }
     }
     
     func nextLevelWillChangeExposure(_ nextLevel: NextLevel) {
     }
     
     func nextLevelDidChangeExposure(_ nextLevel: NextLevel) {
-        if let focusView = self.focusView {
-            if focusView.superview != nil {
-                focusView.stopAnimation()
-            }
-        }
+//        if let focusView = self.focusView {
+//            if focusView.superview != nil {
+//                focusView.stopAnimation()
+//            }
+//        }
     }
     
     func nextLevelWillChangeWhiteBalance(_ nextLevel: NextLevel) {
