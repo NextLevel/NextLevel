@@ -326,10 +326,13 @@ public class NextLevelARConfiguration : NextLevelConfiguration {
     /// ARKit configuration
     public var config: ARConfiguration?
     
-    /// ARKit session
+    /// ARKit session, note: the delegate queue will be overriden
     public var session: ARSession?
     
     /// Session run options
     public var runOptions: ARSession.RunOptions?
+
+    /// AR scene output antialiasing mode
+    //public var antialiasingMode: SCNAntialiasingMode = .none
     
 }
