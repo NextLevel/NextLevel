@@ -371,7 +371,7 @@ extension NextLevelSession {
     ///   - imageBuffer: Optional image buffer input for writing a custom buffer
     ///   - minFrameDuration: Current active minimum frame duration
     ///   - completionHandler: Handler when a frame appending operation completes or fails
-    public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, imageBuffer: CVPixelBuffer?, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
+    public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, customImageBuffer: CVPixelBuffer?, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
         let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         self.startSessionIfNecessary(timestamp: timestamp)
         
@@ -392,8 +392,8 @@ extension NextLevelSession {
             if videoInput.isReadyForMoreMediaData {
                 
                 var bufferToProcess: CVPixelBuffer? = nil
-                if let pixelImageBuffer = imageBuffer {
-                    bufferToProcess = pixelImageBuffer
+                if let customImageBuffer = customImageBuffer {
+                    bufferToProcess = customImageBuffer
                 } else {
                     bufferToProcess = CMSampleBufferGetImageBuffer(sampleBuffer)
                 }

@@ -2386,8 +2386,7 @@ extension NextLevel {
                 }
                 
                 // when clients modify a frame using their rendering context, the resulting CVPixelBuffer is then passed in here with the original sampleBuffer for recording
-                let minFrameDuration = device.activeVideoMinFrameDuration
-                session.appendVideo(withSampleBuffer: sampleBuffer, imageBuffer: self._sessionVideoCustomContextImageBuffer, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
+                session.appendVideo(withSampleBuffer: sampleBuffer, customImageBuffer: self._sessionVideoCustomContextImageBuffer, minFrameDuration: device.activeVideoMinFrameDuration, completionHandler: { (success: Bool) -> Void in
                     // cleanup client rendering context
                     if self.isVideoCustomContextRenderingEnabled {
                         if let imageBuffer = imageBuffer {
