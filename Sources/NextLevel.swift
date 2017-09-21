@@ -611,9 +611,13 @@ public class NextLevel: NSObject {
             }
             
             self.executeClosureAsyncOnSessionQueueIfNecessary {
-                self.configureSession()
-                self.configureSessionDevices()
-                self.updateVideoOrientation()
+                if self.captureMode == .arKit {
+                    self.configureSession()
+                } else {
+                    self.configureSession()
+                    self.configureSessionDevices()
+                    self.updateVideoOrientation()
+                }
             }
         }
     }
@@ -667,6 +671,11 @@ public class NextLevel: NSObject {
     /// Checks if the current capture session is running
     public var isRunning: Bool {
         get {
+            if #available(iOS 11.0, *) {
+                if self.captureMode == .arKit {
+                    return self._arRunning
+                }
+            }
             if let session = self._captureSession {
                 return session.isRunning
             }
@@ -709,6 +718,7 @@ public class NextLevel: NSObject {
     internal var _sessionVideoCustomContextImageBuffer: CVPixelBuffer?
     internal var _ciContext: CIContext?
     
+    internal var _arRunning: Bool = false
     internal var _arConfiguration: NextLevelConfiguration?
     
     // MARK: - singleton
@@ -885,7 +895,10 @@ extension NextLevel {
         
         if self.captureMode == .arKit {
             if #available(iOS 11.0, *) {
-                self.arConfiguration?.session?.pause()
+                if self._arRunning == true {
+                    self.arConfiguration?.session?.pause()
+                    self._arRunning = false
+                }
             }
         }
     }
@@ -925,7 +938,16 @@ extension NextLevel {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let config = self.arConfiguration?.config,
                 let options = self.arConfiguration?.runOptions {
+                self._sessionConfigurationCount = 0
+
+                self.arConfiguration?.session?.delegateQueue = self._sessionQueue
+
+                // setup NL recording session
+                self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionSpecificKey)
+                
+                self.delegate?.nextLevelSessionWillStart(self)
                 self.arConfiguration?.session?.run(config, options: options)
+                self._arRunning = true
             }
         }
     }
@@ -1082,6 +1104,7 @@ extension NextLevel {
                 let _ = self.addAudioOuput()
                 break
             case .arKit:
+                // no AV inputs to setup
                 break
             }
             
