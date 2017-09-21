@@ -254,18 +254,38 @@ extension NextLevelSession {
     ///   - configuration: Video configuration for video output
     ///   - formatDescription: sample buffer format description
     /// - Returns: True when setup completes successfully
-    public func setupVideo(withSettings settings: [String : Any]?, configuration: NextLevelVideoConfiguration, formatDescription: CMFormatDescription) -> Bool {
-        self._videoInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: settings, sourceFormatHint: formatDescription)
+    public func setupVideo(withSettings settings: [String : Any]?, configuration: NextLevelVideoConfiguration, formatDescription: CMFormatDescription? = nil) -> Bool {
+        if let formatDescription = formatDescription {
+            self._videoInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: settings, sourceFormatHint: formatDescription)
+        } else {
+            if let _ = settings?[AVVideoCodecKey],
+                let _ = settings?[AVVideoWidthKey],
+                let _ = settings?[AVVideoHeightKey] {
+                self._videoInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: settings)
+            } else {
+                self._videoInput = nil
+                print("NextLevelSession, configuration failure for video output")
+                return false
+            }
+        }
+        
         if let videoInput = self._videoInput {
             videoInput.expectsMediaDataInRealTime = true
             videoInput.transform = configuration.transform
             self._videoConfiguration = configuration
             
-            let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
+            var pixelBufferAttri: [String : Any] = [String(kCVPixelBufferPixelFormatTypeKey): Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
             
-            let pixelBufferAttri: [String : Any] = [String(kCVPixelBufferPixelFormatTypeKey): Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
-                                                    String(kCVPixelBufferWidthKey): Float(videoDimensions.width),
-                                                    String(kCVPixelBufferHeightKey): Float(videoDimensions.height)]
+            if let formatDescription = formatDescription {
+                let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
+                pixelBufferAttri[String(kCVPixelBufferWidthKey)] = Float(videoDimensions.width)
+                pixelBufferAttri[String(kCVPixelBufferHeightKey)] = Float(videoDimensions.height)
+            } else if let width = settings?[AVVideoWidthKey],
+                      let height = settings?[AVVideoHeightKey] {
+                pixelBufferAttri[String(kCVPixelBufferWidthKey)] = width
+                pixelBufferAttri[String(kCVPixelBufferHeightKey)] = height
+            }
+            
             self._pixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput, sourcePixelBufferAttributes: pixelBufferAttri)
         }
         return self._videoInput != nil
