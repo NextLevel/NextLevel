@@ -2376,11 +2376,10 @@ extension NextLevel {
                 
                 // check with the client to setup/maintain external render contexts
                 let imageBuffer = self.isVideoCustomContextRenderingEnabled == true ? CMSampleBufferGetImageBuffer(sampleBuffer) : nil
-                
-                if let bufferRef = imageBuffer {
-                    if CVPixelBufferLockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: 0)) == kCVReturnSuccess {
+                if let imageBuffer = imageBuffer {
+                    if CVPixelBufferLockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0)) == kCVReturnSuccess {
                         // only called from captureQueue
-                        self.videoDelegate?.nextLevel(self, renderToCustomContextWithImageBuffer: bufferRef, onQueue: self._sessionQueue)
+                        self.videoDelegate?.nextLevel(self, renderToCustomContextWithImageBuffer: imageBuffer, onQueue: self._sessionQueue)
                     } else {
                         self._sessionVideoCustomContextImageBuffer = nil
                     }
@@ -2391,8 +2390,8 @@ extension NextLevel {
                 session.appendVideo(withSampleBuffer: sampleBuffer, imageBuffer: self._sessionVideoCustomContextImageBuffer, minFrameDuration: minFrameDuration, completionHandler: { (success: Bool) -> Void in
                     // cleanup client rendering context
                     if self.isVideoCustomContextRenderingEnabled {
-                        if let bufferRef = imageBuffer {
-                            CVPixelBufferUnlockBaseAddress(bufferRef, CVPixelBufferLockFlags(rawValue: 0))
+                        if let imageBuffer = imageBuffer {
+                            CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
                         }
                     }
                     
@@ -2424,7 +2423,6 @@ extension NextLevel {
             } // self._currentDevice
         }
     }
-    
     
     internal func handleAudioOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         if session.isAudioReady == false {

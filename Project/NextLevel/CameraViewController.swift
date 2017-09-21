@@ -528,11 +528,9 @@ extension CameraViewController: NextLevelVideoDelegate {
     
     // video recording session
     func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession) {
-//        print("setup video")
     }
     
     func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession) {
-//        print("setup audio")
     }
     
     func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession) {
