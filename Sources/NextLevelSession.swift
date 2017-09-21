@@ -263,8 +263,8 @@ extension NextLevelSession {
                 let _ = settings?[AVVideoHeightKey] {
                 self._videoInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: settings)
             } else {
-                self._videoInput = nil
                 print("NextLevelSession, configuration failure for video output")
+                self._videoInput = nil
                 return false
             }
         }

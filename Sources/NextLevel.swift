@@ -2352,7 +2352,7 @@ extension NextLevel {
     
     internal func handleVideoOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         if session.isVideoReady == false {
-            if let settings = self.videoConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
+            if let settings = self.videoConfiguration.avcaptureSettingsDictionary(sampleBuffer: sampleBuffer),
                 let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 if !session.setupVideo(withSettings: settings, configuration: self.videoConfiguration, formatDescription: formatDescription) {
                     print("NextLevel, could not setup video session")
@@ -2426,7 +2426,7 @@ extension NextLevel {
     
     internal func handleAudioOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
         if session.isAudioReady == false {
-            if let settings = self.audioConfiguration.avcaptureSettingsDictionary(withSampleBuffer: sampleBuffer),
+            if let settings = self.audioConfiguration.avcaptureSettingsDictionary(sampleBuffer: sampleBuffer),
                 let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 if !session.setupAudio(withSettings: settings, configuration: self.audioConfiguration, formatDescription: formatDescription) {
                     print("NextLevel, could not setup audio session")
@@ -2738,21 +2738,6 @@ extension NextLevel {
             self.executeClosureAsyncOnMainQueueIfNecessary {
                 self.delegate?.nextLevelSessionWasInterrupted(self)
             }
-            
-            //            if let reason = notification.userInfo?[AVCaptureSessionInterruptionReasonKey] as? AVCaptureSessionInterruptionReason {
-            //                switch reason {
-            //                case .audioDeviceInUseByAnotherClient:
-            //                    fallthrough
-            //                case .videoDeviceInUseByAnotherClient:
-            //                    // TODO
-            //                    break
-            //                case .videoDeviceNotAvailableWithMultipleForegroundApps:
-            //                    // TODO
-            //                    break
-            //                default:
-            //                    break
-            //                }
-            //            }
         }
     }
     

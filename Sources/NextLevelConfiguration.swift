@@ -53,7 +53,7 @@ public class NextLevelConfiguration: NSObject {
     ///
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Configuration dictionary for AVFoundation
-    public func avcaptureSettingsDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String: Any]? {
+    public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
         return self.options
     }
 }
@@ -135,7 +135,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     ///
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Video configuration dictionary for AVFoundation
-    override public func avcaptureSettingsDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String : Any]? {
+    override public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String : Any]? {
         if let options = self.options {
             return options
         } else {
@@ -144,8 +144,8 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             if let dimensions = self.dimensions {
                 config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(dimensions.width))
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(dimensions.height))
-            } else if let buffer = sampleBuffer,
-                      let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(buffer) {
+            } else if let sampleBuffer = sampleBuffer,
+                      let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
                 switch self.aspectRatio {
                 case .standard:
@@ -168,6 +168,11 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                     config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.height))
                     break
                 }
+            } else if let pixelBuffer = pixelBuffer {
+                let width = CVPixelBufferGetWidth(pixelBuffer)
+                let height = CVPixelBufferGetWidth(pixelBuffer)
+                config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(width))
+                config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
             }
 
             config[AVVideoCodecKey] = self.codec
@@ -191,6 +196,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             return config
         }
     }
+    
 }
 
 // MARK: - AudioConfiguration
@@ -229,14 +235,14 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
     ///
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Audio configuration dictionary for AVFoundation
-    override public func avcaptureSettingsDictionary(withSampleBuffer sampleBuffer: CMSampleBuffer?) -> [String: Any]? {
+    override public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
         if let options = self.options {
             return options
         } else {
             var config: [String : Any] = [AVEncoderBitRateKey : NSNumber(integerLiteral: self.bitRate)]
             
-            if let buffer = sampleBuffer {
-                if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(buffer) {
+            if let sampleBuffer = sampleBuffer {
+                if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                     if let _ = self.sampleRate, let _ = self.channelsCount {
                         // loading user provided settings after buffer use
                     } else if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
