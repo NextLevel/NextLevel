@@ -2617,9 +2617,10 @@ extension NextLevel {
         let pixelBufferPoolMinimumCount = 3
         let poolAttributes: [String:AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey): NSNumber(integerLiteral: pixelBufferPoolMinimumCount)]
         
+        // TODO: doesn't properly support orientation
         let pixelBufferAttributes: [String:AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(self._bufferFormatType)),
-                                                         String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferWidth),
-                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferHeight),
+                                                         String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferHeight),
+                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferWidth),
                                                          String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
                                                          String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
         
@@ -2769,7 +2770,7 @@ extension NextLevel {
         // TODO: support orientation changes, maybe use snapshot API instead
         self.setupPixelBufferPoolIfNecessary(pixelBuffer)
         if let pixelBufferPool = self._pixelBufferPool,
-            let adjustedPixelBuffer = self._ciContext?.createPixelBuffer(fromPixelBuffer: pixelBuffer, withExifOrientation: 4, pixelBufferPool: pixelBufferPool) {
+            let adjustedPixelBuffer = self._ciContext?.createPixelBuffer(fromPixelBuffer: pixelBuffer, withOrientation: .right, pixelBufferPool: pixelBufferPool) {
             pixelBuffer = adjustedPixelBuffer
         
             self.videoDelegate?.nextLevel(self, willProcessFrame: frame, pixelBuffer: pixelBuffer, timestamp: timestamp, onQueue: self._sessionQueue)

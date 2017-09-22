@@ -65,22 +65,23 @@ extension CIContext {
     ///
     /// - Parameters:
     ///   - pixelBuffer: Pixel buffer input
-    ///   - orientation: Exif orientation for the new pixel buffer
+    ///   - orientation: CGImage orientation for the new pixel buffer
     ///   - pixelBufferPool: Pixel buffer pool at which to allocate the new buffer
     /// - Returns: Oriented pixel buffer, otherwise nil
-    public func createPixelBuffer(fromPixelBuffer pixelBuffer: CVPixelBuffer, withExifOrientation orientation: Int32, pixelBufferPool: CVPixelBufferPool) -> CVPixelBuffer? {
+    @available(iOS 11.0, *)
+    public func createPixelBuffer(fromPixelBuffer pixelBuffer: CVPixelBuffer, withOrientation orientation: CGImagePropertyOrientation, pixelBufferPool: CVPixelBufferPool) -> CVPixelBuffer? {
         var updatedPixelBuffer: CVPixelBuffer? = nil
         if CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess {
-            CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
-            let ciImage = CIImage(cvPixelBuffer: pixelBuffer, options: nil)
-      
-            let orientedImage = ciImage.oriented(forExifOrientation: orientation)
-            self.render(orientedImage, to: updatedPixelBuffer!)
-        
-            // Note: it's possible to apply CoreImage filters here
-            
-            CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
-            return updatedPixelBuffer
+            if let updatedPixelBuffer = updatedPixelBuffer {
+                CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+                
+                let ciImage = CIImage(cvPixelBuffer: pixelBuffer, options: nil)
+                let orientedImage = ciImage.oriented(orientation)
+                self.render(orientedImage, to: updatedPixelBuffer)
+
+                CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+                return updatedPixelBuffer
+            }
         }
         return nil
     }
