@@ -2617,10 +2617,10 @@ extension NextLevel {
         let pixelBufferPoolMinimumCount = 3
         let poolAttributes: [String:AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey): NSNumber(integerLiteral: pixelBufferPoolMinimumCount)]
         
-        // TODO: doesn't properly support orientation
+        // TODO: doesn't properly support orientation, should reference videoConfiguration settings
         let pixelBufferAttributes: [String:AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(self._bufferFormatType)),
-                                                         String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferHeight),
-                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferWidth),
+                                                         String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferHeight), // flip
+                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferWidth), // flip
                                                          String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
                                                          String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
         
