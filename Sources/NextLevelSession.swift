@@ -35,10 +35,10 @@ public class NextLevelSession: NSObject {
     public var outputDirectory: String
     
     /// Output file type for a session, see AVMediaFormat.h for supported types.
-    public var fileType: AVFileType
+    public var fileType: AVFileType = .mp4
     
     /// Output file extension for a session, see AVMediaFormat.h for supported extensions.
-    public var fileExtension: String
+    public var fileExtension: String = "mp4"
     
     /// Unique identifier for a session.
     public var identifier: String {
@@ -159,8 +159,8 @@ public class NextLevelSession: NSObject {
     internal var _date: Date
     
     internal var _duration: CMTime = kCMTimeZero
-    internal var _clips: [NextLevelClip]
-    internal var _clipFilenameCount: Int
+    internal var _clips: [NextLevelClip] = []
+    internal var _clipFilenameCount: Int = 0
 
     internal var _writer: AVAssetWriter?
     internal var _videoInput: AVAssetWriterInput?
@@ -175,14 +175,14 @@ public class NextLevelSession: NSObject {
     internal var _sessionQueueKey: DispatchSpecificKey<NSObject>
     
     internal var _currentClipDuration: CMTime = kCMTimeZero
-    internal var _currentClipHasAudio: Bool
-    internal var _currentClipHasVideo: Bool
+    internal var _currentClipHasAudio: Bool = false
+    internal var _currentClipHasVideo: Bool = false
 
-    internal var _clipStarted: Bool
-    internal var _timeOffset: CMTime
-    internal var _startTimestamp: CMTime
-    internal var _lastAudioTimestamp: CMTime
-    internal var _lastVideoTimestamp: CMTime
+    internal var _clipStarted: Bool = false
+    internal var _timeOffset: CMTime = kCMTimeInvalid
+    internal var _startTimestamp: CMTime = kCMTimeInvalid
+    internal var _lastAudioTimestamp: CMTime = kCMTimeInvalid
+    internal var _lastVideoTimestamp: CMTime = kCMTimeInvalid
     
     private let NextLevelSessionAudioQueueIdentifier = "engineering.NextLevel.session.audioQueue"
     private let NextLevelSessionQueueIdentifier = "engineering.NextLevel.sessionQueue"
@@ -206,11 +206,6 @@ public class NextLevelSession: NSObject {
         self._identifier = NSUUID().uuidString
         self._date = Date()
         self.outputDirectory = NSTemporaryDirectory()
-        self.fileType = AVFileType.mp4
-        self.fileExtension = "mp4"
-        
-        self._clips = []
-        self._clipFilenameCount = 0
      
         self._audioQueue = DispatchQueue(label: NextLevelSessionAudioQueueIdentifier)
 
@@ -218,15 +213,6 @@ public class NextLevelSession: NSObject {
         self._sessionQueue = DispatchQueue(label: NextLevelSessionQueueIdentifier)
         self._sessionQueue.setSpecific(key: NextLevelSessionSpecificKey, value: self._sessionQueue)
         self._sessionQueueKey = NextLevelSessionSpecificKey
-
-        self._currentClipHasAudio = false
-        self._currentClipHasVideo = false
-        
-        self._clipStarted = false
-        self._timeOffset = kCMTimeInvalid
-        self._startTimestamp = kCMTimeInvalid
-        self._lastAudioTimestamp = kCMTimeInvalid
-        self._lastVideoTimestamp = kCMTimeInvalid
         
         super.init()
     }
@@ -238,7 +224,7 @@ public class NextLevelSession: NSObject {
         self._pixelBufferAdapter = nil
         
         self._videoConfiguration = nil
-        self._audioConfiguration = nil    
+        self._audioConfiguration = nil
     }
     
 }
