@@ -170,7 +170,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 }
             } else if let pixelBuffer = pixelBuffer {
                 let width = CVPixelBufferGetWidth(pixelBuffer)
-                let height = CVPixelBufferGetWidth(pixelBuffer)
+                let height = CVPixelBufferGetHeight(pixelBuffer)
                 config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(width))
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
             }
