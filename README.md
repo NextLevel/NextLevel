@@ -9,6 +9,7 @@ Next Level is a media capture camera library for iOS written in [Swift](https://
 | &#127916; | “[Vine](http://vine.co)-like” video clip recording and editing |
 | &#128444; | photo capture (raw, jpeg, and from a video frame) |
 | &#128070; | customizable gestural interaction and user interface |
+| &#128160; | [ARKit integration](https://developer.apple.com/arkit/) (beta) |
 | &#128247; | dual camera, wide angle, and telephoto device support |
 | &#128034; | adjustable frame rate on supported hardware (ie fast/slow motion capture) |
 | &#128269; | video zoom |
@@ -44,7 +45,13 @@ let package = Package(
 
 Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/NextLevel/tree/master/Sources) or project file into your Xcode project.
 
-Need Swift 3? Use release `0.6.3`.
+Need Swift 3.X? Use release version `0.6.3` in your Podfile.
+
+## ARKit
+
+Starting with release `0.8.0`, NextLevel will provide a mode for leveraging ARKit in-place of AVFoundation. This enables a variety of new great features while building on the existing recording capabilities of NextLevel.
+
+This mode is in beta, so please help out if encountering a bug or contributing ideas for improvement.
 
 ## Overview
 
