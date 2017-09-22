@@ -369,6 +369,13 @@ extension MixedRealityViewController: UIGestureRecognizerDelegate {
             break
         }
     }
+    
+    @objc internal func handlePhotoTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
+        // play system camera shutter sound
+        AudioServicesPlaySystemSoundWithCompletion(SystemSoundID(1108), nil)
+        NextLevel.shared.capturePhotoFromVideo()
+    }
+    
 }
 
 // MARK: - gesture handlers
