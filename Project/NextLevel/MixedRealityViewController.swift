@@ -54,7 +54,7 @@ class MixedRealityViewController: UIViewController {
     
     internal var longPressGestureRecognizer: UILongPressGestureRecognizer?
     internal var photoTapGestureRecognizer: UITapGestureRecognizer?
-    internal var focusTapGestureRecognizer: UITapGestureRecognizer?
+    internal var tapGestureRecognizer: UITapGestureRecognizer?
     internal var flipDoubleTapGestureRecognizer: UITapGestureRecognizer?
     
     internal var _panStartPoint: CGPoint = .zero
@@ -166,15 +166,16 @@ class MixedRealityViewController: UIViewController {
             gestureView.backgroundColor = .clear
             self.view.addSubview(gestureView)
             
-            self.focusTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleFocusTapGestureRecognizer(_:)))
-            if let focusTapGestureRecognizer = self.focusTapGestureRecognizer {
-                focusTapGestureRecognizer.delegate = self
-                focusTapGestureRecognizer.numberOfTapsRequired = 1
-                gestureView.addGestureRecognizer(focusTapGestureRecognizer)
+            self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGestureRecognizer(_:)))
+            if let tapGestureRecognizer = self.tapGestureRecognizer {
+                tapGestureRecognizer.delegate = self
+                tapGestureRecognizer.numberOfTapsRequired = 1
+                gestureView.addGestureRecognizer(tapGestureRecognizer)
             }
         }
         
         self.arConfig = ARWorldTrackingConfiguration()
+        self.arConfig?.providesAudioData = true
         self.arConfig?.planeDetection = .horizontal
         
         // Configure NextLevel by modifying the configuration ivars
@@ -375,21 +376,7 @@ extension MixedRealityViewController: UIGestureRecognizerDelegate {
 @available(iOS 11.0, *)
 extension MixedRealityViewController {
     
-    @objc internal func handleFocusTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
-//        let tapPoint = gestureRecognizer.location(in: self.arView)
-//
-//        if let focusView = self.focusView {
-//            var focusFrame = focusView.frame
-//            focusFrame.origin.x = CGFloat((tapPoint.x - (focusFrame.size.width * 0.5)).rounded())
-//            focusFrame.origin.y = CGFloat((tapPoint.y - (focusFrame.size.height * 0.5)).rounded())
-//            focusView.frame = focusFrame
-//
-//            self.arView?.addSubview(focusView)
-//            focusView.startAnimation()
-//        }
-//
-//        let adjustedPoint = NextLevel.shared.previewLayer.captureDevicePointConverted(fromLayerPoint: tapPoint)
-//        NextLevel.shared.focusExposeAndAdjustWhiteBalance(atAdjustedPoint: adjustedPoint)
+    @objc internal func handleTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
     }
     
 }
@@ -569,14 +556,17 @@ extension MixedRealityViewController: NextLevelVideoDelegate {
     // enabled by isCustomContextVideoRenderingEnabled
     func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue) {
     }
-    
+
+    func nextLevel(_ nextLevel: NextLevel, willProcessFrame frame: AnyObject, pixelBuffer: CVPixelBuffer, timestamp: TimeInterval, onQueue queue: DispatchQueue) {
+    }
+
     // video recording session
     func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession) {
-        //        print("setup video")
+        print("setup video")
     }
     
     func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession) {
-        //        print("setup audio")
+        print("setup audio")
     }
     
     func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession) {

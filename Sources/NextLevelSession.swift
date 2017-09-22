@@ -415,6 +415,57 @@ extension NextLevelSession {
         completionHandler(false)
     }
     
+    /// Append video pixel buffer frames to a session for recording.
+    ///
+    /// - Parameters:
+    ///   - sampleBuffer: Sample buffer input to be appended, unless an image buffer is also provided
+    ///   - customImageBuffer: Optional image buffer input for writing a custom buffer
+    ///   - minFrameDuration: Current active minimum frame duration
+    ///   - completionHandler: Handler when a frame appending operation completes or fails
+    public func appendVideo(withPixelBuffer pixelBuffer: CVPixelBuffer, customImageBuffer: CVPixelBuffer?, timestamp: TimeInterval, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
+        let timestamp = CMTime(seconds: timestamp, preferredTimescale: minFrameDuration.timescale)
+        self.startSessionIfNecessary(timestamp: timestamp)
+        
+        var frameDuration = minFrameDuration
+        let offsetBufferTimestamp = timestamp - self._timeOffset
+        
+        if let videoConfig = self._videoConfiguration, let timeScale = videoConfig.timescale {
+            if timeScale != 1.0 {
+                let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
+                if self._currentClipDuration.value > 0 {
+                    self._timeOffset = self._timeOffset + (duration - scaledDuration)
+                }
+                frameDuration = scaledDuration
+            }
+        }
+        
+        if let videoInput = self._videoInput, let pixelBufferAdapter = self._pixelBufferAdapter {
+            if videoInput.isReadyForMoreMediaData {
+                
+                var bufferToProcess: CVPixelBuffer? = nil
+                if let customImageBuffer = customImageBuffer {
+                    bufferToProcess = customImageBuffer
+                } else {
+                    bufferToProcess = pixelBuffer
+                }
+                
+                if let outputBuffer = bufferToProcess {
+                    if pixelBufferAdapter.append(outputBuffer, withPresentationTime: offsetBufferTimestamp) {
+                        self._currentClipDuration = (offsetBufferTimestamp + frameDuration) - self._startTimestamp
+                        self._lastVideoTimestamp = timestamp
+                        self._currentClipHasVideo = true
+                        completionHandler(true)
+                        return
+                    }
+                }
+                
+            }
+        }
+        
+        print("NextLevel, session failed to append video frame to clip")
+        completionHandler(false)
+    }
+    
     /// Append audio sample buffer to a session for recording.
     ///
     /// - Parameters:
