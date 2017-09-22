@@ -290,7 +290,7 @@ extension CameraViewController {
                         self.present(alertController, animated: true, completion: nil)
                     } else {
                         // prompt that the video has been saved
-                        let alertController = UIAlertController(title: "Something failed!", message: "Something failed!", preferredStyle: .alert)
+                        let alertController = UIAlertController(title: "Oops!", message: "Something failed!", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alertController.addAction(okAction)
                         self.present(alertController, animated: true, completion: nil)

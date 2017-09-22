@@ -740,7 +740,7 @@ public class NextLevel: NSObject {
     internal var _arConfiguration: NextLevelConfiguration?
     
     internal var _lastARFrame: CVPixelBuffer?
-
+    
     // MARK: - singleton
     
     /// Method for providing a NextLevel singleton. This isn't required for use.
