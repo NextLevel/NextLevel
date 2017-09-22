@@ -1319,45 +1319,50 @@ extension NextLevel {
                 session.removeOutput(photoOutput)
                 self._photoOutput = nil
             }
-            
             break
         case .videoWithoutAudio:
             if let photoOutput = self._photoOutput, session.outputs.contains(photoOutput) {
                 session.removeOutput(photoOutput)
                 self._photoOutput = nil
             }
-            
             if let audioOutput = self._audioOutput, session.outputs.contains(audioOutput) {
                 session.removeOutput(audioOutput)
                 self._audioOutput = nil
             }
-            
             break
         case .photo:
             if let videoOutput = self._videoOutput, session.outputs.contains(videoOutput) {
                 session.removeOutput(videoOutput)
                 self._videoOutput = nil
             }
-            
             if let audioOutput = self._audioOutput, session.outputs.contains(audioOutput) {
                 session.removeOutput(audioOutput)
                 self._audioOutput = nil
             }
-            
             break
         case .audio:
             if let videoOutput = self._videoOutput, session.outputs.contains(videoOutput) {
                 session.removeOutput(videoOutput)
                 self._videoOutput = nil
             }
-            
             if let photoOutput = self._photoOutput, session.outputs.contains(photoOutput) {
                 session.removeOutput(photoOutput)
                 self._photoOutput = nil
             }
-
             break
         case .arKit:
+            if let videoOutput = self._videoOutput, session.outputs.contains(videoOutput) {
+                session.removeOutput(videoOutput)
+                self._videoOutput = nil
+            }
+            if let audioOutput = self._audioOutput, session.outputs.contains(audioOutput) {
+                session.removeOutput(audioOutput)
+                self._audioOutput = nil
+            }
+            if let photoOutput = self._photoOutput, session.outputs.contains(photoOutput) {
+                session.removeOutput(photoOutput)
+                self._photoOutput = nil
+            }
             break
         }
         
