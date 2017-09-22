@@ -737,12 +737,8 @@ extension NextLevelSession {
 // MARK: - composition
 
 extension NextLevelSession {
-
-    internal func appendClips(toComposition composition: AVMutableComposition) {
-        self.appendClips(toComposition: composition, audioMix: nil)
-    }
     
-    internal func appendClips(toComposition composition: AVMutableComposition, audioMix: AVMutableAudioMix?) {
+    internal func appendClips(toComposition composition: AVMutableComposition, audioMix: AVMutableAudioMix? = nil) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             var videoTrack: AVMutableCompositionTrack? = nil
             var audioTrack: AVMutableCompositionTrack? = nil
