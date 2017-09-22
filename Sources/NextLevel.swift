@@ -2135,13 +2135,13 @@ extension NextLevel {
     /// Updates video capture zoom factor.
     public var videoZoomFactor: Float {
         get {
-            if let device: AVCaptureDevice = self._currentDevice {
+            if let device = self._currentDevice {
                 return Float(device.videoZoomFactor)
             }
             return 1.0 // prefer 1.0 instead of using an optional
         }
         set {
-            if let device: AVCaptureDevice = self._currentDevice {
+            if let device = self._currentDevice {
                 do {
                     try device.lockForConfiguration()
                     
@@ -2149,8 +2149,7 @@ extension NextLevel {
                     device.videoZoomFactor = CGFloat(zoom)
                     
                     device.unlockForConfiguration()
-                }
-                catch {
+                } catch {
                     print("NextLevel, zoomFactor failed to lock device for configuration")
                 }
             }
