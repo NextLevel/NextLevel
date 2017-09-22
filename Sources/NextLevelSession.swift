@@ -384,8 +384,8 @@ extension NextLevelSession {
                     bufferToProcess = CMSampleBufferGetImageBuffer(sampleBuffer)
                 }
                 
-                if let outputBuffer = bufferToProcess {
-                    if pixelBufferAdapter.append(outputBuffer, withPresentationTime: offsetBufferTimestamp) {
+                if let bufferToProcess = bufferToProcess {
+                    if pixelBufferAdapter.append(bufferToProcess, withPresentationTime: offsetBufferTimestamp) {
                         self._currentClipDuration = (offsetBufferTimestamp + frameDuration) - self._startTimestamp
                         self._lastVideoTimestamp = timestamp
                         self._currentClipHasVideo = true
@@ -437,8 +437,8 @@ extension NextLevelSession {
                     bufferToProcess = pixelBuffer
                 }
                 
-                if let outputBuffer = bufferToProcess {
-                    if pixelBufferAdapter.append(outputBuffer, withPresentationTime: offsetBufferTimestamp) {
+                if let bufferToProcess = bufferToProcess {
+                    if pixelBufferAdapter.append(bufferToProcess, withPresentationTime: offsetBufferTimestamp) {
                         self._currentClipDuration = (offsetBufferTimestamp + frameDuration) - self._startTimestamp
                         self._lastVideoTimestamp = timestamp
                         self._currentClipHasVideo = true
