@@ -522,14 +522,17 @@ public protocol NextLevelVideoDelegate: NSObjectProtocol {
     func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession)
     
+    // clip start/stop
     func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didCompleteClip clip: NextLevelClip, inSession session: NextLevelSession)
     
+    // clip file I/O
     func nextLevel(_ nextLevel: NextLevel, didAppendVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
-    func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didSkipVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
+
+    func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didSkipAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
-    
+
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession)
     
     // video frame photo
@@ -728,6 +731,7 @@ public class NextLevel: NSObject {
     internal var _videoCustomContextRenderingEnabled: Bool
     internal var _sessionVideoCustomContextImageBuffer: CVPixelBuffer?
     internal var _ciContext: CIContext?
+    // ARKit
     
     internal var _arRunning: Bool = false
     internal var _arConfiguration: NextLevelConfiguration?
