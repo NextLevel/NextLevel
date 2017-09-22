@@ -401,6 +401,8 @@ extension NextLevelSession {
         completionHandler(false)
     }
     
+    // Beta: appendVideo(withPixelBuffer:customImageBuffer:timestamp:minFrameDuration:completionHandler:) needs to be tested
+    
     /// Append video pixel buffer frames to a session for recording.
     ///
     /// - Parameters:
