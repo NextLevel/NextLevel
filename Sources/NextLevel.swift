@@ -902,11 +902,14 @@ extension NextLevel {
         
         if self.captureMode == .arKit {
             if #available(iOS 11.0, *) {
-                if self._arRunning == true {
-                    self.arConfiguration?.session?.pause()
-                    self._arRunning = false
-                    
-                    self._recordingSession = nil
+                self.executeClosureAsyncOnSessionQueueIfNecessary {
+                    if self._arRunning == true {
+                        self.arConfiguration?.session?.pause()
+                        self._arRunning = false
+                        
+                        self._recordingSession = nil
+                        self._currentDevice = nil
+                    }
                 }
             }
         }
