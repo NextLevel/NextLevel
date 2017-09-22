@@ -1001,82 +1001,84 @@ extension NextLevel {
     }
     
     internal func configureSessionDevices() {
-        if self._captureSession != nil {
+        guard self._captureSession != nil else {
+            return
+        }
+        
+        self.beginConfiguration()
+        
+        var shouldConfigureVideo = false
+        var shouldConfigureAudio = false
+        switch self.captureMode {
+        case .photo:
+            shouldConfigureVideo = true
+            break
+        case .audio:
+            shouldConfigureAudio = true
+            break
+        case .video:
+            shouldConfigureVideo = true
+            shouldConfigureAudio = true
+            break
+        case .videoWithoutAudio:
+            shouldConfigureVideo = true
+            break
+        case .arKit:
+            shouldConfigureVideo = true
+            break
+        }
+        
+        if shouldConfigureVideo == true {
+            var captureDevice: AVCaptureDevice? = nil
             
-            self.beginConfiguration()
-            
-            var shouldConfigureVideo = false
-            var shouldConfigureAudio = false
-            switch self.captureMode {
-            case .photo:
-                shouldConfigureVideo = true
-                break
-            case .audio:
-                shouldConfigureAudio = true
-                break
-            case .video:
-                shouldConfigureVideo = true
-                shouldConfigureAudio = true
-                break
-            case .videoWithoutAudio:
-                shouldConfigureVideo = true
-                break
-            case .arKit:
-                break
+            if let requestedDevice = self._requestedDevice {
+                captureDevice = requestedDevice
+            } else if let videoDevice = AVCaptureDevice.primaryVideoDevice(forPosition: self.devicePosition.avfoundationType) {
+                captureDevice = videoDevice
             }
             
-            if shouldConfigureVideo == true {
-                var captureDevice: AVCaptureDevice? = nil
-                
-                if let requestedDevice = self._requestedDevice {
-                    captureDevice = requestedDevice
-                } else if let videoDevice = AVCaptureDevice.primaryVideoDevice(forPosition: self.devicePosition.avfoundationType) {
-                    captureDevice = videoDevice
-                }
-                
-                if let captureDevice = captureDevice {
-                    if captureDevice != self._currentDevice {
-                        self.configureDevice(captureDevice: captureDevice, mediaType: AVMediaType.video)
-                        
-                        let changingPosition = captureDevice.position != self._currentDevice?.position
-                        if changingPosition == true {
-                            self.executeClosureAsyncOnMainQueueIfNecessary {
-                                self.deviceDelegate?.nextLevelDevicePositionWillChange(self)
-                            }
+            if let captureDevice = captureDevice {
+                if captureDevice != self._currentDevice {
+                    self.configureDevice(captureDevice: captureDevice, mediaType: AVMediaType.video)
+                    
+                    let changingPosition = captureDevice.position != self._currentDevice?.position
+                    if changingPosition == true {
+                        self.executeClosureAsyncOnMainQueueIfNecessary {
+                            self.deviceDelegate?.nextLevelDevicePositionWillChange(self)
                         }
-                        
-                        self.willChangeValue(forKey: "currentDevice")
-                        self._currentDevice = captureDevice
-                        self.didChangeValue(forKey: "currentDevice")
-                        self._requestedDevice = nil
-                        
-                        if changingPosition == true {
-                            self.executeClosureAsyncOnMainQueueIfNecessary {
-                                self.deviceDelegate?.nextLevelDevicePositionDidChange(self)
-                            }
+                    }
+                    
+                    self.willChangeValue(forKey: "currentDevice")
+                    self._currentDevice = captureDevice
+                    self.didChangeValue(forKey: "currentDevice")
+                    self._requestedDevice = nil
+                    
+                    if changingPosition == true {
+                        self.executeClosureAsyncOnMainQueueIfNecessary {
+                            self.deviceDelegate?.nextLevelDevicePositionDidChange(self)
                         }
                     }
                 }
             }
-            
-            if shouldConfigureAudio == true {
-                if let audioDevice = AVCaptureDevice.audioDevice() {
-                    self.configureDevice(captureDevice: audioDevice, mediaType: AVMediaType.audio)
-                }
+        }
+        
+        if shouldConfigureAudio == true {
+            if let audioDevice = AVCaptureDevice.audioDevice() {
+                self.configureDevice(captureDevice: audioDevice, mediaType: AVMediaType.audio)
             }
-            
-            self.commitConfiguration()
-            
-            if shouldConfigureVideo == true {
-                self.executeClosureAsyncOnMainQueueIfNecessary {
-                    self.delegate?.nextLevel(self, didUpdateVideoConfiguration: self.videoConfiguration)
-                }
+        }
+        
+        self.commitConfiguration()
+        
+        if shouldConfigureVideo == true {
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                self.delegate?.nextLevel(self, didUpdateVideoConfiguration: self.videoConfiguration)
             }
-            
-            if shouldConfigureAudio == true {
-                self.executeClosureAsyncOnMainQueueIfNecessary {
-                    self.delegate?.nextLevel(self, didUpdateAudioConfiguration: self.audioConfiguration)
-                }
+        }
+        
+        if shouldConfigureAudio == true {
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                self.delegate?.nextLevel(self, didUpdateAudioConfiguration: self.audioConfiguration)
             }
         }
     }
