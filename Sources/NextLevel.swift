@@ -626,6 +626,7 @@ public class NextLevel: NSObject {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
                 if self.captureMode == .arKit {
                     self.configureSession()
+                    self.setupContextIfNecessary()
                 } else {
                     self.configureSession()
                     self.configureSessionDevices()
@@ -716,6 +717,7 @@ public class NextLevel: NSObject {
     internal var _videoCustomContextRenderingEnabled: Bool = false
     internal var _sessionVideoCustomContextImageBuffer: CVPixelBuffer?
     internal var _ciContext: CIContext?
+    internal var _pixelBufferPool: CVPixelBufferPool?
 
     // AVFoundation
     
@@ -2171,15 +2173,7 @@ extension NextLevel {
             
             // create a render context
             
-            if self._ciContext == nil {
-                let options : [String : AnyObject] = [kCIContextWorkingColorSpace : CGColorSpaceCreateDeviceRGB(),
-                                                      kCIContextUseSoftwareRenderer : NSNumber(booleanLiteral: false)]
-                if let device = MTLCreateSystemDefaultDevice() {
-                    self._ciContext = CIContext(mtlDevice: device, options: options)
-                } else if let eaglContext = EAGLContext(api: .openGLES2) {
-                    self._ciContext = CIContext(eaglContext: eaglContext, options: options)
-                }
-            }
+            self.setupContextIfNecessary()
             
             var photoDict: [String: Any]? = nil
             if let customFrame = self._sessionVideoCustomContextImageBuffer {
@@ -2566,6 +2560,43 @@ extension NextLevel {
         }
     }
     
+    private func setupContextIfNecessary() {
+        if self._ciContext == nil {
+            let options : [String : AnyObject] = [kCIContextWorkingColorSpace : CGColorSpaceCreateDeviceRGB(),
+                                                  kCIContextUseSoftwareRenderer : NSNumber(booleanLiteral: false)]
+            if let device = MTLCreateSystemDefaultDevice() {
+                self._ciContext = CIContext(mtlDevice: device, options: options)
+            } else if let eaglContext = EAGLContext(api: .openGLES2) {
+                self._ciContext = CIContext(eaglContext: eaglContext, options: options)
+            }
+        }
+    }
+    
+    private func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer) {
+        guard self._pixelBufferPool == nil else {
+            return
+        }
+        
+        let formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        
+        let pixelBufferPoolMinimumCount = 3
+        let poolAttributes: [String:AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey): NSNumber(integerLiteral: pixelBufferPoolMinimumCount)]
+        
+        let pixelBufferAttributes: [String:AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(formatType)),
+                                                         String(kCVPixelBufferWidthKey) : NSNumber(value: width),
+                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: height),
+                                                         String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
+                                                         String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
+        
+        var pixelBufferPool: CVPixelBufferPool? = nil
+        let result = CVPixelBufferPoolCreate(kCFAllocatorDefault, poolAttributes as CFDictionary, pixelBufferAttributes as CFDictionary, &pixelBufferPool)
+        if result == kCVReturnSuccess {
+            self._pixelBufferPool = pixelBufferPool
+        }
+    }
+    
 }
 
 // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate
@@ -2700,14 +2731,21 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
 extension NextLevel {
    
     public func arSession(_ session: ARSession, didUpdate frame: ARFrame) {
-        let pixelBuffer = frame.capturedImage
+        var pixelBuffer = frame.capturedImage
         let timestamp = frame.timestamp
+
+        // TODO: support orientation changes, maybe use snapshot API instead
+        self.setupPixelBufferPoolIfNecessary(pixelBuffer)
+        if let pixelBufferPool = self._pixelBufferPool,
+            let adjustedPixelBuffer = self._ciContext?.createPixelBuffer(fromPixelBuffer: pixelBuffer, withExifOrientation: 4, pixelBufferPool: pixelBufferPool) {
+            pixelBuffer = adjustedPixelBuffer
         
-        self.videoDelegate?.nextLevel(self, willProcessFrame: frame, pixelBuffer: pixelBuffer, timestamp: timestamp, onQueue: self._sessionQueue)
-        self._lastARFrame = pixelBuffer
-        
-        if let session = self._recordingSession {
-            self.handleVideoOutput(pixelBuffer: pixelBuffer, timestamp: timestamp, session: session)
+            self.videoDelegate?.nextLevel(self, willProcessFrame: frame, pixelBuffer: pixelBuffer, timestamp: timestamp, onQueue: self._sessionQueue)
+            self._lastARFrame = pixelBuffer
+            
+            if let session = self._recordingSession {
+                self.handleVideoOutput(pixelBuffer: pixelBuffer, timestamp: timestamp, session: session)
+            }
         }
     }
     
