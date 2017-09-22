@@ -602,7 +602,7 @@ public class NextLevel: NSObject {
     // audio configuration
     
     /// Indicates whether the capture session automatically changes settings in the app’s shared audio session. By default, is `true`.
-    public var automaticallyConfiguresApplicationAudioSession: Bool
+    public var automaticallyConfiguresApplicationAudioSession: Bool = true
     
     // camera configuration
     
@@ -615,7 +615,7 @@ public class NextLevel: NSObject {
     }
     
     /// The current capture mode of the device.
-    public var captureMode: NextLevelCaptureMode {
+    public var captureMode: NextLevelCaptureMode = .video {
         didSet {
             guard
                 self.captureMode != oldValue
@@ -636,7 +636,7 @@ public class NextLevel: NSObject {
     }
     
     /// The current device position.
-    public var devicePosition: NextLevelDevicePosition {
+    public var devicePosition: NextLevelDevicePosition = .back {
         didSet {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
                 self.configureSessionDevices()
@@ -646,10 +646,10 @@ public class NextLevel: NSObject {
     }
     
     /// When `true` actives device orientation updates
-    public var automaticallyUpdatesDeviceOrientation: Bool
+    public var automaticallyUpdatesDeviceOrientation: Bool = false
     
     /// The current orientation of the device.
-    public var deviceOrientation: NextLevelDeviceOrientation {
+    public var deviceOrientation: NextLevelDeviceOrientation = .portrait {
         didSet {
             self.automaticallyUpdatesDeviceOrientation = false
             self.updateVideoOrientation()
@@ -659,10 +659,10 @@ public class NextLevel: NSObject {
     // stabilization
     
     /// When `true`, enables photo capture stabilization.
-    public var photoStabilizationEnabled: Bool
+    public var photoStabilizationEnabled: Bool = false
     
     /// Video stabilization mode
-    public var videoStabilizationMode: NextLevelVideoStabilizationMode {
+    public var videoStabilizationMode: NextLevelVideoStabilizationMode = .auto {
         didSet {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
                 self.beginConfiguration()
@@ -706,9 +706,20 @@ public class NextLevel: NSObject {
     
     // MARK: - private instance vars
     
-    internal var _captureSession: AVCaptureSession?
     internal var _sessionQueue: DispatchQueue
-    internal var _sessionConfigurationCount: Int
+    internal var _sessionConfigurationCount: Int = 0
+    
+    internal var _recording: Bool = false
+    internal var _recordingSession: NextLevelSession?
+    internal var _lastVideoFrameTimeInterval: TimeInterval = 0
+    
+    internal var _videoCustomContextRenderingEnabled: Bool = false
+    internal var _sessionVideoCustomContextImageBuffer: CVPixelBuffer?
+    internal var _ciContext: CIContext?
+
+    // AVFoundation
+    
+    internal var _captureSession: AVCaptureSession?
     
     internal var _videoInput: AVCaptureDeviceInput?
     internal var _audioInput: AVCaptureDeviceInput?
@@ -722,20 +733,14 @@ public class NextLevel: NSObject {
     
     internal var _lastVideoFrame: CMSampleBuffer?
     internal var _lastAudioFrame: CMSampleBuffer?
-    internal var _lastARFrame: CVPixelBuffer?
     
-    internal var _recording: Bool
-    internal var _recordingSession: NextLevelSession?
-    internal var _lastVideoFrameTimeInterval: TimeInterval
-    
-    internal var _videoCustomContextRenderingEnabled: Bool
-    internal var _sessionVideoCustomContextImageBuffer: CVPixelBuffer?
-    internal var _ciContext: CIContext?
     // ARKit
     
     internal var _arRunning: Bool = false
     internal var _arConfiguration: NextLevelConfiguration?
     
+    internal var _lastARFrame: CVPixelBuffer?
+
     // MARK: - singleton
     
     /// Method for providing a NextLevel singleton. This isn't required for use.
@@ -749,7 +754,6 @@ public class NextLevel: NSObject {
         
         self._sessionQueue = DispatchQueue(label: NextLevelCaptureSessionIdentifier, qos: .userInteractive, target: DispatchQueue.global())
         self._sessionQueue.setSpecific(key: NextLevelCaptureSessionSpecificKey, value: self._sessionQueue)
-        self._sessionConfigurationCount = 0
         
         self.videoConfiguration = NextLevelVideoConfiguration()
         self.audioConfiguration = NextLevelAudioConfiguration()
@@ -757,21 +761,6 @@ public class NextLevel: NSObject {
         if #available(iOS 11.0, *) {
             self._arConfiguration = NextLevelARConfiguration()
         }
-        
-        self.captureMode = .video
-        
-        self.photoStabilizationEnabled = false
-        self.videoStabilizationMode = .auto
-        self._videoCustomContextRenderingEnabled = false
-        
-        self._recording = false
-        self._lastVideoFrameTimeInterval = 0
-        
-        self.automaticallyConfiguresApplicationAudioSession = true
-        self.automaticallyUpdatesDeviceOrientation = false
-        
-        self.devicePosition = .back
-        self.deviceOrientation = .portrait
         
         super.init()
         
