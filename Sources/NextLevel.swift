@@ -905,6 +905,8 @@ extension NextLevel {
                 if self._arRunning == true {
                     self.arConfiguration?.session?.pause()
                     self._arRunning = false
+                    
+                    self._recordingSession = nil
                 }
             }
         }
