@@ -446,13 +446,18 @@ public protocol NextLevelDelegate: NSObjectProtocol {
     func nextLevelSessionWasInterrupted(_ nextLevel: NextLevel)
     func nextLevelSessionInterruptionEnded(_ nextLevel: NextLevel)
     
-    // preview
-    func nextLevelWillStartPreview(_ nextLevel: NextLevel)
-    func nextLevelDidStopPreview(_ nextLevel: NextLevel)
-    
     // mode
     func nextLevelCaptureModeWillChange(_ nextLevel: NextLevel)
     func nextLevelCaptureModeDidChange(_ nextLevel: NextLevel)
+}
+
+/// Preview delegate, provides update for
+public protocol NextLevelPreviewDelegate: NSObjectProtocol {
+
+    // preview
+    func nextLevelWillStartPreview(_ nextLevel: NextLevel)
+    func nextLevelDidStopPreview(_ nextLevel: NextLevel)
+
 }
 
 /// Device delegate, provides updates on device position, orientation, clean aperture, focus, exposure, and white balances changes.
@@ -561,6 +566,7 @@ public class NextLevel: NSObject {
     // delegates
     
     public weak var delegate: NextLevelDelegate?
+    public weak var previewDelegate: NextLevelPreviewDelegate?
     public weak var deviceDelegate: NextLevelDeviceDelegate?
     public weak var flashDelegate: NextLevelFlashAndTorchDelegate?
     public weak var videoDelegate: NextLevelVideoDelegate?
@@ -772,6 +778,7 @@ public class NextLevel: NSObject {
     
     deinit {
         self.delegate = nil
+        self.previewDelegate = nil
         self.deviceDelegate = nil
         self.flashDelegate = nil
         self.videoDelegate = nil
@@ -933,6 +940,7 @@ extension NextLevel {
                 if session.isRunning == false {
                     self.delegate?.nextLevelSessionWillStart(self)
                     session.startRunning()
+                    self.previewDelegate?.nextLevelWillStartPreview(self)
                 }
             }
         }

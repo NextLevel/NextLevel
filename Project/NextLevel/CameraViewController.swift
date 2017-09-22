@@ -421,19 +421,23 @@ extension CameraViewController: NextLevelDelegate {
     
     func nextLevelSessionInterruptionEnded(_ nextLevel: NextLevel) {
     }
-
-    // preview
-    func nextLevelWillStartPreview(_ nextLevel: NextLevel) {
-    }
-    
-    func nextLevelDidStopPreview(_ nextLevel: NextLevel) {
-    }
     
     // mode
     func nextLevelCaptureModeWillChange(_ nextLevel: NextLevel) {
     }
     
     func nextLevelCaptureModeDidChange(_ nextLevel: NextLevel) {
+    }
+    
+}
+
+extension CameraViewController: NextLevelPreviewDelegate {
+    
+    // preview
+    func nextLevelWillStartPreview(_ nextLevel: NextLevel) {
+    }
+    
+    func nextLevelDidStopPreview(_ nextLevel: NextLevel) {
     }
     
 }

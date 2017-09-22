@@ -472,13 +472,6 @@ extension MixedRealityViewController: NextLevelDelegate {
     func nextLevelSessionInterruptionEnded(_ nextLevel: NextLevel) {
     }
     
-    // preview
-    func nextLevelWillStartPreview(_ nextLevel: NextLevel) {
-    }
-    
-    func nextLevelDidStopPreview(_ nextLevel: NextLevel) {
-    }
-    
     // mode
     func nextLevelCaptureModeWillChange(_ nextLevel: NextLevel) {
     }
