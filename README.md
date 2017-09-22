@@ -49,9 +49,9 @@ Need Swift 3.X? Use release version `0.6.3` in your Podfile.
 
 ## ARKit
 
-Starting with release `0.8.0`, NextLevel will provide a mode for leveraging ARKit in-place of AVFoundation. This enables a variety of new great features while building on the existing recording capabilities of NextLevel.
+Starting with release `0.8.0`, NextLevel will provide a mode for ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities of NextLevel.
 
-This mode is in beta, so please help out if encountering a bug or contributing ideas for improvement.
+The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement. To try it out, uncomment the code found in the AppDelegate to load the `MixedRealityViewController`.
 
 ## Overview
 
