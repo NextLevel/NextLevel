@@ -325,6 +325,8 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     internal var flashMode: AVCaptureDevice.FlashMode
 }
 
+// MARK: - ARConfiguration
+
 @available(iOS 11.0, *)
 /// NextLevelARConfiguration, augmented reality configuration object
 public class NextLevelARConfiguration : NextLevelConfiguration {
@@ -337,8 +339,5 @@ public class NextLevelARConfiguration : NextLevelConfiguration {
     
     /// Session run options
     public var runOptions: ARSession.RunOptions?
-
-    /// AR scene output antialiasing mode
-    //public var antialiasingMode: SCNAntialiasingMode = .none
     
 }
