@@ -966,6 +966,11 @@ extension NextLevel {
                     self.commitConfiguration()
                 }
                 
+                if self._arRunning == false {
+                    self.delegate?.nextLevelSessionWillStart(self)
+                    self.arConfiguration?.session?.run(config, options: options)
+                    self._arRunning = true
+                }
             }
         }
     }
