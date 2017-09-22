@@ -624,13 +624,12 @@ public class NextLevel: NSObject {
             }
             
             self.executeClosureAsyncOnSessionQueueIfNecessary {
+                self.configureSession()
+                self.configureSessionDevices()
+                self.updateVideoOrientation()
+                
                 if self.captureMode == .arKit {
-                    self.configureSession()
                     self.setupContextIfNecessary()
-                } else {
-                    self.configureSession()
-                    self.configureSessionDevices()
-                    self.updateVideoOrientation()
                 }
             }
         }
@@ -908,7 +907,6 @@ extension NextLevel {
                         self._arRunning = false
                         
                         self._recordingSession = nil
-                        self._currentDevice = nil
                     }
                 }
             }
@@ -951,16 +949,23 @@ extension NextLevel {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let config = self.arConfiguration?.config,
                 let options = self.arConfiguration?.runOptions {
+                self._captureSession = AVCaptureSession() // AV session is needed for device management and configuration
                 self._sessionConfigurationCount = 0
-
-                self.arConfiguration?.session?.delegateQueue = self._sessionQueue
 
                 // setup NL recording session
                 self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionSpecificKey)
+                self.arConfiguration?.session?.delegateQueue = self._sessionQueue
                 
-                self.delegate?.nextLevelSessionWillStart(self)
-                self.arConfiguration?.session?.run(config, options: options)
-                self._arRunning = true
+                if let session = self._captureSession {
+                    session.automaticallyConfiguresApplicationAudioSession = self.automaticallyConfiguresApplicationAudioSession
+                    
+                    self.beginConfiguration()
+                    self.configureSession()
+                    self.configureSessionDevices()
+                    self.updateVideoOrientation()
+                    self.commitConfiguration()
+                }
+                
             }
         }
     }
