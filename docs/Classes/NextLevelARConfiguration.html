@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>NextLevelPhotoDelegate Protocol Reference</title>
+    <title>NextLevelARConfiguration Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/NextLevelPhotoDelegate" class="dashAnchor"></a>
-    <a title="NextLevelPhotoDelegate Protocol Reference"></a>
+    <a name="//apple_ref/swift/Class/NextLevelARConfiguration" class="dashAnchor"></a>
+    <a title="NextLevelARConfiguration Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">NextLevel Docs</a> (58% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">NextLevel Reference</a>
         <img id="carat" src="../img/carat.png" />
-        NextLevelPhotoDelegate Protocol Reference
+        NextLevelARConfiguration Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -184,14 +184,8 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>NextLevelPhotoDelegate</h1>
-              <div class="declaration">
-                <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
-
-                </div>
-              </div>
-            <p>Photo delegate, provides updates on photo related capture functionality.</p>
+            <h1>NextLevelARConfiguration</h1>
+            <p>Undocumented</p>
 
           </section>
           <section class="section task-group-section">
@@ -200,9 +194,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevel0aB13PhotoDelegateP04nextB0yA2AC_AA0abC13ConfigurationC011willCapturec4WithF0tF"></a>
-                    <a name="//apple_ref/swift/Method/nextLevel(_:willCapturePhotoWithConfiguration:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB13PhotoDelegateP04nextB0yA2AC_AA0abC13ConfigurationC011willCapturec4WithF0tF">nextLevel(_:willCapturePhotoWithConfiguration:)</a>
+                    <a name="/s:9NextLevel0aB15ARConfigurationC6configSo0C0CSgv"></a>
+                    <a name="//apple_ref/swift/Property/config" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevel0aB15ARConfigurationC6configSo0C0CSgv">config</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -210,14 +204,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>ARKit configuration</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">config</span><span class="p">:</span> <span class="kt">ARConfiguration</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -227,9 +221,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevel0aB13PhotoDelegateP04nextB0yA2AC_AA0abC13ConfigurationC010didCapturec4WithF0tF"></a>
-                    <a name="//apple_ref/swift/Method/nextLevel(_:didCapturePhotoWithConfiguration:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB13PhotoDelegateP04nextB0yA2AC_AA0abC13ConfigurationC010didCapturec4WithF0tF">nextLevel(_:didCapturePhotoWithConfiguration:)</a>
+                    <a name="/s:9NextLevel0aB15ARConfigurationC7sessionSo9ARSessionCSgv"></a>
+                    <a name="//apple_ref/swift/Property/session" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevel0aB15ARConfigurationC7sessionSo9ARSessionCSgv">session</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -237,14 +231,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>ARKit session, note: the delegate queue will be overriden</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">session</span><span class="p">:</span> <span class="kt">ARSession</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -254,9 +248,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevel0aB13PhotoDelegateP04nextB0yA2AC_s10DictionaryVySSypGSg010didProcessC11CaptureWithAA0abC13ConfigurationC05photoK0tF"></a>
-                    <a name="//apple_ref/swift/Method/nextLevel(_:didProcessPhotoCaptureWith:photoConfiguration:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB13PhotoDelegateP04nextB0yA2AC_s10DictionaryVySSypGSg010didProcessC11CaptureWithAA0abC13ConfigurationC05photoK0tF">nextLevel(_:didProcessPhotoCaptureWith:photoConfiguration:)</a>
+                    <a name="/s:9NextLevel0aB15ARConfigurationC10runOptionsSo9ARSessionC03RunE0VSgv"></a>
+                    <a name="//apple_ref/swift/Property/runOptions" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevel0aB15ARConfigurationC10runOptionsSo9ARSessionC03RunE0VSgv">runOptions</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -264,68 +258,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Session run options</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9NextLevel0aB13PhotoDelegateP04nextB0yA2AC_s10DictionaryVySSypGSg013didProcessRawC11CaptureWithAA0abC13ConfigurationC05photoL0tF"></a>
-                    <a name="//apple_ref/swift/Method/nextLevel(_:didProcessRawPhotoCaptureWith:photoConfiguration:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB13PhotoDelegateP04nextB0yA2AC_s10DictionaryVySSypGSg013didProcessRawC11CaptureWithAA0abC13ConfigurationC05photoL0tF">nextLevel(_:didProcessRawPhotoCaptureWith:photoConfiguration:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9NextLevel0aB13PhotoDelegateP04nextb11DidCompleteC7CaptureyA2ACF"></a>
-                    <a name="//apple_ref/swift/Method/nextLevelDidCompletePhotoCapture(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB13PhotoDelegateP04nextb11DidCompleteC7CaptureyA2ACF">nextLevelDidCompletePhotoCapture(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">runOptions</span><span class="p">:</span> <span class="kt">ARSession</span><span class="o">.</span><span class="kt">RunOptions</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
