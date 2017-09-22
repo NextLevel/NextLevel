@@ -716,8 +716,12 @@ public class NextLevel: NSObject {
     internal var _videoCustomContextRenderingEnabled: Bool = false
     internal var _sessionVideoCustomContextImageBuffer: CVPixelBuffer?
     internal var _ciContext: CIContext?
+    
     internal var _pixelBufferPool: CVPixelBufferPool?
-
+    internal var _bufferWidth: Int = 0
+    internal var _bufferHeight: Int = 0
+    internal var _bufferFormatType: OSType = OSType(kCVPixelFormatType_32BGRA)
+    
     // AVFoundation
     
     internal var _captureSession: AVCaptureSession?
@@ -2594,26 +2598,33 @@ extension NextLevel {
     }
     
     private func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer) {
-        guard self._pixelBufferPool == nil else {
-            return
-        }
-        
         let formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
         let width = CVPixelBufferGetWidth(pixelBuffer)
         let height = CVPixelBufferGetHeight(pixelBuffer)
         
+        guard self._pixelBufferPool == nil ||
+              width != self._bufferWidth ||
+              height != self._bufferHeight ||
+              formatType != self._bufferFormatType
+        else {
+            return
+        }
+        
+        self._bufferWidth = width
+        self._bufferHeight = height
+        self._bufferFormatType = formatType
+        
         let pixelBufferPoolMinimumCount = 3
         let poolAttributes: [String:AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey): NSNumber(integerLiteral: pixelBufferPoolMinimumCount)]
         
-        let pixelBufferAttributes: [String:AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(formatType)),
-                                                         String(kCVPixelBufferWidthKey) : NSNumber(value: width),
-                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: height),
+        let pixelBufferAttributes: [String:AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(self._bufferFormatType)),
+                                                         String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferWidth),
+                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferHeight),
                                                          String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
                                                          String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
         
         var pixelBufferPool: CVPixelBufferPool? = nil
-        let result = CVPixelBufferPoolCreate(kCFAllocatorDefault, poolAttributes as CFDictionary, pixelBufferAttributes as CFDictionary, &pixelBufferPool)
-        if result == kCVReturnSuccess {
+        if CVPixelBufferPoolCreate(kCFAllocatorDefault, poolAttributes as CFDictionary, pixelBufferAttributes as CFDictionary, &pixelBufferPool) == kCVReturnSuccess {
             self._pixelBufferPool = pixelBufferPool
         }
     }
