@@ -15,9 +15,9 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>0.0.1</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Next Level uses the camera for photo and video capture.</string>
 	<key>NSMicrophoneUsageDescription</key>
