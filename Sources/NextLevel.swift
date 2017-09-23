@@ -943,6 +943,8 @@ extension NextLevel {
                     self.delegate?.nextLevelSessionWillStart(self)
                     session.startRunning()
                     self.previewDelegate?.nextLevelWillStartPreview(self)
+                    
+                    // nextLevelSessionDidStart is called from AVFoundation
                 }
             }
         }
@@ -974,6 +976,10 @@ extension NextLevel {
                     self.delegate?.nextLevelSessionWillStart(self)
                     self.arConfiguration?.session?.run(config, options: options)
                     self._arRunning = true
+                    
+                    self.executeClosureAsyncOnMainQueueIfNecessary {
+                        self.delegate?.nextLevelSessionDidStart(self)
+                    }
                 }
             }
         }
