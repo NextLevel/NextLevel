@@ -2894,7 +2894,7 @@ extension NextLevel {
         }
     }
     
-    @objc internal func handleSessionWasInterrupted(_ notification: Notification) {
+    @objc public func handleSessionWasInterrupted(_ notification: Notification) {
         self.executeClosureAsyncOnMainQueueIfNecessary {
             if self._recording == true {
                 self.delegate?.nextLevelSessionDidStop(self)
@@ -2906,7 +2906,7 @@ extension NextLevel {
         }
     }
     
-    @objc internal func handleSessionInterruptionEnded(_ notification: Notification) {
+    @objc public func handleSessionInterruptionEnded(_ notification: Notification) {
         self.executeClosureAsyncOnMainQueueIfNecessary {
             self.delegate?.nextLevelSessionInterruptionEnded(self)
         }
