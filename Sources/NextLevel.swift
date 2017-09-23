@@ -2178,15 +2178,15 @@ extension NextLevel {
                 return
             }
             
+            var buffer: CVPixelBuffer? = nil
+            if let videoFrame = self._lastVideoFrame,
+                let imageBuffer = CMSampleBufferGetImageBuffer(videoFrame) {
+                buffer = imageBuffer
+            } else if let arFrame = self._lastARFrame {
+                buffer = arFrame
+            }
+
             if self.isVideoCustomContextRenderingEnabled {
-                var buffer: CVPixelBuffer? = nil
-                if let videoFrame = self._lastVideoFrame,
-                    let imageBuffer = CMSampleBufferGetImageBuffer(videoFrame) {
-                    buffer = imageBuffer
-                } else if let arFrame = self._lastARFrame {
-                    buffer = arFrame
-                }
-                
                 if let buffer = buffer {
                     if CVPixelBufferLockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: 0)) == kCVReturnSuccess {
                         // only called from captureQueue, populates self._sessionVideoCustomContextImageBuffer
@@ -2238,10 +2238,20 @@ extension NextLevel {
                     photoDict?[NextLevelPhotoJPEGKey] = imageData
                 }
                 
-            } else if let _ = self._lastARFrame {
+            } else if let arFrame = self._lastARFrame {
                 
                 // TODO append exif metadata
                 
+                // add JPEG, thumbnail
+                if let context = self._ciContext,
+                    let photo = context.uiimage(withPixelBuffer: arFrame),
+                    let imageData = UIImageJPEGRepresentation(photo, 1) {
+                    
+                    if photoDict == nil {
+                        photoDict = [:]
+                    }
+                    photoDict?[NextLevelPhotoJPEGKey] = imageData
+                }
             }
             
             // TODO, if photoDict?[NextLevelPhotoJPEGKey]
