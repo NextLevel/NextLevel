@@ -185,11 +185,13 @@ class MixedRealityViewController: UIViewController {
         nextLevel.videoDelegate = self
         
         nextLevel.captureMode = .arKit
+        nextLevel.videoStabilizationMode = .off
         
         // video configuration
         nextLevel.videoConfiguration.bitRate = 2000000
         nextLevel.videoConfiguration.scalingMode = AVVideoScalingModeResizeAspectFill
-        
+        nextLevel.videoConfiguration.profileLevel = AVVideoProfileLevelH264HighAutoLevel
+
         // audio configuration
         nextLevel.audioConfiguration.bitRate = 96000
         
@@ -202,24 +204,31 @@ class MixedRealityViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let nextLevel = NextLevel.shared
-        if nextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
-            nextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
-            do {
-                try nextLevel.start()
-            } catch {
-                print("NextLevel, failed to start camera session")
+        if NextLevel.shared.isRunning == false {
+            let nextLevel = NextLevel.shared
+            if nextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
+                nextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
+                do {
+                    try nextLevel.start()
+                } catch {
+                    print("NextLevel, failed to start camera session")
+                }
+            } else {
+                nextLevel.requestAuthorization(forMediaType: AVMediaType.video)
+                nextLevel.requestAuthorization(forMediaType: AVMediaType.audio)
             }
         } else {
-            nextLevel.requestAuthorization(forMediaType: AVMediaType.video)
-            nextLevel.requestAuthorization(forMediaType: AVMediaType.audio)
+            // handleCameraDidStart
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        NextLevel.shared.stop()
+        if NextLevel.shared.isRunning {
+            NextLevel.shared.stop()
+            NextLevel.shared.videoZoomFactor = 1.0
+        }
     }
     
 }
