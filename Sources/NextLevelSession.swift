@@ -41,7 +41,7 @@ public class NextLevelSession: NSObject {
     public var fileExtension: String = "mp4"
     
     /// Unique identifier for a session.
-    public var identifier: String {
+    public var identifier: UUID {
         get {
             return self._identifier
         }
@@ -57,7 +57,7 @@ public class NextLevelSession: NSObject {
     /// Creates a URL for session output, otherwise nil
     public var url: URL? {
         get {
-            let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
+            let filename = "\(self.identifier.uuidString)-NL-merged.\(self.fileExtension)"
             if let url = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory) {
                 return url
             } else {
@@ -155,7 +155,7 @@ public class NextLevelSession: NSObject {
     
     // MARK: - private instance vars
     
-    internal var _identifier: String
+    internal var _identifier: UUID
     internal var _date: Date
     
     internal var _duration: CMTime = kCMTimeZero
@@ -203,7 +203,7 @@ public class NextLevelSession: NSObject {
     
     /// Initialize.
     override init() {
-        self._identifier = NSUUID().uuidString
+        self._identifier = UUID()
         self._date = Date()
         self.outputDirectory = NSTemporaryDirectory()
      
@@ -697,7 +697,7 @@ extension NextLevelSession {
     ///   - completionHandler: Handler for when the merging process completes
     public func mergeClips(usingPreset preset: String, completionHandler: @escaping NextLevelSessionMergeClipsCompletionHandler) {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
-            let filename = "\(self.identifier)-NL-merged.\(self.fileExtension)"
+            let filename = "\(self.identifier.uuidString)-NL-merged.\(self.fileExtension)"
 
             let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory)
             var asset: AVAsset? = nil
@@ -826,7 +826,7 @@ extension NextLevelSession {
 extension NextLevelSession {
     
     internal func nextFileURL() -> URL? {
-        let filename = "\(self.identifier)-NL-clip.\(self._clipFilenameCount).\(self.fileExtension)"
+        let filename = "\(self.identifier.uuidString)-NL-clip.\(self._clipFilenameCount).\(self.fileExtension)"
         if let url = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory) {
             self.removeFile(fileUrl: url)
             self._clipFilenameCount += 1
