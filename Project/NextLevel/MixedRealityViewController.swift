@@ -553,7 +553,7 @@ extension MixedRealityViewController: NextLevelDeviceDelegate {
 
 @available(iOS 11.0, *)
 extension MixedRealityViewController: NextLevelVideoDelegate {
-    
+
     // video zoom
     func nextLevel(_ nextLevel: NextLevel, didUpdateVideoZoomFactor videoZoomFactor: Float) {
     }
@@ -588,6 +588,12 @@ extension MixedRealityViewController: NextLevelVideoDelegate {
     }
     
     func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
+    }
+    
+    func nextLevel(_ nextLevel: NextLevel, didAppendVideoPixelBuffer pixelBuffer: CVPixelBuffer, timestamp: TimeInterval, inSession session: NextLevelSession) {
+    }
+    
+    func nextLevel(_ nextLevel: NextLevel, didSkipVideoPixelBuffer pixelBuffer: CVPixelBuffer, timestamp: TimeInterval, inSession session: NextLevelSession) {
     }
     
     func nextLevel(_ nextLevel: NextLevel, didSkipVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession) {
