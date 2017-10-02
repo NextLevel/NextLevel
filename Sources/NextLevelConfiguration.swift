@@ -89,16 +89,16 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     }
     
     /// Average video bit rate (bits per second), AV dictionary key AVVideoAverageBitRateKey
-    public var bitRate: Int
+    public var bitRate: Int = NextLevelVideoConfigurationDefaultBitRate
 
     /// Dimensions for video output, AV dictionary keys AVVideoWidthKey, AVVideoHeightKey
     public var dimensions: CGSize?
 
     /// Output aspect ratio automatically sizes output dimensions, `active` indicates NextLevelVideoConfiguration.preset or NextLevelVideoConfiguration.dimensions
-    public var aspectRatio: OutputAspectRatio
+    public var aspectRatio: OutputAspectRatio = .active
 
     /// Video output transform for display
-    public var transform: CGAffineTransform
+    public var transform: CGAffineTransform = .identity
 
     /// Codec used to encode video, AV dictionary key AVVideoCodecKey
     public var codec: String
@@ -121,10 +121,11 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     // MARK: - object lifecycle
     
     override init() {
-        self.bitRate = NextLevelVideoConfigurationDefaultBitRate
-        self.aspectRatio = .active
-        self.transform = CGAffineTransform.identity
-        self.codec = AVVideoCodecH264
+        if #available(iOS 11.0, *) {
+            self.codec = AVVideoCodecType.h264.rawValue
+        } else {
+            self.codec = AVVideoCodecH264
+        }
         self.scalingMode = AVVideoScalingModeResizeAspectFill
         super.init()
     }
@@ -209,7 +210,7 @@ let NextLevelAudioConfigurationDefaultChannelsCount: Int = 2
 public class NextLevelAudioConfiguration: NextLevelConfiguration {
 
     /// Audio bit rate, AV dictionary key AVEncoderBitRateKey
-    public var bitRate: Int
+    public var bitRate: Int = NextLevelAudioConfigurationDefaultBitRate
 
     /// Sample rate in hertz, AV dictionary key AVSampleRateKey
     public var sampleRate: Float64?
@@ -219,13 +220,11 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
 
     /// Audio data format identifier, AV dictionary key AVFormatIDKey
     /// https://developer.apple.com/reference/coreaudio/1613060-core_audio_data_types
-    public var format: AudioFormatID
+    public var format: AudioFormatID = kAudioFormatMPEG4AAC
 
     // MARK: - object lifecycle
     
     override init() {
-        self.bitRate = NextLevelAudioConfigurationDefaultBitRate
-        self.format = kAudioFormatMPEG4AAC
         super.init()
     }
 
@@ -286,14 +285,21 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     public var codec: String
 
     /// True indicates that NextLevel should generate a thumbnail for the photo
-    public var generateThumbnail: Bool
+    public var generateThumbnail: Bool = false
+
+    // MARK: - ivars
     
+    // change flashMode with NextLevel.flashMode
+    internal var flashMode: AVCaptureDevice.FlashMode = .off
+
     // MARK: - object lifecycle
     
     override init() {
-        self.codec = AVVideoCodecJPEG
-        self.generateThumbnail = false
-        self.flashMode = .off
+        if #available(iOS 11.0, *) {
+            self.codec = AVVideoCodecType.jpeg.rawValue
+        } else {
+            self.codec = AVVideoCodecJPEG
+        }
         super.init()
     }
     
@@ -320,9 +326,6 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
             return config
         }
     }
-    
-    // change flashMode with NextLevel.flashMode
-    internal var flashMode: AVCaptureDevice.FlashMode
 }
 
 // MARK: - ARConfiguration
