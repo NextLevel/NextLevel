@@ -102,7 +102,11 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
         case .wideAngleCamera:
             return AVCaptureDevice.DeviceType.builtInWideAngleCamera
         case .duoCamera:
-            return AVCaptureDevice.DeviceType.builtInDuoCamera
+            if #available(iOS 11.0, *) {
+                return AVCaptureDevice.DeviceType.builtInDualCamera
+            } else {
+                return AVCaptureDevice.DeviceType.builtInDuoCamera
+            }
         }
     }
     
@@ -2135,7 +2139,13 @@ extension NextLevel {
     /// Checks if video capture is supported by the hardware.
     public var supportsVideoCapture: Bool {
         get {
-            let deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInWideAngleCamera, AVCaptureDevice.DeviceType.builtInTelephotoCamera, AVCaptureDevice.DeviceType.builtInDuoCamera]
+            var deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInWideAngleCamera, AVCaptureDevice.DeviceType.builtInTelephotoCamera]
+            if #available(iOS 11.0, *) {
+                deviceTypes.append(.builtInDualCamera)
+            } else {
+                deviceTypes.append(.builtInDuoCamera)
+            }
+            
             let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: .unspecified)
             return discoverySession.devices.count > 0
         }
