@@ -101,7 +101,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     public var transform: CGAffineTransform
 
     /// Codec used to encode video, AV dictionary key AVVideoCodecKey
-    public var codec: AVVideoCodecType = .h264
+    public var codec: String
 
     /// Profile level for the configuration, AV dictionary key AVVideoProfileLevelKey (H.264 codec only)
     public var profileLevel: String?
@@ -124,6 +124,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
         self.bitRate = NextLevelVideoConfigurationDefaultBitRate
         self.aspectRatio = .active
         self.transform = CGAffineTransform.identity
+        self.codec = AVVideoCodecH264
         self.scalingMode = AVVideoScalingModeResizeAspectFill
         super.init()
     }
@@ -174,7 +175,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
             }
 
-            config[AVVideoCodecKey] = self.codec.rawValue
+            config[AVVideoCodecKey] = self.codec
             
             if let scalingMode = self.scalingMode {
                 config[AVVideoScalingModeKey] = scalingMode
@@ -282,7 +283,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
 public class NextLevelPhotoConfiguration : NextLevelConfiguration {
 
     /// Codec used to encode photo, AV dictionary key AVVideoCodecKey
-    public var codec: AVVideoCodecType = .jpeg
+    public var codec: String
 
     /// True indicates that NextLevel should generate a thumbnail for the photo
     public var generateThumbnail: Bool
@@ -290,6 +291,7 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     // MARK: - object lifecycle
     
     override init() {
+        self.codec = AVVideoCodecJPEG
         self.generateThumbnail = false
         self.flashMode = .off
         super.init()
@@ -304,7 +306,7 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
         if let options = self.options {
             return options
         } else {
-            var config: [String: Any] = [AVVideoCodecKey: self.codec.rawValue]
+            var config: [String: Any] = [AVVideoCodecKey: self.codec]
             if self.generateThumbnail {
                 let settings = AVCapturePhotoSettings()
                 // iOS 11 GM fix
