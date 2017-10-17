@@ -97,7 +97,7 @@ override func viewDidLoad() {
     
     // modify .videoConfiguration, .audioConfiguration, .photoConfiguration properties
     // Compression, resolution, and maximum recording time options are available
-    NextLevel.shared.videoConfiguration.maxRecordDuration = CMTimeMakeWithSeconds(5, 600)
+    NextLevel.shared.videoConfiguration.maximumCaptureDuration = CMTimeMakeWithSeconds(5, 600)
     NextLevel.shared.audioConfiguration.bitRate = 44000
  }
 ```
