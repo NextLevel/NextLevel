@@ -146,7 +146,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(dimensions.width))
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(dimensions.height))
             } else if let sampleBuffer = sampleBuffer,
-                      let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+                let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
                 switch self.aspectRatio {
                 case .standard:
@@ -175,7 +175,9 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(width))
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
             }
-
+            
+            config = updateConfigSizeValues(withConfig: config)
+            
             config[AVVideoCodecKey] = self.codec
             
             if let scalingMode = self.scalingMode {
@@ -192,10 +194,32 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             if let maxKeyFrameInterval = self.maxKeyFrameInterval {
                 compressionDict[AVVideoMaxKeyFrameIntervalKey] = NSNumber(integerLiteral: maxKeyFrameInterval)
             }
-
+            
             config[AVVideoCompressionPropertiesKey] = (compressionDict as NSDictionary)
             return config
         }
+    }
+    
+    /**
+     With MPEG-2 and MPEG-4 (and other DCT based codecs), compression is applied to a grid of 16x16 pixel macroblocks.
+     With MPEG-4 Part 10 (AVC/H.264), multiple of 4 and 8 also works, but 16 is most efficient.
+     So, to prevent appearing on broken(green) pixels, the sizes of captured video must be divided by 4, 8, or 16.
+     */
+    private func updateConfigSizeValues(withConfig config: [String : Any], makeDividableBy dividableBy: Int? = 16) -> [String : Any] {
+        var config = config
+        
+        if let divValue = dividableBy {
+            if let width = config[AVVideoWidthKey] as? Int {
+                let newWidth = width - (width % divValue)
+                config[AVVideoWidthKey] = NSNumber(integerLiteral: newWidth)
+            }
+            if let height = config[AVVideoHeightKey] as? Int {
+                let newHeight = height - (height % divValue)
+                config[AVVideoHeightKey] = NSNumber(integerLiteral: newHeight)
+            }
+        }
+        
+        return config
     }
     
 }
@@ -344,3 +368,4 @@ public class NextLevelARConfiguration : NextLevelConfiguration {
     public var runOptions: ARSession.RunOptions?
     
 }
+
