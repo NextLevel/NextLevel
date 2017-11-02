@@ -176,7 +176,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
             }
             
-            config = updateConfigSizeValues(withConfig: config)
+            config = update(config: config)
             
             config[AVVideoCodecKey] = self.codec
             
@@ -200,21 +200,25 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
         }
     }
     
-    /**
-     With MPEG-2 and MPEG-4 (and other DCT based codecs), compression is applied to a grid of 16x16 pixel macroblocks.
-     With MPEG-4 Part 10 (AVC/H.264), multiple of 4 and 8 also works, but 16 is most efficient.
-     So, to prevent appearing on broken(green) pixels, the sizes of captured video must be divided by 4, 8, or 16.
-     */
-    private func updateConfigSizeValues(withConfig config: [String : Any], makeDividableBy dividableBy: Int? = 16) -> [String : Any] {
+    /// Update configuration with size values.
+    ///     With MPEG-2 and MPEG-4 (and other DCT based codecs), compression is applied to a grid of 16x16 pixel macroblocks.
+    ///     With MPEG-4 Part 10 (AVC/H.264), multiple of 4 and 8 also works, but 16 is most efficient.
+    ///     So, to prevent appearing on broken(green) pixels, the sizes of captured video must be divided by 4, 8, or 16.
+    ///
+    /// - Parameters:
+    ///   - config: Input configuration dictionary
+    ///   - divisibleBy: Divisor
+    /// - Returns: Configuration with appropriately divided sizes
+    private func update(config: [String : Any], withSizeValuesDivisibleBy divisibleBy: Int? = 16) -> [String : Any] {
         var config = config
         
-        if let divValue = dividableBy {
+        if let divisibleBy = divisibleBy {
             if let width = config[AVVideoWidthKey] as? Int {
-                let newWidth = width - (width % divValue)
+                let newWidth = width - (width % divisibleBy)
                 config[AVVideoWidthKey] = NSNumber(integerLiteral: newWidth)
             }
             if let height = config[AVVideoHeightKey] as? Int {
-                let newHeight = height - (height % divValue)
+                let newHeight = height - (height % divisibleBy)
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: newHeight)
             }
         }
