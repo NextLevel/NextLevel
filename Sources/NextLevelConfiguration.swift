@@ -26,8 +26,10 @@
 import UIKit
 import Foundation
 import AVFoundation
+#if USE_ARKIT
 import ARKit
-
+#endif
+    
 // MARK: - MediaTypeConfiguration
 
 /// NextLevelConfiguration, media capture configuration object
@@ -361,7 +363,8 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
 @available(iOS 11.0, *)
 /// NextLevelARConfiguration, augmented reality configuration object
 public class NextLevelARConfiguration : NextLevelConfiguration {
-    
+
+    #if USE_ARKIT
     /// ARKit configuration
     public var config: ARConfiguration?
     
@@ -370,6 +373,7 @@ public class NextLevelARConfiguration : NextLevelConfiguration {
     
     /// Session run options
     public var runOptions: ARSession.RunOptions?
-    
+    #endif
+
 }
 

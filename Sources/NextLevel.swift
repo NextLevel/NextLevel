@@ -30,7 +30,9 @@ import CoreImage
 import CoreVideo
 import ImageIO
 import Metal
+#if USE_ARKIT
 import ARKit
+#endif
 
 // MARK: - types
 
@@ -634,10 +636,12 @@ public class NextLevel: NSObject {
                 self.configureSession()
                 self.configureSessionDevices()
                 self.updateVideoOrientation()
-                
+
+#if USE_ARKIT
                 if self.captureMode == .arKit {
                     self.setupContextIfNecessary()
                 }
+#endif
             }
         }
     }
@@ -910,6 +914,7 @@ extension NextLevel {
             }
         }
         
+#if USE_ARKIT
         if self.captureMode == .arKit {
             if #available(iOS 11.0, *) {
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
@@ -922,6 +927,7 @@ extension NextLevel {
                 }
             }
         }
+#endif
     }
     
     internal func setupAVSession() {
@@ -959,6 +965,7 @@ extension NextLevel {
     
     @available(iOS 11.0, *)
     internal func setupARSession() {
+#if USE_ARKIT
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let config = self.arConfiguration?.config,
                 let options = self.arConfiguration?.runOptions {
@@ -990,6 +997,7 @@ extension NextLevel {
                 }
             }
         }
+#endif
     }
     
 }
@@ -2794,6 +2802,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
     
 }
 
+#if USE_ARKIT
 // MARK: - ARSession
 
 @available(iOS 11.0, *)
@@ -2826,6 +2835,7 @@ extension NextLevel {
     }
     
 }
+#endif
 
 // MARK: - queues
 
