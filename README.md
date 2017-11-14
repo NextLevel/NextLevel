@@ -51,7 +51,20 @@ Need Swift 3.X? Target your Podfile to release version `0.6.3`. Swift 4 support 
 
 In release `0.8.0`, NextLevel provides a mode for ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities of NextLevel.
 
-The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement. To try it out, uncomment the code found in the AppDelegate to load the `MixedRealityViewController`. I’ll be adding in a Scene renderer shortly, as of now each raw frame is processed just as in AVFoundation.
+The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement. It is also not compiled in by default without the inclusion of the Swift compiler flag `USE_ARKIT`, since Apple will reject apps that link ARKit and do not use it. To try it out, setup the AppDelegate to load the `MixedRealityViewController` class and include the swift flag.
+
+If you use Cocoapods, you can include the flag with the following podfile addition for `-DUSE_ARKIT` or by adding it to your Xcode build settings.
+
+```ruby
+  installer.pods_project.targets.each do |target|
+    # setup NextLevel for ARKit use
+    if target.name == 'NextLevel'
+      target.build_configurations.each do |config|
+        config.build_settings['OTHER_SWIFT_FLAGS'] = '-DUSE_ARKIT'
+      end
+    end
+  end
+```
 
 ## Overview
 
