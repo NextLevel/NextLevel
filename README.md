@@ -29,10 +29,10 @@ Next Level is a media capture camera library for iOS written in [Swift](https://
 
 # CocoaPods
 swift_version = "4.0"
-pod "NextLevel", "~> 0.8.2"
+pod "NextLevel", "~> 0.9.0"
 
 # Carthage
-github "nextlevel/NextLevel" ~> 0.8.2
+github "nextlevel/NextLevel" ~> 0.9.0
 
 # Swift PM
 let package = Package(
@@ -51,9 +51,9 @@ Need Swift 3.X? Target your Podfile to release version `0.6.3`. Swift 4 support 
 
 In release `0.8.0`, NextLevel provides a mode for ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities of NextLevel.
 
-The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement. It is also not compiled in by default without the inclusion of the Swift compiler flag `USE_ARKIT`, since Apple will reject apps that link ARKit and do not use it. To try it out, setup the AppDelegate to load the `MixedRealityViewController` class and include the swift flag.
+The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement. It is not compiled by default without the inclusion of the Swift compiler flag `USE_ARKIT`, since Apple will [reject](https://github.com/NextLevel/NextLevel/issues/106) apps that link ARKit and do not use it. To try it out, setup the AppDelegate to load the `MixedRealityViewController` class and include the xcode build settings flag.
 
-If you use Cocoapods, you can include the flag with the following podfile addition for `-DUSE_ARKIT` or by adding it to your Xcode build settings.
+If you use Cocoapods, you can include `-DUSE_ARKIT` with the following podfile addition or by adding it to your Xcode build settings.
 
 ```ruby
   installer.pods_project.targets.each do |target|
