@@ -632,6 +632,8 @@ public class NextLevel: NSObject {
                     return
             }
             
+            self.delegate?.nextLevelCaptureModeWillChange(self)
+            
             self.executeClosureAsyncOnSessionQueueIfNecessary {
                 self.configureSession()
                 self.configureSessionDevices()
@@ -642,6 +644,7 @@ public class NextLevel: NSObject {
                     self.setupContextIfNecessary()
                 }
 #endif
+                self.delegate?.nextLevelCaptureModeDidChange(self)
             }
         }
     }
