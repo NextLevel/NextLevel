@@ -1317,6 +1317,7 @@ extension NextLevel {
         
         if self._photoOutput == nil {
             self._photoOutput = AVCapturePhotoOutput()
+            self._photoOutput?.isHighResolutionCaptureEnabled = true
         }
         
         if let session = self._captureSession, let photoOutput = self._photoOutput {
