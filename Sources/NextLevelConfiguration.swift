@@ -86,8 +86,8 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                     return "Square"
                 case .widescreen:
                     return "Widescreen"
-                case .custom:
-                    return "custom"
+                case .custom(let w, let h):
+                    return "custom \(w):\(h)"
                 }
             }
         }
@@ -169,7 +169,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                     break
                 case .custom(let w, let h):
                     config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
-                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * Int32(w) / Int32(h)))
+                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * Int32(h) / Int32(w)))
                     break
                 case .active:
                     fallthrough
