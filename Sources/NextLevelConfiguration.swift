@@ -68,11 +68,12 @@ let NextLevelVideoConfigurationDefaultBitRate: Int = 2000000
 public class NextLevelVideoConfiguration: NextLevelConfiguration {
 
     /// Output aspect ratio, specifies dimensions for video output automatically
-    public enum OutputAspectRatio: Int, CustomStringConvertible {
+    public enum OutputAspectRatio: CustomStringConvertible {
         case active      // active preset or specified dimensions (default)
         case standard    // 4:3
         case square      // 1:1
         case widescreen  // 16:9
+        case custom(w: Int, h: Int)
         
         public var description: String {
             get {
@@ -85,6 +86,8 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                     return "Square"
                 case .widescreen:
                     return "Widescreen"
+                case .custom(let w, let h):
+                    return "custom \(w):\(h)"
                 }
             }
         }
@@ -163,6 +166,10 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                     let min = Swift.min(videoDimensions.width, videoDimensions.height)
                     config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(min))
                     config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(min))
+                    break
+                case .custom(let w, let h):
+                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
+                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * Int32(h) / Int32(w)))
                     break
                 case .active:
                     fallthrough
