@@ -91,6 +91,23 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 }
             }
         }
+        
+        public var ratio: CGFloat? {
+            get {
+                switch self {
+                case .active:
+                    return nil
+                case .standard:
+                    return 3 / 4
+                case .square:
+                    return 1
+                case .widescreen:
+                    return 9 / 16
+                case .custom(let w, let h):
+                    return CGFloat(h) / CGFloat(w)
+                }
+            }
+        }
     }
     
     /// Average video bit rate (bits per second), AV dictionary key AVVideoAverageBitRateKey
