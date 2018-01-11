@@ -425,6 +425,9 @@ public let NextLevelPhotoMetadataKey = "NextLevelPhotoMetadataKey"
 /// Delegate callback dictionary key for JPEG data
 public let NextLevelPhotoJPEGKey = "NextLevelPhotoJPEGKey"
 
+/// Delegate callback dictionary key for cropped JPEG data
+public let NextLevelPhotoCroppedJPEGKey = "NextLevelPhotoCroppedJPEGKey"
+
 /// Delegate callback dictionary key for raw image data
 public let NextLevelPhotoRawImageKey = "NextLevelPhotoRawImageKey"
 
@@ -2238,21 +2241,25 @@ extension NextLevel {
             self.setupContextIfNecessary()
             
             var photoDict: [String: Any]? = nil
+            let ratio = self.videoConfiguration.aspectRatio.ratio
             if let customFrame = self._sessionVideoCustomContextImageBuffer {
                 
                 // TODO append exif metadata
                 
                 // add JPEG, thumbnail
-                if let context = self._ciContext,
-                    let photo = context.uiimage(withPixelBuffer: customFrame),
-                    let imageData = UIImageJPEGRepresentation(photo, 1) {
-                    
-                    if photoDict == nil {
-                        photoDict = [:]
-                    }
-                    photoDict?[NextLevelPhotoJPEGKey] = imageData
-                }
                 
+                if let context = self._ciContext,
+                    let photo = context.uiimage(withPixelBuffer: customFrame) {
+                    let croppedPhoto = ratio != nil ? photo.nx_croppedImage(to: ratio!) : photo
+                    if let imageData = UIImageJPEGRepresentation(photo, 1),
+                        let croppedImageData = UIImageJPEGRepresentation(croppedPhoto, 1){
+                        if photoDict == nil {
+                            photoDict = [:]
+                        }
+                        photoDict?[NextLevelPhotoJPEGKey] = imageData
+                        photoDict?[NextLevelPhotoCroppedJPEGKey] = croppedImageData
+                    }
+                }
             } else if let videoFrame = self._lastVideoFrame {
                 
                 // append exif metadata
@@ -2266,13 +2273,16 @@ extension NextLevel {
                 
                 // add JPEG, thumbnail
                 if let context = self._ciContext,
-                    let photo = context.uiimage(withSampleBuffer: videoFrame),
-                    let imageData = UIImageJPEGRepresentation(photo, 1) {
-                    
-                    if photoDict == nil {
-                        photoDict = [:]
+                    let photo = context.uiimage(withSampleBuffer: videoFrame) {
+                    let croppedPhoto = ratio != nil ? photo.nx_croppedImage(to: ratio!) : photo
+                    if let imageData = UIImageJPEGRepresentation(photo, 1),
+                    let croppedImageData = UIImageJPEGRepresentation(croppedPhoto, 1){
+                        if photoDict == nil {
+                            photoDict = [:]
+                        }
+                        photoDict?[NextLevelPhotoJPEGKey] = imageData
+                        photoDict?[NextLevelPhotoCroppedJPEGKey] = croppedImageData
                     }
-                    photoDict?[NextLevelPhotoJPEGKey] = imageData
                 }
                 
             } else if let arFrame = self._lastARFrame {
