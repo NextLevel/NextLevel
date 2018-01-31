@@ -19,11 +19,11 @@
 	<key>CFBundleVersion</key>
 	<string>0.0.1</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Next Level uses the camera for photo and video capture.</string>
+	<string>NextLevel uses the camera for photo and video capture.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Next Level uses the microphone for audio capture.</string>
+	<string>NextLevel uses the microphone for audio capture.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Next Level saves photos and videos to your library.</string>
+	<string>NextLevel saves photos and videos to your library.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>
