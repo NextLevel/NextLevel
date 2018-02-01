@@ -1320,6 +1320,7 @@ extension NextLevel {
         
         if self._photoOutput == nil {
             self._photoOutput = AVCapturePhotoOutput()
+            self._photoOutput?.isHighResolutionCaptureEnabled = true
         }
         
         if let session = self._captureSession, let photoOutput = self._photoOutput {
@@ -2427,6 +2428,7 @@ extension NextLevel {
         if let photoOutput = self._photoOutput, let _ = photoOutput.connection(with: AVMediaType.video) {
             if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
                 let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
+                photoSettings.isHighResolutionPhotoEnabled = photoOutput.isHighResolutionCaptureEnabled
                 if self.isFlashAvailable {
                     photoSettings.flashMode = self.photoConfiguration.flashMode
                 }
