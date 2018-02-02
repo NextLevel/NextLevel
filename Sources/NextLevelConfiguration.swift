@@ -341,6 +341,9 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     /// True indicates that NextLevel should generate a thumbnail for the photo
     public var generateThumbnail: Bool = false
 
+    /// Enabled high resolution capture
+    public var isHighResolutionEnabled: Bool = false
+    
     // MARK: - ivars
     
     // change flashMode with NextLevel.flashMode
