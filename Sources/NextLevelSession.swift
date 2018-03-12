@@ -69,14 +69,20 @@ public class NextLevelSession: NSObject {
     /// Checks if the session is setup for recording video
     public var isVideoReady: Bool {
         get {
-            return self._videoInput != nil
+            if let videoInput = self._videoInput {
+                return videoInput.isReadyForMoreMediaData
+            }
+            return false
         }
     }
     
     /// Checks if the session is setup for recording audio
     public var isAudioReady: Bool {
         get {
-            return self._audioInput != nil
+            if let audioInput = self._audioInput {
+                return audioInput.isReadyForMoreMediaData
+            }
+            return false
         }
     }
 
