@@ -251,16 +251,14 @@ extension CameraViewController {
                         print("failed to merge clips at the end of capture \(String(describing: error))")
                     }
                 })
+            } else if let videoUrl = NextLevel.shared.session?.lastClipUrl {
+                self.saveVideo(withURL: videoUrl)
             } else {
-                if let videoUrl = NextLevel.shared.session?.lastClipUrl {
-                    self.saveVideo(withURL: videoUrl)
-                } else {
-                    // prompt that the video has been saved
-                    let alertController = UIAlertController(title: "Oops!", message: "An error occured!", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alertController.addAction(okAction)
-                    self.present(alertController, animated: true, completion: nil)
-                }
+                // prompt that the video has been saved
+                let alertController = UIAlertController(title: "Video Capture", message: "Not enough video captured!", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
             }
         
         }
