@@ -364,36 +364,35 @@ extension NextLevelSession {
         var frameDuration = minFrameDuration
         let offsetBufferTimestamp = timestamp - self._timeOffset
         
-        if let videoConfig = self._videoConfiguration, let timeScale = videoConfig.timescale {
-            if timeScale != 1.0 {
-                let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
-                if self._currentClipDuration.value > 0 {
-                    self._timeOffset = self._timeOffset + (duration - scaledDuration)
-                }
-                frameDuration = scaledDuration
+        if let videoConfig = self._videoConfiguration,
+            let timeScale = videoConfig.timescale,
+            timeScale != 1.0 {
+            let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
+            if self._currentClipDuration.value > 0 {
+                self._timeOffset = self._timeOffset + (duration - scaledDuration)
             }
+            frameDuration = scaledDuration
         }
         
-        if let videoInput = self._videoInput, let pixelBufferAdapter = self._pixelBufferAdapter {
-            if videoInput.isReadyForMoreMediaData {
+        if let videoInput = self._videoInput,
+            let pixelBufferAdapter = self._pixelBufferAdapter,
+            videoInput.isReadyForMoreMediaData {
                 
-                var bufferToProcess: CVPixelBuffer? = nil
-                if let customImageBuffer = customImageBuffer {
-                    bufferToProcess = customImageBuffer
-                } else {
-                    bufferToProcess = CMSampleBufferGetImageBuffer(sampleBuffer)
+            var bufferToProcess: CVPixelBuffer? = nil
+            if let customImageBuffer = customImageBuffer {
+                bufferToProcess = customImageBuffer
+            } else {
+                bufferToProcess = CMSampleBufferGetImageBuffer(sampleBuffer)
+            }
+            
+            if let bufferToProcess = bufferToProcess {
+                if pixelBufferAdapter.append(bufferToProcess, withPresentationTime: offsetBufferTimestamp) {
+                    self._currentClipDuration = (offsetBufferTimestamp + frameDuration) - self._startTimestamp
+                    self._lastVideoTimestamp = timestamp
+                    self._currentClipHasVideo = true
+                    completionHandler(true)
+                    return
                 }
-                
-                if let bufferToProcess = bufferToProcess {
-                    if pixelBufferAdapter.append(bufferToProcess, withPresentationTime: offsetBufferTimestamp) {
-                        self._currentClipDuration = (offsetBufferTimestamp + frameDuration) - self._startTimestamp
-                        self._lastVideoTimestamp = timestamp
-                        self._currentClipHasVideo = true
-                        completionHandler(true)
-                        return
-                    }
-                }
-                
             }
         }
 
@@ -417,36 +416,34 @@ extension NextLevelSession {
         var frameDuration = minFrameDuration
         let offsetBufferTimestamp = timestamp - self._timeOffset
         
-        if let videoConfig = self._videoConfiguration, let timeScale = videoConfig.timescale {
-            if timeScale != 1.0 {
-                let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
-                if self._currentClipDuration.value > 0 {
-                    self._timeOffset = self._timeOffset + (duration - scaledDuration)
-                }
-                frameDuration = scaledDuration
+        if let videoConfig = self._videoConfiguration,
+            let timeScale = videoConfig.timescale,
+            timeScale != 1.0 {
+            let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
+            if self._currentClipDuration.value > 0 {
+                self._timeOffset = self._timeOffset + (duration - scaledDuration)
             }
+            frameDuration = scaledDuration
         }
         
-        if let videoInput = self._videoInput, let pixelBufferAdapter = self._pixelBufferAdapter {
-            if videoInput.isReadyForMoreMediaData {
-                
-                var bufferToProcess: CVPixelBuffer? = nil
-                if let customImageBuffer = customImageBuffer {
-                    bufferToProcess = customImageBuffer
-                } else {
-                    bufferToProcess = pixelBuffer
-                }
-                
-                if let bufferToProcess = bufferToProcess {
-                    if pixelBufferAdapter.append(bufferToProcess, withPresentationTime: offsetBufferTimestamp) {
-                        self._currentClipDuration = (offsetBufferTimestamp + frameDuration) - self._startTimestamp
-                        self._lastVideoTimestamp = timestamp
-                        self._currentClipHasVideo = true
-                        completionHandler(true)
-                        return
-                    }
-                }
-                
+        if let videoInput = self._videoInput,
+            let pixelBufferAdapter = self._pixelBufferAdapter,
+            videoInput.isReadyForMoreMediaData {
+            
+            var bufferToProcess: CVPixelBuffer? = nil
+            if let customImageBuffer = customImageBuffer {
+                bufferToProcess = customImageBuffer
+            } else {
+                bufferToProcess = pixelBuffer
+            }
+            
+            if let bufferToProcess = bufferToProcess,
+                pixelBufferAdapter.append(bufferToProcess, withPresentationTime: offsetBufferTimestamp) {
+                self._currentClipDuration = (offsetBufferTimestamp + frameDuration) - self._startTimestamp
+                self._lastVideoTimestamp = timestamp
+                self._currentClipHasVideo = true
+                completionHandler(true)
+                return
             }
         }
         
@@ -468,19 +465,18 @@ extension NextLevelSession {
             let lastTimestamp = presentationTimestamp + duration
             
             self._audioQueue.async {
-                if let audioInput = self._audioInput {
-                    if audioInput.isReadyForMoreMediaData && audioInput.append(adjustedBuffer) {
-                        self._lastAudioTimestamp = lastTimestamp
-                        
-                        if !self.currentClipHasVideo {
-                            self._currentClipDuration = lastTimestamp - self._startTimestamp
-                        }
-                        
-                        self._currentClipHasAudio = true
-                        
-                        completionHandler(true)
-                        return
+                if let audioInput = self._audioInput,
+                    audioInput.isReadyForMoreMediaData && audioInput.append(adjustedBuffer) {
+                    self._lastAudioTimestamp = lastTimestamp
+                    
+                    if !self.currentClipHasVideo {
+                        self._currentClipDuration = lastTimestamp - self._startTimestamp
                     }
+                    
+                    self._currentClipHasAudio = true
+                    
+                    completionHandler(true)
+                    return
                 }
                 completionHandler(false)
             }
@@ -597,11 +593,10 @@ extension NextLevelSession {
     public var lastClipUrl: URL? {
         get {
             var lastClipUrl: URL? = nil
-            if self._clips.count > 0 {
-                if let lastClip: NextLevelClip = self.clips.last,
-                    let clipURL = lastClip.url {
-                    lastClipUrl = clipURL
-                }
+            if !self._clips.isEmpty,
+                let lastClip: NextLevelClip = self.clips.last,
+                let clipURL = lastClip.url {
+                lastClipUrl = clipURL
             }
             return lastClipUrl
         }
@@ -664,7 +659,7 @@ extension NextLevelSession {
     /// - Parameter removeFiles: When true, associated files are also removed.
     public func removeAllClips(removeFiles: Bool = true) {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
-            while self._clips.count > 0 {
+            while !self._clips.isEmpty {
                 if let clipToRemove = self._clips.first {
                     if removeFiles {
                         clipToRemove.removeFile()
@@ -679,10 +674,9 @@ extension NextLevelSession {
     /// Removes the last recorded clip for a session, "Undo".
     public func removeLastClip() {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            if self.clips.count > 0 {
-                if let clipToRemove = self.clips.last {
-                    self.remove(clip: clipToRemove)
-                }
+            if !self._clips.isEmpty,
+               let clipToRemove = self.clips.last {
+                self.remove(clip: clipToRemove)
             }
         }
     }
@@ -702,7 +696,7 @@ extension NextLevelSession {
             let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory)
             var asset: AVAsset? = nil
             
-            if self._clips.count > 0 {
+            if !self._clips.isEmpty {
                 
                 if self._clips.count == 1 {
                     debugPrint("NextLevel, warning, a merge was requested for a single clip, use lastClipUrl instead")
