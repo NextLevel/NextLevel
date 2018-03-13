@@ -401,8 +401,6 @@ extension NextLevelSession {
                 }
             }
         }
-
-        print("NextLevel, session failed to append video frame to clip")
         completionHandler(false)
     }
     
@@ -452,8 +450,6 @@ extension NextLevelSession {
                 return
             }
         }
-        
-        print("NextLevel, session failed to append video frame to clip")
         completionHandler(false)
     }
     
