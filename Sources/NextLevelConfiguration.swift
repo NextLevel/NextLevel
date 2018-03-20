@@ -210,8 +210,20 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 config[AVVideoScalingModeKey] = scalingMode
             }
             
+            let numPixels = (config[AVVideoWidthKey] as! Int) * (config[AVVideoHeightKey] as! Int)
+            let bitsPerPixel: Double
+            if numPixels < (640 * 480) {
+                // This bitrate approximately matches the quality produced by AVCaptureSessionPresetMedium or Low.
+                bitsPerPixel = 4.05
+            }
+            else {
+                // This bitrate approximately matches the quality produced by AVCaptureSessionPresetHigh.
+                bitsPerPixel = 10.1
+            }
+            let bitsPerSecond = Int(Double(numPixels) * bitsPerPixel)
+            
             var compressionDict: [String : Any] = [:]
-            compressionDict[AVVideoAverageBitRateKey] = NSNumber(integerLiteral: self.bitRate)
+            compressionDict[AVVideoAverageBitRateKey] = NSNumber(integerLiteral: bitsPerSecond)
             compressionDict[AVVideoAllowFrameReorderingKey] = NSNumber(booleanLiteral: false)
             compressionDict[AVVideoExpectedSourceFrameRateKey] = NSNumber(integerLiteral: 30)
             if let profileLevel = self.profileLevel {
