@@ -168,9 +168,12 @@ class CameraViewController: UIViewController {
         nextLevel.photoDelegate = self
         
         // video configuration
-        nextLevel.videoConfiguration.bitRate = 2000000
+        nextLevel.videoConfiguration.preset = AVCaptureSession.Preset.hd1280x720
+        nextLevel.videoConfiguration.bitRate = 5500000
+        nextLevel.videoConfiguration.maxKeyFrameInterval = 30
         nextLevel.videoConfiguration.scalingMode = AVVideoScalingModeResizeAspectFill
-        
+        nextLevel.videoConfiguration.profileLevel = AVVideoProfileLevelH264HighAutoLevel
+
         // audio configuration
         nextLevel.audioConfiguration.bitRate = 96000
     }
