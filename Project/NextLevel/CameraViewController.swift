@@ -245,14 +245,14 @@ extension CameraViewController {
             
             if session.clips.count > 1 {
                 NextLevel.shared.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
-                    if let videoUrl = url {
-                        self.saveVideo(withURL: videoUrl)
+                    if let url = url {
+                        self.saveVideo(withURL: url)
                     } else if let _ = error {
                         print("failed to merge clips at the end of capture \(String(describing: error))")
                     }
                 })
-            } else if let videoUrl = NextLevel.shared.session?.lastClipUrl {
-                self.saveVideo(withURL: videoUrl)
+            } else if let lastClipUrl = NextLevel.shared.session?.lastClipUrl {
+                self.saveVideo(withURL: lastClipUrl)
             } else {
                 // prompt that the video has been saved
                 let alertController = UIAlertController(title: "Video Capture", message: "Not enough video captured!", preferredStyle: .alert)
