@@ -2354,16 +2354,11 @@ extension NextLevel {
             }
         }
     }
-    
-    /// Pauses video recording, preparing 'NextLevel' to start a new clip with 'record()'
-    public func pause() {
-        self.pause(withCompletionHandler: nil)
-    }
-    
+        
     /// Pauses video recording, preparing 'NextLevel' to start a new clip with 'record()' with completion handler.
     ///
     /// - Parameter completionHandler: Completion handler for when pause completes
-    public func pause(withCompletionHandler completionHandler: (() -> Void)?) {
+    public func pause(withCompletionHandler completionHandler: (() -> Void)? = nil) {
         self._recording = false
         
         self.executeClosureAsyncOnSessionQueueIfNecessary {
