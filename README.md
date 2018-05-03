@@ -1,6 +1,6 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" alt="Next Level" style="max-width:100%;"></p>
 
-`NextLevel` is an iOS media capture and camera library, written in [Swift](https://developer.apple.com/swift/).
+`NextLevel` is an iOS media capture and camera library, written in [Swift](https://developer.apple.com/swift/). It enables fast integration and customization leveraging AVFoundation or optionally ARKit.
 
 [![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) [![Pod Version](https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat)](http://cocoadocs.org/docsets/NextLevel/) [![Swift Version](https://img.shields.io/badge/language-swift%204.0-brightgreen.svg)](https://developer.apple.com/swift) [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/NextLevel/NextLevel/blob/master/LICENSE)
 
@@ -23,16 +23,20 @@
 | &#127744; | extensible API for image processing and CV |
 | &#128038; | [Swift 4](https://developer.apple.com/swift/) |
 
+## Documentation
+
+You can find [the docs here](https://nextlevel.github.io/NextLevel). Documentation is generated with [jazzy](https://github.com/realm/jazzy) and hosted on [GitHub-Pages](https://pages.github.com).
+
 ## Quick Start
 
 ```ruby
 
 # CocoaPods
 swift_version = "4.0"
-pod "NextLevel", "~> 0.9.0"
+pod "NextLevel", "~> 0.9.5"
 
 # Carthage
-github "nextlevel/NextLevel" ~> 0.9.0
+github "nextlevel/NextLevel" ~> 0.9.5
 
 # Swift PM
 let package = Package(
@@ -219,15 +223,13 @@ NextLevel will check this property when writing buffers to a destination file. T
 nextLevel.videoCustomContextImageBuffer = modifiedFrame
 ```
 
-## Documentation
-
-You can find [the docs here](https://nextlevel.github.io/NextLevel). Documentation is generated with [jazzy](https://github.com/realm/jazzy) and hosted on [GitHub-Pages](https://pages.github.com).
-
 ## About
 
-Next Level was a little weekend project that turned into something more useful. The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
+NextLevel was initally just a weekend project but has grown into a open community of enthusists. The software provides foundational components for managing advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
 
-The goal is to continue to provide a good foundation for quick integration (taking you to the next level) – allowing everyone to focus on the app functionality that matters most. My hope is the app functionality that matters most whether is be realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques benefit from how this library is structured.
+It's goal is to continue to provide a good foundation for quick integration (enabling you to take your projects to the next level) – focusing development on the functionality that matters most whether it's realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.
+
+One example of NextLevel adoption is AR app [Mirage World](https://mirage.world), which leverages it's capabilities for media capture and image analysis.
 
 ### Related Projects
 
