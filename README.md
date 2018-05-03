@@ -1,6 +1,8 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" alt="Next Level" style="max-width:100%;"></p>
 
-`NextLevel` is an iOS media capture and camera library, written in [Swift](https://developer.apple.com/swift/). It enables fast integration and customization leveraging AVFoundation or optionally ARKit.
+`NextLevel` is an iOS media capture and camera library, written in [Swift](https://developer.apple.com/swift/).
+
+It enables fast integration and customization leveraging AVFoundation or optionally ARKit.
 
 [![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) [![Pod Version](https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat)](http://cocoadocs.org/docsets/NextLevel/) [![Swift Version](https://img.shields.io/badge/language-swift%204.0-brightgreen.svg)](https://developer.apple.com/swift) [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/NextLevel/NextLevel/blob/master/LICENSE)
 
