@@ -7,7 +7,7 @@
 jazzy \
     --clean \
     --author 'Patrick Piemonte' \
-    --author_url 'https://nextlevel.engineering' \
+    --author_url 'http://nextlevel.engineering' \
     --github_url 'https://github.com/NextLevel/NextLevel' \
     --sdk iphonesimulator \
     --xcodebuild-arguments -scheme,NextLevel \
