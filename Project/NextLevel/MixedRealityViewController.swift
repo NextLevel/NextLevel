@@ -175,8 +175,14 @@ class MixedRealityViewController: UIViewController {
         }
         
         self.arConfig = ARWorldTrackingConfiguration()
-        self.arConfig?.providesAudioData = true
-        self.arConfig?.planeDetection = .horizontal
+        if let arConfig = self.arConfig {
+            arConfig.providesAudioData = true
+            arConfig.isLightEstimationEnabled = true
+            if #available(iOS 11.3, *) {
+                arConfig.isAutoFocusEnabled = true
+            }
+            arConfig.planeDetection = .horizontal
+        }
         
         // Configure NextLevel by modifying the configuration ivars
         let nextLevel = NextLevel.shared
