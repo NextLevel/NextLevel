@@ -1,6 +1,6 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" alt="Next Level" style="max-width:100%;"></p>
 
-`NextLevel` is a [Swift](https://developer.apple.com/swift/) camera system and library designed for easy integration, customized media capture, and image streaming for iOS.
+`NextLevel` is a [Swift](https://developer.apple.com/swift/) camera system designed for easy integration, customized media capture, and image streaming for iOS.
 
 It enables fast integration and customization leveraging `AVFoundation` or optionally `ARKit`.
 
@@ -30,10 +30,6 @@ Need a different version of Swift?
 * `4.0` - Target your Podfile to the latest release or master
 * `3.2` - Target your Podfile to release `0.6.3` or the `swift3.2` branch
 
-## Documentation
-
-You can find [the docs here](https://nextlevel.github.io/NextLevel). Documentation is generated with [jazzy](https://github.com/realm/jazzy) and hosted on [GitHub-Pages](https://pages.github.com).
-
 ## Quick Start
 
 ```ruby
@@ -56,9 +52,9 @@ let package = Package(
 
 Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/NextLevel/tree/master/Sources) or project file into your Xcode project.
 
-## ARKit
+## ARKit Capture
 
-In release `0.8.0`, NextLevel provides a mode for ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities of NextLevel.
+Starting with release `0.8.0`, NextLevel provides a mode for ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.
 
 The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement. It is not compiled by default without the inclusion of the Swift compiler flag `USE_ARKIT`, since Apple will [reject](https://github.com/NextLevel/NextLevel/issues/106) apps that link ARKit and do not use it. To try it out, setup the AppDelegate to load the `MixedRealityViewController` class and include the xcode build settings flag.
 
@@ -230,11 +226,27 @@ nextLevel.videoCustomContextImageBuffer = modifiedFrame
 
 ## About
 
-NextLevel was initally just a weekend project but has grown into a open community of enthusists. The software provides foundational components for managing advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
+NextLevel was initally just a weekend project but has grown into a open community of camera enthusists. The software provides foundational components for managing media recording, camera interface customization, gestural interaction customization, and image streaming for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
 
-It's goal is to continue to provide a good foundation for quick integration (enabling you to take your projects to the next level) – focusing development on the functionality that matters most whether it's realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.
+The goal is to continue to provide a good foundation for quick integration (enabling projects to be taken to the next level) – allowing focus to placed on functionality that matters most whether it's realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.
 
-One example of NextLevel adoption is AR app [Mirage World](https://mirage.world), which leverages it's capabilities for media capture and image analysis.
+## Documentation
+
+You can find [the docs here](https://nextlevel.github.io/NextLevel). Documentation is generated with [jazzy](https://github.com/realm/jazzy) and hosted on [GitHub-Pages](https://pages.github.com).
+
+### Stickers
+
+If you found this project to be helpful, check out the [Next Level stickers](https://www.stickermule.com/en/user/1070732101/stickers).
+
+### Project
+
+NextLevel is a community – contributions and discussions are welcome!
+
+- Feature idea? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
+- Found a bug? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
+- Need help? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag ’nextlevel’.
+- Questions? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag 'nextlevel'.
+- Want to contribute? Submit a pull request.
 
 ### Related Projects
 
@@ -244,26 +256,6 @@ One example of NextLevel adoption is AR app [Mirage World](https://mirage.world)
 - [SCRecorder](https://github.com/rFlex/SCRecorder), obj-c capture library
 - [PBJVision](https://github.com/piemonte/PBJVision), obj-c capture library
 - [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), media transcoding in Swift
-
-## Community
-
-NextLevel is a community – contributions and discussions are welcome!
-
-### Project
-
-- Feature idea? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
-- Found a bug? Open an [issue](https://github.com/nextlevel/NextLevel/issues).
-- Need help? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag ’nextlevel’.
-- Questions? Use [Stack Overflow](http://stackoverflow.com/questions/tagged/nextlevel) with the tag 'nextlevel'.
-- Want to contribute? Submit a pull request.
-
-### Stickers
-
-If you found this project to be helpful, check out the [Next Level stickers](https://www.stickermule.com/en/user/1070732101/stickers).
-
-You can use this sign up [link](https://www.stickermule.com/unlock?ref_id=1012370701) for a $10 [credit](https://www.stickermule.com/unlock?ref_id=1012370701).
-
-If other projects have interest in providing a similar hex sticker, it conforms to the [sticker standard](https://terinjokes.github.io/StickerConstructorSpec/) used by several node projects. 
 
 ## Resources
 
