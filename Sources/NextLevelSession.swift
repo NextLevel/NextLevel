@@ -164,7 +164,7 @@ public class NextLevelSession: NSObject {
     internal var _identifier: UUID
     internal var _date: Date
     
-    internal var _duration: CMTime = CMTime.zero
+    internal var _duration: CMTime = kCMTimeZero
     internal var _clips: [NextLevelClip] = []
     internal var _clipFilenameCount: Int = 0
 
@@ -180,15 +180,15 @@ public class NextLevelSession: NSObject {
     internal var _sessionQueue: DispatchQueue
     internal var _sessionQueueKey: DispatchSpecificKey<NSObject>
     
-    internal var _currentClipDuration: CMTime = CMTime.zero
+    internal var _currentClipDuration: CMTime = kCMTimeZero
     internal var _currentClipHasAudio: Bool = false
     internal var _currentClipHasVideo: Bool = false
 
     internal var _clipStarted: Bool = false
-    internal var _timeOffset: CMTime = CMTime.invalid
-    internal var _startTimestamp: CMTime = CMTime.invalid
-    internal var _lastAudioTimestamp: CMTime = CMTime.invalid
-    internal var _lastVideoTimestamp: CMTime = CMTime.invalid
+    internal var _timeOffset: CMTime = kCMTimeInvalid
+    internal var _startTimestamp: CMTime = kCMTimeInvalid
+    internal var _lastAudioTimestamp: CMTime = kCMTimeInvalid
+    internal var _lastVideoTimestamp: CMTime = kCMTimeInvalid
     
     private let NextLevelSessionAudioQueueIdentifier = "engineering.NextLevel.session.audioQueue"
     private let NextLevelSessionQueueIdentifier = "engineering.NextLevel.sessionQueue"
@@ -269,7 +269,7 @@ extension NextLevelSession {
             var pixelBufferAttri: [String : Any] = [String(kCVPixelBufferPixelFormatTypeKey): Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
             
             if let formatDescription = formatDescription {
-                let videoDimensions = formatDescription.videoDimensions
+                let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
                 pixelBufferAttri[String(kCVPixelBufferWidthKey)] = Float(videoDimensions.width)
                 pixelBufferAttri[String(kCVPixelBufferHeightKey)] = Float(videoDimensions.height)
             } else if let width = settings?[AVVideoWidthKey],
@@ -325,8 +325,8 @@ extension NextLevelSession {
                     
                     if writer.startWriting() {
                         self._clipStarted = true
-                        self._timeOffset = CMTime.zero
-                        self._startTimestamp = CMTime.invalid
+                        self._timeOffset = kCMTimeZero
+                        self._startTimestamp = kCMTimeInvalid
                     } else {
                         print("NextLevel, writer encountered an error \(String(describing: writer.error))")
                         self._writer = nil
@@ -341,9 +341,9 @@ extension NextLevelSession {
     internal func destroyWriter() {
         self._writer = nil
         self._clipStarted = false
-        self._timeOffset = CMTime.zero
-        self._startTimestamp = CMTime.invalid
-        self._currentClipDuration = CMTime.zero
+        self._timeOffset = kCMTimeZero
+        self._startTimestamp = kCMTimeInvalid
+        self._currentClipDuration = kCMTimeZero
         self._currentClipHasVideo = false
         self._currentClipHasAudio = false
     }
@@ -364,7 +364,7 @@ extension NextLevelSession {
     ///   - minFrameDuration: Current active minimum frame duration
     ///   - completionHandler: Handler when a frame appending operation completes or fails
     public func appendVideo(withSampleBuffer sampleBuffer: CMSampleBuffer, customImageBuffer: CVPixelBuffer?, minFrameDuration: CMTime, completionHandler: NextLevelSessionAppendSampleBufferCompletionHandler) {
-        let timestamp = sampleBuffer.presentationTimeStamp
+        let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         self.startSessionIfNecessary(timestamp: timestamp)
         
         var frameDuration = minFrameDuration
@@ -373,7 +373,7 @@ extension NextLevelSession {
         if let videoConfig = self._videoConfiguration,
             let timeScale = videoConfig.timescale,
             timeScale != 1.0 {
-            let scaledDuration = duration.multiply(by: timeScale)
+            let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
             if self._currentClipDuration.value > 0 {
                 self._timeOffset = self._timeOffset + (duration - scaledDuration)
             }
@@ -388,7 +388,7 @@ extension NextLevelSession {
             if let customImageBuffer = customImageBuffer {
                 bufferToProcess = customImageBuffer
             } else {
-                bufferToProcess = sampleBuffer.imageBuffer
+                bufferToProcess = CMSampleBufferGetImageBuffer(sampleBuffer)
             }
             
             if let bufferToProcess = bufferToProcess {
@@ -423,7 +423,7 @@ extension NextLevelSession {
         if let videoConfig = self._videoConfiguration,
             let timeScale = videoConfig.timescale,
             timeScale != 1.0 {
-            let scaledDuration = duration.multiply(by: timeScale)
+            let scaledDuration = CMTimeMultiplyByFloat64(duration, timeScale)
             if self._currentClipDuration.value > 0 {
                 self._timeOffset = self._timeOffset + (duration - scaledDuration)
             }
@@ -459,11 +459,11 @@ extension NextLevelSession {
     ///   - sampleBuffer: Sample buffer input to be appended
     ///   - completionHandler: Handler when a frame appending operation completes or fails
     public func appendAudio(withSampleBuffer sampleBuffer: CMSampleBuffer, completionHandler: @escaping NextLevelSessionAppendSampleBufferCompletionHandler) {
-        self.startSessionIfNecessary(timestamp: sampleBuffer.presentationTimeStamp)
+        self.startSessionIfNecessary(timestamp: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
         
-        let duration = sampleBuffer.duration
+        let duration = CMSampleBufferGetDuration(sampleBuffer)
         if let adjustedBuffer = CMSampleBuffer.createSampleBuffer(fromSampleBuffer: sampleBuffer, withTimeOffset: self._timeOffset, duration: duration) {
-            let presentationTimestamp = adjustedBuffer.presentationTimeStamp
+            let presentationTimestamp = CMSampleBufferGetPresentationTimeStamp(adjustedBuffer)
             let lastTimestamp = presentationTimestamp + duration
             
             self._audioQueue.async {
@@ -517,7 +517,7 @@ extension NextLevelSession {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             if self._writer == nil {
                 self.setupWriter()
-                self._currentClipDuration = CMTime.zero
+                self._currentClipDuration = kCMTimeZero
                 self._currentClipHasAudio = false
                 self._currentClipHasVideo = false
             } else {
@@ -669,7 +669,7 @@ extension NextLevelSession {
                     self._clips.removeFirst()
                 }
             }
-            self._duration = CMTime.zero
+            self._duration = kCMTimeZero
         }
     }
 
@@ -746,7 +746,7 @@ extension NextLevelSession {
                     let videoAssetTracks = asset.tracks(withMediaType: AVMediaType.video)
                     let audioAssetTracks = asset.tracks(withMediaType: AVMediaType.audio)
                  
-                    var maxRange = CMTime.invalid
+                    var maxRange = kCMTimeInvalid
                     
                     var videoTime = currentTime
                     for videoAssetTrack in videoAssetTracks {
@@ -803,7 +803,7 @@ extension NextLevelSession {
             }
         }
         
-        if timeRange.duration > CMTime.zero {
+        if timeRange.duration > kCMTimeZero {
             do {
                 try compositionTrack.insertTimeRange(timeRange, of: track, at: startTime)
             } catch {

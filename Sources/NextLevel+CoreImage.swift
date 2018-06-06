@@ -36,7 +36,7 @@ extension CIContext {
     /// - Returns: UIImage from the sample buffer, otherwise nil
     public func uiimage(withSampleBuffer sampleBuffer: CMSampleBuffer) -> UIImage? {
         var sampleBufferImage: UIImage? = nil
-        if let pixelBuffer = sampleBuffer.imageBuffer {
+        if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
             let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
             if let cgimage = self.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
                 sampleBufferImage = UIImage(cgImage: cgimage)
