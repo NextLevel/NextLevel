@@ -26,9 +26,9 @@ It enables fast integration and customization leveraging `AVFoundation` or optio
 | &#128038; | [Swift 4](https://developer.apple.com/swift/) |
 
 Need a different version of Swift?
-* `4.2` - Target yoru Podfile to the `swift4.2` branch, https://github.com/NextLevel/NextLevel/tree/swift4.2
+* `4.2` - Target your Podfile to the `swift4.2` branch
 * `4.0` - Target your Podfile to the latest release or master
-* `3.2` - Target your Podfile to release `0.6.3`, https://github.com/NextLevel/NextLevel/tree/swift3.2
+* `3.2` - Target your Podfile to release `0.6.3` or the `swift3.2` branch
 
 ## Documentation
 
