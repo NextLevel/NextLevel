@@ -1,6 +1,6 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" alt="Next Level" style="max-width:100%;"></p>
 
-`NextLevel` is an iOS media capture and camera library, written in [Swift](https://developer.apple.com/swift/).
+`NextLevel` is a [Swift](https://developer.apple.com/swift/) camera system and library designed for easy integration, customized media capture, and image streaming for iOS.
 
 It enables fast integration and customization leveraging `AVFoundation` or optionally `ARKit`.
 
@@ -24,6 +24,11 @@ It enables fast integration and customization leveraging `AVFoundation` or optio
 | &#128736; | simple media capture and editing API |
 | &#127744; | extensible API for image processing and CV |
 | &#128038; | [Swift 4](https://developer.apple.com/swift/) |
+
+Need a different version of Swift?
+* `4.2` - Target yoru Podfile to the `swift4.2` branch, https://github.com/NextLevel/NextLevel/tree/swift4.2
+* `4.0` - Target your Podfile to the latest release or master
+* `3.2` - Target your Podfile to release `0.6.3`, https://github.com/NextLevel/NextLevel/tree/swift3.2
 
 ## Documentation
 
@@ -50,8 +55,6 @@ let package = Package(
 ```
 
 Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/NextLevel/tree/master/Sources) or project file into your Xcode project.
-
-Need Swift 3.X? Target your Podfile to release version `0.6.3`. Swift 4 support begins with release ‘0.7.1’.
 
 ## ARKit
 
