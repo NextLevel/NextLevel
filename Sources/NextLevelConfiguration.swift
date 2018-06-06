@@ -168,8 +168,8 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(dimensions.width))
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(dimensions.height))
             } else if let sampleBuffer = sampleBuffer,
-                let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
-                let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
+                let formatDescription: CMFormatDescription = sampleBuffer.formatDescription {
+                let videoDimensions = formatDescription.videoDimensions
                 switch self.aspectRatio {
                 case .standard:
                     config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
@@ -295,16 +295,16 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
             var config: [String : Any] = [AVEncoderBitRateKey : NSNumber(integerLiteral: self.bitRate)]
             
             if let sampleBuffer = sampleBuffer {
-                if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+                if let formatDescription: CMFormatDescription = sampleBuffer.formatDescription {
                     if let _ = self.sampleRate, let _ = self.channelsCount {
                         // loading user provided settings after buffer use
-                    } else if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
+                    } else if let streamBasicDescription = formatDescription.audioStreamBasicDescription {
                         self.sampleRate = streamBasicDescription.pointee.mSampleRate
                         self.channelsCount = Int(streamBasicDescription.pointee.mChannelsPerFrame)
                     }
                     
                     var layoutSize: Int = 0
-                    if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, &layoutSize) {
+                    if let currentChannelLayout = formatDescription.getAudioChannelLayout(sizeOut: &layoutSize) {
                         let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count:layoutSize) : Data()
                         config[AVChannelLayoutKey] = currentChannelLayoutData
                     }

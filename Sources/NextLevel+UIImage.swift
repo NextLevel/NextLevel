@@ -40,7 +40,7 @@ extension UIImage {
                                           height: bound.height * self.scale)
         let imageRef = self.cgImage?.cropping(to: scaledBounds)
         
-        let croppedImage: UIImage = UIImage(cgImage: imageRef!, scale: self.scale, orientation: UIImageOrientation.up)
+        let croppedImage: UIImage = UIImage(cgImage: imageRef!, scale: self.scale, orientation: UIImage.Orientation.up)
         return croppedImage
     }
 }
