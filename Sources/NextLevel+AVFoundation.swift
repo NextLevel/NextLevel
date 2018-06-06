@@ -234,7 +234,7 @@ extension AVCaptureDevice.Format {
     ///   - dimensions: Desired video dimensions
     /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
     public func isSupported(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions = CMVideoDimensions(width: 0, height: 0)) -> Bool {
-        let formatDimensions = CMVideoFormatDescriptionGetDimensions(self.formatDescription)
+        let formatDimensions = self.formatDescription.videoDimensions
         if (formatDimensions.width >= dimensions.width && formatDimensions.height >= dimensions.height) {
             for frameRateRange in self.videoSupportedFrameRateRanges {
                 if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {

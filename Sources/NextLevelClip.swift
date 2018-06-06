@@ -70,7 +70,7 @@ public class NextLevelClip: NSObject {
             if let asset = self.asset {
                 return asset.duration
             }
-            return kCMTimeZero
+            return CMTime.zero
         }
     }
   
@@ -91,7 +91,7 @@ public class NextLevelClip: NSObject {
                 imageGenerator.appliesPreferredTrackTransform = true
                 
                 do {
-                    let cgimage: CGImage = try imageGenerator.copyCGImage(at: kCMTimeZero, actualTime: nil)
+                    let cgimage: CGImage = try imageGenerator.copyCGImage(at: CMTime.zero, actualTime: nil)
                     let uiimage: UIImage = UIImage(cgImage: cgimage)
                     self._thumbnailImage = uiimage
                 } catch {
