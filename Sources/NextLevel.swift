@@ -2363,7 +2363,7 @@ extension NextLevel {
         
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let session = self._recordingSession {
-                if session.clipStarted {
+                if session.currentClipHasStarted {
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
                             self.executeClosureAsyncOnMainQueueIfNecessary {
@@ -2452,7 +2452,7 @@ extension NextLevel {
             }
         }
         
-        if self._recording && (session.isAudioReady || self.captureMode == .videoWithoutAudio) && session.clipStarted {
+        if self._recording && (session.isAudioReady || self.captureMode == .videoWithoutAudio) && session.currentClipHasStarted {
             self.beginRecordingNewClipIfNecessary()
                         
             if let device = self._currentDevice {
@@ -2519,7 +2519,7 @@ extension NextLevel {
             }
         }
 
-        if self._recording && (session.isAudioReady || self.captureMode == .videoWithoutAudio) && session.clipStarted {
+        if self._recording && (session.isAudioReady || self.captureMode == .videoWithoutAudio) && session.currentClipHasStarted {
             self.beginRecordingNewClipIfNecessary()
 
             let minTimeBetweenFrames = 0.004
@@ -2589,7 +2589,7 @@ extension NextLevel {
             }
         }
         
-        if self._recording && session.isVideoReady && session.clipStarted && session.currentClipHasVideo {
+        if self._recording && session.isVideoReady && session.currentClipHasStarted && session.currentClipHasVideo {
             self.beginRecordingNewClipIfNecessary()
             
             session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool) -> Void in

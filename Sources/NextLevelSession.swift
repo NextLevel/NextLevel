@@ -108,9 +108,9 @@ public class NextLevelSession: NSObject {
     }
     
     /// True if the current clip recording has been started.
-    public var clipStarted: Bool {
+    public var currentClipHasStarted: Bool {
         get {
-            return self._clipStarted
+            return self._currentClipHasStarted
         }
     }
     
@@ -184,7 +184,7 @@ public class NextLevelSession: NSObject {
     internal var _currentClipHasAudio: Bool = false
     internal var _currentClipHasVideo: Bool = false
 
-    internal var _clipStarted: Bool = false
+    internal var _currentClipHasStarted: Bool = false
     internal var _timeOffset: CMTime = kCMTimeInvalid
     internal var _startTimestamp: CMTime = kCMTimeInvalid
     internal var _lastAudioTimestamp: CMTime = kCMTimeInvalid
@@ -324,7 +324,7 @@ extension NextLevelSession {
                     }
                     
                     if writer.startWriting() {
-                        self._clipStarted = true
+                        self._currentClipHasStarted = true
                         self._timeOffset = kCMTimeZero
                         self._startTimestamp = kCMTimeInvalid
                     } else {
@@ -340,7 +340,7 @@ extension NextLevelSession {
     
     internal func destroyWriter() {
         self._writer = nil
-        self._clipStarted = false
+        self._currentClipHasStarted = false
         self._timeOffset = kCMTimeZero
         self._startTimestamp = kCMTimeInvalid
         self._currentClipDuration = kCMTimeZero
@@ -532,8 +532,8 @@ extension NextLevelSession {
     public func endClip(completionHandler: NextLevelSessionEndClipCompletionHandler?) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             self._audioQueue.sync {
-                if self.clipStarted {
-                    self._clipStarted = false
+                if self.currentClipHasStarted {
+                    self._currentClipHasStarted = false
                     
                     if let writer = self._writer {
                         if !self.currentClipHasAudio && !self.currentClipHasVideo {
@@ -542,9 +542,9 @@ extension NextLevelSession {
                             self.removeFile(fileUrl: writer.outputURL)
                             self.destroyWriter()
                             
-                            if let handler = completionHandler {
+                            if let completionHandler = completionHandler {
                                 self.executeClosureAsyncOnMainQueueIfNecessary {
-                                    handler(nil, nil)
+                                    completionHandler(nil, nil)
                                 }
                             }
                             
