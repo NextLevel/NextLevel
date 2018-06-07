@@ -850,7 +850,7 @@ extension NextLevel {
     public func requestAuthorization(forMediaType mediaType: AVMediaType) {
         AVCaptureDevice.requestAccess(for: mediaType) { (granted: Bool) in
             let status: NextLevelAuthorizationStatus = (granted == true) ? .authorized : .notAuthorized
-            self.executeClosureAsyncOnMainQueueIfNecessary {
+            DispatchQueue.main.async {
                 self.delegate?.nextLevel(self, didUpdateAuthorizationStatus: status, forMediaType: mediaType)
             }
         }
@@ -997,7 +997,7 @@ extension NextLevel {
                     self.arConfiguration?.session?.run(config, options: options)
                     self._arRunning = true
                     
-                    self.executeClosureAsyncOnMainQueueIfNecessary {
+                    DispatchQueue.main.async {
                         self.delegate?.nextLevelSessionDidStart(self)
                     }
                 }
@@ -1072,9 +1072,9 @@ extension NextLevel {
                 if captureDevice != self._currentDevice {
                     self.configureDevice(captureDevice: captureDevice, mediaType: AVMediaType.video)
                     
-                    let changingPosition = captureDevice.position != self._currentDevice?.position
-                    if changingPosition == true {
-                        self.executeClosureAsyncOnMainQueueIfNecessary {
+                    let changingPosition = (captureDevice.position != self._currentDevice?.position)
+                    if changingPosition {
+                        DispatchQueue.main.async {
                             self.deviceDelegate?.nextLevelDevicePositionWillChange(self)
                         }
                     }
@@ -1084,8 +1084,8 @@ extension NextLevel {
                     self.didChangeValue(forKey: "currentDevice")
                     self._requestedDevice = nil
                     
-                    if changingPosition == true {
-                        self.executeClosureAsyncOnMainQueueIfNecessary {
+                    if changingPosition {
+                        DispatchQueue.main.async {
                             self.deviceDelegate?.nextLevelDevicePositionDidChange(self)
                         }
                     }
@@ -1093,7 +1093,7 @@ extension NextLevel {
             }
         }
         
-        if shouldConfigureAudio == true {
+        if shouldConfigureAudio {
             if let audioDevice = AVCaptureDevice.audioDevice() {
                 self.configureDevice(captureDevice: audioDevice, mediaType: AVMediaType.audio)
             }
@@ -1101,14 +1101,14 @@ extension NextLevel {
         
         self.commitConfiguration()
         
-        if shouldConfigureVideo == true {
-            self.executeClosureAsyncOnMainQueueIfNecessary {
+        if shouldConfigureVideo {
+            DispatchQueue.main.async {
                 self.delegate?.nextLevel(self, didUpdateVideoConfiguration: self.videoConfiguration)
             }
         }
         
-        if shouldConfigureAudio == true {
-            self.executeClosureAsyncOnMainQueueIfNecessary {
+        if shouldConfigureAudio {
+            DispatchQueue.main.async {
                 self.delegate?.nextLevel(self, didUpdateAudioConfiguration: self.audioConfiguration)
             }
         }
@@ -1788,7 +1788,7 @@ extension NextLevel {
     }
     
     internal func focusStarted() {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.deviceDelegate?.nextLevelWillStartFocus(self)
         }
     }
@@ -1815,7 +1815,7 @@ extension NextLevel {
                 }
             }
             
-            self.executeClosureAsyncOnMainQueueIfNecessary {
+            DispatchQueue.main.async {
                 self.deviceDelegate?.nextLevelDidStopFocus(self)
             }
             
@@ -1823,7 +1823,7 @@ extension NextLevel {
     }
     
     internal func exposureStarted() {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.deviceDelegate?.nextLevelWillChangeExposure(self)
         }
     }
@@ -1851,20 +1851,20 @@ extension NextLevel {
                 }
             }
             
-            self.executeClosureAsyncOnMainQueueIfNecessary {
+            DispatchQueue.main.async {
                 self.deviceDelegate?.nextLevelDidChangeExposure(self)
             }
         }
     }
     
     internal func whiteBalanceStarted() {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.deviceDelegate?.nextLevelWillChangeWhiteBalance(self)
         }
     }
     
     internal func whiteBalanceEnded() {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.deviceDelegate?.nextLevelDidChangeWhiteBalance(self)
         }
     }
@@ -1890,19 +1890,19 @@ extension NextLevel {
             }
         }
         
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.flashDelegate?.nextLevelFlashActiveChanged(self)
         }
     }
     
     internal func torchActiveChanged() {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.flashDelegate?.nextLevelTorchActiveChanged(self)
         }
     }
     
     internal func flashAndTorchAvailabilityChanged() {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(self)
         }
     }
@@ -2060,7 +2060,7 @@ extension NextLevel {
                         }
                         device.unlockForConfiguration()
                         
-                        self.executeClosureAsyncOnMainQueueIfNecessary {
+                        DispatchQueue.main.async {
                             self.deviceDelegate?.nextLevel(self, didChangeDeviceFormat: format)
                         }
                     } catch {
@@ -2204,7 +2204,7 @@ extension NextLevel {
     }
     
     internal func videoZoomFactorChanged() {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.videoDelegate?.nextLevel(self, didUpdateVideoZoomFactor: self.videoZoomFactor)
         }
     }
@@ -2307,8 +2307,7 @@ extension NextLevel {
             //if let tData = thumbnailData {
             //    photoDict[NextLevelPhotoThumbnailKey] = tData
             //}
-            
-            self.executeClosureSyncOnMainQueue {
+            DispatchQueue.main.sync {
                 self.videoDelegate?.nextLevel(self, didCompletePhotoCaptureFromVideoFrame: photoDict)
             }
             
@@ -2366,7 +2365,7 @@ extension NextLevel {
                 if session.currentClipHasStarted {
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
                         if let clip = sessionClip {
-                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                            DispatchQueue.main.async {
                                 self.videoDelegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
                             }
                             if let handler = completionHandler {
@@ -2379,15 +2378,11 @@ extension NextLevel {
                             }
                         }
                     })
-                } else {
-                    if let handler = completionHandler {
-                        self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: handler)
-                    }
+                } else if let completionHandler = completionHandler {
+                    DispatchQueue.main.async(execute: completionHandler)
                 }
-            } else {
-                if let handler = completionHandler {
-                    self.executeClosureAsyncOnMainQueueIfNecessary(withClosure: handler)
-                }
+            } else if let completionHandler = completionHandler {
+                DispatchQueue.main.async(execute: completionHandler)
             }
         }
     }
@@ -2848,10 +2843,6 @@ extension NextLevel {
         DispatchQueue.main.async(execute: closure)
     }
     
-    internal func executeClosureSyncOnMainQueue(withClosure closure: @escaping () -> Void) {
-        DispatchQueue.main.sync(execute: closure)
-    }
-    
     internal func executeClosureAsyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
         self._sessionQueue.async(execute: closure)
     }
@@ -2914,14 +2905,13 @@ extension NextLevel {
     @objc internal func handleSessionDidStartRunning(_ notification: Notification) {
         //self.performRecoveryCheckIfNecessary()
         // TODO
-        
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.delegate?.nextLevelSessionDidStart(self)
         }
     }
     
     @objc internal func handleSessionDidStopRunning(_ notification: Notification) {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.delegate?.nextLevelSessionDidStop(self)
         }
     }
@@ -2944,19 +2934,19 @@ extension NextLevel {
     }
     
     @objc public func handleSessionWasInterrupted(_ notification: Notification) {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
-            if self._recording == true {
+        DispatchQueue.main.async {
+            if self._recording {
                 self.delegate?.nextLevelSessionDidStop(self)
             }
             
-            self.executeClosureAsyncOnMainQueueIfNecessary {
+            DispatchQueue.main.async {
                 self.delegate?.nextLevelSessionWasInterrupted(self)
             }
         }
     }
     
     @objc public func handleSessionInterruptionEnded(_ notification: Notification) {
-        self.executeClosureAsyncOnMainQueueIfNecessary {
+        DispatchQueue.main.async {
             self.delegate?.nextLevelSessionInterruptionEnded(self)
         }
     }
