@@ -277,6 +277,32 @@ extension CameraViewController {
         
     }
     
+    internal func authorizePhotoLibaryIfNecessary() {
+        let authorizationStatus = PHPhotoLibrary.authorizationStatus()
+        switch authorizationStatus {
+        case .restricted:
+            fallthrough
+        case .denied:
+            let alertController = UIAlertController(title: "Oh no!", message: "Access denied.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            break
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization({ (status) in
+                if status == .authorized {
+                    
+                } else {
+                    
+                }
+            })
+            break
+        case .authorized:
+            
+            break
+        }
+    }
+    
     internal func saveVideo(withURL url: URL) {
         PHPhotoLibrary.shared().performChanges({
             let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle)
