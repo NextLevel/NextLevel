@@ -317,18 +317,17 @@ extension MixedRealityViewController {
         
         if let session = NextLevel.shared.session {
             if session.clips.count > 1 {
-                NextLevel.shared.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
+                session.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
                     if let videoUrl = url {
                         self.saveVideo(withURL: videoUrl)
                     } else if let _ = error {
                         print("failed to merge clips at the end of capture \(String(describing: error))")
                     }
                 })
-            } else if let videoUrl = NextLevel.shared.session?.lastClipUrl {
-                self.saveVideo(withURL: videoUrl)
-            } else if let clipHasStarted = NextLevel.shared.session?.currentClipHasStarted,
-                clipHasStarted == true {
-                NextLevel.shared.session?.endClip(completionHandler: { (clip, error) in
+            } else if let lastClipUrl = session.lastClipUrl {
+                self.saveVideo(withURL: lastClipUrl)
+            } else if session.currentClipHasStarted {
+                session.endClip(completionHandler: { (clip, error) in
                     if error == nil {
                         self.saveVideo(withURL: (clip?.url)!)
                     } else {
