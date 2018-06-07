@@ -35,6 +35,7 @@ public let NextLevelClipInfoDictKey = "NextLevelClipInfoDictKey"
 /// NextLevelClip, an object for managing a single media clip
 public class NextLevelClip {
 
+    /// Unique identifier for a clip
     public var uuid: UUID {
         get {
             return self._uuid
@@ -73,10 +74,7 @@ public class NextLevelClip {
     /// Duration of the clip, otherwise invalid.
     public var duration: CMTime {
         get {
-            if let asset = self.asset {
-                return asset.duration
-            }
-            return kCMTimeZero
+            return self.asset?.duration ?? kCMTimeZero
         }
     }
   
@@ -86,9 +84,7 @@ public class NextLevelClip {
     /// If it doesn't already exist, generates a thumbnail image of the clip.
     public var thumbnailImage: UIImage? {
         get {
-            guard
-                self._thumbnailImage == nil
-            else {
+            guard self._thumbnailImage == nil else {
                 return self._thumbnailImage
             }
             
@@ -138,12 +134,10 @@ public class NextLevelClip {
     /// Frame rate at which the asset was recorded.
     public var frameRate: Float {
         get {
-            if let asset = self.asset {
-                let tracks: [AVAssetTrack] = asset.tracks(withMediaType: AVMediaType.video)
-                if tracks.count > 0 {
-                    if let videoTrack = tracks.first {
-                        return videoTrack.nominalFrameRate
-                    }
+            if let tracks = self.asset?.tracks(withMediaType: AVMediaType.video),
+                tracks.isEmpty == false {
+                if let videoTrack = tracks.first {
+                    return videoTrack.nominalFrameRate
                 }
             }
             return 0
@@ -160,7 +154,8 @@ public class NextLevelClip {
     /// Dictionary containing data for re-initialization of the clip.
     public var representationDict: [String:Any]? {
         get {
-            if let infoDict = self.infoDict, let url = self.url {
+            if let infoDict = self.infoDict,
+               let url = self.url {
                 return [NextLevelClipFilenameKey:url.lastPathComponent,
                         NextLevelClipInfoDictKey:infoDict]
             } else if let url = self.url {
@@ -180,7 +175,7 @@ public class NextLevelClip {
     ///   - directoryPath: Directory path for the media asset
     /// - Returns: Returns a URL for the designated clip, otherwise nil
     public class func clipURL(withFilename filename: String, directoryPath: String) -> URL? {
-        var clipURL: URL = URL(fileURLWithPath: directoryPath)
+        var clipURL = URL(fileURLWithPath: directoryPath)
         clipURL.appendPathComponent(filename)
         return clipURL
     }
@@ -233,6 +228,10 @@ public class NextLevelClip {
     }
     
     deinit {
+        self._asset = nil
+        self._infoDict = nil
+        self._thumbnailImage = nil
+        self._lastFrameImage = nil
     }
     
     // MARK: - functions
