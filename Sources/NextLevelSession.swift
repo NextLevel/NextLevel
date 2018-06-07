@@ -178,7 +178,7 @@ public class NextLevelSession: NSObject {
     
     internal var _audioQueue: DispatchQueue
     internal var _sessionQueue: DispatchQueue
-    internal var _sessionQueueKey: DispatchSpecificKey<NSObject>
+    internal var _sessionQueueKey: DispatchSpecificKey<()>
     
     internal var _currentClipDuration: CMTime = kCMTimeZero
     internal var _currentClipHasAudio: Bool = false
@@ -192,7 +192,7 @@ public class NextLevelSession: NSObject {
     
     private let NextLevelSessionAudioQueueIdentifier = "engineering.NextLevel.session.audioQueue"
     private let NextLevelSessionQueueIdentifier = "engineering.NextLevel.sessionQueue"
-    private let NextLevelSessionSpecificKey = DispatchSpecificKey<NSObject>()
+    private let NextLevelSessionSpecificKey = DispatchSpecificKey<()>()
     
     // MARK: - object lifecycle
     
@@ -201,7 +201,7 @@ public class NextLevelSession: NSObject {
     /// - Parameters:
     ///   - queue: Queue for a session operations
     ///   - queueKey: Key for re-calling the session queue from the system
-    convenience init(queue: DispatchQueue, queueKey: DispatchSpecificKey<NSObject>) {
+    convenience init(queue: DispatchQueue, queueKey: DispatchSpecificKey<()>) {
         self.init()
         self._sessionQueue = queue
         self._sessionQueueKey = queueKey
@@ -217,7 +217,7 @@ public class NextLevelSession: NSObject {
 
         // should always use init(queue:queueKey:), but this may be good for the future
         self._sessionQueue = DispatchQueue(label: NextLevelSessionQueueIdentifier)
-        self._sessionQueue.setSpecific(key: NextLevelSessionSpecificKey, value: self._sessionQueue)
+        self._sessionQueue.setSpecific(key: NextLevelSessionSpecificKey, value: ())
         self._sessionQueueKey = NextLevelSessionSpecificKey
         
         super.init()
@@ -860,7 +860,7 @@ extension NextLevelSession {
     }
     
     internal func executeClosureSyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
-        if DispatchQueue.getSpecific(key: self._sessionQueueKey) == self._sessionQueue {
+        if DispatchQueue.getSpecific(key: self._sessionQueueKey) != nil {
             closure()
         } else {
             self._sessionQueue.sync(execute: closure)

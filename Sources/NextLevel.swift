@@ -570,7 +570,7 @@ public protocol NextLevelPhotoDelegate: NSObjectProtocol {
 // MARK: - constants
 
 private let NextLevelCaptureSessionIdentifier = "engineering.NextLevel.captureSession"
-private let NextLevelCaptureSessionSpecificKey = DispatchSpecificKey<NSObject>()
+private let NextLevelCaptureSessionSpecificKey = DispatchSpecificKey<()>()
 private let NextLevelRequiredMinimumStorageSpaceInBytes: UInt64 = 49999872 // ~47 MB
 
 // MARK: - NextLevel state
@@ -775,7 +775,7 @@ public class NextLevel: NSObject {
         self.previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         
         self._sessionQueue = DispatchQueue(label: NextLevelCaptureSessionIdentifier, qos: .userInteractive, target: DispatchQueue.global())
-        self._sessionQueue.setSpecific(key: NextLevelCaptureSessionSpecificKey, value: self._sessionQueue)
+        self._sessionQueue.setSpecific(key: NextLevelCaptureSessionSpecificKey, value: ())
         
         self.videoConfiguration = NextLevelVideoConfiguration()
         self.audioConfiguration = NextLevelAudioConfiguration()
@@ -2857,7 +2857,7 @@ extension NextLevel {
     }
     
     internal func executeClosureSyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
-        if DispatchQueue.getSpecific(key: NextLevelCaptureSessionSpecificKey) == self._sessionQueue {
+        if DispatchQueue.getSpecific(key: NextLevelCaptureSessionSpecificKey) != nil {
             closure()
         } else {
             self._sessionQueue.sync(execute: closure)
