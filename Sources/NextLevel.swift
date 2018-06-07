@@ -2800,6 +2800,22 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
     
 }
 
+// MARK: - AVCaptureDepthDataOutputDelegate
+
+@available(iOS 11.0, *)
+extension NextLevel: AVCaptureDepthDataOutputDelegate {
+    
+    public func depthDataOutput(_ output: AVCaptureDepthDataOutput, didOutput depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection) {
+        DispatchQueue.main.async {
+            
+        }
+    }
+    
+    public func depthDataOutput(_ output: AVCaptureDepthDataOutput, didDrop depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection, reason: AVCaptureOutput.DataDroppedReason) {
+    }
+    
+}
+
 #if USE_ARKIT
 // MARK: - ARSession
 
