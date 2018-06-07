@@ -2364,17 +2364,17 @@ extension NextLevel {
             if let session = self._recordingSession {
                 if session.currentClipHasStarted {
                     session.endClip(completionHandler: { (sessionClip: NextLevelClip?, error: Error?) in
-                        if let clip = sessionClip {
+                        if let sessionClip = sessionClip {
                             DispatchQueue.main.async {
-                                self.videoDelegate?.nextLevel(self, didCompleteClip: clip, inSession: session)
+                                self.videoDelegate?.nextLevel(self, didCompleteClip: sessionClip, inSession: session)
                             }
-                            if let handler = completionHandler {
-                                handler()
+                            DispatchQueue.main.async {
+                                completionHandler?()
                             }
                         } else if let _ = error {
                             // TODO, report error
-                            if let handler = completionHandler {
-                                handler()
+                            DispatchQueue.main.async {
+                                completionHandler?()
                             }
                         }
                     })
