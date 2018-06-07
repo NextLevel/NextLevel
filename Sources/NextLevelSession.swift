@@ -695,7 +695,7 @@ extension NextLevelSession {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             let filename = "\(self.identifier.uuidString)-NL-merged.\(self.fileExtension)"
 
-            let outputURL: URL? = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory)
+            let outputURL = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory)
             var asset: AVAsset? = nil
             
             if !self._clips.isEmpty {
@@ -767,20 +767,19 @@ extension NextLevelSession {
                     }
                   
                     if !clip.isMutedOnMerge {
-                      var audioTime = currentTime
-                      for audioAssetTrack in audioAssetTracks {
+                        var audioTime = currentTime
+                        for audioAssetTrack in audioAssetTracks {
                         if audioTrack == nil {
-                          let audioTracks = composition.tracks(withMediaType: AVMediaType.audio)
+                            let audioTracks = composition.tracks(withMediaType: AVMediaType.audio)
                           
-                          if audioTracks.count > 0 {
-                            audioTrack = audioTracks.first
-                          } else {
-                            audioTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-                          }
-                          
+                            if audioTracks.count > 0 {
+                                audioTrack = audioTracks.first
+                            } else {
+                                audioTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+                            }
                         }
                         if let foundTrack = audioTrack {
-                          audioTime = self.appendTrack(track: audioAssetTrack, toCompositionTrack: foundTrack, withStartTime: audioTime, range: maxRange)
+                            audioTime = self.appendTrack(track: audioAssetTrack, toCompositionTrack: foundTrack, withStartTime: audioTime, range: maxRange)
                         }
                       }
                     }
