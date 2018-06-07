@@ -29,7 +29,7 @@ import AVFoundation
 // MARK: - NextLevelSession
 
 /// NextLevelSession, a powerful object for managing and editing a set of recorded media clips.
-public class NextLevelSession: NSObject {
+public class NextLevelSession {
     
     /// Output directory for a session.
     public var outputDirectory: String
@@ -207,8 +207,8 @@ public class NextLevelSession: NSObject {
         self._sessionQueueKey = queueKey
     }
     
-    /// Initialize.
-    override init() {
+    /// Initializer.
+    public init() {
         self._identifier = UUID()
         self._date = Date()
         self.outputDirectory = NSTemporaryDirectory()
@@ -219,8 +219,6 @@ public class NextLevelSession: NSObject {
         self._sessionQueue = DispatchQueue(label: NextLevelSessionQueueIdentifier)
         self._sessionQueue.setSpecific(key: NextLevelSessionSpecificKey, value: ())
         self._sessionQueueKey = NextLevelSessionSpecificKey
-        
-        super.init()
     }
     
     deinit {
@@ -631,7 +629,9 @@ extension NextLevelSession {
     /// - Parameter clip: Clip to be removed
     public func remove(clip: NextLevelClip) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            if let idx = self._clips.index(of: clip) {
+            if let idx = self._clips.index(where: { (clipToEvaluate) -> Bool in
+                return clip.uuid == clipToEvaluate.uuid
+            }) {
                 self._clips.remove(at: idx)
                 self._duration = self._duration - clip.duration
             }

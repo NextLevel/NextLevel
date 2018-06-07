@@ -33,8 +33,14 @@ public let NextLevelClipFilenameKey = "NextLevelClipFilenameKey"
 public let NextLevelClipInfoDictKey = "NextLevelClipInfoDictKey"
 
 /// NextLevelClip, an object for managing a single media clip
-public class NextLevelClip: NSObject {
+public class NextLevelClip {
 
+    public var uuid: UUID {
+        get {
+            return self._uuid
+        }
+    }
+    
     /// URL of the clip
     public var url: URL? {
         didSet {
@@ -191,16 +197,13 @@ public class NextLevelClip: NSObject {
     
     // MARK: - private instance vars
     
+    internal var _uuid: UUID = UUID()
     internal var _asset: AVAsset?
     internal var _infoDict: [String : Any]?
     internal var _thumbnailImage: UIImage?
     internal var _lastFrameImage: UIImage?
     
     // MARK: - object lifecycle
-    
-    override init() {
-        super.init()
-    }
     
     /// Initialize a clip from a URL and dictionary.
     ///
