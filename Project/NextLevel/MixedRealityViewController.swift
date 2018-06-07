@@ -305,11 +305,11 @@ extension MixedRealityViewController {
     }
     
     internal func pauseCapture() {
-        UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.recordButton?.transform = .identity
         }) { (completed: Bool) in
+            NextLevel.shared.pause()
         }
-        NextLevel.shared.pause()
     }
     
     internal func endCapture() {
