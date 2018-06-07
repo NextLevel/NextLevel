@@ -316,7 +316,6 @@ extension MixedRealityViewController {
         self.photoTapGestureRecognizer?.isEnabled = true
         
         if let session = NextLevel.shared.session {
-            
             if session.clips.count > 1 {
                 NextLevel.shared.session?.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
                     if let videoUrl = url {
@@ -325,16 +324,23 @@ extension MixedRealityViewController {
                         print("failed to merge clips at the end of capture \(String(describing: error))")
                     }
                 })
+            } else if let videoUrl = NextLevel.shared.session?.lastClipUrl {
+                self.saveVideo(withURL: videoUrl)
+            } else if let clipHasStarted = NextLevel.shared.session?.currentClipHasStarted,
+                clipHasStarted == true {
+                NextLevel.shared.session?.endClip(completionHandler: { (clip, error) in
+                    if error == nil {
+                        self.saveVideo(withURL: (clip?.url)!)
+                    } else {
+                        print("Error saving video: \(error?.localizedDescription ?? "")")
+                    }
+                })
             } else {
-                if let videoUrl = NextLevel.shared.session?.lastClipUrl {
-                    self.saveVideo(withURL: videoUrl)
-                } else {
-                    // prompt that the video has been saved
-                    let alertController = UIAlertController(title: "Oops!", message: "Something failed!", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alertController.addAction(okAction)
-                    self.present(alertController, animated: true, completion: nil)
-                }
+                // prompt that the video has been saved
+                let alertController = UIAlertController(title: "Oops!", message: "Something failed!", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
             }
         }
     }
