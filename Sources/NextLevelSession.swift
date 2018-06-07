@@ -559,9 +559,9 @@ extension NextLevelSession {
                     }
                 }
                 
-                if let handler = completionHandler {
+                if let completionHandler = completionHandler {
                     self.executeClosureAsyncOnMainQueueIfNecessary {
-                        handler(nil, NextLevelError.notReadyToRecord)
+                        completionHandler(nil, NextLevelError.notReadyToRecord)
                     }
                 }
             }
@@ -576,8 +576,8 @@ extension NextLevelSession {
             self.destroyWriter()
             
             self.executeClosureAsyncOnMainQueueIfNecessary {
-                if let handler = completionHandler {
-                    handler(clip, error)
+                if let completionHandler = completionHandler {
+                    completionHandler(clip, error)
                 }
             }
         }
@@ -827,9 +827,8 @@ extension NextLevelSession {
             self.removeFile(fileUrl: url)
             self._clipFilenameCount += 1
             return url
-        } else {
-            return nil
         }
+        return nil
     }
     
     internal func removeFile(fileUrl: URL) {
