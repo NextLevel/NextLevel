@@ -69,20 +69,14 @@ public class NextLevelSession {
     /// Checks if the session is setup for recording video
     public var isVideoReady: Bool {
         get {
-            if let videoInput = self._videoInput {
-                return videoInput.isReadyForMoreMediaData
-            }
-            return false
+            return self._videoInput?.isReadyForMoreMediaData ?? false
         }
     }
     
     /// Checks if the session is setup for recording audio
     public var isAudioReady: Bool {
         get {
-            if let audioInput = self._audioInput {
-                return audioInput.isReadyForMoreMediaData
-            }
-            return false
+            return self._audioInput?.isReadyForMoreMediaData ?? false
         }
     }
 
@@ -497,9 +491,7 @@ extension NextLevelSession {
     private func startSessionIfNecessary(timestamp: CMTime) {
         if !self._startTimestamp.isValid {
             self._startTimestamp = timestamp
-            if let writer = self._writer {
-                writer.startSession(atSourceTime: timestamp)
-            }
+            self._writer?.startSession(atSourceTime: timestamp)
         }
     }
     
@@ -539,12 +531,12 @@ extension NextLevelSession {
                             self.destroyWriter()
 
                             if let completionHandler = completionHandler {
-                                self.executeClosureAsyncOnMainQueueIfNecessary {
+                                DispatchQueue.main.async {
                                     completionHandler(nil, nil)
                                 }
                             }
-                            
                         } else {
+                            print("ending session \(CMTimeGetSeconds(self._currentClipDuration))")
                             writer.endSession(atSourceTime: CMTimeAdd(self._currentClipDuration, self._startTimestamp))
                             writer.finishWriting(completionHandler: {
                                 self.executeClosureSyncOnSessionQueueIfNecessary {
@@ -574,7 +566,7 @@ extension NextLevelSession {
                 }
                 
                 if let completionHandler = completionHandler {
-                    self.executeClosureAsyncOnMainQueueIfNecessary {
+                    DispatchQueue.main.async {
                         completionHandler(nil, NextLevelError.notReadyToRecord)
                     }
                 }

@@ -2368,13 +2368,13 @@ extension NextLevel {
                             DispatchQueue.main.async {
                                 self.videoDelegate?.nextLevel(self, didCompleteClip: sessionClip, inSession: session)
                             }
-                            DispatchQueue.main.async {
-                                completionHandler?()
+                            if let completionHandler = completionHandler {
+                                DispatchQueue.main.async(execute: completionHandler)
                             }
                         } else if let _ = error {
                             // TODO, report error
-                            DispatchQueue.main.async {
-                                completionHandler?()
+                            if let completionHandler = completionHandler {
+                                DispatchQueue.main.async(execute: completionHandler)
                             }
                         }
                     })
@@ -2388,12 +2388,11 @@ extension NextLevel {
     }
     
     internal func beginRecordingNewClipIfNecessary() {
-        if let session = self._recordingSession {
-            if session.isReady == false {
-                session.beginClip()
-                self.executeClosureAsyncOnMainQueueIfNecessary {
-                    self.videoDelegate?.nextLevel(self, didStartClipInSession: session)
-                }
+        if let session = self._recordingSession,
+            session.isReady == false {
+            session.beginClip()
+            self.executeClosureAsyncOnMainQueueIfNecessary {
+                self.videoDelegate?.nextLevel(self, didStartClipInSession: session)
             }
         }
     }
@@ -2610,8 +2609,8 @@ extension NextLevel {
     
     private func checkSessionDuration() {
         if let session = self._recordingSession,
-            let maxRecordingDuration = self.videoConfiguration.maximumCaptureDuration {
-            if maxRecordingDuration.isValid && session.duration >= maxRecordingDuration {
+            let maximumCaptureDuration = self.videoConfiguration.maximumCaptureDuration {
+            if maximumCaptureDuration.isValid && session.totalDuration >= maximumCaptureDuration {
                 self._recording = false
                 
                 // already on session queue, adding to next cycle
