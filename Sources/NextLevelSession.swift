@@ -389,7 +389,7 @@ extension NextLevelSession {
                 self._currentClipHasVideo = true
                 completionHandler(true)
                 return
-            }            
+            }
         }
         completionHandler(false)
     }
@@ -536,7 +536,7 @@ extension NextLevelSession {
                                 }
                             }
                         } else {
-                            print("ending session \(CMTimeGetSeconds(self._currentClipDuration))")
+                            //print("ending session \(CMTimeGetSeconds(self._currentClipDuration))")
                             writer.endSession(atSourceTime: CMTimeAdd(self._currentClipDuration, self._startTimestamp))
                             writer.finishWriting(completionHandler: {
                                 self.executeClosureSyncOnSessionQueueIfNecessary {
