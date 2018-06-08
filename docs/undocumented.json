@@ -9,910 +9,938 @@
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 37,
+      "line": 39,
       "symbol": "NextLevelAuthorizationStatus",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 38,
+      "line": 40,
       "symbol": "NextLevelAuthorizationStatus.notDetermined",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 39,
+      "line": 41,
       "symbol": "NextLevelAuthorizationStatus.notAuthorized",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 40,
+      "line": 42,
       "symbol": "NextLevelAuthorizationStatus.authorized",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 56,
+      "line": 58,
       "symbol": "NextLevelDevicePosition",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 57,
+      "line": 59,
       "symbol": "NextLevelDevicePosition.back",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 58,
+      "line": 60,
       "symbol": "NextLevelDevicePosition.front",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 60,
+      "line": 62,
       "symbol": "NextLevelDevicePosition.uikitType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 69,
+      "line": 71,
       "symbol": "NextLevelDevicePosition.avfoundationType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 90,
+      "line": 92,
       "symbol": "NextLevelDeviceType",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 91,
+      "line": 93,
       "symbol": "NextLevelDeviceType.microphone",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 92,
+      "line": 94,
       "symbol": "NextLevelDeviceType.wideAngleCamera",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 93,
+      "line": 95,
       "symbol": "NextLevelDeviceType.telephotoCamera",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 94,
+      "line": 96,
       "symbol": "NextLevelDeviceType.duoCamera",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 96,
+      "line": 98,
       "symbol": "NextLevelDeviceType.avfoundationType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 125,
+      "line": 131,
       "symbol": "NextLevelCaptureMode",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 126,
+      "line": 132,
       "symbol": "NextLevelCaptureMode.video",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 127,
+      "line": 133,
       "symbol": "NextLevelCaptureMode.photo",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 128,
+      "line": 134,
       "symbol": "NextLevelCaptureMode.audio",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 129,
+      "line": 135,
       "symbol": "NextLevelCaptureMode.videoWithoutAudio",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 130,
+      "line": 136,
       "symbol": "NextLevelCaptureMode.arKit",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 150,
+      "line": 156,
       "symbol": "NextLevelDeviceOrientation",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 151,
+      "line": 157,
       "symbol": "NextLevelDeviceOrientation.portrait",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 152,
+      "line": 158,
       "symbol": "NextLevelDeviceOrientation.portraitUpsideDown",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 153,
+      "line": 159,
       "symbol": "NextLevelDeviceOrientation.landscapeRight",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 154,
+      "line": 160,
       "symbol": "NextLevelDeviceOrientation.landscapeLeft",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 156,
+      "line": 162,
       "symbol": "NextLevelDeviceOrientation.uikitType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 169,
+      "line": 175,
       "symbol": "NextLevelDeviceOrientation.avfoundationType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 198,
+      "line": 204,
       "symbol": "NextLevelFocusMode",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 199,
+      "line": 205,
       "symbol": "NextLevelFocusMode.locked",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 200,
+      "line": 206,
       "symbol": "NextLevelFocusMode.autoFocus",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 201,
+      "line": 207,
       "symbol": "NextLevelFocusMode.continuousAutoFocus",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 203,
+      "line": 209,
       "symbol": "NextLevelFocusMode.avfoundationType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 228,
+      "line": 234,
       "symbol": "NextLevelExposureMode",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 229,
+      "line": 235,
       "symbol": "NextLevelExposureMode.locked",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 230,
+      "line": 236,
       "symbol": "NextLevelExposureMode.autoExpose",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 231,
+      "line": 237,
       "symbol": "NextLevelExposureMode.continuousAutoExposure",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 232,
+      "line": 238,
       "symbol": "NextLevelExposureMode.custom",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 234,
+      "line": 240,
       "symbol": "NextLevelExposureMode.avfoundationType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 263,
+      "line": 269,
       "symbol": "NextLevelFlashMode",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 264,
+      "line": 270,
       "symbol": "NextLevelFlashMode.off",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 265,
+      "line": 271,
       "symbol": "NextLevelFlashMode.on",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 266,
+      "line": 272,
       "symbol": "NextLevelFlashMode.auto",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 268,
+      "line": 274,
       "symbol": "NextLevelFlashMode.avfoundationType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 293,
+      "line": 299,
       "symbol": "NextLevelTorchMode",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 294,
+      "line": 300,
       "symbol": "NextLevelTorchMode.off",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 295,
+      "line": 301,
       "symbol": "NextLevelTorchMode.on",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 296,
+      "line": 302,
       "symbol": "NextLevelTorchMode.auto",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 298,
+      "line": 304,
       "symbol": "NextLevelTorchMode.avfoundationType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 323,
+      "line": 329,
       "symbol": "NextLevelMirroringMode",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 324,
+      "line": 330,
       "symbol": "NextLevelMirroringMode.off",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 325,
+      "line": 331,
       "symbol": "NextLevelMirroringMode.on",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 326,
+      "line": 332,
       "symbol": "NextLevelMirroringMode.auto",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 342,
+      "line": 348,
       "symbol": "NextLevelVideoStabilizationMode",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 343,
+      "line": 349,
       "symbol": "NextLevelVideoStabilizationMode.off",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 344,
+      "line": 350,
       "symbol": "NextLevelVideoStabilizationMode.standard",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 345,
+      "line": 351,
       "symbol": "NextLevelVideoStabilizationMode.cinematic",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 346,
+      "line": 352,
       "symbol": "NextLevelVideoStabilizationMode.auto",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 348,
+      "line": 354,
       "symbol": "NextLevelVideoStabilizationMode.avfoundationType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 384,
+      "line": 390,
       "symbol": "NextLevelError.unknown",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 385,
+      "line": 391,
       "symbol": "NextLevelError.started",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 386,
+      "line": 392,
       "symbol": "NextLevelError.deviceNotAvailable",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 387,
+      "line": 393,
       "symbol": "NextLevelError.authorization",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 388,
+      "line": 394,
       "symbol": "NextLevelError.fileExists",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 389,
+      "line": 395,
       "symbol": "NextLevelError.nothingRecorded",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 390,
+      "line": 396,
       "symbol": "NextLevelError.notReadyToRecord",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 434,
+      "line": 443,
       "symbol": "NextLevelDelegate.nextLevel(_:didUpdateAuthorizationStatus:forMediaType:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 437,
+      "line": 446,
       "symbol": "NextLevelDelegate.nextLevel(_:didUpdateVideoConfiguration:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 438,
+      "line": 447,
       "symbol": "NextLevelDelegate.nextLevel(_:didUpdateAudioConfiguration:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 441,
+      "line": 450,
       "symbol": "NextLevelDelegate.nextLevelSessionWillStart(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 442,
+      "line": 451,
       "symbol": "NextLevelDelegate.nextLevelSessionDidStart(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 443,
+      "line": 452,
       "symbol": "NextLevelDelegate.nextLevelSessionDidStop(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 446,
+      "line": 455,
       "symbol": "NextLevelDelegate.nextLevelSessionWasInterrupted(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 447,
+      "line": 456,
       "symbol": "NextLevelDelegate.nextLevelSessionInterruptionEnded(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 450,
+      "line": 459,
       "symbol": "NextLevelDelegate.nextLevelCaptureModeWillChange(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 451,
+      "line": 460,
       "symbol": "NextLevelDelegate.nextLevelCaptureModeDidChange(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 458,
+      "line": 467,
       "symbol": "NextLevelPreviewDelegate.nextLevelWillStartPreview(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 459,
+      "line": 468,
       "symbol": "NextLevelPreviewDelegate.nextLevelDidStopPreview(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 467,
+      "line": 476,
       "symbol": "NextLevelDeviceDelegate.nextLevelDevicePositionWillChange(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 468,
+      "line": 477,
       "symbol": "NextLevelDeviceDelegate.nextLevelDevicePositionDidChange(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 469,
+      "line": 478,
       "symbol": "NextLevelDeviceDelegate.nextLevel(_:didChangeDeviceOrientation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 472,
+      "line": 481,
       "symbol": "NextLevelDeviceDelegate.nextLevel(_:didChangeDeviceFormat:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 475,
+      "line": 484,
       "symbol": "NextLevelDeviceDelegate.nextLevel(_:didChangeCleanAperture:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 478,
+      "line": 487,
       "symbol": "NextLevelDeviceDelegate.nextLevelWillStartFocus(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 479,
+      "line": 488,
       "symbol": "NextLevelDeviceDelegate.nextLevelDidStopFocus(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 481,
+      "line": 490,
       "symbol": "NextLevelDeviceDelegate.nextLevelWillChangeExposure(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 482,
+      "line": 491,
       "symbol": "NextLevelDeviceDelegate.nextLevelDidChangeExposure(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 484,
+      "line": 493,
       "symbol": "NextLevelDeviceDelegate.nextLevelWillChangeWhiteBalance(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 485,
+      "line": 494,
       "symbol": "NextLevelDeviceDelegate.nextLevelDidChangeWhiteBalance(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 494,
+      "line": 503,
       "symbol": "NextLevelFlashAndTorchDelegate.nextLevelDidChangeFlashMode(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 495,
+      "line": 504,
       "symbol": "NextLevelFlashAndTorchDelegate.nextLevelDidChangeTorchMode(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 497,
+      "line": 506,
       "symbol": "NextLevelFlashAndTorchDelegate.nextLevelFlashActiveChanged(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 498,
+      "line": 507,
       "symbol": "NextLevelFlashAndTorchDelegate.nextLevelTorchActiveChanged(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 500,
+      "line": 509,
       "symbol": "NextLevelFlashAndTorchDelegate.nextLevelFlashAndTorchAvailabilityChanged(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 511,
+      "line": 520,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didUpdateVideoZoomFactor:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 514,
+      "line": 523,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:willProcessRawVideoSampleBuffer:onQueue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 515,
+      "line": 524,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:renderToCustomContextWithImageBuffer:onQueue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 519,
+      "line": 528,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:willProcessFrame:pixelBuffer:timestamp:onQueue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 522,
+      "line": 531,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didSetupVideoInSession:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 523,
+      "line": 532,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didSetupAudioInSession:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 526,
+      "line": 535,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didStartClipInSession:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 527,
+      "line": 536,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didCompleteClip:inSession:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 530,
+      "line": 539,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didAppendVideoSampleBuffer:inSession:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 531,
+      "line": 540,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didSkipVideoSampleBuffer:inSession:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 533,
+      "line": 542,
+      "symbol": "NextLevelVideoDelegate.nextLevel(_:didAppendVideoPixelBuffer:timestamp:inSession:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
+      "line": 543,
+      "symbol": "NextLevelVideoDelegate.nextLevel(_:didSkipVideoPixelBuffer:timestamp:inSession:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
+      "line": 545,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didAppendAudioSampleBuffer:inSession:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 534,
+      "line": 546,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didSkipAudioSampleBuffer:inSession:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 536,
+      "line": 548,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didCompleteSession:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 539,
+      "line": 551,
       "symbol": "NextLevelVideoDelegate.nextLevel(_:didCompletePhotoCaptureFromVideoFrame:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 548,
+      "line": 560,
       "symbol": "NextLevelPhotoDelegate.nextLevel(_:willCapturePhotoWithConfiguration:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 549,
+      "line": 561,
       "symbol": "NextLevelPhotoDelegate.nextLevel(_:didCapturePhotoWithConfiguration:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 551,
+      "line": 563,
       "symbol": "NextLevelPhotoDelegate.nextLevel(_:didProcessPhotoCaptureWith:photoConfiguration:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 552,
+      "line": 564,
       "symbol": "NextLevelPhotoDelegate.nextLevel(_:didProcessRawPhotoCaptureWith:photoConfiguration:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 554,
+      "line": 566,
       "symbol": "NextLevelPhotoDelegate.nextLevelDidCompletePhotoCapture(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 571,
+      "line": 583,
       "symbol": "NextLevel.delegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 572,
+      "line": 584,
       "symbol": "NextLevel.previewDelegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 573,
+      "line": 585,
       "symbol": "NextLevel.deviceDelegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 574,
+      "line": 586,
       "symbol": "NextLevel.flashDelegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 575,
+      "line": 587,
       "symbol": "NextLevel.videoDelegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 576,
+      "line": 588,
       "symbol": "NextLevel.photoDelegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 596,
+      "line": 608,
       "symbol": "NextLevel.arConfiguration",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 756,
+      "line": 773,
       "symbol": "NextLevel.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2639,
+      "line": 2686,
       "symbol": "NextLevel.captureOutput(_:didOutput:from:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2676,
+      "line": 2723,
       "symbol": "NextLevel.photoOutput(_:willCapturePhotoFor:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2682,
+      "line": 2729,
       "symbol": "NextLevel.photoOutput(_:didCapturePhotoFor:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2688,
+      "line": 2735,
       "symbol": "NextLevel.photoOutput(_:didFinishProcessingPhoto:previewPhoto:resolvedSettings:bracketSettings:error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2720,
+      "line": 2767,
       "symbol": "NextLevel.photoOutput(_:didFinishProcessingRawPhoto:previewPhoto:resolvedSettings:bracketSettings:error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2753,
+      "line": 2800,
       "symbol": "NextLevel.photoOutput(_:didFinishCaptureFor:error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2766,
-      "symbol": "NextLevel.arSession(_:didUpdate:)",
+      "line": 2813,
+      "symbol": "NextLevel.depthDataOutput(_:didOutput:timestamp:connection:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2785,
-      "symbol": "NextLevel.arSession(_:didOutputAudioSampleBuffer:)",
+      "line": 2819,
+      "symbol": "NextLevel.depthDataOutput(_:didDrop:timestamp:connection:reason:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2991,
+      "line": 2957,
+      "symbol": "NextLevel.handleSessionWasInterrupted(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
+      "line": 2969,
+      "symbol": "NextLevel.handleSessionInterruptionEnded(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
+      "line": 3051,
       "symbol": "NextLevel.observeValue(forKeyPath:of:change:context:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -933,35 +961,56 @@
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevelConfiguration.swift",
-      "line": 70,
+      "line": 46,
+      "symbol": "NextLevelConfiguration.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevelConfiguration.swift",
+      "line": 71,
       "symbol": "NextLevelVideoConfiguration.OutputAspectRatio.active",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevelConfiguration.swift",
-      "line": 71,
+      "line": 72,
       "symbol": "NextLevelVideoConfiguration.OutputAspectRatio.standard",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevelConfiguration.swift",
-      "line": 72,
+      "line": 73,
       "symbol": "NextLevelVideoConfiguration.OutputAspectRatio.square",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevelConfiguration.swift",
-      "line": 73,
+      "line": 74,
       "symbol": "NextLevelVideoConfiguration.OutputAspectRatio.widescreen",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevelConfiguration.swift",
-      "line": 332,
+      "line": 75,
+      "symbol": "NextLevelVideoConfiguration.OutputAspectRatio.custom",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevelConfiguration.swift",
+      "line": 94,
+      "symbol": "NextLevelVideoConfiguration.OutputAspectRatio.ratio",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevelConfiguration.swift",
+      "line": 391,
       "symbol": "NextLevelARConfiguration",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"

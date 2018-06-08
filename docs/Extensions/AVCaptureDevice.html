@@ -14,7 +14,7 @@
     <a title="AVCaptureDevice Extension Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">NextLevel Docs</a> (58% documented)</p>
+        <p><a href="../index.html">NextLevel Docs</a> (57% documented)</p>
         <p class="header-right"><a href="https://github.com/NextLevel/NextLevel"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -64,30 +64,33 @@
             <a href="../Global Variables.html">Global Variables</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Global Variables.html#/s:9NextLevel0aB15ClipFilenameKeySSv">NextLevelClipFilenameKey</a>
+                <a href="../Global Variables.html#/s:9NextLevel0aB15ClipFilenameKeySSvp">NextLevelClipFilenameKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Global Variables.html#/s:9NextLevel0aB15ClipInfoDictKeySSv">NextLevelClipInfoDictKey</a>
+                <a href="../Global Variables.html#/s:9NextLevel0aB15ClipInfoDictKeySSvp">NextLevelClipInfoDictKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Global Variables.html#/s:9NextLevel0aB11ErrorDomainSSv">NextLevelErrorDomain</a>
+                <a href="../Global Variables.html#/s:9NextLevel0aB11ErrorDomainSSvp">NextLevelErrorDomain</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Global Variables.html#/s:9NextLevel0aB12PhotoJPEGKeySSv">NextLevelPhotoJPEGKey</a>
+                <a href="../Global Variables.html#/s:9NextLevel0aB19PhotoCroppedJPEGKeySSvp">NextLevelPhotoCroppedJPEGKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Global Variables.html#/s:9NextLevel0aB16PhotoMetadataKeySSv">NextLevelPhotoMetadataKey</a>
+                <a href="../Global Variables.html#/s:9NextLevel0aB12PhotoJPEGKeySSvp">NextLevelPhotoJPEGKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Global Variables.html#/s:9NextLevel0aB16PhotoRawImageKeySSv">NextLevelPhotoRawImageKey</a>
+                <a href="../Global Variables.html#/s:9NextLevel0aB16PhotoMetadataKeySSvp">NextLevelPhotoMetadataKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Global Variables.html#/s:9NextLevel0aB17PhotoThumbnailKeySSv">NextLevelPhotoThumbnailKey</a>
+                <a href="../Global Variables.html#/s:9NextLevel0aB16PhotoRawImageKeySSvp">NextLevelPhotoRawImageKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:9NextLevel0aB17PhotoThumbnailKeySSvp">NextLevelPhotoThumbnailKey</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Enums.html">Enums</a>
+            <a href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Enums/NextLevelAuthorizationStatus.html">NextLevelAuthorizationStatus</a>
@@ -137,6 +140,9 @@
                 <a href="../Extensions/AVCaptureDevice.html">AVCaptureDevice</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Extensions/AVCaptureDevice/Format.html">– Format</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Extensions/AVCaptureDeviceInput.html">AVCaptureDeviceInput</a>
               </li>
               <li class="nav-group-task">
@@ -153,6 +159,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Extensions/FileManager.html">FileManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/UIImage.html">UIImage</a>
               </li>
             </ul>
           </li>
@@ -217,19 +226,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Returns the capture device for the desired device type and position.</p>
-
-<p><a href='#protip-nextleveldeviceposition-avfoundationtype-can-provide-the-avfoundation-type' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='protip-nextleveldeviceposition-avfoundationtype-can-provide-the-avfoundation-type'>protip, NextLevelDevicePosition.avfoundationType can provide the AVFoundation type.</h1>
-<li>Parameters:</p>
-
-<p><ul>
-<li>deviceType: Specified capture device type, (i.e. builtInMicrophone, builtInWideAngleCamera, etc.)</li>
-<li>position: Desired position of device</li>
-</ul></li>
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    Capture device for the specified type and position, otherwise nil</p>
-
-<p></div></p>
+<h1 id='protip-nextleveldeviceposition-avfoundationtype-can-provide-the-avfoundation-type' class='heading'>protip, NextLevelDevicePosition.avfoundationType can provide the AVFoundation type.</h1>
 
                       </div>
                       <div class="declaration">
@@ -239,6 +236,41 @@
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">captureDevice</span><span class="p">(</span><span class="n">withType</span> <span class="nv">deviceType</span><span class="p">:</span> <span class="kt">AVCaptureDevice</span><span class="o">.</span><span class="kt">DeviceType</span><span class="p">,</span> <span class="n">forPosition</span> <span class="nv">position</span><span class="p">:</span> <span class="kt">AVCaptureDevice</span><span class="o">.</span><span class="kt">Position</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AVCaptureDevice</span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>deviceType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Specified capture device type, (i.e. builtInMicrophone, builtInWideAngleCamera, etc.)</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>position</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Desired position of device</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Capture device for the specified type and position, otherwise nil</p>
                       </div>
                     </section>
                   </div>
@@ -258,18 +290,6 @@
                       <div class="abstract">
                         <p>Returns the default wide angle video device for the desired position, otherwise nil.</p>
 
-<div class="aside aside-parameter">
-    <p class="aside-title">Parameter</p>
-    Parameter position: Desired position of the device
-
-</div>
-
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    Wide angle video capture device, otherwise nil
-
-</div>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -278,6 +298,29 @@
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">wideAngleVideoDevice</span><span class="p">(</span><span class="n">forPosition</span> <span class="nv">position</span><span class="p">:</span> <span class="kt">AVCaptureDevice</span><span class="o">.</span><span class="kt">Position</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AVCaptureDevice</span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>position</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Desired position of the device</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Wide angle video capture device, otherwise nil</p>
                       </div>
                     </section>
                   </div>
@@ -297,18 +340,6 @@
                       <div class="abstract">
                         <p>Returns the default telephoto video device for the desired position, otherwise nil.</p>
 
-<div class="aside aside-parameter">
-    <p class="aside-title">Parameter</p>
-    Parameter position: Desired position of the device
-
-</div>
-
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    Telephoto video capture device, otherwise nil
-
-</div>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -317,6 +348,29 @@
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">telephotoVideoDevice</span><span class="p">(</span><span class="n">forPosition</span> <span class="nv">position</span><span class="p">:</span> <span class="kt">AVCaptureDevice</span><span class="o">.</span><span class="kt">Position</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AVCaptureDevice</span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>position</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Desired position of the device</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Telephoto video capture device, otherwise nil</p>
                       </div>
                     </section>
                   </div>
@@ -336,18 +390,6 @@
                       <div class="abstract">
                         <p>Returns the primary duo camera video device, if available, else the default wide angel camera, otherwise nil.</p>
 
-<div class="aside aside-parameter">
-    <p class="aside-title">Parameter</p>
-    Parameter position: Desired position of the device
-
-</div>
-
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    Primary video capture device found, otherwise nil
-
-</div>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -356,6 +398,29 @@
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">primaryVideoDevice</span><span class="p">(</span><span class="n">forPosition</span> <span class="nv">position</span><span class="p">:</span> <span class="kt">AVCaptureDevice</span><span class="o">.</span><span class="kt">Position</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AVCaptureDevice</span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>position</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Desired position of the device</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Primary video capture device found, otherwise nil</p>
                       </div>
                     </section>
                   </div>
@@ -375,12 +440,6 @@
                       <div class="abstract">
                         <p>Returns the default video capture device, otherwise nil.</p>
 
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    Default video capture device, otherwise nil
-
-</div>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -389,6 +448,10 @@
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">videoDevice</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">AVCaptureDevice</span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Default video capture device, otherwise nil</p>
                       </div>
                     </section>
                   </div>
@@ -408,12 +471,6 @@
                       <div class="abstract">
                         <p>Returns the default audio capture device, otherwise nil.</p>
 
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    default audio capture device, otherwise nil
-
-</div>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -422,6 +479,10 @@
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">audioDevice</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">AVCaptureDevice</span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>default audio capture device, otherwise nil</p>
                       </div>
                     </section>
                   </div>
@@ -433,9 +494,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:So6FormatC9NextLevelE12maxFrameRates5Int32VAB03forA0_AF03mineF0tFZ"></a>
-                    <a name="//apple_ref/swift/Method/maxFrameRate(forFormat:minFrameRate:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:So6FormatC9NextLevelE12maxFrameRates5Int32VAB03forA0_AF03mineF0tFZ">maxFrameRate(forFormat:minFrameRate:)</a>
+                    <a name="/c:objc(cs)AVCaptureDeviceFormat"></a>
+                    <a name="//apple_ref/swift/Extension/Format" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)AVCaptureDeviceFormat">Format</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -443,65 +504,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Returns the maximum capable framerate for the desired capture format and minimum, otherwise zero.</p>
-
-<p><li>Parameters:</p>
-
-<p><ul>
-<li>format: Capture format to evaluate for a specific framerate.</li>
-<li>minFrameRate: Lower bound time scale or minimum desired framerate.</li>
-</ul></li>
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    Maximum capable framerate within the desired format and minimum constraints.</p>
-
-<p></div></p>
-
+                        
+                        <a href="../Extensions/AVCaptureDevice/Format.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">maxFrameRate</span><span class="p">(</span><span class="n">forFormat</span> <span class="nv">format</span><span class="p">:</span> <span class="kt">AVCaptureDevice</span><span class="o">.</span><span class="kt">Format</span><span class="p">,</span> <span class="nv">minFrameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CMTimeScale</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:So6FormatC9NextLevelE11isSupportedSbs5Int32V13withFrameRate_SC17CMVideoDimensionsV10dimensionstF"></a>
-                    <a name="//apple_ref/swift/Method/isSupported(withFrameRate:dimensions:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:So6FormatC9NextLevelE11isSupportedSbs5Int32V13withFrameRate_SC17CMVideoDimensionsV10dimensionstF">isSupported(withFrameRate:dimensions:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Checks if the specified capture device format supports a desired framerate and dimensions.</p>
-
-<p><li>Parameters:</p>
-
-<p><ul>
-<li>frameRate: Desired frame rate</li>
-<li>dimensions: Desired video dimensions</li>
-</ul></li>
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    <code>true</code> if the capture device format supports the given criteria, otherwise false</p>
-
-<p></div></p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">isSupported</span><span class="p">(</span><span class="n">withFrameRate</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">,</span> <span class="nv">dimensions</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span> <span class="o">=</span> <span class="kt">CMVideoDimensions</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="mi">0</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kt">Format</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
 
                         </div>
                       </div>
@@ -513,8 +523,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-09-22)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-06-07)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

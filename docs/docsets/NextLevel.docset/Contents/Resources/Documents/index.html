@@ -13,7 +13,7 @@
     <a title="NextLevel  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">NextLevel Docs</a> (58% documented)</p>
+        <p><a href="index.html">NextLevel Docs</a> (57% documented)</p>
         <p class="header-right"><a href="https://github.com/NextLevel/NextLevel"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -63,30 +63,33 @@
             <a href="Global Variables.html">Global Variables</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Global Variables.html#/s:9NextLevel0aB15ClipFilenameKeySSv">NextLevelClipFilenameKey</a>
+                <a href="Global Variables.html#/s:9NextLevel0aB15ClipFilenameKeySSvp">NextLevelClipFilenameKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="Global Variables.html#/s:9NextLevel0aB15ClipInfoDictKeySSv">NextLevelClipInfoDictKey</a>
+                <a href="Global Variables.html#/s:9NextLevel0aB15ClipInfoDictKeySSvp">NextLevelClipInfoDictKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="Global Variables.html#/s:9NextLevel0aB11ErrorDomainSSv">NextLevelErrorDomain</a>
+                <a href="Global Variables.html#/s:9NextLevel0aB11ErrorDomainSSvp">NextLevelErrorDomain</a>
               </li>
               <li class="nav-group-task">
-                <a href="Global Variables.html#/s:9NextLevel0aB12PhotoJPEGKeySSv">NextLevelPhotoJPEGKey</a>
+                <a href="Global Variables.html#/s:9NextLevel0aB19PhotoCroppedJPEGKeySSvp">NextLevelPhotoCroppedJPEGKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="Global Variables.html#/s:9NextLevel0aB16PhotoMetadataKeySSv">NextLevelPhotoMetadataKey</a>
+                <a href="Global Variables.html#/s:9NextLevel0aB12PhotoJPEGKeySSvp">NextLevelPhotoJPEGKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="Global Variables.html#/s:9NextLevel0aB16PhotoRawImageKeySSv">NextLevelPhotoRawImageKey</a>
+                <a href="Global Variables.html#/s:9NextLevel0aB16PhotoMetadataKeySSvp">NextLevelPhotoMetadataKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="Global Variables.html#/s:9NextLevel0aB17PhotoThumbnailKeySSv">NextLevelPhotoThumbnailKey</a>
+                <a href="Global Variables.html#/s:9NextLevel0aB16PhotoRawImageKeySSvp">NextLevelPhotoRawImageKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Global Variables.html#/s:9NextLevel0aB17PhotoThumbnailKeySSvp">NextLevelPhotoThumbnailKey</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Enums.html">Enums</a>
+            <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Enums/NextLevelAuthorizationStatus.html">NextLevelAuthorizationStatus</a>
@@ -136,6 +139,9 @@
                 <a href="Extensions/AVCaptureDevice.html">AVCaptureDevice</a>
               </li>
               <li class="nav-group-task">
+                <a href="Extensions/AVCaptureDevice/Format.html">– Format</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Extensions/AVCaptureDeviceInput.html">AVCaptureDeviceInput</a>
               </li>
               <li class="nav-group-task">
@@ -152,6 +158,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Extensions/FileManager.html">FileManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/UIImage.html">UIImage</a>
               </li>
             </ul>
           </li>
@@ -186,7 +195,9 @@
             
             <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" alt="Next Level" style="max-width:100%;"></p>
 
-<p>Next Level is a media capture camera library for iOS written in <a href="https://developer.apple.com/swift/">Swift</a>.</p>
+<p><code><a href="Classes/NextLevel.html">NextLevel</a></code> is a <a href="https://developer.apple.com/swift/">Swift</a> camera system designed for easy integration, customized media capture, and image streaming for iOS.</p>
+
+<p>It enables fast integration and customization leveraging <code>AVFoundation</code> or optionally <code>ARKit</code>.</p>
 
 <p><a href="https://travis-ci.org/NextLevel/NextLevel"><img src="https://travis-ci.org/NextLevel/NextLevel.svg?branch=master" alt="Build Status"></a> <a href="http://cocoadocs.org/docsets/NextLevel/"><img src="https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat" alt="Pod Version"></a> <a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/language-swift%204.0-brightgreen.svg" alt="Swift Version"></a> <a href="https://github.com/NextLevel/NextLevel/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="GitHub license"></a></p>
 
@@ -261,14 +272,22 @@
 <td style="text-align: left"><a href="https://developer.apple.com/swift/">Swift 4</a></td>
 </tr>
 </tbody></table>
-<a href='#quick-start' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='quick-start'>Quick Start</h2>
+
+<p>Need a different version of Swift?</p>
+
+<ul>
+<li><code>4.2</code> - Target your Podfile to the <code>swift4.2</code> branch</li>
+<li><code>4.0</code> - Target your Podfile to the latest release or master</li>
+<li><code>3.2</code> - Target your Podfile to release <code>0.6.3</code> or the <code>swift3.2</code> branch</li>
+</ul>
+<h2 id='quick-start' class='heading'>Quick Start</h2>
 <pre class="highlight ruby"><code>
 <span class="c1"># CocoaPods</span>
 <span class="n">swift_version</span> <span class="o">=</span> <span class="s2">"4.0"</span>
-<span class="n">pod</span> <span class="s2">"NextLevel"</span><span class="p">,</span> <span class="s2">"~&gt; 0.7.1"</span>
+<span class="n">pod</span> <span class="s2">"NextLevel"</span><span class="p">,</span> <span class="s2">"~&gt; 0.9.5"</span>
 
 <span class="c1"># Carthage</span>
-<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">7</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="o">.</span><span class="mi">5</span>
 
 <span class="c1"># Swift PM</span>
 <span class="n">let</span> <span class="n">package</span> <span class="o">=</span> <span class="no">Package</span><span class="p">(</span>
@@ -280,14 +299,23 @@
 </code></pre>
 
 <p>Alternatively, drop the NextLevel <a href="https://github.com/NextLevel/NextLevel/tree/master/Sources">source files</a> or project file into your Xcode project.</p>
+<h2 id='arkit-capture' class='heading'>ARKit Capture</h2>
 
-<p>Need Swift 3.X? Use release version <code>0.6.3</code> in your Podfile.</p>
-<a href='#arkit' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='arkit'>ARKit</h2>
+<p>Starting with release <code>0.8.0</code>, NextLevel provides a mode for ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.</p>
 
-<p>Starting with release <code>0.8.0</code>, NextLevel will provide a mode for ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities of NextLevel.</p>
+<p>The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement. It is not compiled by default without the inclusion of the Swift compiler flag <code>USE_ARKIT</code>, since Apple will <a href="https://github.com/NextLevel/NextLevel/issues/106">reject</a> apps that link ARKit and do not use it. To try it out, setup the AppDelegate to load the <code>MixedRealityViewController</code> class and include the xcode build settings flag.</p>
 
-<p>The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement. To try it out, uncomment the code found in the AppDelegate to load the <code>MixedRealityViewController</code>.</p>
-<a href='#overview' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='overview'>Overview</h2>
+<p>If you use Cocoapods, you can include <code>-DUSE_ARKIT</code> with the following podfile addition or by adding it to your Xcode build settings.</p>
+<pre class="highlight ruby"><code>  <span class="n">installer</span><span class="p">.</span><span class="nf">pods_project</span><span class="p">.</span><span class="nf">targets</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">target</span><span class="o">|</span>
+    <span class="c1"># setup NextLevel for ARKit use</span>
+    <span class="k">if</span> <span class="n">target</span><span class="p">.</span><span class="nf">name</span> <span class="o">==</span> <span class="s1">'NextLevel'</span>
+      <span class="n">target</span><span class="p">.</span><span class="nf">build_configurations</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+        <span class="n">config</span><span class="p">.</span><span class="nf">build_settings</span><span class="p">[</span><span class="s1">'OTHER_SWIFT_FLAGS'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'-DUSE_ARKIT'</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+</code></pre>
+<h2 id='overview' class='heading'>Overview</h2>
 
 <p>Before starting, ensure that permission keys have been added to your app&rsquo;s <code>Info.plist</code>.</p>
 <pre class="highlight xml"><code><span class="nt">&lt;key&gt;</span>NSCameraUsageDescription<span class="nt">&lt;/key&gt;</span>
@@ -295,7 +323,7 @@
 <span class="nt">&lt;key&gt;</span>NSMicrophoneUsageDescription<span class="nt">&lt;/key&gt;</span>
     <span class="nt">&lt;string&gt;</span>Allowing access to the microphone lets you record audio.<span class="nt">&lt;/string&gt;</span>
 </code></pre>
-<a href='#recording-video-clips' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='recording-video-clips'>Recording Video Clips</h3>
+<h3 id='recording-video-clips' class='heading'>Recording Video Clips</h3>
 
 <p>Import the library.</p>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">NextLevel</span>
@@ -322,7 +350,7 @@
 
     <span class="c1">// modify .videoConfiguration, .audioConfiguration, .photoConfiguration properties</span>
     <span class="c1">// Compression, resolution, and maximum recording time options are available</span>
-    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">videoConfiguration</span><span class="o">.</span><span class="n">maxRecordDuration</span> <span class="o">=</span> <span class="kt">CMTimeMakeWithSeconds</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+    <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">videoConfiguration</span><span class="o">.</span><span class="n">maximumCaptureDuration</span> <span class="o">=</span> <span class="kt">CMTimeMakeWithSeconds</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
     <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">audioConfiguration</span><span class="o">.</span><span class="n">bitRate</span> <span class="o">=</span> <span class="mi">44000</span>
  <span class="p">}</span>
 </code></pre>
@@ -348,35 +376,35 @@
 <span class="c1">// pause</span>
 <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">pause</span><span class="p">()</span>
 </code></pre>
-<a href='#editing-recorded-clips' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='editing-recorded-clips'>Editing Recorded Clips</h3>
+<h3 id='editing-recorded-clips' class='heading'>Editing Recorded Clips</h3>
 
-<p>Editing and finalizing the recorded session.
-&ldquo;`swift</p>
+<p>Editing and finalizing the recorded session.</p>
+<pre class="highlight swift"><code>
+<span class="k">if</span> <span class="k">let</span> <span class="nv">session</span> <span class="o">=</span> <span class="kt">NextLevel</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">session</span> <span class="p">{</span>
 
-<p>if let session = NextLevel.shared.session {</p>
-<pre class="highlight plaintext"><code>//..
+    <span class="c1">//..</span>
 
-// undo
-session.removeLastClip()
+    <span class="c1">// undo</span>
+    <span class="n">session</span><span class="o">.</span><span class="nf">removeLastClip</span><span class="p">()</span>
 
-// various editing operations can be done using the NextLevelSession methods
+    <span class="c1">// various editing operations can be done using the NextLevelSession methods</span>
 
-// export
-session.mergeClips(usingPreset: AVAssetExportPresetHighestQuality, completionHandler: { (url: URL?, error: Error?) in
-    if let _ = url {
-        //
-    } else if let _ = error {
-        //
-    }
- })
+    <span class="c1">// export</span>
+    <span class="n">session</span><span class="o">.</span><span class="nf">mergeClips</span><span class="p">(</span><span class="nv">usingPreset</span><span class="p">:</span> <span class="kt">AVAssetExportPresetHighestQuality</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span> <span class="k">in</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">_</span> <span class="o">=</span> <span class="n">url</span> <span class="p">{</span>
+            <span class="c1">//</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="k">let</span> <span class="nv">_</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
+            <span class="c1">//</span>
+        <span class="p">}</span>
+     <span class="p">})</span>
 
-//..
+    <span class="c1">//..</span>
+
+<span class="p">}</span>
 </code></pre>
 
-<p>}
-&rdquo;`
-Videos can also be processed using the <a href="https://github.com/NextLevel/NextLevelSessionExporter">NextLevelSessionExporter</a>, a media transcoding library in Swift.</p>
-<a href='#custom-buffer-rendering' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='custom-buffer-rendering'>Custom Buffer Rendering</h2>
+<p>Videos can also be processed using the <a href="https://github.com/NextLevel/NextLevelSessionExporter">NextLevelSessionExporter</a>, a media transcoding library in Swift.</p>
+<h2 id='custom-buffer-rendering' class='heading'>Custom Buffer Rendering</h2>
 
 <p>‘NextLevel’ was designed for sample buffer analysis and custom modification in real-time along side a rich set of camera features. </p>
 
@@ -414,15 +442,29 @@ Videos can also be processed using the <a href="https://github.com/NextLevel/Nex
 <p>NextLevel will check this property when writing buffers to a destination file. This works for both video and photos with <code>capturePhotoFromVideo</code>.</p>
 <pre class="highlight swift"><code><span class="n">nextLevel</span><span class="o">.</span><span class="n">videoCustomContextImageBuffer</span> <span class="o">=</span> <span class="n">modifiedFrame</span>
 </code></pre>
-<a href='#documentation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='documentation'>Documentation</h2>
+<h2 id='about' class='heading'>About</h2>
+
+<p>NextLevel was initally just a weekend project but has grown into a open community of camera enthusists. The software provides foundational components for managing media recording, camera interface customization, gestural interaction customization, and image streaming for iOS. The same capabilities can also be found in apps such as <a href="http://snapchat.com">Snapchat</a>, <a href="http://instagram.com">Instagram</a>, and <a href="http://vine.co">Vine</a>.</p>
+
+<p>The goal is to continue to provide a good foundation for quick integration (enabling projects to be taken to the next level) – allowing focus to placed on functionality that matters most whether it&rsquo;s realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.</p>
+<h2 id='documentation' class='heading'>Documentation</h2>
 
 <p>You can find <a href="https://nextlevel.github.io/NextLevel">the docs here</a>. Documentation is generated with <a href="https://github.com/realm/jazzy">jazzy</a> and hosted on <a href="https://pages.github.com">GitHub-Pages</a>.</p>
-<a href='#about' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='about'>About</h2>
+<h3 id='stickers' class='heading'>Stickers</h3>
 
-<p>Next Level was a little weekend project that turned into something more useful. The software provides foundational components for advanced media recording, camera interface customization, and gestural interaction customization for iOS. The same capabilities can also be found in apps such as <a href="http://snapchat.com">Snapchat</a>, <a href="http://instagram.com">Instagram</a>, and <a href="http://vine.co">Vine</a>.</p>
+<p>If you found this project to be helpful, check out the <a href="https://www.stickermule.com/en/user/1070732101/stickers">Next Level stickers</a>.</p>
+<h3 id='project' class='heading'>Project</h3>
 
-<p>The goal is to continue to provide a good foundation for quick integration (taking you to the next level) – allowing everyone to focus on the app functionality that matters most. My hope is the app functionality that matters most whether is be realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques benefit from how this library is structured.</p>
-<a href='#related-projects' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='related-projects'>Related Projects</h3>
+<p>NextLevel is a community – contributions and discussions are welcome!</p>
+
+<ul>
+<li>Feature idea? Open an <a href="https://github.com/nextlevel/NextLevel/issues">issue</a>.</li>
+<li>Found a bug? Open an <a href="https://github.com/nextlevel/NextLevel/issues">issue</a>.</li>
+<li>Need help? Use <a href="http://stackoverflow.com/questions/tagged/nextlevel">Stack Overflow</a> with the tag ’nextlevel’.</li>
+<li>Questions? Use <a href="http://stackoverflow.com/questions/tagged/nextlevel">Stack Overflow</a> with the tag &lsquo;nextlevel&rsquo;.</li>
+<li>Want to contribute? Submit a pull request.</li>
+</ul>
+<h3 id='related-projects' class='heading'>Related Projects</h3>
 
 <ul>
 <li><a href="https://github.com/piemonte/player">Player (Swift)</a>, video player in Swift</li>
@@ -432,26 +474,7 @@ Videos can also be processed using the <a href="https://github.com/NextLevel/Nex
 <li><a href="https://github.com/piemonte/PBJVision">PBJVision</a>, obj-c capture library</li>
 <li><a href="https://github.com/NextLevel/NextLevelSessionExporter">NextLevelSessionExporter</a>, media transcoding in Swift</li>
 </ul>
-<a href='#community' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='community'>Community</h2>
-
-<p>NextLevel is a community – contributions and discussions are welcome!</p>
-<a href='#project' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='project'>Project</h3>
-
-<ul>
-<li>Feature idea? Open an <a href="https://github.com/nextlevel/NextLevel/issues">issue</a>.</li>
-<li>Found a bug? Open an <a href="https://github.com/nextlevel/NextLevel/issues">issue</a>.</li>
-<li>Need help? Use <a href="http://stackoverflow.com/questions/tagged/nextlevel">Stack Overflow</a> with the tag ’nextlevel’.</li>
-<li>Questions? Use <a href="http://stackoverflow.com/questions/tagged/nextlevel">Stack Overflow</a> with the tag &#39;nextlevel&rsquo;.</li>
-<li>Want to contribute? Submit a pull request.</li>
-</ul>
-<a href='#stickers' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='stickers'>Stickers</h3>
-
-<p>If you found this project to be helpful, check out the <a href="https://www.stickermule.com/en/user/1070732101/stickers">Next Level stickers</a>.</p>
-
-<p>You can use this sign up <a href="https://www.stickermule.com/unlock?ref_id=1012370701">link</a> for a $10 <a href="https://www.stickermule.com/unlock?ref_id=1012370701">credit</a>.</p>
-
-<p>If other projects have interest in providing a similar hex sticker, it conforms to the <a href="https://terinjokes.github.io/StickerConstructorSpec/">sticker standard</a> used by several node projects. </p>
-<a href='#resources' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='resources'>Resources</h2>
+<h2 id='resources' class='heading'>Resources</h2>
 
 <ul>
 <li><a href="https://developer.apple.com/library/prerelease/content/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/Cameras/Cameras.html">iOS Device Camera Summary</a></li>
@@ -464,15 +487,15 @@ Videos can also be processed using the <a href="https://github.com/NextLevel/Nex
 <li><a href="http://ben-evans.com/benedictevans/2016/11/20/ku6omictaredoge4cao9cytspbz4jt">Cameras, ecommerce and machine learning</a></li>
 <li><a href="http://om.co/2016/12/07/again-iphone-is-the-default-camera/">Again, iPhone is the default camera</a></li>
 </ul>
-<a href='#license' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='license'>License</h2>
+<h2 id='license' class='heading'>License</h2>
 
 <p>NextLevel is available under the MIT license, see the <a href="https://github.com/NextLevel/NextLevel/blob/master/LICENSE">LICENSE</a> file for more information.</p>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2017-09-22)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-06-07)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

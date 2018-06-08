@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OutputAspectRatio Enumeration Reference</title>
+    <title>Format Extension Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/OutputAspectRatio" class="dashAnchor"></a>
-    <a title="OutputAspectRatio Enumeration Reference"></a>
+    <a name="//apple_ref/swift/Extension/Format" class="dashAnchor"></a>
+    <a title="Format Extension Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../../index.html">NextLevel Docs</a> (57% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../../index.html">NextLevel Reference</a>
         <img id="carat" src="../../img/carat.png" />
-        OutputAspectRatio Enumeration Reference
+        Format Extension Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -193,15 +193,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>OutputAspectRatio</h1>
+            <h1>Format</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OutputAspectRatio</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">class</span> <span class="kt">Format</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
 
                 </div>
               </div>
-            <p>Output aspect ratio, specifies dimensions for video output automatically</p>
-
+            
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -209,9 +208,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO6activeA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/active" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO6activeA2EmF">active</a>
+                    <a name="/s:So6FormatC9NextLevelE12maxFrameRates5Int32VAB03forA0_AF03mineF0tFZ"></a>
+                    <a name="//apple_ref/swift/Method/maxFrameRate(forFormat:minFrameRate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So6FormatC9NextLevelE12maxFrameRates5Int32VAB03forA0_AF03mineF0tFZ">maxFrameRate(forFormat:minFrameRate:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -219,170 +218,51 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Returns the maximum capable framerate for the desired capture format and minimum, otherwise zero.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OutputAspectRatio</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">maxFrameRate</span><span class="p">(</span><span class="n">forFormat</span> <span class="nv">format</span><span class="p">:</span> <span class="kt">AVCaptureDevice</span><span class="o">.</span><span class="kt">Format</span><span class="p">,</span> <span class="nv">minFrameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CMTimeScale</span></code></pre>
 
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO8standardA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/standard" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO8standardA2EmF">standard</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>format</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Capture format to evaluate for a specific framerate.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>minFrameRate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Lower bound time scale or minimum desired framerate.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OutputAspectRatio</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO6squareA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/square" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO6squareA2EmF">square</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OutputAspectRatio</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO10widescreenA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/widescreen" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO10widescreenA2EmF">widescreen</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OutputAspectRatio</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO6customAESi1w_Si1htcAEmF"></a>
-                    <a name="//apple_ref/swift/Element/custom" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO6customAESi1w_Si1htcAEmF">custom</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OutputAspectRatio</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:s23CustomStringConvertibleP11descriptionSSvp"></a>
-                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
-                    <a class="token" href="#/s:s23CustomStringConvertibleP11descriptionSSvp">description</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Maximum capable framerate within the desired format and minimum constraints.</p>
                       </div>
                     </section>
                   </div>
@@ -390,9 +270,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO5ratio12CoreGraphics7CGFloatVSgvp"></a>
-                    <a name="//apple_ref/swift/Property/ratio" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB18VideoConfigurationC17OutputAspectRatioO5ratio12CoreGraphics7CGFloatVSgvp">ratio</a>
+                    <a name="/s:So6FormatC9NextLevelE11isSupportedSbs5Int32V13withFrameRate_SC17CMVideoDimensionsV10dimensionstF"></a>
+                    <a name="//apple_ref/swift/Method/isSupported(withFrameRate:dimensions:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So6FormatC9NextLevelE11isSupportedSbs5Int32V13withFrameRate_SC17CMVideoDimensionsV10dimensionstF">isSupported(withFrameRate:dimensions:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -400,16 +280,51 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Checks if the specified capture device format supports a desired framerate and dimensions.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OutputAspectRatio</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">isSupported</span><span class="p">(</span><span class="n">withFrameRate</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">,</span> <span class="nv">dimensions</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span> <span class="o">=</span> <span class="kt">CMVideoDimensions</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="mi">0</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>frameRate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Desired frame rate</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dimensions</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Desired video dimensions</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the capture device format supports the given criteria, otherwise false</p>
                       </div>
                     </section>
                   </div>
