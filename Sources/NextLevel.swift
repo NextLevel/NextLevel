@@ -60,6 +60,7 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
     case wideAngleCamera
     case telephotoCamera
     case duoCamera
+    case trueDepthCamera
     
     public var avfoundationType: AVCaptureDevice.DeviceType {
         switch self {
@@ -75,6 +76,12 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
             } else {
                 return AVCaptureDevice.DeviceType.builtInDuoCamera
             }
+        case .trueDepthCamera:
+            if #available(iOS 11.1, *) {
+                return AVCaptureDevice.DeviceType.builtInTrueDepthCamera
+            } else {
+                return AVCaptureDevice.DeviceType(rawValue: "Unavailable")
+            }
         }
     }
     
@@ -89,6 +96,8 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
                 return "Telephoto Camera"
             case .duoCamera:
                 return "Duo Camera"
+            case .trueDepthCamera:
+                return "True Depth Camera"
             }
         }
     }
