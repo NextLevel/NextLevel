@@ -201,130 +201,11 @@ public enum NextLevelDeviceOrientation: Int, CustomStringConvertible {
     }
 }
 
-public enum NextLevelFocusMode: Int, CustomStringConvertible {
-    case locked
-    case autoFocus
-    case continuousAutoFocus
-    
-    public var avfoundationType: AVCaptureDevice.FocusMode {
-        switch self {
-        case .locked:
-            return .locked
-        case .autoFocus:
-            return .autoFocus
-        case .continuousAutoFocus:
-            return .continuousAutoFocus
-        }
-    }
-    
-    public var description: String {
-        get {
-            switch self {
-            case .locked:
-                return "Locked"
-            case .autoFocus:
-                return "AutoFocus"
-            case .continuousAutoFocus:
-                return "ContinuousAutoFocus"
-            }
-        }
-    }
-}
-
-public enum NextLevelExposureMode: Int, CustomStringConvertible {
-    case locked
-    case autoExpose
-    case continuousAutoExposure
-    case custom
-    
-    public var avfoundationType: AVCaptureDevice.ExposureMode {
-        switch self {
-        case .locked:
-            return .locked
-        case .autoExpose:
-            return .autoExpose
-        case .continuousAutoExposure:
-            return .continuousAutoExposure
-        case .custom:
-            return .custom
-        }
-    }
-    
-    public var description: String {
-        get {
-            switch self {
-            case .locked:
-                return "Locked"
-            case .autoExpose:
-                return "AutoExpose"
-            case .continuousAutoExposure:
-                return "ContinuousAutoExposure"
-            case .custom:
-                return "Custom"
-            }
-        }
-    }
-}
-
-public enum NextLevelFlashMode: Int, CustomStringConvertible {
-    case off
-    case on
-    case auto
-    
-    public var avfoundationType: AVCaptureDevice.FlashMode {
-        switch self {
-        case .off:
-            return .off
-        case .on:
-            return .on
-        case .auto:
-            return .auto
-        }
-    }
-    
-    public var description: String {
-        get {
-            switch self {
-            case .off:
-                return "Off"
-            case .on:
-                return "On"
-            case .auto:
-                return "Auto"
-            }
-        }
-    }
-}
-
-public enum NextLevelTorchMode: Int, CustomStringConvertible {
-    case off
-    case on
-    case auto
-    
-    public var avfoundationType: AVCaptureDevice.TorchMode {
-        switch self {
-        case .off:
-            return .off
-        case .on:
-            return .on
-        case .auto:
-            return .auto
-        }
-    }
-    
-    public var description: String {
-        get {
-            switch self {
-            case .off:
-                return "Off"
-            case .on:
-                return "On"
-            case .auto:
-                return "Auto"
-            }
-        }
-    }
-}
+public typealias NextLevelFocusMode = AVCaptureDevice.FocusMode
+public typealias NextLevelExposureMode = AVCaptureDevice.ExposureMode
+public typealias NextLevelFlashMode = AVCaptureDevice.FlashMode
+public typealias NextLevelTorchMode = AVCaptureDevice.TorchMode
+public typealias NextLevelVideoStabilizationMode = AVCaptureVideoStabilizationMode
 
 public enum NextLevelMirroringMode: Int, CustomStringConvertible {
     case off = 0
@@ -338,41 +219,6 @@ public enum NextLevelMirroringMode: Int, CustomStringConvertible {
                 return "Off"
             case .on:
                 return "On"
-            case .auto:
-                return "Auto"
-            }
-        }
-    }
-}
-
-public enum NextLevelVideoStabilizationMode: Int, CustomStringConvertible {
-    case off = 0
-    case standard
-    case cinematic
-    case auto
-    
-    public var avfoundationType: AVCaptureVideoStabilizationMode {
-        switch self {
-        case .off:
-            return .off
-        case .standard:
-            return .standard
-        case .cinematic:
-            return .cinematic
-        case .auto:
-            return .auto
-        }
-    }
-    
-    public var description: String {
-        get {
-            switch self {
-            case .off:
-                return "Off"
-            case .standard:
-                return "Standard"
-            case .cinematic:
-                return "Cinematic"
             case .auto:
                 return "Auto"
             }
@@ -1444,12 +1290,12 @@ extension NextLevel {
                 }
                 
                 if let output = self._photoOutput {
-                    if self.photoConfiguration.flashMode != newValue.avfoundationType {
+                    if self.photoConfiguration.flashMode != newValue {
                         // iOS 11 GM fix
                         // https://forums.developer.apple.com/thread/86810
                         let modes = output.__supportedFlashModes
-                        if modes.contains(NSNumber(value: newValue.avfoundationType.rawValue)) {
-                            self.photoConfiguration.flashMode = newValue.avfoundationType
+                        if modes.contains(NSNumber(value: newValue.rawValue)) {
+                            self.photoConfiguration.flashMode = newValue
                         }
                     }
                 }
@@ -1471,7 +1317,7 @@ extension NextLevel {
     public var torchMode: NextLevelTorchMode {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
-                return device.torchModeNextLevelType()
+                return device.torchMode
             }
             return .off
         }
@@ -1479,7 +1325,7 @@ extension NextLevel {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
                 if let device = self._currentDevice {
                     guard
-                        device.torchMode != newValue.avfoundationType,
+                        device.torchMode != newValue,
                         device.hasTorch
                         else {
                             return
@@ -1487,8 +1333,8 @@ extension NextLevel {
                     
                     do {
                         try device.lockForConfiguration()
-                        if device.isTorchModeSupported(newValue.avfoundationType) {
-                            device.torchMode = newValue.avfoundationType
+                        if device.isTorchModeSupported(newValue) {
+                            device.torchMode = newValue
                         }
                         device.unlockForConfiguration()
                     } catch {
@@ -1536,7 +1382,7 @@ extension NextLevel {
     public var focusMode: NextLevelFocusMode {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
-                return device.focusModeNextLevelType()
+                return device.focusMode
             }
             return .locked
         }
@@ -1544,15 +1390,15 @@ extension NextLevel {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
                 if let device: AVCaptureDevice = self._currentDevice {
                     guard
-                        device.focusMode != newValue.avfoundationType,
-                        device.isFocusModeSupported(newValue.avfoundationType)
+                        device.focusMode != newValue,
+                        device.isFocusModeSupported(newValue)
                         else {
                             return
                     }
                     
                     do {
                         try device.lockForConfiguration()
-                        device.focusMode = newValue.avfoundationType
+                        device.focusMode = newValue
                         device.unlockForConfiguration()
                     } catch {
                         print("NextLevel, focusMode failed to lock device for configuration")
@@ -1659,15 +1505,15 @@ extension NextLevel {
     public var exposureMode: NextLevelExposureMode {
         get {
             if let device: AVCaptureDevice = self._currentDevice {
-                return device.exposureModeNextLevelType()
+                return device.exposureMode
             }
             return .locked
         }
         set {
             if let device: AVCaptureDevice = self._currentDevice {
                 guard
-                    device.exposureMode != newValue.avfoundationType,
-                    device.isExposureModeSupported(newValue.avfoundationType)
+                    device.exposureMode != newValue,
+                    device.isExposureModeSupported(newValue)
                     else {
                         return
                 }
@@ -1675,8 +1521,8 @@ extension NextLevel {
                 do {
                     try device.lockForConfiguration()
                     
-                    device.exposureMode = newValue.avfoundationType
-                    self.adjustWhiteBalanceForExposureMode(exposureMode: newValue.avfoundationType)
+                    device.exposureMode = newValue
+                    self.adjustWhiteBalanceForExposureMode(exposureMode: newValue)
                     
                     device.unlockForConfiguration()
                 }
@@ -2142,7 +1988,7 @@ extension NextLevel {
         if let videoOutput = self._videoOutput {
             if let videoConnection = videoOutput.connection(with: AVMediaType.video) {
                 if videoConnection.isVideoStabilizationSupported {
-                    videoConnection.preferredVideoStabilizationMode = self.videoStabilizationMode.avfoundationType
+                    videoConnection.preferredVideoStabilizationMode = self.videoStabilizationMode
                 }
             }
         }

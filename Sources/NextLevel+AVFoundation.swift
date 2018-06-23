@@ -154,59 +154,6 @@ extension AVCaptureDevice {
         return AVCaptureDevice.default(for: AVMediaType.audio)
     }
     
-    // MARK: NextLevel types
-    
-    internal func torchModeNextLevelType() -> NextLevelTorchMode {
-        var mode = NextLevelTorchMode.off
-        switch self.torchMode {
-        case .auto:
-            mode = .auto
-            break
-        case .off:
-            mode = .off
-            break
-        case .on:
-            mode = .on
-            break
-        }
-        return mode
-    }
-    
-    internal func focusModeNextLevelType() -> NextLevelFocusMode {
-        var mode = NextLevelFocusMode.locked
-        switch self.focusMode {
-        case .autoFocus:
-            mode = .autoFocus
-            break
-        case .continuousAutoFocus:
-            mode = .continuousAutoFocus
-            break
-        case .locked:
-            mode = .locked
-            break
-        }
-        return mode
-    }
-    
-    internal func exposureModeNextLevelType() -> NextLevelExposureMode {
-        var nextLevelMode = NextLevelExposureMode.locked
-        switch self.exposureMode {
-        case .autoExpose:
-            nextLevelMode = .autoExpose
-            break
-        case .continuousAutoExposure:
-            nextLevelMode = .continuousAutoExposure
-            break
-        case .locked:
-            nextLevelMode = .locked
-            break
-        case .custom:
-            nextLevelMode = .custom
-            break
-        }
-        return nextLevelMode
-    }
-    
 }
 
 extension AVCaptureDevice.Format {
