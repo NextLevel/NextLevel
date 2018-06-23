@@ -55,40 +55,6 @@ public enum NextLevelAuthorizationStatus: Int, CustomStringConvertible {
     }
 }
 
-public enum NextLevelDevicePosition: Int, CustomStringConvertible {
-    case back = 0
-    case front
-    
-    public var uikitType: UIImagePickerControllerCameraDevice {
-        switch self {
-        case .back:
-            return .rear
-        case .front:
-            return .front
-        }
-    }
-    
-    public var avfoundationType: AVCaptureDevice.Position {
-        switch self {
-        case .back:
-            return .back
-        case .front:
-            return .front
-        }
-    }
-    
-    public var description: String {
-        get {
-            switch self {
-            case .back:
-                return "Back"
-            case .front:
-                return "Front"
-            }
-        }
-    }
-}
-
 public enum NextLevelDeviceType: Int, CustomStringConvertible {
     case microphone = 0
     case wideAngleCamera
@@ -153,58 +119,14 @@ public enum NextLevelCaptureMode: Int, CustomStringConvertible {
     }
 }
 
-public enum NextLevelDeviceOrientation: Int, CustomStringConvertible {
-    case portrait
-    case portraitUpsideDown
-    case landscapeRight
-    case landscapeLeft
-    
-    public var uikitType: UIDeviceOrientation {
-        switch self {
-        case .portrait:
-            return .portrait
-        case .landscapeLeft:
-            return .landscapeLeft
-        case .landscapeRight:
-            return .landscapeRight
-        case .portraitUpsideDown:
-            return .portraitUpsideDown
-        }
-    }
-    
-    public var avfoundationType: AVCaptureVideoOrientation {
-        switch self {
-        case .portrait:
-            return .portrait
-        case .portraitUpsideDown:
-            return .portraitUpsideDown
-        case .landscapeRight:
-            return .landscapeRight
-        case .landscapeLeft:
-            return .landscapeLeft
-        }
-    }
-    
-    public var description: String {
-        get {
-            switch self {
-            case .portrait:
-                return "Portrait"
-            case .portraitUpsideDown:
-                return "PortraitUpsideDown"
-            case .landscapeRight:
-                return "LandscapeRight"
-            case .landscapeLeft:
-                return "LandscapeLeft"
-            }
-        }
-    }
-}
+public typealias NextLevelDeviceOrientation = AVCaptureVideoOrientation
+public typealias NextLevelDevicePosition = AVCaptureDevice.Position
 
 public typealias NextLevelFocusMode = AVCaptureDevice.FocusMode
 public typealias NextLevelExposureMode = AVCaptureDevice.ExposureMode
 public typealias NextLevelFlashMode = AVCaptureDevice.FlashMode
 public typealias NextLevelTorchMode = AVCaptureDevice.TorchMode
+
 public typealias NextLevelVideoStabilizationMode = AVCaptureVideoStabilizationMode
 
 public enum NextLevelMirroringMode: Int, CustomStringConvertible {
@@ -415,7 +337,7 @@ public protocol NextLevelPhotoDelegate: NSObjectProtocol {
 
 // MARK: - constants
 
-private let NextLevelCaptureSessionQueueIdentifier = "engineering.NextLevel.Session"
+private let NextLevelCaptureSessionQueueIdentifier = "engineering.NextLevel.CaptureSession"
 private let NextLevelCaptureSessionQueueSpecificKey = DispatchSpecificKey<()>()
 private let NextLevelRequiredMinimumStorageSpaceInBytes: UInt64 = 49999872 // ~47 MB
 
@@ -910,7 +832,7 @@ extension NextLevel {
             
             if let requestedDevice = self._requestedDevice {
                 captureDevice = requestedDevice
-            } else if let videoDevice = AVCaptureDevice.primaryVideoDevice(forPosition: self.devicePosition.avfoundationType) {
+            } else if let videoDevice = AVCaptureDevice.primaryVideoDevice(forPosition: self.devicePosition) {
                 captureDevice = videoDevice
             }
             
