@@ -344,10 +344,24 @@ public protocol NextLevelPhotoDelegate: NSObjectProtocol {
     
 }
 
+// MARK: - NextLevelDepthDataDelegate
+
+/// Depth data delegate, provides depth data updates
+public protocol NextLevelDepthDataDelegate: NSObjectProtocol {
+
+    @available(iOS 11.0, *)
+    func depthDataOutput(_ nextLevel: NextLevel, didOutput depthData: AVDepthData, timestamp: CMTime)
+
+    @available(iOS 11.0, *)
+    func depthDataOutput(_ nextLevel: NextLevel, didDrop depthData: AVDepthData, timestamp: CMTime, reason: AVCaptureOutput.DataDroppedReason)
+
+}
+
 // MARK: - constants
 
 private let NextLevelCaptureSessionQueueIdentifier = "engineering.NextLevel.CaptureSession"
 private let NextLevelCaptureSessionQueueSpecificKey = DispatchSpecificKey<()>()
+private let NextLevelDepthDataQueueIdentifier = "engineering.NextLevel.DepthData"
 private let NextLevelRequiredMinimumStorageSpaceInBytes: UInt64 = 49999872 // ~47 MB
 
 // MARK: - NextLevel state
@@ -363,6 +377,7 @@ public class NextLevel: NSObject {
     public weak var flashDelegate: NextLevelFlashAndTorchDelegate?
     public weak var videoDelegate: NextLevelVideoDelegate?
     public weak var photoDelegate: NextLevelPhotoDelegate?
+    public weak var depthDataDelegate: NextLevelDepthDataDelegate?
     
     // preview
     
@@ -466,6 +481,11 @@ public class NextLevel: NSObject {
         }
     }
     
+    // depth data
+    
+    /// When `true`, enables streaming depth data capture (use PhotoConfiguration for photos)
+    public var depthDataCaptureEnabled: Bool = false
+    
     // state
     
     /// Checks if the system is recording.
@@ -527,6 +547,17 @@ public class NextLevel: NSObject {
     internal var _audioOutput: AVCaptureAudioDataOutput?
     internal var _photoOutput: AVCapturePhotoOutput?
     
+    internal var _depthDataOutput: Any?
+    @available(iOS 11.0, *)
+    internal var depthDataOutput: AVCaptureDepthDataOutput? {
+        get {
+            return self._depthDataOutput as? AVCaptureDepthDataOutput
+        }
+        set {
+            self._depthDataOutput = newValue
+        }
+    }
+    
     internal var _currentDevice: AVCaptureDevice?
     internal var _requestedDevice: AVCaptureDevice?
     
@@ -575,6 +606,7 @@ public class NextLevel: NSObject {
         self.flashDelegate = nil
         self.videoDelegate = nil
         self.photoDelegate = nil
+        self.depthDataDelegate = nil
         
         self.removeApplicationObservers()
         self.removeSessionObservers()
@@ -901,17 +933,7 @@ extension NextLevel {
             
             switch self.captureMode {
             case .video:
-                if session.sessionPreset != self.videoConfiguration.preset {
-                    if session.canSetSessionPreset(self.videoConfiguration.preset) {
-                        session.sessionPreset = self.videoConfiguration.preset
-                    } else {
-                        print("NextLevel, could not set preset on session")
-                    }
-                }
-                
-                let _ = self.addAudioOuput()
-                let _ = self.addVideoOutput()
-                break
+                fallthrough
             case .videoWithoutAudio:
                 if session.sessionPreset != self.videoConfiguration.preset {
                     if session.canSetSessionPreset(self.videoConfiguration.preset) {
@@ -920,7 +942,14 @@ extension NextLevel {
                         print("NextLevel, could not set preset on session")
                     }
                 }
+                
+                if self.captureMode == .video {
+                    let _ = self.addAudioOuput()
+                }
                 let _ = self.addVideoOutput()
+                if self.depthDataCaptureEnabled {
+                    let _ = self.addDepthDataOutput()
+                }
                 break
             case .photo:
                 if session.sessionPreset != self.photoConfiguration.preset {
@@ -932,6 +961,9 @@ extension NextLevel {
                 }
                 
                 let _ = self.addPhotoOutput()
+                if self.depthDataCaptureEnabled {
+                    let _ = self.addDepthDataOutput()
+                }
                 break
             case .audio:
                 let _ = self.addAudioOuput()
@@ -1110,6 +1142,32 @@ extension NextLevel {
         
     }
     
+    private func addDepthDataOutput() -> Bool {
+        guard depthDataCaptureEnabled else {
+            return false
+        }
+        
+        if #available(iOS 11.0, *) {
+            // setup depth streaming
+            if self.depthDataOutput == nil {
+                self.depthDataOutput = AVCaptureDepthDataOutput()
+                if let depthDataOutput = self.depthDataOutput {
+                    let depthDataQueue = DispatchQueue(label: NextLevelDepthDataQueueIdentifier)
+                    depthDataOutput.setDelegate(self, callbackQueue: depthDataQueue)
+                }
+                
+                if let session = self._captureSession, let depthDataOutput = self.depthDataOutput {
+                    if session.canAddOutput(depthDataOutput) {
+                        session.addOutput(depthDataOutput)
+                        return true
+                    }
+                }
+            }
+        }
+        print("NextLevel, couldn't add depth data output to session")
+        return false
+    }
+    
     internal func removeOutputs(session: AVCaptureSession) {
         for output in session.outputs {
             session.removeOutput(output)
@@ -1118,6 +1176,7 @@ extension NextLevel {
         self._videoOutput = nil
         self._audioInput = nil
         self._photoOutput = nil
+        self._depthDataOutput = nil
     }
     
     internal func removeUnusedOutputsForCurrentCameraMode(session: AVCaptureSession) {
@@ -2189,13 +2248,24 @@ extension NextLevel {
     
     /// Triggers a photo capture.
     public func capturePhoto() {
-        if let photoOutput = self._photoOutput, let _ = photoOutput.connection(with: AVMediaType.video) {
+        if let photoOutput = self._photoOutput,
+           let _ = photoOutput.connection(with: AVMediaType.video) {
             if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
+                
                 let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
                 photoSettings.isHighResolutionPhotoEnabled = self.photoConfiguration.isHighResolutionEnabled
+                
+                if #available(iOS 11.0, *) {
+                    if photoOutput.isDepthDataDeliverySupported {
+                        photoOutput.isDepthDataDeliveryEnabled = self.photoConfiguration.isDepthDataEnabled
+                        photoSettings.embedsDepthDataInPhoto = self.photoConfiguration.isDepthDataEnabled
+                    }
+                }
+                
                 if self.isFlashAvailable {
                     photoSettings.flashMode = self.photoConfiguration.flashMode
                 }
+                
                 photoOutput.capturePhoto(with: photoSettings, delegate: self)
             }
         }
@@ -2588,11 +2658,12 @@ extension NextLevel: AVCaptureDepthDataOutputDelegate {
     
     public func depthDataOutput(_ output: AVCaptureDepthDataOutput, didOutput depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection) {
         DispatchQueue.main.async {
-            
+            self.depthDataDelegate?.depthDataOutput(self, didOutput: depthData, timestamp: timestamp)
         }
     }
     
     public func depthDataOutput(_ output: AVCaptureDepthDataOutput, didDrop depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection, reason: AVCaptureOutput.DataDroppedReason) {
+            self.depthDataDelegate?.depthDataOutput(self, didDrop: depthData, timestamp: timestamp, reason: reason)
     }
     
 }

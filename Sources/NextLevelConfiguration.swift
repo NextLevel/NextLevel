@@ -337,11 +337,14 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     /// Codec used to encode photo, AV dictionary key AVVideoCodecKey
     public var codec: String
 
-    /// True indicates that NextLevel should generate a thumbnail for the photo
+    /// When true, NextLevel should generate a thumbnail for the photo
     public var generateThumbnail: Bool = false
 
     /// Enabled high resolution capture
     public var isHighResolutionEnabled: Bool = false
+    
+    /// Enabled depth data capture with photo
+    public var isDepthDataEnabled: Bool = false
     
     // MARK: - ivars
     

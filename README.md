@@ -9,11 +9,12 @@ It enables fast integration and customization leveraging `AVFoundation` or optio
 |  | Features |
 |:---------:|:---------------------------------------------------------------|
 | &#127916; | “[Vine](http://vine.co)-like” video clip recording and editing |
-| &#128444; | photo capture (raw, jpeg, and from a video frame) |
-| &#128070; | customizable gestural interaction and user interface |
+| &#128444; | photo capture (raw, jpeg, and video frame) |
+| &#128070; | customizable gestural interaction and interface |
 | &#128160; | [ARKit integration](https://developer.apple.com/arkit/) (beta) |
-| &#128247; | dual camera, wide angle, and telephoto device support |
+| &#128247; | dual, wide angle, telephoto, & true depth support |
 | &#128034; | adjustable frame rate on supported hardware (ie fast/slow motion capture) |
+| &#127906; | depth data capture support |
 | &#128269; | video zoom |
 | &#9878; | white balance, focus, and exposure adjustment |
 | &#128294; | flash and torch support |
