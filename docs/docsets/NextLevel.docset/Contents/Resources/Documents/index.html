@@ -13,7 +13,7 @@
     <a title="NextLevel  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">NextLevel Docs</a> (57% documented)</p>
+        <p><a href="index.html">NextLevel Docs</a> (63% documented)</p>
         <p class="header-right"><a href="https://github.com/NextLevel/NextLevel"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -98,34 +98,13 @@
                 <a href="Enums/NextLevelCaptureMode.html">NextLevelCaptureMode</a>
               </li>
               <li class="nav-group-task">
-                <a href="Enums/NextLevelDeviceOrientation.html">NextLevelDeviceOrientation</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/NextLevelDevicePosition.html">NextLevelDevicePosition</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Enums/NextLevelDeviceType.html">NextLevelDeviceType</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/NextLevelError.html">NextLevelError</a>
               </li>
               <li class="nav-group-task">
-                <a href="Enums/NextLevelExposureMode.html">NextLevelExposureMode</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/NextLevelFlashMode.html">NextLevelFlashMode</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/NextLevelFocusMode.html">NextLevelFocusMode</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Enums/NextLevelMirroringMode.html">NextLevelMirroringMode</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/NextLevelTorchMode.html">NextLevelTorchMode</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/NextLevelVideoStabilizationMode.html">NextLevelVideoStabilizationMode</a>
               </li>
             </ul>
           </li>
@@ -139,10 +118,16 @@
                 <a href="Extensions/AVCaptureDevice.html">AVCaptureDevice</a>
               </li>
               <li class="nav-group-task">
+                <a href="Extensions/AVCaptureDevice/Position.html">– Position</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Extensions/AVCaptureDevice/Format.html">– Format</a>
               </li>
               <li class="nav-group-task">
                 <a href="Extensions/AVCaptureDeviceInput.html">AVCaptureDeviceInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/AVCaptureVideoOrientation.html">AVCaptureVideoOrientation</a>
               </li>
               <li class="nav-group-task">
                 <a href="Extensions/CIContext.html">CIContext</a>
@@ -171,6 +156,9 @@
                 <a href="Protocols/NextLevelDelegate.html">NextLevelDelegate</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/NextLevelDepthDataDelegate.html">NextLevelDepthDataDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/NextLevelDeviceDelegate.html">NextLevelDeviceDelegate</a>
               </li>
               <li class="nav-group-task">
@@ -184,6 +172,32 @@
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/NextLevelVideoDelegate.html">NextLevelVideoDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:9NextLevel0aB17DeviceOrientationa">NextLevelDeviceOrientation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:9NextLevel0aB14DevicePositiona">NextLevelDevicePosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:9NextLevel0aB12ExposureModea">NextLevelExposureMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:9NextLevel0aB9FlashModea">NextLevelFlashMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:9NextLevel0aB9FocusModea">NextLevelFocusMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:9NextLevel0aB9TorchModea">NextLevelTorchMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:9NextLevel0aB22VideoStabilizationModea">NextLevelVideoStabilizationMode</a>
               </li>
             </ul>
           </li>
@@ -213,11 +227,11 @@
 </tr>
 <tr>
 <td style="text-align: center">&#128444;</td>
-<td style="text-align: left">photo capture (raw, jpeg, and from a video frame)</td>
+<td style="text-align: left">photo capture (raw, jpeg, and video frame)</td>
 </tr>
 <tr>
 <td style="text-align: center">&#128070;</td>
-<td style="text-align: left">customizable gestural interaction and user interface</td>
+<td style="text-align: left">customizable gestural interaction and interface</td>
 </tr>
 <tr>
 <td style="text-align: center">&#128160;</td>
@@ -225,11 +239,15 @@
 </tr>
 <tr>
 <td style="text-align: center">&#128247;</td>
-<td style="text-align: left">dual camera, wide angle, and telephoto device support</td>
+<td style="text-align: left">dual, wide angle, telephoto, &amp; true depth support</td>
 </tr>
 <tr>
 <td style="text-align: center">&#128034;</td>
 <td style="text-align: left">adjustable frame rate on supported hardware (ie fast/slow motion capture)</td>
+</tr>
+<tr>
+<td style="text-align: center">&#127906;</td>
+<td style="text-align: left">depth data capture support</td>
 </tr>
 <tr>
 <td style="text-align: center">&#128269;</td>
@@ -287,7 +305,7 @@
 <span class="n">pod</span> <span class="s2">"NextLevel"</span><span class="p">,</span> <span class="s2">"~&gt; 0.9.5"</span>
 
 <span class="c1"># Carthage</span>
-<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="o">.</span><span class="mi">5</span>
+<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mf">0.9</span><span class="o">.</span><span class="mi">5</span>
 
 <span class="c1"># Swift PM</span>
 <span class="n">let</span> <span class="n">package</span> <span class="o">=</span> <span class="no">Package</span><span class="p">(</span>
@@ -494,8 +512,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-06-07)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-06-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

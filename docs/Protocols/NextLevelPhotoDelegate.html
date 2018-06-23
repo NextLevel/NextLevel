@@ -14,7 +14,7 @@
     <a title="NextLevelPhotoDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">NextLevel Docs</a> (57% documented)</p>
+        <p><a href="../index.html">NextLevel Docs</a> (63% documented)</p>
         <p class="header-right"><a href="https://github.com/NextLevel/NextLevel"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -99,34 +99,13 @@
                 <a href="../Enums/NextLevelCaptureMode.html">NextLevelCaptureMode</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/NextLevelDeviceOrientation.html">NextLevelDeviceOrientation</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/NextLevelDevicePosition.html">NextLevelDevicePosition</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Enums/NextLevelDeviceType.html">NextLevelDeviceType</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/NextLevelError.html">NextLevelError</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/NextLevelExposureMode.html">NextLevelExposureMode</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/NextLevelFlashMode.html">NextLevelFlashMode</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/NextLevelFocusMode.html">NextLevelFocusMode</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Enums/NextLevelMirroringMode.html">NextLevelMirroringMode</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/NextLevelTorchMode.html">NextLevelTorchMode</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/NextLevelVideoStabilizationMode.html">NextLevelVideoStabilizationMode</a>
               </li>
             </ul>
           </li>
@@ -140,10 +119,16 @@
                 <a href="../Extensions/AVCaptureDevice.html">AVCaptureDevice</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Extensions/AVCaptureDevice/Position.html">– Position</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Extensions/AVCaptureDevice/Format.html">– Format</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Extensions/AVCaptureDeviceInput.html">AVCaptureDeviceInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/AVCaptureVideoOrientation.html">AVCaptureVideoOrientation</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Extensions/CIContext.html">CIContext</a>
@@ -172,6 +157,9 @@
                 <a href="../Protocols/NextLevelDelegate.html">NextLevelDelegate</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/NextLevelDepthDataDelegate.html">NextLevelDepthDataDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/NextLevelDeviceDelegate.html">NextLevelDeviceDelegate</a>
               </li>
               <li class="nav-group-task">
@@ -188,6 +176,32 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:9NextLevel0aB17DeviceOrientationa">NextLevelDeviceOrientation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:9NextLevel0aB14DevicePositiona">NextLevelDevicePosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:9NextLevel0aB12ExposureModea">NextLevelExposureMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:9NextLevel0aB9FlashModea">NextLevelFlashMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:9NextLevel0aB9FocusModea">NextLevelFocusMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:9NextLevel0aB9TorchModea">NextLevelTorchMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:9NextLevel0aB22VideoStabilizationModea">NextLevelVideoStabilizationMode</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -196,7 +210,7 @@
             <h1>NextLevelPhotoDelegate</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span> <span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
 
                 </div>
               </div>
@@ -226,7 +240,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">willCapturePhotoWithConfiguration</span> <span class="nv">photoConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelPhotoConfiguration.html">NextLevelPhotoConfiguration</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -253,7 +267,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didCapturePhotoWithConfiguration</span> <span class="nv">photoConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelPhotoConfiguration.html">NextLevelPhotoConfiguration</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -280,7 +294,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didProcessPhotoCaptureWith</span> <span class="nv">photoDict</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?,</span> <span class="nv">photoConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelPhotoConfiguration.html">NextLevelPhotoConfiguration</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -307,7 +321,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didProcessRawPhotoCaptureWith</span> <span class="nv">photoDict</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?,</span> <span class="nv">photoConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelPhotoConfiguration.html">NextLevelPhotoConfiguration</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -334,7 +348,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevelDidCompletePhotoCapture</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -346,8 +360,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-06-07)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-06-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
