@@ -415,8 +415,8 @@ public protocol NextLevelPhotoDelegate: NSObjectProtocol {
 
 // MARK: - constants
 
-private let NextLevelCaptureSessionIdentifier = "engineering.NextLevel.captureSession"
-private let NextLevelCaptureSessionSpecificKey = DispatchSpecificKey<()>()
+private let NextLevelCaptureSessionQueueIdentifier = "engineering.NextLevel.Session"
+private let NextLevelCaptureSessionQueueSpecificKey = DispatchSpecificKey<()>()
 private let NextLevelRequiredMinimumStorageSpaceInBytes: UInt64 = 49999872 // ~47 MB
 
 // MARK: - NextLevel state
@@ -620,8 +620,8 @@ public class NextLevel: NSObject {
         self.previewLayer = AVCaptureVideoPreviewLayer()
         self.previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         
-        self._sessionQueue = DispatchQueue(label: NextLevelCaptureSessionIdentifier, qos: .userInteractive, target: DispatchQueue.global())
-        self._sessionQueue.setSpecific(key: NextLevelCaptureSessionSpecificKey, value: ())
+        self._sessionQueue = DispatchQueue(label: NextLevelCaptureSessionQueueIdentifier, qos: .userInteractive, target: DispatchQueue.global())
+        self._sessionQueue.setSpecific(key: NextLevelCaptureSessionQueueSpecificKey, value: ())
         
         self.videoConfiguration = NextLevelVideoConfiguration()
         self.audioConfiguration = NextLevelAudioConfiguration()
@@ -790,7 +790,7 @@ extension NextLevel {
             self._sessionConfigurationCount = 0
             
             // setup NL recording session
-            self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionSpecificKey)
+            self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionQueueSpecificKey)
             
             if let session = self._captureSession {
                 session.automaticallyConfiguresApplicationAudioSession = self.automaticallyConfiguresApplicationAudioSession
@@ -1455,11 +1455,10 @@ extension NextLevel {
     /// - Parameter adjustedPoint: The point of interest for focus
     public func focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint) {
         if let device: AVCaptureDevice = self._currentDevice {
-            guard
-                !device.isAdjustingFocus,
-                !device.isAdjustingExposure
-                else {
-                    return
+            guard !device.isAdjustingFocus,
+                  !device.isAdjustingExposure
+            else {
+                return
             }
             
             do {
@@ -2715,7 +2714,7 @@ extension NextLevel {
     }
     
     internal func executeClosureSyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
-        if DispatchQueue.getSpecific(key: NextLevelCaptureSessionSpecificKey) != nil {
+        if DispatchQueue.getSpecific(key: NextLevelCaptureSessionQueueSpecificKey) != nil {
             closure()
         } else {
             self._sessionQueue.sync(execute: closure)
