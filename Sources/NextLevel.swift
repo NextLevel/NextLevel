@@ -788,7 +788,7 @@ extension NextLevel {
                 self._sessionConfigurationCount = 0
 
                 // setup NL recording session
-                self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionSpecificKey)
+                self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionQueueSpecificKey)
                 self.arConfiguration?.session?.delegateQueue = self._sessionQueue
                 
                 if let session = self._captureSession {
