@@ -707,7 +707,7 @@ extension NextLevelSession {
                         exportSession.outputURL = exportURL
                         exportSession.outputFileType = self.fileType
                         exportSession.exportAsynchronously {
-                            self.executeClosureAsyncOnMainQueueIfNecessary {
+                            DispatchQueue.main.async {
                                 completionHandler(exportURL, exportSession.error)
                             }
                         }
@@ -716,7 +716,7 @@ extension NextLevelSession {
                 }
             }
             
-            self.executeClosureAsyncOnMainQueueIfNecessary {
+            DispatchQueue.main.async {
                 completionHandler(nil, NextLevelError.unknown)
             }
         }
@@ -837,14 +837,6 @@ extension NextLevelSession {
 // MARK: - queues
 
 extension NextLevelSession {
-    
-    internal func executeClosureAsyncOnMainQueueIfNecessary(withClosure closure: @escaping () -> Void) {
-        if Thread.isMainThread {
-            closure()
-        } else {
-            DispatchQueue.main.async(execute: closure)
-        }
-    }
     
     internal func executeClosureAsyncOnSessionQueueIfNecessary(withClosure closure: @escaping () -> Void) {
         self._sessionQueue.async(execute: closure)
