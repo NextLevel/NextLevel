@@ -1,8 +1,6 @@
 <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" alt="Next Level" style="max-width:100%;"></p>
 
-`NextLevel` is a [Swift](https://developer.apple.com/swift/) camera system designed for easy integration, customized media capture, and image streaming for iOS.
-
-It enables fast integration and customization leveraging `AVFoundation` or optionally `ARKit`.
+`NextLevel` is a [Swift](https://developer.apple.com/swift/) camera system designed for easy integration, customized media capture, and image streaming in iOS. Integration can optionally leverage `AVFoundation` or `ARKit`.
 
 [![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) [![Pod Version](https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat)](http://cocoadocs.org/docsets/NextLevel/) [![Swift Version](https://img.shields.io/badge/language-swift%204.0-brightgreen.svg)](https://developer.apple.com/swift) [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/NextLevel/NextLevel/blob/master/LICENSE)
 
@@ -227,9 +225,9 @@ nextLevel.videoCustomContextImageBuffer = modifiedFrame
 
 ## About
 
-NextLevel was initally just a weekend project but has grown into a open community of camera enthusists. The software provides foundational components for managing media recording, camera interface customization, gestural interaction customization, and image streaming for iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
+NextLevel was initally a weekend project that has now grown into a open community of camera platform enthusists. The software provides foundational components for managing media recording, camera interface customization, gestural interaction customization, and image streaming on iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
 
-The goal is to continue to provide a good foundation for quick integration (enabling projects to be taken to the next level) – allowing focus to placed on functionality that matters most whether it's realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.
+The goal is to continue to provide a good foundation for quick integration (enabling projects to be taken to the next level) – allowing focus to placed on functionality that matters most whether it's realtime image processing, computer vision methods, augmented reality, or [computational photography](https://om.co/2018/07/23/even-leica-loves-computational-photography/).
 
 ## Documentation
 
@@ -253,16 +251,17 @@ NextLevel is a community – contributions and discussions are welcome!
 
 - [Player (Swift)](https://github.com/piemonte/player), video player in Swift
 - [PBJVideoPlayer (obj-c)](https://github.com/piemonte/PBJVideoPlayer), video player in obj-c
+- [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), media transcoding in Swift
 - [GPUImage2](https://github.com/BradLarson/GPUImage2), image processing library
 - [SCRecorder](https://github.com/rFlex/SCRecorder), obj-c capture library
 - [PBJVision](https://github.com/piemonte/PBJVision), obj-c capture library
-- [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), media transcoding in Swift
 
 ## Resources
 
-* [iOS Device Camera Summary](https://developer.apple.com/library/prerelease/content/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/Cameras/Cameras.html)
+* [iOS Device Camera Summary](https://developer.apple.com/library/archive/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/Cameras/Cameras.html)
 * [AV Foundation Programming Guide](https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html)
 * [AV Foundation Framework Reference](https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVFoundationFramework/)
+* [ARKit Framework Reference](https://developer.apple.com/documentation/arkit)
 * [Swift Evolution](https://github.com/apple/swift-evolution)
 * [objc.io Camera and Photos](http://www.objc.io/issue-21/)
 * [objc.io Video](http://www.objc.io/issue-23/)
