@@ -1270,7 +1270,7 @@ extension NextLevel {
     /// The flash mode of the device.
     public var flashMode: NextLevelFlashMode {
         get {
-            return self.photoConfiguration.flashMode.flashModeNextLevelType()
+            return self.photoConfiguration.flashMode
         }
         set {
             if let device: AVCaptureDevice = self._currentDevice {
@@ -1969,7 +1969,7 @@ extension NextLevel {
         }
         
         if didChangeOrientation == true {
-            self.deviceDelegate?.nextLevel(self, didChangeDeviceOrientation: currentOrientation.deviceOrientationNextLevelType())
+            self.deviceDelegate?.nextLevel(self, didChangeDeviceOrientation: currentOrientation)
         }
     }
     
