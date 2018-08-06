@@ -252,44 +252,4 @@ extension AVCaptureVideoOrientation {
         return avorientation
     }
     
-    internal func deviceOrientationNextLevelType() -> NextLevelDeviceOrientation {
-        var nlorientation = NextLevelDeviceOrientation.portrait
-        switch self {
-        case .portrait:
-            break
-        case .landscapeLeft:
-            nlorientation = .landscapeRight
-            break
-        case .landscapeRight:
-            nlorientation = .landscapeLeft
-            break
-        case .portraitUpsideDown:
-            nlorientation = .portraitUpsideDown
-            break
-        }
-        return nlorientation
-    }
-    
-}
-
-extension AVCaptureDevice.FlashMode {
-    
-    // MARK: NextLevel types
-    
-    internal func flashModeNextLevelType() -> NextLevelFlashMode {
-        var mode = NextLevelFlashMode.off
-        switch self {
-        case .auto:
-            mode = .auto
-            break
-        case .off:
-            mode = .off
-            break
-        case .on:
-            mode = .on
-            break
-        }
-        return mode
-    }
-    
 }
