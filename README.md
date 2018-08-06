@@ -252,7 +252,7 @@ NextLevel is a community – contributions and discussions are welcome!
 - [Player (Swift)](https://github.com/piemonte/player), video player in Swift
 - [PBJVideoPlayer (obj-c)](https://github.com/piemonte/PBJVideoPlayer), video player in obj-c
 - [NextLevelSessionExporter](https://github.com/NextLevel/NextLevelSessionExporter), media transcoding in Swift
-- [GPUImage2](https://github.com/BradLarson/GPUImage2), image processing library
+- [GPUImage3](https://github.com/BradLarson/GPUImage3), image processing library
 - [SCRecorder](https://github.com/rFlex/SCRecorder), obj-c capture library
 - [PBJVision](https://github.com/piemonte/PBJVision), obj-c capture library
 
