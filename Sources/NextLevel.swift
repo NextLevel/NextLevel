@@ -1989,11 +1989,15 @@ extension NextLevel {
 extension NextLevel {
     
     /// Checks if video capture is supported by the hardware.
-    public var supportsVideoCapture: Bool {
+    public var isVideoCaptureSupported: Bool {
         get {
-            var deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInWideAngleCamera, AVCaptureDevice.DeviceType.builtInTelephotoCamera]
+            var deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInWideAngleCamera,
+                                                             AVCaptureDevice.DeviceType.builtInTelephotoCamera]
             if #available(iOS 11.0, *) {
                 deviceTypes.append(.builtInDualCamera)
+                if #available(iOS 11.1, *) {
+                    deviceTypes.append(.builtInTrueDepthCamera)
+                }
             } else {
                 deviceTypes.append(.builtInDuoCamera)
             }
@@ -2006,7 +2010,7 @@ extension NextLevel {
     /// Checks if video capture is available, based on available storage and supported hardware functionality.
     public var canCaptureVideo: Bool {
         get {
-            return self.supportsVideoCapture && (FileManager.availableStorageSpaceInBytes() > NextLevelRequiredMinimumStorageSpaceInBytes)
+            return self.isVideoCaptureSupported && (FileManager.availableStorageSpaceInBytes() > NextLevelRequiredMinimumStorageSpaceInBytes)
         }
     }
     
@@ -2477,7 +2481,12 @@ extension NextLevel {
             }
         }
     }
+}
+
+// MARK: - rendering support
     
+extension NextLevel {
+
     private func setupContextIfNecessary() {
         if self._ciContext == nil {
             let options : [String : AnyObject] = [kCIContextWorkingColorSpace : CGColorSpaceCreateDeviceRGB(),
