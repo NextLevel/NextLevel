@@ -1491,13 +1491,13 @@ extension NextLevel {
     /// The exposure mode of the device.
     public var exposureMode: NextLevelExposureMode {
         get {
-            if let device: AVCaptureDevice = self._currentDevice {
+            if let device = self._currentDevice {
                 return device.exposureMode
             }
             return .locked
         }
         set {
-            guard let device: AVCaptureDevice = self._currentDevice,
+            guard let device = self._currentDevice,
                 device.exposureMode != newValue,
                 device.isExposureModeSupported(newValue)
                 else {
@@ -1554,10 +1554,12 @@ extension NextLevel {
             return
         }
  
+        let newISO = iso.clamped(to: device.activeFormat.minISO...device.activeFormat.maxISO)
+        
         do {
             try device.lockForConfiguration()
             
-            device.setExposureModeCustom(duration: AVCaptureDevice.currentExposureDuration, iso: iso, completionHandler: nil)
+            device.setExposureModeCustom(duration: AVCaptureDevice.currentExposureDuration, iso: newISO, completionHandler: nil)
             
             device.unlockForConfiguration()
         } catch {
@@ -1574,15 +1576,17 @@ extension NextLevel {
         else {
             return
         }
-            
+        
+        let newTargetBias = targetBias.clamped(to: device.minExposureTargetBias...device.maxExposureTargetBias)
+        
         do {
             try device.lockForConfiguration()
             
-            device.setExposureTargetBias(targetBias, completionHandler: nil)
+            device.setExposureTargetBias(newTargetBias, completionHandler: nil)
             
             device.unlockForConfiguration()
         } catch {
-            print("NextLevel, setExposureModeCustom failed to lock device for configuration")
+            print("NextLevel, setExposureTargetBias failed to lock device for configuration")
         }
     }
     
