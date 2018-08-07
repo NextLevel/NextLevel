@@ -1544,6 +1544,37 @@ extension NextLevel {
         }
     }
     
+    /// Adjusts exposure duration to a custom value in seconds.
+    ///
+    /// - Parameter duration: The exposure duration in seconds.
+    /// - Parameter durationPower: Larger power values will increase the sensitivity at shorter durations.
+    /// - Parameter minDurationRangeLimit: Minimum limitation for duration.
+    public func expose(withDuration duration: Double, durationPower: Double = 5, minDurationRangeLimit: Double = (1.0 / 1000.0)) {
+        guard let device = self._currentDevice,
+            !device.isAdjustingExposure
+        else {
+                return
+        }
+        
+        let newDuration = duration.clamped(to: 0...1)
+        
+        let minDurationSeconds: Double = Swift.max(CMTimeGetSeconds(device.activeFormat.minExposureDuration), minDurationRangeLimit)
+        let maxDurationSeconds: Double = CMTimeGetSeconds(device.activeFormat.maxExposureDuration)
+
+        let p: Double = pow(newDuration, durationPower)
+        let newDurationSeconds: Double = (p * ( maxDurationSeconds - minDurationSeconds ) + minDurationSeconds)
+        
+        do {
+            try device.lockForConfiguration()
+            
+            device.setExposureModeCustom(duration: CMTimeMakeWithSeconds( newDurationSeconds, 1000*1000*1000 ), iso: AVCaptureDevice.currentISO, completionHandler: nil)
+            
+            device.unlockForConfiguration()
+        } catch {
+            print("NextLevel, setExposureModeCustom failed to lock device for configuration")
+        }
+    }
+    
     /// Adjusts exposure to a specific custom ISO value.
     ///
     /// - Parameter iso: The exposure ISO value.
