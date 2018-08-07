@@ -209,9 +209,7 @@
             
             <p><img src="https://raw.github.com/NextLevel/NextLevel/master/NextLevel%402x.png" alt="Next Level" style="max-width:100%;"></p>
 
-<p><code><a href="Classes/NextLevel.html">NextLevel</a></code> is a <a href="https://developer.apple.com/swift/">Swift</a> camera system designed for easy integration, customized media capture, and image streaming for iOS.</p>
-
-<p>It enables fast integration and customization leveraging <code>AVFoundation</code> or optionally <code>ARKit</code>.</p>
+<p><code><a href="Classes/NextLevel.html">NextLevel</a></code> is a <a href="https://developer.apple.com/swift/">Swift</a> camera system designed for easy integration, customized media capture, and image streaming in iOS. Integration can optionally leverage <code>AVFoundation</code> or <code>ARKit</code>.</p>
 
 <p><a href="https://travis-ci.org/NextLevel/NextLevel"><img src="https://travis-ci.org/NextLevel/NextLevel.svg?branch=master" alt="Build Status"></a> <a href="http://cocoadocs.org/docsets/NextLevel/"><img src="https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat" alt="Pod Version"></a> <a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/language-swift%204.0-brightgreen.svg" alt="Swift Version"></a> <a href="https://github.com/NextLevel/NextLevel/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="GitHub license"></a></p>
 
@@ -305,7 +303,7 @@
 <span class="n">pod</span> <span class="s2">"NextLevel"</span><span class="p">,</span> <span class="s2">"~&gt; 0.9.5"</span>
 
 <span class="c1"># Carthage</span>
-<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mf">0.9</span><span class="o">.</span><span class="mi">5</span>
+<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="o">.</span><span class="mi">5</span>
 
 <span class="c1"># Swift PM</span>
 <span class="n">let</span> <span class="n">package</span> <span class="o">=</span> <span class="no">Package</span><span class="p">(</span>
@@ -462,9 +460,9 @@
 </code></pre>
 <h2 id='about' class='heading'>About</h2>
 
-<p>NextLevel was initally just a weekend project but has grown into a open community of camera enthusists. The software provides foundational components for managing media recording, camera interface customization, gestural interaction customization, and image streaming for iOS. The same capabilities can also be found in apps such as <a href="http://snapchat.com">Snapchat</a>, <a href="http://instagram.com">Instagram</a>, and <a href="http://vine.co">Vine</a>.</p>
+<p>NextLevel was initally a weekend project that has now grown into a open community of camera platform enthusists. The software provides foundational components for managing media recording, camera interface customization, gestural interaction customization, and image streaming on iOS. The same capabilities can also be found in apps such as <a href="http://snapchat.com">Snapchat</a>, <a href="http://instagram.com">Instagram</a>, and <a href="http://vine.co">Vine</a>.</p>
 
-<p>The goal is to continue to provide a good foundation for quick integration (enabling projects to be taken to the next level) – allowing focus to placed on functionality that matters most whether it&rsquo;s realtime image processing, computer vision methods, augmented reality, or even new cinematographic recording techniques.</p>
+<p>The goal is to continue to provide a good foundation for quick integration (enabling projects to be taken to the next level) – allowing focus to placed on functionality that matters most whether it&rsquo;s realtime image processing, computer vision methods, augmented reality, or <a href="https://om.co/2018/07/23/even-leica-loves-computational-photography/">computational photography</a>.</p>
 <h2 id='documentation' class='heading'>Documentation</h2>
 
 <p>You can find <a href="https://nextlevel.github.io/NextLevel">the docs here</a>. Documentation is generated with <a href="https://github.com/realm/jazzy">jazzy</a> and hosted on <a href="https://pages.github.com">GitHub-Pages</a>.</p>
@@ -487,17 +485,18 @@
 <ul>
 <li><a href="https://github.com/piemonte/player">Player (Swift)</a>, video player in Swift</li>
 <li><a href="https://github.com/piemonte/PBJVideoPlayer">PBJVideoPlayer (obj-c)</a>, video player in obj-c</li>
-<li><a href="https://github.com/BradLarson/GPUImage2">GPUImage2</a>, image processing library</li>
+<li><a href="https://github.com/NextLevel/NextLevelSessionExporter">NextLevelSessionExporter</a>, media transcoding in Swift</li>
+<li><a href="https://github.com/BradLarson/GPUImage3">GPUImage3</a>, image processing library</li>
 <li><a href="https://github.com/rFlex/SCRecorder">SCRecorder</a>, obj-c capture library</li>
 <li><a href="https://github.com/piemonte/PBJVision">PBJVision</a>, obj-c capture library</li>
-<li><a href="https://github.com/NextLevel/NextLevelSessionExporter">NextLevelSessionExporter</a>, media transcoding in Swift</li>
 </ul>
 <h2 id='resources' class='heading'>Resources</h2>
 
 <ul>
-<li><a href="https://developer.apple.com/library/prerelease/content/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/Cameras/Cameras.html">iOS Device Camera Summary</a></li>
+<li><a href="https://developer.apple.com/library/archive/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/Cameras/Cameras.html">iOS Device Camera Summary</a></li>
 <li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">AV Foundation Programming Guide</a></li>
 <li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVFoundationFramework/">AV Foundation Framework Reference</a></li>
+<li><a href="https://developer.apple.com/documentation/arkit">ARKit Framework Reference</a></li>
 <li><a href="https://github.com/apple/swift-evolution">Swift Evolution</a></li>
 <li><a href="http://www.objc.io/issue-21/">objc.io Camera and Photos</a></li>
 <li><a href="http://www.objc.io/issue-23/">objc.io Video</a></li>
@@ -512,8 +511,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-06-23)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-08-06)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
