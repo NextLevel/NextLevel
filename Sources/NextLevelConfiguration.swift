@@ -158,71 +158,73 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Video configuration dictionary for AVFoundation
     override public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String : Any]? {
+        
+        // if the client specified custom options, use those instead
         if let options = self.options {
             return options
-        } else {
-            var config: [String : Any] = [:]
-            
-            if let dimensions = self.dimensions {
-                config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(dimensions.width))
-                config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(dimensions.height))
-            } else if let sampleBuffer = sampleBuffer,
-                let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
-                let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
-                switch self.aspectRatio {
-                case .standard:
-                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
-                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * 3 / 4))
-                    break
-                case .widescreen:
-                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
-                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * 9 / 16))
-                    break
-                case .square:
-                    let min = Swift.min(videoDimensions.width, videoDimensions.height)
-                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(min))
-                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(min))
-                    break
-                case .custom(let w, let h):
-                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
-                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * Int32(h) / Int32(w)))
-                    break
-                case .active:
-                    fallthrough
-                default:
-                    config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
-                    config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.height))
-                    break
-                }
-            } else if let pixelBuffer = pixelBuffer {
-                let width = CVPixelBufferGetWidth(pixelBuffer)
-                let height = CVPixelBufferGetHeight(pixelBuffer)
-                config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(width))
-                config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
-            }
-            
-            config = update(config: config)
-            
-            config[AVVideoCodecKey] = self.codec
-            
-            if let scalingMode = self.scalingMode {
-                config[AVVideoScalingModeKey] = scalingMode
-            }
-            
-            var compressionDict: [String : Any] = [:]
-            compressionDict[AVVideoAverageBitRateKey] = NSNumber(integerLiteral: self.bitRate)
-            compressionDict[AVVideoAllowFrameReorderingKey] = NSNumber(booleanLiteral: false)
-            compressionDict[AVVideoExpectedSourceFrameRateKey] = NSNumber(integerLiteral: 30)
-            if let profileLevel = self.profileLevel {
-                compressionDict[AVVideoProfileLevelKey] = profileLevel
-            }
-            if let maxKeyFrameInterval = self.maxKeyFrameInterval {
-                compressionDict[AVVideoMaxKeyFrameIntervalKey] = NSNumber(integerLiteral: maxKeyFrameInterval)
-            }
-            
-            config[AVVideoCompressionPropertiesKey] = (compressionDict as NSDictionary)
-            return config
         }
+        
+        var config: [String : Any] = [:]
+        
+        if let dimensions = self.dimensions {
+            config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(dimensions.width))
+            config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(dimensions.height))
+        } else if let sampleBuffer = sampleBuffer,
+            let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+            let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
+            switch self.aspectRatio {
+            case .standard:
+                config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
+                config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * 3 / 4))
+                break
+            case .widescreen:
+                config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
+                config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * 9 / 16))
+                break
+            case .square:
+                let min = Swift.min(videoDimensions.width, videoDimensions.height)
+                config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(min))
+                config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(min))
+                break
+            case .custom(let w, let h):
+                config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
+                config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.width * Int32(h) / Int32(w)))
+                break
+            case .active:
+                fallthrough
+            default:
+                config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(videoDimensions.width))
+                config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.height))
+                break
+            }
+        } else if let pixelBuffer = pixelBuffer {
+            let width = CVPixelBufferGetWidth(pixelBuffer)
+            let height = CVPixelBufferGetHeight(pixelBuffer)
+            config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(width))
+            config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
+        }
+        
+        config = update(config: config)
+        
+        config[AVVideoCodecKey] = self.codec
+        
+        if let scalingMode = self.scalingMode {
+            config[AVVideoScalingModeKey] = scalingMode
+        }
+        
+        var compressionDict: [String : Any] = [:]
+        compressionDict[AVVideoAverageBitRateKey] = NSNumber(integerLiteral: self.bitRate)
+        compressionDict[AVVideoAllowFrameReorderingKey] = NSNumber(booleanLiteral: false)
+        compressionDict[AVVideoExpectedSourceFrameRateKey] = NSNumber(integerLiteral: 30)
+        if let profileLevel = self.profileLevel {
+            compressionDict[AVVideoProfileLevelKey] = profileLevel
+        }
+        if let maxKeyFrameInterval = self.maxKeyFrameInterval {
+            compressionDict[AVVideoMaxKeyFrameIntervalKey] = NSNumber(integerLiteral: maxKeyFrameInterval)
+        }
+        
+        config[AVVideoCompressionPropertiesKey] = (compressionDict as NSDictionary)
+        return config
     }
     
     /// Update configuration with size values.
@@ -288,44 +290,45 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Audio configuration dictionary for AVFoundation
     override public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
+        // if the client specified custom options, use those instead
         if let options = self.options {
             return options
-        } else {
-            var config: [String : Any] = [AVEncoderBitRateKey : NSNumber(integerLiteral: self.bitRate)]
-            
-            if let sampleBuffer = sampleBuffer {
-                if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
-                    if let _ = self.sampleRate, let _ = self.channelsCount {
-                        // loading user provided settings after buffer use
-                    } else if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
-                        self.sampleRate = streamBasicDescription.pointee.mSampleRate
-                        self.channelsCount = Int(streamBasicDescription.pointee.mChannelsPerFrame)
-                    }
-                    
-                    var layoutSize: Int = 0
-                    if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, &layoutSize) {
-                        let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count:layoutSize) : Data()
-                        config[AVChannelLayoutKey] = currentChannelLayoutData
-                    }
+        }
+        
+        var config: [String : Any] = [AVEncoderBitRateKey : NSNumber(integerLiteral: self.bitRate)]
+        
+        if let sampleBuffer = sampleBuffer {
+            if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+                if let _ = self.sampleRate, let _ = self.channelsCount {
+                    // loading user provided settings after buffer use
+                } else if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
+                    self.sampleRate = streamBasicDescription.pointee.mSampleRate
+                    self.channelsCount = Int(streamBasicDescription.pointee.mChannelsPerFrame)
+                }
+                
+                var layoutSize: Int = 0
+                if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, &layoutSize) {
+                    let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count:layoutSize) : Data()
+                    config[AVChannelLayoutKey] = currentChannelLayoutData
                 }
             }
-            
-            if let sampleRate = self.sampleRate {
-                config[AVSampleRateKey] = sampleRate == 0 ? NSNumber(value: NextLevelAudioConfigurationDefaultSampleRate) : NSNumber(value: sampleRate)
-            } else {
-                config[AVSampleRateKey] = NSNumber(value: NextLevelAudioConfigurationDefaultSampleRate)
-            }
-                
-            if let channels = self.channelsCount {
-                config[AVNumberOfChannelsKey] = channels == 0 ? NSNumber(integerLiteral: NextLevelAudioConfigurationDefaultChannelsCount) : NSNumber(integerLiteral: channels)
-            } else {
-                config[AVNumberOfChannelsKey] = NSNumber(integerLiteral: NextLevelAudioConfigurationDefaultChannelsCount)
-            }
-            
-            config[AVFormatIDKey] = NSNumber(value: self.format as UInt32)
-            
-            return config
         }
+        
+        if let sampleRate = self.sampleRate {
+            config[AVSampleRateKey] = sampleRate == 0 ? NSNumber(value: NextLevelAudioConfigurationDefaultSampleRate) : NSNumber(value: sampleRate)
+        } else {
+            config[AVSampleRateKey] = NSNumber(value: NextLevelAudioConfigurationDefaultSampleRate)
+        }
+        
+        if let channels = self.channelsCount {
+            config[AVNumberOfChannelsKey] = channels == 0 ? NSNumber(integerLiteral: NextLevelAudioConfigurationDefaultChannelsCount) : NSNumber(integerLiteral: channels)
+        } else {
+            config[AVNumberOfChannelsKey] = NSNumber(integerLiteral: NextLevelAudioConfigurationDefaultChannelsCount)
+        }
+        
+        config[AVFormatIDKey] = NSNumber(value: self.format as UInt32)
+        
+        return config
     }
 }
 

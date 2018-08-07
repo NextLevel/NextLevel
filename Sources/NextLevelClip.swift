@@ -108,25 +108,24 @@ public class NextLevelClip {
     /// If it doesn't already exist, generates an image for the last frame of the clip.
     public var lastFrameImage: UIImage? {
         get {
-            guard
-                self._lastFrameImage == nil
+            guard self._lastFrameImage == nil,
+                  let asset = self.asset
             else {
                 return self._lastFrameImage
             }
             
-            if let asset = self.asset {
-                let imageGenerator: AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
-                imageGenerator.appliesPreferredTrackTransform = true
-            
-                do {
-                    let cgimage: CGImage = try imageGenerator.copyCGImage(at: self.duration, actualTime: nil)
-                    let uiimage: UIImage = UIImage(cgImage: cgimage)
-                    self._lastFrameImage = uiimage
-                } catch {
-                    print("NextLevel, unable to generate lastFrameImage for \(String(describing: self.url?.absoluteString))")
-                    self._lastFrameImage = nil
-                }
+            let imageGenerator: AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
+            imageGenerator.appliesPreferredTrackTransform = true
+        
+            do {
+                let cgimage: CGImage = try imageGenerator.copyCGImage(at: self.duration, actualTime: nil)
+                let uiimage: UIImage = UIImage(cgImage: cgimage)
+                self._lastFrameImage = uiimage
+            } catch {
+                print("NextLevel, unable to generate lastFrameImage for \(String(describing: self.url?.absoluteString))")
+                self._lastFrameImage = nil
             }
+            
             return self._lastFrameImage
         }
     }
