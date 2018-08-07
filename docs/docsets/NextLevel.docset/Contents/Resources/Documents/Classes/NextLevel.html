@@ -137,6 +137,9 @@
                 <a href="../Extensions/CMSampleBuffer.html">CMSampleBuffer</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Extensions/Comparable.html">Comparable</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Extensions/Data.html">Data</a>
               </li>
               <li class="nav-group-task">
@@ -1627,6 +1630,168 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9NextLevelAAC6exposeySd12withDuration_Sd13durationPowerSd03minE10RangeLimittF"></a>
+                    <a name="//apple_ref/swift/Method/expose(withDuration:durationPower:minDurationRangeLimit:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevelAAC6exposeySd12withDuration_Sd13durationPowerSd03minE10RangeLimittF">expose(withDuration:durationPower:minDurationRangeLimit:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adjusts exposure duration to a custom value in seconds.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">expose</span><span class="p">(</span><span class="n">withDuration</span> <span class="nv">duration</span><span class="p">:</span> <span class="kt">Double</span><span class="p">,</span> <span class="nv">durationPower</span><span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="nv">minDurationRangeLimit</span><span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>duration</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The exposure duration in seconds.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>durationPower</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Larger power values will increase the sensitivity at shorter durations.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>minDurationRangeLimit</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Minimum limitation for duration.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9NextLevelAAC6exposeySf7withISO_tF"></a>
+                    <a name="//apple_ref/swift/Method/expose(withISO:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevelAAC6exposeySf7withISO_tF">expose(withISO:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adjusts exposure to a specific custom ISO value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">expose</span><span class="p">(</span><span class="n">withISO</span> <span class="nv">iso</span><span class="p">:</span> <span class="kt">Float</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>iso</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The exposure ISO value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9NextLevelAAC6exposeySf14withTargetBias_tF"></a>
+                    <a name="//apple_ref/swift/Method/expose(withTargetBias:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevelAAC6exposeySf14withTargetBias_tF">expose(withTargetBias:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adjusts exposure to the specified target bias.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">expose</span><span class="p">(</span><span class="n">withTargetBias</span> <span class="nv">targetBias</span><span class="p">:</span> <span class="kt">Float</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>targetBias</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The exposure target bias.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9NextLevelAAC28focalLengthAndPrinciplePointSbSfz0cD1X_Sfz0cD1YSfz09principleG1XSfz0hG1YtF"></a>
                     <a name="//apple_ref/swift/Method/focalLengthAndPrinciplePoint(focalLengthX:focalLengthY:principlePointX:principlePointY:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:9NextLevelAAC28focalLengthAndPrinciplePointSbSfz0cD1X_Sfz0cD1YSfz09principleG1XSfz0hG1YtF">focalLengthAndPrinciplePoint(focalLengthX:focalLengthY:principlePointX:principlePointY:)</a>
@@ -2502,7 +2667,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-08-06)</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-08-07)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

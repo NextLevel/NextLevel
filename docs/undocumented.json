@@ -8,6 +8,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel+Swift.swift",
+      "line": 32,
+      "symbol": "Comparable.clamped(to:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
       "line": 39,
       "symbol": "NextLevelAuthorizationStatus",
@@ -674,77 +681,77 @@
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2541,
+      "line": 2610,
       "symbol": "NextLevel.captureOutput(_:didOutput:from:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2578,
+      "line": 2647,
       "symbol": "NextLevel.photoOutput(_:willCapturePhotoFor:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2584,
+      "line": 2653,
       "symbol": "NextLevel.photoOutput(_:didCapturePhotoFor:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2590,
+      "line": 2659,
       "symbol": "NextLevel.photoOutput(_:didFinishProcessingPhoto:previewPhoto:resolvedSettings:bracketSettings:error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2622,
+      "line": 2691,
       "symbol": "NextLevel.photoOutput(_:didFinishProcessingRawPhoto:previewPhoto:resolvedSettings:bracketSettings:error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2655,
+      "line": 2724,
       "symbol": "NextLevel.photoOutput(_:didFinishCaptureFor:error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2668,
+      "line": 2737,
       "symbol": "NextLevel.depthDataOutput(_:didOutput:timestamp:connection:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2674,
+      "line": 2743,
       "symbol": "NextLevel.depthDataOutput(_:didDrop:timestamp:connection:reason:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2809,
+      "line": 2878,
       "symbol": "NextLevel.handleSessionWasInterrupted(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2821,
+      "line": 2890,
       "symbol": "NextLevel.handleSessionInterruptionEnded(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevel.swift",
-      "line": 2903,
+      "line": 2972,
       "symbol": "NextLevel.observeValue(forKeyPath:of:change:context:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -814,7 +821,7 @@
     },
     {
       "file": "/Users/piemonte/Source/NextLevel/Sources/NextLevelConfiguration.swift",
-      "line": 394,
+      "line": 397,
       "symbol": "NextLevelARConfiguration",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
