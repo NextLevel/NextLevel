@@ -1402,41 +1402,40 @@ extension NextLevel {
     ///
     /// - Parameter adjustedPoint: The point of interest.
     public func focusExposeAndAdjustWhiteBalance(atAdjustedPoint adjustedPoint: CGPoint) {
-        if let device: AVCaptureDevice = self._currentDevice {
-            guard
-                !device.isAdjustingFocus,
-                !device.isAdjustingExposure
-                else {
-                    return
+        guard let device = self._currentDevice,
+            !device.isAdjustingFocus,
+            !device.isAdjustingExposure
+        else {
+            return
+        }
+        
+        do {
+            try device.lockForConfiguration()
+            
+            let focusMode: AVCaptureDevice.FocusMode = .autoFocus
+            let exposureMode: AVCaptureDevice.ExposureMode = .continuousAutoExposure
+            let whiteBalanceMode: AVCaptureDevice.WhiteBalanceMode = .continuousAutoWhiteBalance
+            
+            if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(focusMode) {
+                device.focusPointOfInterest = adjustedPoint
+                device.focusMode = focusMode
             }
-            do {
-                try device.lockForConfiguration()
-                
-                let focusMode: AVCaptureDevice.FocusMode = .autoFocus
-                let exposureMode: AVCaptureDevice.ExposureMode = .continuousAutoExposure
-                let whiteBalanceMode: AVCaptureDevice.WhiteBalanceMode = .continuousAutoWhiteBalance
-                
-                if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(focusMode) {
-                    device.focusPointOfInterest = adjustedPoint
-                    device.focusMode = focusMode
-                }
-                
-                if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode) {
-                    device.exposurePointOfInterest = adjustedPoint
-                    device.exposureMode = exposureMode
-                }
-                
-                if device.isWhiteBalanceModeSupported(whiteBalanceMode) {
-                    device.whiteBalanceMode = whiteBalanceMode
-                }
-                
-                device.isSubjectAreaChangeMonitoringEnabled = false
-                
-                device.unlockForConfiguration()
+            
+            if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode) {
+                device.exposurePointOfInterest = adjustedPoint
+                device.exposureMode = exposureMode
             }
-            catch {
-                print("NextLevel, focusExposeAndAdjustWhiteBalance failed to lock device for configuration")
+            
+            if device.isWhiteBalanceModeSupported(whiteBalanceMode) {
+                device.whiteBalanceMode = whiteBalanceMode
             }
+            
+            device.isSubjectAreaChangeMonitoringEnabled = false
+            
+            device.unlockForConfiguration()
+        }
+        catch {
+            print("NextLevel, focusExposeAndAdjustWhiteBalance failed to lock device for configuration")
         }
     }
     
@@ -1444,27 +1443,26 @@ extension NextLevel {
     ///
     /// - Parameter adjustedPoint: The point of interest for focus
     public func focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint) {
-        if let device: AVCaptureDevice = self._currentDevice {
-            guard !device.isAdjustingFocus,
-                  !device.isAdjustingExposure
-            else {
-                return
+        guard let device = self._currentDevice,
+                !device.isAdjustingFocus,
+                !device.isAdjustingExposure
+        else {
+            return
+        }
+        
+        do {
+            try device.lockForConfiguration()
+            
+            if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(.autoFocus) {
+                let focusMode = device.focusMode
+                device.focusPointOfInterest = adjustedPoint
+                device.focusMode = focusMode
             }
             
-            do {
-                try device.lockForConfiguration()
-                
-                if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(.autoFocus) {
-                    let focusMode = device.focusMode
-                    device.focusPointOfInterest = adjustedPoint
-                    device.focusMode = focusMode
-                }
-                
-                device.unlockForConfiguration()
-            }
-            catch {
-                print("NextLevel, focusAtAdjustedPointOfInterest failed to lock device for configuration")
-            }
+            device.unlockForConfiguration()
+        }
+        catch {
+            print("NextLevel, focusAtAdjustedPointOfInterest failed to lock device for configuration")
         }
     }
     
@@ -1499,25 +1497,23 @@ extension NextLevel {
             return .locked
         }
         set {
-            if let device: AVCaptureDevice = self._currentDevice {
-                guard
-                    device.exposureMode != newValue,
-                    device.isExposureModeSupported(newValue)
-                    else {
-                        return
-                }
+            guard let device: AVCaptureDevice = self._currentDevice,
+                device.exposureMode != newValue,
+                device.isExposureModeSupported(newValue)
+                else {
+                    return
+            }
+            
+            do {
+                try device.lockForConfiguration()
                 
-                do {
-                    try device.lockForConfiguration()
-                    
-                    device.exposureMode = newValue
-                    self.adjustWhiteBalanceForExposureMode(exposureMode: newValue)
-                    
-                    device.unlockForConfiguration()
-                }
-                catch {
-                    print("NextLevel, exposureMode failed to lock device for configuration")
-                }
+                device.exposureMode = newValue
+                self.adjustWhiteBalanceForExposureMode(exposureMode: newValue)
+                
+                device.unlockForConfiguration()
+            }
+            catch {
+                print("NextLevel, exposureMode failed to lock device for configuration")
             }
         }
     }
@@ -1526,27 +1522,25 @@ extension NextLevel {
     ///
     /// - Parameter adjustedPoint: The point of interest for exposure.
     public func exposeAtAdjustedPointOfInterest(adjustedPoint: CGPoint) {
-        if let device: AVCaptureDevice = self._currentDevice {
-            guard
-                !device.isAdjustingExposure
-                else {
-                    return
+        guard let device = self._currentDevice,
+            !device.isAdjustingExposure
+        else {
+            return
+        }
+        
+        do {
+            try device.lockForConfiguration()
+            
+            if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(.continuousAutoExposure) {
+                let exposureMode = device.exposureMode
+                device.exposurePointOfInterest = adjustedPoint
+                device.exposureMode = exposureMode
             }
             
-            do {
-                try device.lockForConfiguration()
-                
-                if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(.continuousAutoExposure) {
-                    let exposureMode = device.exposureMode
-                    device.exposurePointOfInterest = adjustedPoint
-                    device.exposureMode = exposureMode
-                }
-                
-                device.unlockForConfiguration()
-            }
-            catch {
-                print("NextLevel, exposeAtAdjustedPointOfInterest failed to lock device for configuration")
-            }
+            device.unlockForConfiguration()
+        }
+        catch {
+            print("NextLevel, exposeAtAdjustedPointOfInterest failed to lock device for configuration")
         }
     }
     
@@ -1554,13 +1548,12 @@ extension NextLevel {
     ///
     /// - Parameter iso: The exposure ISO value.
     public func expose(withISO iso: Float) {
-        guard let device = self._currentDevice else {
+        guard let device = self._currentDevice,
+                !device.isAdjustingExposure
+        else {
             return
         }
-        guard !device.isAdjustingExposure else {
-            return
-        }
-            
+ 
         do {
             try device.lockForConfiguration()
             
@@ -1577,7 +1570,7 @@ extension NextLevel {
     /// - Parameter targetBias: The exposure target bias.
     public func expose(withTargetBias targetBias: Float) {
         guard let device = self._currentDevice,
-            !device.isAdjustingExposure
+                !device.isAdjustingExposure
         else {
             return
         }
@@ -1675,31 +1668,29 @@ extension NextLevel {
     }
     
     internal func focusEnded() {
-        if let device = self._currentDevice {
-            guard !device.isAdjustingFocus
-            else {
-                return
+        guard let device = self._currentDevice,
+                !device.isAdjustingFocus
+        else {
+            return
+        }
+        
+        let isAutoFocusEnabled: Bool = (device.focusMode == .autoFocus ||
+            device.focusMode == .continuousAutoFocus)
+        if isAutoFocusEnabled {
+            do {
+                try device.lockForConfiguration()
+                
+                device.isSubjectAreaChangeMonitoringEnabled = true
+                
+                device.unlockForConfiguration()
             }
-            
-            let isAutoFocusEnabled: Bool = (device.focusMode == .autoFocus ||
-                device.focusMode == .continuousAutoFocus)
-            if isAutoFocusEnabled {
-                do {
-                    try device.lockForConfiguration()
-                    
-                    device.isSubjectAreaChangeMonitoringEnabled = true
-                    
-                    device.unlockForConfiguration()
-                }
-                catch {
-                    print("NextLevel, focus ending failed to lock device for configuration")
-                }
+            catch {
+                print("NextLevel, focus ending failed to lock device for configuration")
             }
-            
-            DispatchQueue.main.async {
-                self.deviceDelegate?.nextLevelDidStopFocus(self)
-            }
-            
+        }
+        
+        DispatchQueue.main.async {
+            self.deviceDelegate?.nextLevelDidStopFocus(self)
         }
     }
     
@@ -1710,31 +1701,29 @@ extension NextLevel {
     }
     
     internal func exposureEnded() {
-        if let device = self._currentDevice {
-            guard
-                !device.isAdjustingFocus ||
-                    !device.isAdjustingExposure
-                else {
-                    return
+        guard let device = self._currentDevice,
+            !device.isAdjustingFocus,
+            !device.isAdjustingExposure
+        else {
+            return
+        }
+        
+        let isContinuousAutoExposureEnabled: Bool = (device.exposureMode == .continuousAutoExposure)
+        if isContinuousAutoExposureEnabled {
+            do {
+                try device.lockForConfiguration()
+                
+                device.isSubjectAreaChangeMonitoringEnabled = true
+                
+                device.unlockForConfiguration()
             }
-            
-            let isContinuousAutoExposureEnabled: Bool = (device.exposureMode == .continuousAutoExposure)
-            if isContinuousAutoExposureEnabled {
-                do {
-                    try device.lockForConfiguration()
-                    
-                    device.isSubjectAreaChangeMonitoringEnabled = true
-                    
-                    device.unlockForConfiguration()
-                }
-                catch {
-                    print("NextLevel, focus ending failed to lock device for configuration")
-                }
+            catch {
+                print("NextLevel, focus ending failed to lock device for configuration")
             }
-            
-            DispatchQueue.main.async {
-                self.deviceDelegate?.nextLevelDidChangeExposure(self)
-            }
+        }
+        
+        DispatchQueue.main.async {
+            self.deviceDelegate?.nextLevelDidChangeExposure(self)
         }
     }
     
@@ -1805,49 +1794,51 @@ extension NextLevel {
             return .off
         }
         set {
-            if let _ = self._captureSession,
-                let videoOutput = self._videoOutput {
-                
-                switch newValue {
-                case .off:
-                    if let vc = videoOutput.connection(with: AVMediaType.video) {
-                        if vc.isVideoMirroringSupported {
-                            vc.isVideoMirrored = false
-                        }
+            guard let _ = self._captureSession,
+                  let videoOutput = self._videoOutput
+            else {
+                return
+            }
+
+            switch newValue {
+            case .off:
+                if let vc = videoOutput.connection(with: AVMediaType.video) {
+                    if vc.isVideoMirroringSupported {
+                        vc.isVideoMirrored = false
                     }
-                    if let pc = self.previewLayer.connection {
-                        if pc.isVideoMirroringSupported {
-                            pc.automaticallyAdjustsVideoMirroring = false
-                            pc.isVideoMirrored = false
-                        }
-                    }
-                    break
-                case .on:
-                    if let vc = videoOutput.connection(with: AVMediaType.video) {
-                        if vc.isVideoMirroringSupported {
-                            vc.isVideoMirrored = true
-                        }
-                    }
-                    if let pc = self.previewLayer.connection {
-                        if pc.isVideoMirroringSupported {
-                            pc.automaticallyAdjustsVideoMirroring = false
-                            pc.isVideoMirrored = true
-                        }
-                    }
-                    break
-                case .auto:
-                    if let vc = videoOutput.connection(with: AVMediaType.video), let device = self._currentDevice {
-                        if vc.isVideoMirroringSupported {
-                            vc.isVideoMirrored = (device.position == .front)
-                        }
-                    }
-                    if let pc = self.previewLayer.connection {
-                        if pc.isVideoMirroringSupported {
-                            pc.automaticallyAdjustsVideoMirroring = true
-                        }
-                    }
-                    break
                 }
+                if let pc = self.previewLayer.connection {
+                    if pc.isVideoMirroringSupported {
+                        pc.automaticallyAdjustsVideoMirroring = false
+                        pc.isVideoMirrored = false
+                    }
+                }
+                break
+            case .on:
+                if let vc = videoOutput.connection(with: AVMediaType.video) {
+                    if vc.isVideoMirroringSupported {
+                        vc.isVideoMirrored = true
+                    }
+                }
+                if let pc = self.previewLayer.connection {
+                    if pc.isVideoMirroringSupported {
+                        pc.automaticallyAdjustsVideoMirroring = false
+                        pc.isVideoMirrored = true
+                    }
+                }
+                break
+            case .auto:
+                if let vc = videoOutput.connection(with: AVMediaType.video), let device = self._currentDevice {
+                    if vc.isVideoMirroringSupported {
+                        vc.isVideoMirrored = (device.position == .front)
+                    }
+                }
+                if let pc = self.previewLayer.connection {
+                    if pc.isVideoMirroringSupported {
+                        pc.automaticallyAdjustsVideoMirroring = true
+                    }
+                }
+                break
             }
         }
     }
@@ -1903,55 +1894,56 @@ extension NextLevel {
     ///   - dimensions: Desired video dimensions.
     public func updateDeviceFormat(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions) {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
-            if let device: AVCaptureDevice = self._currentDevice {
-                
-                var updatedFormat: AVCaptureDevice.Format? = nil
-                for currentFormat in device.formats {
-                    if currentFormat.isSupported(withFrameRate: frameRate, dimensions: dimensions) {
-                        if updatedFormat == nil {
-                            updatedFormat = currentFormat
-                        } else if let updated = updatedFormat {
-                            let currentDimensions = CMVideoFormatDescriptionGetDimensions(currentFormat.formatDescription)
-                            let updatedDimensions = CMVideoFormatDescriptionGetDimensions(updated.formatDescription)
-                            
-                            if currentDimensions.width < updatedDimensions.width && currentDimensions.height < updatedDimensions.height {
-                                updatedFormat = currentFormat
-                            } else if currentDimensions.width == updatedDimensions.width && currentDimensions.height == updatedDimensions.height {
-                                
-                                let currentFrameRate = AVCaptureDevice.Format.maxFrameRate(forFormat: currentFormat, minFrameRate: frameRate)
-                                let updatedFrameRate = AVCaptureDevice.Format.maxFrameRate(forFormat: updated, minFrameRate: frameRate)
-                                
-                                if updatedFrameRate > currentFrameRate {
-                                    updatedFormat = currentFormat
-                                }
-                            }
-                            
-                        }
-                    }
-                }
-                
-                if let format = updatedFormat {
-                    do {
-                        try device.lockForConfiguration()
-                        device.activeFormat = format
-                        if device.activeFormat.isSupported(withFrameRate: frameRate) {
-                            let fps: CMTime = CMTimeMake(1, frameRate)
-                            device.activeVideoMaxFrameDuration = fps
-                            device.activeVideoMinFrameDuration = fps
-                        }
-                        device.unlockForConfiguration()
-                        
-                        DispatchQueue.main.async {
-                            self.deviceDelegate?.nextLevel(self, didChangeDeviceFormat: format)
-                        }
-                    } catch {
-                        print("NextLevel, active device format failed to lock device for configuration")
-                    }
-                } else {
-                    print("Nextlevel, could not find a current device format matching the requirements")
-                }
-                
+            guard let device = self._currentDevice else {
+                return
             }
+            
+            var updatedFormat: AVCaptureDevice.Format? = nil
+            for currentFormat in device.formats {
+                if currentFormat.isSupported(withFrameRate: frameRate, dimensions: dimensions) {
+                    if updatedFormat == nil {
+                        updatedFormat = currentFormat
+                    } else if let updated = updatedFormat {
+                        let currentDimensions = CMVideoFormatDescriptionGetDimensions(currentFormat.formatDescription)
+                        let updatedDimensions = CMVideoFormatDescriptionGetDimensions(updated.formatDescription)
+                        
+                        if currentDimensions.width < updatedDimensions.width && currentDimensions.height < updatedDimensions.height {
+                            updatedFormat = currentFormat
+                        } else if currentDimensions.width == updatedDimensions.width && currentDimensions.height == updatedDimensions.height {
+                            
+                            let currentFrameRate = AVCaptureDevice.Format.maxFrameRate(forFormat: currentFormat, minFrameRate: frameRate)
+                            let updatedFrameRate = AVCaptureDevice.Format.maxFrameRate(forFormat: updated, minFrameRate: frameRate)
+                            
+                            if updatedFrameRate > currentFrameRate {
+                                updatedFormat = currentFormat
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            
+            if let format = updatedFormat {
+                do {
+                    try device.lockForConfiguration()
+                    device.activeFormat = format
+                    if device.activeFormat.isSupported(withFrameRate: frameRate) {
+                        let fps: CMTime = CMTimeMake(1, frameRate)
+                        device.activeVideoMaxFrameDuration = fps
+                        device.activeVideoMinFrameDuration = fps
+                    }
+                    device.unlockForConfiguration()
+                    
+                    DispatchQueue.main.async {
+                        self.deviceDelegate?.nextLevel(self, didChangeDeviceFormat: format)
+                    }
+                } catch {
+                    print("NextLevel, active device format failed to lock device for configuration")
+                }
+            } else {
+                print("Nextlevel, could not find a current device format matching the requirements")
+            }
+                
         }
     }
 }
@@ -1962,11 +1954,7 @@ extension NextLevel {
     
     /// Triggers a camera device position change.
     public func flipCaptureDevicePosition() {
-        if self.devicePosition == .back {
-            self.devicePosition = .front
-        } else {
-            self.devicePosition = .back
-        }
+        self.devicePosition = self.devicePosition == .back ? .front : .back
     }
     
     /// Changes capture device if the desired device is available.
