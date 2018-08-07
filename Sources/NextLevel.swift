@@ -1550,6 +1550,49 @@ extension NextLevel {
         }
     }
     
+    /// Adjusts exposure to a specific custom ISO value.
+    ///
+    /// - Parameter iso: The exposure ISO value.
+    public func expose(withISO iso: Float) {
+        guard let device = self._currentDevice else {
+            return
+        }
+        guard !device.isAdjustingExposure else {
+            return
+        }
+            
+        do {
+            try device.lockForConfiguration()
+            
+            device.setExposureModeCustom(duration: AVCaptureDevice.currentExposureDuration, iso: iso, completionHandler: nil)
+            
+            device.unlockForConfiguration()
+        } catch {
+            print("NextLevel, setExposureModeCustom failed to lock device for configuration")
+        }
+    }
+    
+    /// Adjusts exposure to the specified target bias.
+    ///
+    /// - Parameter targetBias: The exposure target bias.
+    public func expose(withTargetBias targetBias: Float) {
+        guard let device = self._currentDevice,
+            !device.isAdjustingExposure
+        else {
+            return
+        }
+            
+        do {
+            try device.lockForConfiguration()
+            
+            device.setExposureTargetBias(targetBias, completionHandler: nil)
+            
+            device.unlockForConfiguration()
+        } catch {
+            print("NextLevel, setExposureModeCustom failed to lock device for configuration")
+        }
+    }
+    
     /// Calculates focal length and principle point camera intrinsic parameters for OpenCV.
     /// (see Hartley's Mutiple View Geometry, Chapter 6)
     ///
