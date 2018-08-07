@@ -823,25 +823,29 @@ extension NextLevel {
     
     // re-entrant configuration lock, thanks to SCRecorder
     internal func beginConfiguration() {
-        if let session = self._captureSession {
-            self._sessionConfigurationCount += 1
-            if self._sessionConfigurationCount == 1 {
-                session.beginConfiguration()
-            }
+        guard let session = self._captureSession else {
+            return
+        }
+
+        self._sessionConfigurationCount += 1
+        if self._sessionConfigurationCount == 1 {
+            session.beginConfiguration()
         }
     }
     
     internal func commitConfiguration() {
-        if let session = self._captureSession {
-            self._sessionConfigurationCount -= 1
-            if self._sessionConfigurationCount == 0 {
-                session.commitConfiguration()
-            }
+        guard let session = self._captureSession else {
+            return
+        }
+        
+        self._sessionConfigurationCount -= 1
+        if self._sessionConfigurationCount == 0 {
+            session.commitConfiguration()
         }
     }
     
     internal func configureSessionDevices() {
-        guard self._captureSession != nil else {
+        guard let _ = self._captureSession else {
             return
         }
         
@@ -924,57 +928,59 @@ extension NextLevel {
     }
     
     internal func configureSession() {
-        if let session = self._captureSession {
-            self.beginConfiguration()
+        guard let session = self._captureSession else {
+            return
+        }
+
+        self.beginConfiguration()
             
-            // setup preset and mode
-            
-            self.removeUnusedOutputsForCurrentCameraMode(session: session)
-            
-            switch self.captureMode {
-            case .video:
-                fallthrough
-            case .videoWithoutAudio:
-                if session.sessionPreset != self.videoConfiguration.preset {
-                    if session.canSetSessionPreset(self.videoConfiguration.preset) {
-                        session.sessionPreset = self.videoConfiguration.preset
-                    } else {
-                        print("NextLevel, could not set preset on session")
-                    }
+        // setup preset and mode
+        
+        self.removeUnusedOutputsForCurrentCameraMode(session: session)
+        
+        switch self.captureMode {
+        case .video:
+            fallthrough
+        case .videoWithoutAudio:
+            if session.sessionPreset != self.videoConfiguration.preset {
+                if session.canSetSessionPreset(self.videoConfiguration.preset) {
+                    session.sessionPreset = self.videoConfiguration.preset
+                } else {
+                    print("NextLevel, could not set preset on session")
                 }
-                
-                if self.captureMode == .video {
-                    let _ = self.addAudioOuput()
-                }
-                let _ = self.addVideoOutput()
-                if self.depthDataCaptureEnabled {
-                    let _ = self.addDepthDataOutput()
-                }
-                break
-            case .photo:
-                if session.sessionPreset != self.photoConfiguration.preset {
-                    if session.canSetSessionPreset(self.photoConfiguration.preset) {
-                        session.sessionPreset = self.photoConfiguration.preset
-                    } else {
-                        print("NextLevel, could not set preset on session")
-                    }
-                }
-                
-                let _ = self.addPhotoOutput()
-                if self.depthDataCaptureEnabled {
-                    let _ = self.addDepthDataOutput()
-                }
-                break
-            case .audio:
-                let _ = self.addAudioOuput()
-                break
-            case .arKit:
-                // no AV inputs to setup
-                break
             }
             
-            self.commitConfiguration()
+            if self.captureMode == .video {
+                let _ = self.addAudioOuput()
+            }
+            let _ = self.addVideoOutput()
+            if self.depthDataCaptureEnabled {
+                let _ = self.addDepthDataOutput()
+            }
+            break
+        case .photo:
+            if session.sessionPreset != self.photoConfiguration.preset {
+                if session.canSetSessionPreset(self.photoConfiguration.preset) {
+                    session.sessionPreset = self.photoConfiguration.preset
+                } else {
+                    print("NextLevel, could not set preset on session")
+                }
+            }
+            
+            let _ = self.addPhotoOutput()
+            if self.depthDataCaptureEnabled {
+                let _ = self.addDepthDataOutput()
+            }
+            break
+        case .audio:
+            let _ = self.addAudioOuput()
+            break
+        case .arKit:
+            // no AV inputs to setup
+            break
         }
+        
+        self.commitConfiguration()
     }
     
     // inputs
@@ -1273,20 +1279,18 @@ extension NextLevel {
             return self.photoConfiguration.flashMode
         }
         set {
-            if let device: AVCaptureDevice = self._currentDevice {
-                guard device.hasFlash
-                    else {
-                        return
-                }
-                
-                if let output = self._photoOutput {
-                    if self.photoConfiguration.flashMode != newValue {
-                        // iOS 11 GM fix
-                        // https://forums.developer.apple.com/thread/86810
-                        let modes = output.__supportedFlashModes
-                        if modes.contains(NSNumber(value: newValue.rawValue)) {
-                            self.photoConfiguration.flashMode = newValue
-                        }
+            guard let device = self._currentDevice, device.hasFlash
+            else {
+                    return
+            }
+            
+            if let output = self._photoOutput {
+                if self.photoConfiguration.flashMode != newValue {
+                    // iOS 11 GM fix
+                    // https://forums.developer.apple.com/thread/86810
+                    let modes = output.__supportedFlashModes
+                    if modes.contains(NSNumber(value: newValue.rawValue)) {
+                        self.photoConfiguration.flashMode = newValue
                     }
                 }
             }
@@ -1313,23 +1317,21 @@ extension NextLevel {
         }
         set {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
-                if let device = self._currentDevice {
-                    guard
-                        device.torchMode != newValue,
-                        device.hasTorch
-                        else {
-                            return
+                guard let device = self._currentDevice,
+                    device.hasTorch,
+                    device.torchMode != newValue
+                else {
+                    return
+                }
+                
+                do {
+                    try device.lockForConfiguration()
+                    if device.isTorchModeSupported(newValue) {
+                        device.torchMode = newValue
                     }
-                    
-                    do {
-                        try device.lockForConfiguration()
-                        if device.isTorchModeSupported(newValue) {
-                            device.torchMode = newValue
-                        }
-                        device.unlockForConfiguration()
-                    } catch {
-                        print("NextLevel, torchMode failed to lock device for configuration")
-                    }
+                    device.unlockForConfiguration()
+                } catch {
+                    print("NextLevel, torchMode failed to lock device for configuration")
                 }
             }
         }
@@ -1351,7 +1353,7 @@ extension NextLevel {
     /// Checks if focus lock is supported.
     public var isFocusLockSupported: Bool {
         get {
-            if let device: AVCaptureDevice = self._currentDevice {
+            if let device = self._currentDevice {
                 return device.isFocusModeSupported(.locked)
             }
             return false
@@ -1361,7 +1363,7 @@ extension NextLevel {
     /// Checks if focus adjustment is in progress.
     public var isAdjustingFocus: Bool {
         get {
-            if let device: AVCaptureDevice = self._currentDevice {
+            if let device = self._currentDevice {
                 return device.isAdjustingFocus
             }
             return false
@@ -1371,28 +1373,26 @@ extension NextLevel {
     /// The focus mode of the device.
     public var focusMode: NextLevelFocusMode {
         get {
-            if let device: AVCaptureDevice = self._currentDevice {
+            if let device = self._currentDevice {
                 return device.focusMode
             }
             return .locked
         }
         set {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
-                if let device: AVCaptureDevice = self._currentDevice {
-                    guard
-                        device.focusMode != newValue,
-                        device.isFocusModeSupported(newValue)
-                        else {
-                            return
-                    }
-                    
-                    do {
-                        try device.lockForConfiguration()
-                        device.focusMode = newValue
-                        device.unlockForConfiguration()
-                    } catch {
-                        print("NextLevel, focusMode failed to lock device for configuration")
-                    }
+                guard let device = self._currentDevice,
+                    device.isFocusModeSupported(newValue),
+                    device.focusMode != newValue
+                else {
+                    return
+                }
+                
+                do {
+                    try device.lockForConfiguration()
+                    device.focusMode = newValue
+                    device.unlockForConfiguration()
+                } catch {
+                    print("NextLevel, focusMode failed to lock device for configuration")
                 }
             }
         }
@@ -1622,24 +1622,27 @@ extension NextLevel {
     // private functions
     
     internal func adjustFocusExposureAndWhiteBalance() {
-        if let device: AVCaptureDevice = self._currentDevice {
-            guard !device.isAdjustingFocus, !device.isAdjustingExposure
-            else {
-                return
-            }
-            if self.focusMode != .locked {
-                self.deviceDelegate?.nextLevelWillStartFocus(self)
-                self.focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint(x: 0.5, y: 0.5))
-            }
+        guard let device = self._currentDevice,
+            !device.isAdjustingFocus,
+            !device.isAdjustingExposure
+        else {
+            return
+        }
+        
+        if self.focusMode != .locked {
+            self.deviceDelegate?.nextLevelWillStartFocus(self)
+            self.focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint(x: 0.5, y: 0.5))
         }
     }
     
     internal func adjustWhiteBalanceForExposureMode(exposureMode: AVCaptureDevice.ExposureMode) {
-        if let device = self._currentDevice {
-            let whiteBalanceMode = self.whiteBalanceModeBestForExposureMode(exposureMode: exposureMode)
-            if device.isWhiteBalanceModeSupported(whiteBalanceMode) {
-                device.whiteBalanceMode = whiteBalanceMode
-            }
+        guard let device = self._currentDevice else {
+            return
+        }
+        
+        let whiteBalanceMode = self.whiteBalanceModeBestForExposureMode(exposureMode: exposureMode)
+        if device.isWhiteBalanceModeSupported(whiteBalanceMode) {
+            device.whiteBalanceMode = whiteBalanceMode
         }
     }
     
