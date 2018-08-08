@@ -158,8 +158,8 @@
 				06CF9CE81F70678D0011CE09 /* NextLevel+CoreMedia.swift */,
 				0699B4BC1D7942D4005958BC /* NextLevel+Foundation.swift */,
 				06BA97681D7FFDF200CD20D7 /* NextLevel+Metadata.swift */,
-				6A3D083B1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift */,
 				063E5350211A1B4B001B6D33 /* NextLevel+Swift.swift */,
+				6A3D083B1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";

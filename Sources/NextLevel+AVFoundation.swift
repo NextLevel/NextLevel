@@ -27,40 +27,6 @@ import UIKit
 import Foundation
 import AVFoundation
 
-extension AVCaptureVideoOrientation {
-    
-    /// UIKit orientation equivalent type
-    public var uikitType: UIDeviceOrientation {
-        switch self {
-        case .portrait:
-            return .portrait
-        case .landscapeLeft:
-            return .landscapeLeft
-        case .landscapeRight:
-            return .landscapeRight
-        case .portraitUpsideDown:
-            return .portraitUpsideDown
-        }
-    }
-    
-}
-
-extension AVCaptureDevice.Position {
-
-    /// UIKit device equivalent type
-    public var uikitType: UIImagePickerControllerCameraDevice {
-        switch self {
-        case .unspecified:
-            fallthrough
-        case .back:
-            return .rear
-        case .front:
-            return .front
-        }
-    }
-    
-}
-
 extension AVCaptureDeviceInput {
     
     /// Returns the capture device input for the desired media type and capture session, otherwise nil.
@@ -230,7 +196,19 @@ extension AVCaptureDevice.Format {
 
 extension AVCaptureVideoOrientation {
     
-    // MARK: NextLevel types
+    /// UIKit orientation equivalent type
+    public var uikitType: UIDeviceOrientation {
+        switch self {
+        case .portrait:
+            return .portrait
+        case .landscapeLeft:
+            return .landscapeLeft
+        case .landscapeRight:
+            return .landscapeRight
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+        }
+    }
 
     internal static func avorientationFromUIDeviceOrientation(_ orientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
         var avorientation: AVCaptureVideoOrientation = .portrait
@@ -250,6 +228,22 @@ extension AVCaptureVideoOrientation {
             break
         }
         return avorientation
+    }
+    
+}
+
+extension AVCaptureDevice.Position {
+    
+    /// UIKit device equivalent type
+    public var uikitType: UIImagePickerControllerCameraDevice {
+        switch self {
+        case .unspecified:
+            fallthrough
+        case .back:
+            return .rear
+        case .front:
+            return .front
+        }
     }
     
 }
