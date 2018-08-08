@@ -542,11 +542,9 @@ public class NextLevel: NSObject {
     
     internal var _videoInput: AVCaptureDeviceInput?
     internal var _audioInput: AVCaptureDeviceInput?
-    
     internal var _videoOutput: AVCaptureVideoDataOutput?
     internal var _audioOutput: AVCaptureAudioDataOutput?
     internal var _photoOutput: AVCapturePhotoOutput?
-    
     internal var _depthDataOutput: Any?
     @available(iOS 11.0, *)
     internal var depthDataOutput: AVCaptureDepthDataOutput? {
@@ -560,6 +558,7 @@ public class NextLevel: NSObject {
     
     internal var _currentDevice: AVCaptureDevice?
     internal var _requestedDevice: AVCaptureDevice?
+    internal var _observers = [NSKeyValueObservation]()
     
     internal var _lastVideoFrame: CMSampleBuffer?
     internal var _lastAudioFrame: CMSampleBuffer?
@@ -2932,92 +2931,62 @@ extension NextLevel {
     }
 }
 
-// MARK: - KVO and KVO constants
-
-private var NextLevelFocusObserverContext = "NextLevelFocusObserverContext"
-private var NextLevelExposureObserverContext = "NextLevelExposureObserverContext"
-private var NextLevelWhiteBalanceObserverContext = "NextLevelWhiteBalanceObserverContext"
-
-private var NextLevelFlashAvailabilityObserverContext = "NextLevelFlashAvailabilityObserverContext"
-private var NextLevelTorchAvailabilityObserverContext = "NextLevelTorchAvailabilityObserverContext"
-private var NextLevelFlashActiveObserverContext = "NextLevelFlashActiveObserverContext"
-private var NextLevelTorchActiveObserverContext = "NextLevelTorchActiveObserverContext"
-
-private var NextLevelVideoZoomFactorObserverContext = "NextLevelVideoZoomFactorObserverContext"
+// MARK: - KVO observers
 
 extension NextLevel {
     
     internal func addKeyValueObservers(_ currentDevice: AVCaptureDevice) {
-        currentDevice.addObserver(self, forKeyPath: "adjustingFocus", options: [.new], context: &NextLevelFocusObserverContext)
-        currentDevice.addObserver(self, forKeyPath: "adjustingExposure", options: [.new], context: &NextLevelExposureObserverContext)
-        currentDevice.addObserver(self, forKeyPath: "adjustingWhiteBalance", options: [.new], context: &NextLevelWhiteBalanceObserverContext)
-        currentDevice.addObserver(self, forKeyPath: "flashAvailable", options: [.new], context: &NextLevelFlashAvailabilityObserverContext)
-        currentDevice.addObserver(self, forKeyPath: "torchAvailable", options: [.new], context: &NextLevelTorchAvailabilityObserverContext)
-        currentDevice.addObserver(self, forKeyPath: "flashActive", options: [.new], context: &NextLevelFlashActiveObserverContext)
-        currentDevice.addObserver(self, forKeyPath: "torchActive", options: [.new], context: &NextLevelTorchActiveObserverContext)
-        currentDevice.addObserver(self, forKeyPath: "videoZoomFactor", options: [.new], context: &NextLevelVideoZoomFactorObserverContext)
+        
+        self._observers.append(currentDevice.observe(\.isAdjustingFocus, options: [.new]) { (object, change) in
+            if object.isAdjustingFocus {
+                self.focusStarted()
+            } else {
+                self.focusEnded()
+            }
+        })
+
+        self._observers.append(currentDevice.observe(\.isAdjustingExposure, options: [.new]) { (object, change) in
+            if object.isAdjustingExposure {
+                self.exposureStarted()
+            } else {
+                self.exposureEnded()
+            }
+        })
+
+        self._observers.append(currentDevice.observe(\.isAdjustingWhiteBalance, options: [.new]) { (object, change) in
+            if object.isAdjustingWhiteBalance {
+                self.whiteBalanceStarted()
+            } else {
+                self.whiteBalanceEnded()
+            }
+        })
+
+        self._observers.append(currentDevice.observe(\.isFlashAvailable, options: [.new]) { (object, change) in
+            self.flashAndTorchAvailabilityChanged()
+        })
+        
+        self._observers.append(currentDevice.observe(\.isTorchAvailable, options: [.new]) { (object, change) in
+            self.flashAndTorchAvailabilityChanged()
+        })
+        
+        self._observers.append(currentDevice.observe(\.isFlashActive, options: [.new]) { (object, change) in
+            self.flashActiveChanged()
+        })
+        
+        self._observers.append(currentDevice.observe(\.isTorchActive, options: [.new]) { (object, change) in
+            self.torchActiveChanged()
+        })
+
+        self._observers.append(currentDevice.observe(\.videoZoomFactor, options: [.new]) { (object, change) in
+            self.videoZoomFactorChanged()
+        })
     }
     
     internal func removeKeyValueObservers(_ currentDevice: AVCaptureDevice) {
-        currentDevice.removeObserver(self, forKeyPath: "adjustingFocus")
-        currentDevice.removeObserver(self, forKeyPath: "adjustingExposure")
-        currentDevice.removeObserver(self, forKeyPath: "adjustingWhiteBalance")
-        currentDevice.removeObserver(self, forKeyPath: "flashAvailable")
-        currentDevice.removeObserver(self, forKeyPath: "torchAvailable")
-        currentDevice.removeObserver(self, forKeyPath: "flashActive")
-        currentDevice.removeObserver(self, forKeyPath: "torchActive")
-        currentDevice.removeObserver(self, forKeyPath: "videoZoomFactor")
-    }
-    
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if context == &NextLevelFocusObserverContext {
-            
-            if let isFocusing = (change?[.newKey] as? Bool) {
-                if isFocusing {
-                    self.focusStarted()
-                } else {
-                    self.focusEnded()
-                }
-            }
-            
-        } else if context == &NextLevelExposureObserverContext {
-            
-            if let isChangingExposure = (change?[.newKey] as? Bool) {
-                if isChangingExposure {
-                    self.exposureStarted()
-                } else {
-                    self.exposureEnded()
-                }
-            }
-            
-        } else if context == &NextLevelWhiteBalanceObserverContext {
-            
-            if let isChangingWhiteBalance = (change?[.newKey] as? Bool) {
-                if isChangingWhiteBalance {
-                    self.whiteBalanceStarted()
-                } else {
-                    self.whiteBalanceEnded()
-                }
-            }
-            
-        } else if context == &NextLevelFlashAvailabilityObserverContext ||
-            context == &NextLevelTorchAvailabilityObserverContext {
-            
-            self.flashAndTorchAvailabilityChanged()
-            
-        } else if context == &NextLevelFlashActiveObserverContext {
-            
-            self.flashActiveChanged()
-            
-        } else if context == &NextLevelTorchActiveObserverContext {
-            
-            self.torchActiveChanged()
-            
-        } else if context == &NextLevelVideoZoomFactorObserverContext {
-            
-            self.videoZoomFactorChanged()
-            
+        for observer in self._observers {
+            observer.invalidate()
         }
+        self._observers.removeAll()
     }
-    
+
 }
