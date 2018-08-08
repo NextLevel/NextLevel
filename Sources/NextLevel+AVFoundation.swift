@@ -247,3 +247,21 @@ extension AVCaptureDevice.Position {
     }
     
 }
+
+extension AVCaptureDevice.WhiteBalanceGains {
+    
+    /// Normalize gain values for a capture device.
+    ///
+    /// - Parameter captureDevice: Device used for adjustment.
+    /// - Returns: Normalized gains.
+    public func normalize(_ captureDevice: AVCaptureDevice) -> AVCaptureDevice.WhiteBalanceGains {
+        var newGains = self
+
+        newGains.redGain = Swift.min(captureDevice.maxWhiteBalanceGain, Swift.max(1.0, newGains.redGain))
+        newGains.greenGain = Swift.min(captureDevice.maxWhiteBalanceGain, Swift.max(1.0, newGains.greenGain))
+        newGains.blueGain = Swift.min(captureDevice.maxWhiteBalanceGain, Swift.max(1.0, newGains.blueGain))
+        
+        return newGains
+    }
+    
+}
