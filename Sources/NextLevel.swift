@@ -1567,7 +1567,7 @@ extension NextLevel {
         do {
             try device.lockForConfiguration()
             
-            device.setExposureModeCustom(duration: CMTimeMakeWithSeconds( newDurationSeconds, 1000*1000*1000 ), iso: AVCaptureDevice.currentISO, completionHandler: nil)
+            device.setExposureModeCustom(duration: CMTimeMakeWithSeconds( newDurationSeconds, preferredTimescale: 1000*1000*1000 ), iso: AVCaptureDevice.currentISO, completionHandler: nil)
             
             device.unlockForConfiguration()
         } catch {
@@ -1632,7 +1632,7 @@ extension NextLevel {
     /// - Returns: `true` when the focal length and principle point parameters are successfully calculated.
     public func focalLengthAndPrinciplePoint(focalLengthX: inout Float, focalLengthY: inout Float, principlePointX: inout Float, principlePointY: inout Float) -> Bool {
         if let device: AVCaptureDevice = self._currentDevice {
-            let dimensions = CMVideoFormatDescriptionGetPresentationDimensions(device.activeFormat.formatDescription, true, true)
+            let dimensions = CMVideoFormatDescriptionGetPresentationDimensions(device.activeFormat.formatDescription, usePixelAspectRatio: true, useCleanAperture: true)
         
             principlePointX = Float(dimensions.width) * 0.5
             principlePointY = Float(dimensions.height) * 0.5
@@ -1640,8 +1640,8 @@ extension NextLevel {
             let horizontalFieldOfView = device.activeFormat.videoFieldOfView
             let verticalFieldOfView = (horizontalFieldOfView / principlePointX) * principlePointY
             
-            focalLengthX = fabs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * .pi / 2 )) )
-            focalLengthY = fabs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * .pi / 2 )) )
+            focalLengthX = abs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * .pi / 2 )) )
+            focalLengthY = abs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * .pi / 2 )) )
             return true
         }
         return false
@@ -1904,7 +1904,7 @@ extension NextLevel {
                             return
                     }
                     
-                    let fps: CMTime = CMTimeMake(1, newValue)
+                    let fps: CMTime = CMTimeMake(value: 1, timescale: newValue)
                     do {
                         try device.lockForConfiguration()
                         
@@ -1963,7 +1963,7 @@ extension NextLevel {
                     try device.lockForConfiguration()
                     device.activeFormat = format
                     if device.activeFormat.isSupported(withFrameRate: frameRate) {
-                        let fps: CMTime = CMTimeMake(1, frameRate)
+                        let fps: CMTime = CMTimeMake(value: 1, timescale: frameRate)
                         device.activeVideoMaxFrameDuration = fps
                         device.activeVideoMinFrameDuration = fps
                     }
@@ -2159,8 +2159,8 @@ extension NextLevel {
                 if let context = self._ciContext,
                     let photo = context.uiimage(withPixelBuffer: customFrame) {
                     let croppedPhoto = ratio != nil ? photo.nx_croppedImage(to: ratio!) : photo
-                    if let imageData = UIImageJPEGRepresentation(photo, 1),
-                        let croppedImageData = UIImageJPEGRepresentation(croppedPhoto, 1){
+                    if let imageData = photo.jpegData(compressionQuality: 1),
+                        let croppedImageData = croppedPhoto.jpegData(compressionQuality: 1){
                         if photoDict == nil {
                             photoDict = [:]
                         }
@@ -2183,8 +2183,8 @@ extension NextLevel {
                 if let context = self._ciContext,
                     let photo = context.uiimage(withSampleBuffer: videoFrame) {
                     let croppedPhoto = ratio != nil ? photo.nx_croppedImage(to: ratio!) : photo
-                    if let imageData = UIImageJPEGRepresentation(photo, 1),
-                    let croppedImageData = UIImageJPEGRepresentation(croppedPhoto, 1){
+                    if let imageData = photo.jpegData(compressionQuality: 1),
+                    let croppedImageData = croppedPhoto.jpegData(compressionQuality: 1){
                         if photoDict == nil {
                             photoDict = [:]
                         }
@@ -2200,7 +2200,7 @@ extension NextLevel {
                 // add JPEG, thumbnail
                 if let context = self._ciContext,
                     let photo = context.uiimage(withPixelBuffer: arFrame),
-                    let imageData = UIImageJPEGRepresentation(photo, 1) {
+                    let imageData = photo.jpegData(compressionQuality: 1) {
                     
                     if photoDict == nil {
                         photoDict = [:]
@@ -2558,12 +2558,12 @@ extension NextLevel {
 
     private func setupContextIfNecessary() {
         if self._ciContext == nil {
-            let options : [String : AnyObject] = [kCIContextWorkingColorSpace : CGColorSpaceCreateDeviceRGB(),
-                                                  kCIContextUseSoftwareRenderer : NSNumber(booleanLiteral: false)]
+            let options : [String : AnyObject] = [convertFromCIContextOption(CIContextOption.workingColorSpace) : CGColorSpaceCreateDeviceRGB(),
+                                                  convertFromCIContextOption(CIContextOption.useSoftwareRenderer) : NSNumber(booleanLiteral: false)]
             if let device = MTLCreateSystemDefaultDevice() {
-                self._ciContext = CIContext(mtlDevice: device, options: options)
+                self._ciContext = CIContext(mtlDevice: device, options: convertToOptionalCIContextOptionDictionary(options))
             } else if let eaglContext = EAGLContext(api: .openGLES2) {
-                self._ciContext = CIContext(eaglContext: eaglContext, options: options)
+                self._ciContext = CIContext(eaglContext: eaglContext, options: convertToOptionalCIContextOptionDictionary(options))
             }
         }
     }
@@ -2805,13 +2805,13 @@ extension NextLevel {
     // application
     
     internal func addApplicationObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleApplicationWillEnterForeground(_:)), name: .UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleApplicationDidEnterBackground(_:)), name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleApplicationWillEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.handleApplicationDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
     
     internal func removeApplicationObservers() {
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
     
     @objc internal func handleApplicationWillEnterForeground(_ notification: Notification) {
@@ -2898,13 +2898,13 @@ extension NextLevel {
     internal func addDeviceObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.deviceSubjectAreaDidChange(_:)), name: .AVCaptureDeviceSubjectAreaDidChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.deviceInputPortFormatDescriptionDidChange(_:)), name: .AVCaptureInputPortFormatDescriptionDidChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.deviceOrientationDidChange(_:)), name: .UIDeviceOrientationDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NextLevel.deviceOrientationDidChange(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     internal func removeDeviceObservers() {
         NotificationCenter.default.removeObserver(self, name: .AVCaptureDeviceSubjectAreaDidChange, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVCaptureInputPortFormatDescriptionDidChange, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIDeviceOrientationDidChange, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     @objc internal func deviceSubjectAreaDidChange(_ notification: NSNotification) {
@@ -2917,7 +2917,7 @@ extension NextLevel {
             if let input = inputs.first,
                 let port = input.ports.first,
                 let formatDescription: CMFormatDescription = port.formatDescription {
-                let cleanAperture = CMVideoFormatDescriptionGetCleanAperture(formatDescription, true)
+                let cleanAperture = CMVideoFormatDescriptionGetCleanAperture(formatDescription, originIsAtTopLeft: true)
                 self.deviceDelegate?.nextLevel(self, didChangeCleanAperture: cleanAperture)
             }
         }
@@ -3020,4 +3020,15 @@ extension NextLevel {
         }
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCIContextOption(_ input: CIContextOption) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalCIContextOptionDictionary(_ input: [String: Any]?) -> [CIContextOption: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (CIContextOption(rawValue: key), value)})
 }

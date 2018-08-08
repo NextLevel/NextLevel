@@ -74,7 +74,7 @@ public class NextLevelClip {
     /// Duration of the clip, otherwise invalid.
     public var duration: CMTime {
         get {
-            return self.asset?.duration ?? kCMTimeZero
+            return self.asset?.duration ?? CMTime.zero
         }
     }
   
@@ -93,7 +93,7 @@ public class NextLevelClip {
                 imageGenerator.appliesPreferredTrackTransform = true
                 
                 do {
-                    let cgimage: CGImage = try imageGenerator.copyCGImage(at: kCMTimeZero, actualTime: nil)
+                    let cgimage: CGImage = try imageGenerator.copyCGImage(at: CMTime.zero, actualTime: nil)
                     let uiimage: UIImage = UIImage(cgImage: cgimage)
                     self._thumbnailImage = uiimage
                 } catch {

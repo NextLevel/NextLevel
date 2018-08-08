@@ -38,7 +38,7 @@ extension CMSampleBuffer {
     /// - Returns: metadata dictionary from the provided sample buffer
     public func metadata() -> [String : Any]? {
         
-        if let cfmetadata = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, self, kCMAttachmentMode_ShouldPropagate) {
+        if let cfmetadata = CMCopyDictionaryOfAttachments(allocator: kCFAllocatorDefault, target: self, attachmentMode: kCMAttachmentMode_ShouldPropagate) {
             if let metadata = cfmetadata as? [String : Any] {
                 return metadata
             }
@@ -53,7 +53,7 @@ extension CMSampleBuffer {
     public func append(metadataAdditions: [String: Any]) {
         
         // append tiff metadata to buffer for proagation
-        if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, kCGImagePropertyTIFFDictionary, kCMAttachmentMode_ShouldPropagate) {
+        if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(allocator: kCFAllocatorDefault, target: kCGImagePropertyTIFFDictionary, attachmentMode: kCMAttachmentMode_ShouldPropagate) {
             let tiffNSDict = tiffDict as NSDictionary
             var metaDict: [String: Any] = [:]
             for (key, value) in metadataAdditions {
@@ -64,9 +64,9 @@ extension CMSampleBuffer {
                     metaDict.updateValue(value as AnyObject, forKey: keyString)
                 }
             }
-            CMSetAttachment(self, kCGImagePropertyTIFFDictionary, metaDict as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+            CMSetAttachment(self, key: kCGImagePropertyTIFFDictionary, value: metaDict as CFTypeRef?, attachmentMode: kCMAttachmentMode_ShouldPropagate)
         } else {
-            CMSetAttachment(self, kCGImagePropertyTIFFDictionary, metadataAdditions as CFTypeRef?, kCMAttachmentMode_ShouldPropagate)
+            CMSetAttachment(self, key: kCGImagePropertyTIFFDictionary, value: metadataAdditions as CFTypeRef?, attachmentMode: kCMAttachmentMode_ShouldPropagate)
         }
     }
     

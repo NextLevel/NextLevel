@@ -48,7 +48,7 @@ extension AVCaptureVideoOrientation {
 extension AVCaptureDevice.Position {
 
     /// UIKit device equivalent type
-    public var uikitType: UIImagePickerControllerCameraDevice {
+    public var uikitType: UIImagePickerController.CameraDevice {
         switch self {
         case .unspecified:
             fallthrough
