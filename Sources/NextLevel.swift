@@ -3154,6 +3154,28 @@ extension NextLevel {
             }
         })
         
+        self._observers.append(currentDevice.observe(\.exposureDuration, options: [.new]) { (object, change) in
+            // TODO: add delegate callback
+        })
+        
+        self._observers.append(currentDevice.observe(\.ISO, options: [.new]) { (object, change) in
+            // TODO: add delegate callback
+        })
+        
+        self._observers.append(currentDevice.observe(\.exposureTargetBias, options: [.new]) { (object, change) in
+            // TODO: add delegate callback
+        })
+        
+        self._observers.append(currentDevice.observe(\.exposureTargetOffset, options: [.new]) { (object, change) in
+            // TODO: add delegate callback
+        })
+        
+        self._observers.append(currentDevice.observe(\.deviceWhiteBalanceGains, options: [.new]) { (object, change) in
+            if object.exposureMode != .locked {
+                // TODO: add delegate callback
+            }
+        })
+        
         self._observers.append(currentDevice.observe(\.videoZoomFactor, options: [.new]) { (object, change) in
             self.videoZoomFactorChanged()
         })
