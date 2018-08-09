@@ -1399,6 +1399,37 @@ extension NextLevel {
         }
     }
     
+    /// The lens position of the device.
+    public var lensPosition: Float {
+        get {
+            if let device = self._currentDevice {
+                return device.lensPosition
+            }
+            return 1.0
+        }
+        set {
+            guard let device = self._currentDevice,
+                device.focusMode == .locked,
+                device.isFocusModeSupported(.locked)
+                else {
+                    return
+            }
+            
+            let newLensPosition = newValue.clamped(to: 0...1)
+            
+            do {
+                try device.lockForConfiguration()
+                
+                device.setFocusModeLocked(lensPosition: newLensPosition, completionHandler: nil)
+                
+                device.unlockForConfiguration()
+            }
+            catch {
+                print("NextLevel, lens position failed to lock device for configuration")
+            }
+        }
+    }
+    
     /// Focuses, exposures, and adjusts white balanace at the point of interest.
     ///
     /// - Parameter adjustedPoint: The point of interest.
