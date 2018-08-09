@@ -17,7 +17,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>0.0.1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSCameraUsageDescription</key>
 	<string>NextLevel uses the camera for photo and video capture.</string>
 	<key>NSMicrophoneUsageDescription</key>
