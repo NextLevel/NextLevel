@@ -133,6 +133,8 @@ public typealias NextLevelDevicePosition = AVCaptureDevice.Position
 
 public typealias NextLevelFocusMode = AVCaptureDevice.FocusMode
 public typealias NextLevelExposureMode = AVCaptureDevice.ExposureMode
+public typealias NextLevelWhiteBalanceMode = AVCaptureDevice.WhiteBalanceMode
+
 public typealias NextLevelFlashMode = AVCaptureDevice.FlashMode
 public typealias NextLevelTorchMode = AVCaptureDevice.TorchMode
 
@@ -1620,6 +1622,81 @@ extension NextLevel {
         }
     }
     
+    // white balance
+    
+    /// Checks if white balance lock is supported.
+    public var isWhiteBalanceLockSupported: Bool {
+        get {
+            if let device: AVCaptureDevice = self._currentDevice {
+                return device.isWhiteBalanceModeSupported(.locked)
+            }
+            return false
+        }
+    }
+    
+    /// Checks if an white balance adjustment is progress.
+    public var isAdjustingWhiteBalance: Bool {
+        get {
+            if let device: AVCaptureDevice = self._currentDevice {
+                return device.isAdjustingWhiteBalance
+            }
+            return false
+        }
+    }
+    
+    /// The white balance mode of the device.
+    public var whiteBalanceMode: NextLevelWhiteBalanceMode {
+        get {
+            if let device = self._currentDevice {
+                return device.whiteBalanceMode
+            }
+            return .locked
+        }
+        set {
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
+                guard let device = self._currentDevice,
+                    device.isWhiteBalanceModeSupported(newValue),
+                    device.whiteBalanceMode != newValue
+                else {
+                    return
+                }
+                
+                do {
+                    try device.lockForConfiguration()
+                    device.whiteBalanceMode = newValue
+                    device.unlockForConfiguration()
+                } catch {
+                    print("NextLevel, whiteBalanceMode failed to lock device for configuration")
+                }
+            }
+        }
+    }
+    
+    // TODO: chromaticity, temperature, and tint adjustment
+    
+    /// Adjusts white balance gains to custom values.
+    ///
+    /// - Parameter whiteBalanceGains: Gains values for adjustment.
+    public func adjustWhiteBalanceGains(_ whiteBalanceGains: AVCaptureDevice.WhiteBalanceGains) {
+        guard let device = self._currentDevice,
+            !device.isAdjustingWhiteBalance
+            else {
+                return
+        }
+        
+        let newWhiteBalanceGains = whiteBalanceGains.normalize(device)
+        
+        do {
+            try device.lockForConfiguration()
+            
+            device.setWhiteBalanceModeLocked(with: newWhiteBalanceGains, completionHandler: nil)
+            
+            device.unlockForConfiguration()
+        } catch {
+            print("NextLevel, setWhiteBalanceModeLocked failed to lock device for configuration")
+        }
+    }
+    
     /// Calculates focal length and principle point camera intrinsic parameters for OpenCV.
     /// (see Hartley's Mutiple View Geometry, Chapter 6)
     ///
@@ -2960,6 +3037,8 @@ extension NextLevel {
                 self.whiteBalanceEnded()
             }
         })
+        
+        
 
         self._observers.append(currentDevice.observe(\.isFlashAvailable, options: [.new]) { (object, change) in
             self.flashAndTorchAvailabilityChanged()
