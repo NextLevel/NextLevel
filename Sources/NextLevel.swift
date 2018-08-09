@@ -1703,15 +1703,73 @@ extension NextLevel {
         }
     }
     
-    // TODO: chromaticity, temperature, and tint adjustment
+    // TODO: chromaticity support?
+    
+    public var whiteBalanceTemperature: Float {
+        get {
+            if let device = self._currentDevice {
+                return device.temperatureAndTintValues(for: device.deviceWhiteBalanceGains).temperature
+            }
+            return 8000
+        }
+        set {
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
+                guard let device = self._currentDevice,
+                    device.isWhiteBalanceModeSupported(.locked),
+                    device.whiteBalanceMode == .locked
+                    else {
+                        return
+                }
+                
+                let newTemperature = newValue.clamped(to: 3000...8000)
+                let temperatureAndTint = AVCaptureDevice.WhiteBalanceTemperatureAndTintValues(temperature: newTemperature, tint: device.temperatureAndTintValues(for: device.deviceWhiteBalanceGains).tint)
+                
+                do {
+                    try device.lockForConfiguration()
+                    device.deviceWhiteBalanceGains(for: temperatureAndTint)
+                    device.unlockForConfiguration()
+                } catch {
+                    print("NextLevel, deviceWhiteBalanceGains failed to lock device for configuration")
+                }
+            }
+        }
+    }
+    
+    public var whiteBalanceTint: Float {
+        get {
+            if let device = self._currentDevice {
+                return device.temperatureAndTintValues(for: device.deviceWhiteBalanceGains).tint
+            }
+            return 150
+        }
+        set {
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
+                guard let device = self._currentDevice,
+                    device.isWhiteBalanceModeSupported(.locked),
+                    device.whiteBalanceMode == .locked
+                    else {
+                        return
+                }
+                
+                let newTint = newValue.clamped(to: -150...150)
+                let temperatureAndTint = AVCaptureDevice.WhiteBalanceTemperatureAndTintValues(temperature: device.temperatureAndTintValues(for: device.deviceWhiteBalanceGains).temperature, tint: newTint)
+                
+                do {
+                    try device.lockForConfiguration()
+                    device.deviceWhiteBalanceGains(for: temperatureAndTint)
+                    device.unlockForConfiguration()
+                } catch {
+                    print("NextLevel, deviceWhiteBalanceGains failed to lock device for configuration")
+                }
+            }
+        }
+    }
     
     /// Adjusts white balance gains to custom values.
     ///
     /// - Parameter whiteBalanceGains: Gains values for adjustment.
     public func adjustWhiteBalanceGains(_ whiteBalanceGains: AVCaptureDevice.WhiteBalanceGains) {
-        guard let device = self._currentDevice,
-            !device.isAdjustingWhiteBalance
-            else {
+        guard let device = self._currentDevice else {
                 return
         }
         
