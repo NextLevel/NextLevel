@@ -1940,44 +1940,6 @@ extension NextLevel {
         }
     }
     
-    internal func flashActiveChanged() {
-        // adjust white balance mode depending on the flash
-        if let device = self._currentDevice {
-            let exposureMode = device.exposureMode
-            let whiteBalanceMode = self.whiteBalanceModeBestForExposureMode(exposureMode: exposureMode)
-            let currentWhiteBalanceMode = device.whiteBalanceMode
-            
-            if whiteBalanceMode != currentWhiteBalanceMode {
-                do {
-                    try device.lockForConfiguration()
-                    
-                    self.adjustWhiteBalanceForExposureMode(exposureMode: exposureMode)
-                    
-                    device.unlockForConfiguration()
-                }
-                catch {
-                    print("NextLevel, failed to lock device for white balance configuration")
-                }
-            }
-        }
-        
-        DispatchQueue.main.async {
-            self.flashDelegate?.nextLevelFlashActiveChanged(self)
-        }
-    }
-    
-    internal func torchActiveChanged() {
-        DispatchQueue.main.async {
-            self.flashDelegate?.nextLevelTorchActiveChanged(self)
-        }
-    }
-    
-    internal func flashAndTorchAvailabilityChanged() {
-        DispatchQueue.main.async {
-            self.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(self)
-        }
-    }
-    
     // mirroring
     
     /// Changes the current capture device's mirroring mode.
@@ -2274,12 +2236,6 @@ extension NextLevel {
                     }
                 }
             }
-        }
-    }
-    
-    internal func videoZoomFactorChanged() {
-        DispatchQueue.main.async {
-            self.videoDelegate?.nextLevel(self, didUpdateVideoZoomFactor: self.videoZoomFactor)
         }
     }
     
@@ -3127,23 +3083,46 @@ extension NextLevel {
                 self.whiteBalanceEnded()
             }
         })
-        
-        
 
         self._observers.append(currentDevice.observe(\.isFlashAvailable, options: [.new]) { (object, change) in
-            self.flashAndTorchAvailabilityChanged()
+            DispatchQueue.main.async {
+                self.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(self)
+            }
         })
         
         self._observers.append(currentDevice.observe(\.isTorchAvailable, options: [.new]) { (object, change) in
-            self.flashAndTorchAvailabilityChanged()
+            DispatchQueue.main.async {
+                self.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(self)
+            }
         })
         
         self._observers.append(currentDevice.observe(\.isFlashActive, options: [.new]) { (object, change) in
-            self.flashActiveChanged()
+            // adjust white balance mode depending on the flash
+            let whiteBalanceMode = self.whiteBalanceModeBestForExposureMode(exposureMode: object.exposureMode)
+            let currentWhiteBalanceMode = object.whiteBalanceMode
+            
+            if whiteBalanceMode != currentWhiteBalanceMode {
+                do {
+                    try object.lockForConfiguration()
+                    
+                    self.adjustWhiteBalanceForExposureMode(exposureMode: object.exposureMode)
+                    
+                    object.unlockForConfiguration()
+                }
+                catch {
+                    print("NextLevel, failed to lock device for white balance exposure configuration")
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.flashDelegate?.nextLevelFlashActiveChanged(self)
+            }
         })
         
         self._observers.append(currentDevice.observe(\.isTorchActive, options: [.new]) { (object, change) in
-            self.torchActiveChanged()
+            DispatchQueue.main.async {
+                self.flashDelegate?.nextLevelTorchActiveChanged(self)
+            }
         })
 
         self._observers.append(currentDevice.observe(\.lensPosition, options: [.new]) { (object, change) in
@@ -3177,7 +3156,9 @@ extension NextLevel {
         })
         
         self._observers.append(currentDevice.observe(\.videoZoomFactor, options: [.new]) { (object, change) in
-            self.videoZoomFactorChanged()
+            DispatchQueue.main.async {
+                self.videoDelegate?.nextLevel(self, didUpdateVideoZoomFactor: self.videoZoomFactor)
+            }
         })
     }
     
