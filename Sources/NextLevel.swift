@@ -259,9 +259,10 @@ public protocol NextLevelDeviceDelegate: NSObjectProtocol {
     // format
     func nextLevel(_ nextLevel: NextLevel, didChangeDeviceFormat deviceFormat: AVCaptureDevice.Format)
     
-    // aperture
+    // aperture, lens
     func nextLevel(_ nextLevel: NextLevel, didChangeCleanAperture cleanAperture: CGRect)
-    
+    func nextLevel(_ nextLevel: NextLevel, didChangeLensPosition lensPosition: Float)
+
     // focus, exposure, white balance
     func nextLevelWillStartFocus(_ nextLevel: NextLevel)
     func nextLevelDidStopFocus(_  nextLevel: NextLevel)
@@ -3145,6 +3146,14 @@ extension NextLevel {
             self.torchActiveChanged()
         })
 
+        self._observers.append(currentDevice.observe(\.lensPosition, options: [.new]) { (object, change) in
+            if object.focusMode != .locked {
+                DispatchQueue.main.async {
+                    self.deviceDelegate?.nextLevel(self, didChangeLensPosition: object.lensPosition)
+                }
+            }
+        })
+        
         self._observers.append(currentDevice.observe(\.videoZoomFactor, options: [.new]) { (object, change) in
             self.videoZoomFactorChanged()
         })
