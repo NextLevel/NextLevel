@@ -529,6 +529,10 @@ extension MixedRealityViewController: NextLevelDeviceDelegate {
     func nextLevel(_ nextLevel: NextLevel, didChangeCleanAperture cleanAperture: CGRect) {
     }
     
+    // lens
+    func nextLevel(_ nextLevel: NextLevel, didChangeLensPosition lensPosition: Float) {
+    }
+    
     // focus, exposure, white balance
     func nextLevelWillStartFocus(_ nextLevel: NextLevel) {
     }
