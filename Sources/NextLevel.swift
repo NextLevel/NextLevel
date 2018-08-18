@@ -103,11 +103,15 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
     }
 }
 
+/// Operation modes for NextLevel.
+/// Note: video, audio, and videoWithoutAudio options support multi clip recording.
+/// Movie is strictly for single clip recording.
 public enum NextLevelCaptureMode: Int, CustomStringConvertible {
     case video = 0
     case photo
     case audio
     case videoWithoutAudio
+    case movie
     case arKit
     
     public var description: String {
@@ -121,6 +125,8 @@ public enum NextLevelCaptureMode: Int, CustomStringConvertible {
                 return "Photo"
             case .audio:
                 return "Audio"
+            case .movie:
+                return "Movie"
             case .arKit:
                 return "ARKit"
             }
@@ -547,6 +553,7 @@ public class NextLevel: NSObject {
     internal var _audioInput: AVCaptureDeviceInput?
     internal var _videoOutput: AVCaptureVideoDataOutput?
     internal var _audioOutput: AVCaptureAudioDataOutput?
+    internal var _movieFileOutput: AVCaptureMovieFileOutput?
     internal var _photoOutput: AVCapturePhotoOutput?
     internal var _depthDataOutput: Any?
     @available(iOS 11.0, *)
@@ -674,6 +681,8 @@ extension NextLevel {
         case .videoWithoutAudio:
             return self.authorizationStatus(forMediaType: AVMediaType.video)
         case .arKit:
+            fallthrough
+        case .movie:
             fallthrough
         case .video:
             let audioStatus = self.authorizationStatus(forMediaType: AVMediaType.audio)
@@ -869,6 +878,9 @@ extension NextLevel {
         case .videoWithoutAudio:
             shouldConfigureVideo = true
             break
+        case .movie:
+            // TODO
+            break
         case .arKit:
             shouldConfigureVideo = true
             break
@@ -976,6 +988,9 @@ extension NextLevel {
             break
         case .audio:
             let _ = self.addAudioOuput()
+            break
+        case .movie:
+            // TODO
             break
         case .arKit:
             // no AV inputs to setup
@@ -1150,6 +1165,25 @@ extension NextLevel {
         
     }
     
+    private func addMovieOutput() -> Bool {
+        
+        if self._movieFileOutput == nil {
+            self._movieFileOutput = AVCaptureMovieFileOutput()
+        }
+        
+        // TODO configuration
+        
+        if let session = self._captureSession, let movieOutput = self._movieFileOutput {
+            if session.canAddOutput(movieOutput) {
+                session.addOutput(movieOutput)
+                return true
+            }
+        }
+        print("NextLevel, couldn't add movie output to session")
+        return false
+        
+    }
+    
     private func addDepthDataOutput() -> Bool {
         guard depthDataCaptureEnabled else {
             return false
@@ -1184,6 +1218,7 @@ extension NextLevel {
         self._videoOutput = nil
         self._audioInput = nil
         self._photoOutput = nil
+        self._movieFileOutput = nil
         self._depthDataOutput = nil
     }
     
@@ -1223,6 +1258,12 @@ extension NextLevel {
             if let photoOutput = self._photoOutput, session.outputs.contains(photoOutput) {
                 session.removeOutput(photoOutput)
                 self._photoOutput = nil
+            }
+            break
+        case .movie:
+            if let movieOutput = self._movieFileOutput, session.outputs.contains(movieOutput) {
+                session.removeOutput(movieOutput)
+                self._movieFileOutput = nil
             }
             break
         case .arKit:
@@ -2758,6 +2799,18 @@ extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudi
                 break
             }
         }
+    }
+    
+}
+
+// MARK: - AVCaptureFileOutputDelegate
+
+extension NextLevel: AVCaptureFileOutputRecordingDelegate {
+    
+    public func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
+    }
+
+    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
     }
     
 }
