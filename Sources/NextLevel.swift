@@ -222,7 +222,7 @@ public let NextLevelPhotoThumbnailKey = "NextLevelPhotoThumbnailKey"
 // MARK: - NextLevelDelegate
 
 /// NextLevel delegate, provides updates for authorization, configuration changes, session state, preview state, and mode changes.
-public protocol NextLevelDelegate: NSObjectProtocol {
+public protocol NextLevelDelegate: AnyObject {
     
     // permission
     func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: AVMediaType)
@@ -246,7 +246,7 @@ public protocol NextLevelDelegate: NSObjectProtocol {
 }
 
 /// Preview delegate, provides update for
-public protocol NextLevelPreviewDelegate: NSObjectProtocol {
+public protocol NextLevelPreviewDelegate: AnyObject {
 
     // preview
     func nextLevelWillStartPreview(_ nextLevel: NextLevel)
@@ -255,7 +255,7 @@ public protocol NextLevelPreviewDelegate: NSObjectProtocol {
 }
 
 /// Device delegate, provides updates on device position, orientation, clean aperture, focus, exposure, and white balances changes.
-public protocol NextLevelDeviceDelegate: NSObjectProtocol {
+public protocol NextLevelDeviceDelegate: AnyObject {
     
     // position, orientation
     func nextLevelDevicePositionWillChange(_ nextLevel: NextLevel)
@@ -284,7 +284,7 @@ public protocol NextLevelDeviceDelegate: NSObjectProtocol {
 // MARK: - NextLevelFlashAndTorchDelegate
 
 /// Flash and torch delegate, provides updates on active flash and torch related changes.
-public protocol NextLevelFlashAndTorchDelegate: NSObjectProtocol {
+public protocol NextLevelFlashAndTorchDelegate: AnyObject {
     
     func nextLevelDidChangeFlashMode(_ nextLevel: NextLevel)
     func nextLevelDidChangeTorchMode(_ nextLevel: NextLevel)
@@ -300,7 +300,7 @@ public protocol NextLevelFlashAndTorchDelegate: NSObjectProtocol {
 
 /// Video delegate, provides updates on video related recording and capture functionality.
 /// All methods are called on the main queue with the exception of nextLevel:renderToCustomContextWithSampleBuffer:onQueue.
-public protocol NextLevelVideoDelegate: NSObjectProtocol {
+public protocol NextLevelVideoDelegate: AnyObject {
     
     // video zoom
     func nextLevel(_ nextLevel: NextLevel, didUpdateVideoZoomFactor videoZoomFactor: Float)
@@ -341,7 +341,7 @@ public protocol NextLevelVideoDelegate: NSObjectProtocol {
 // MARK: - NextLevelPhotoDelegate
 
 /// Photo delegate, provides updates on photo related capture functionality.
-public protocol NextLevelPhotoDelegate: NSObjectProtocol {
+public protocol NextLevelPhotoDelegate: AnyObject {
     
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
     func nextLevel(_ nextLevel: NextLevel, didCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
@@ -356,7 +356,7 @@ public protocol NextLevelPhotoDelegate: NSObjectProtocol {
 // MARK: - NextLevelDepthDataDelegate
 
 /// Depth data delegate, provides depth data updates
-public protocol NextLevelDepthDataDelegate: NSObjectProtocol {
+public protocol NextLevelDepthDataDelegate: AnyObject {
 
     @available(iOS 11.0, *)
     func depthDataOutput(_ nextLevel: NextLevel, didOutput depthData: AVDepthData, timestamp: CMTime)
