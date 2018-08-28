@@ -195,3 +195,14 @@ public protocol NextLevelDepthDataDelegate: AnyObject {
     func depthDataOutput(_ nextLevel: NextLevel, didDrop depthData: AVDepthData, timestamp: CMTime, reason: AVCaptureOutput.DataDroppedReason)
     
 }
+
+// MARK: - NextLevelPortraitEffectsMatteDelegate
+
+/// Portrait Effects Matte delegate, provides portrait effects matte updates
+public protocol NextLevelPortraitEffectsMatteDelegate: AnyObject {
+    
+    @available(iOS 12.0, *)
+    func portraitEffectsMatteOutput(_ nextLevel: NextLevel, didOutput portraitEffectsMatte: AVPortraitEffectsMatte)
+    
+}
+

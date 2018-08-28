@@ -201,8 +201,6 @@ public enum NextLevelError: Error, CustomStringConvertible {
     }
 }
 
-// MARK: - constants
-
 private let NextLevelCaptureSessionQueueIdentifier = "engineering.NextLevel.CaptureSession"
 private let NextLevelCaptureSessionQueueSpecificKey = DispatchSpecificKey<()>()
 private let NextLevelDepthDataQueueIdentifier = "engineering.NextLevel.DepthData"
@@ -222,6 +220,7 @@ public class NextLevel: NSObject {
     public weak var videoDelegate: NextLevelVideoDelegate?
     public weak var photoDelegate: NextLevelPhotoDelegate?
     public weak var depthDataDelegate: NextLevelDepthDataDelegate?
+    public weak var portraitEffectsMatteDelegate: NextLevelPortraitEffectsMatteDelegate?
     
     // preview
     
@@ -321,6 +320,11 @@ public class NextLevel: NSObject {
     
     /// When `true`, enables streaming depth data capture (use PhotoConfiguration for photos)
     public var depthDataCaptureEnabled: Bool = false
+    
+    // portrait effects matte data
+    
+    /// When `true`, enables streaming of portrait effects matte data capture (use PhotoConfiguration for photos)
+    public var portraitEffectsMatteCaptureEnabled: Bool = false
     
     // state
     
@@ -811,6 +815,11 @@ extension NextLevel {
             let _ = self.addPhotoOutput()
             if self.depthDataCaptureEnabled {
                 let _ = self.addDepthDataOutput()
+                
+                // portrait effects matte needs depth to work
+                if self.portraitEffectsMatteCaptureEnabled {
+                    let _ = self.addPortraitEffectsMatteOutput()
+                }
             }
             break
         case .audio:
@@ -1034,6 +1043,26 @@ extension NextLevel {
             }
         }
         print("NextLevel, couldn't add depth data output to session")
+        return false
+    }
+    
+    private func addPortraitEffectsMatteOutput() -> Bool {
+        guard portraitEffectsMatteCaptureEnabled else {
+            return false
+        }
+        
+        if #available(iOS 12.0, *) {
+            guard let photoOutput = self._photoOutput else {
+                return false
+            }
+            
+            // enables portrait effects matte
+            if photoOutput.isPortraitEffectsMatteDeliverySupported {
+                photoOutput.isPortraitEffectsMatteDeliveryEnabled = true
+                return true
+            }
+        }
+        print("NextLevel, couldn't enable portrait effects matte delivery in the output")
         return false
     }
     
@@ -2652,6 +2681,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
         }
     }
     
+    
     public func photoOutput(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         if let sampleBuffer = photoSampleBuffer {
             
@@ -2723,6 +2753,16 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
         }
     }
     
+    @available(iOS 11.0, *)
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        
+        if #available(iOS 12.0, *){
+            if let portraitEffectsMatte = photo.portraitEffectsMatte {
+                self.portraitEffectsMatteDelegate?.portraitEffectsMatteOutput(self, didOutput: portraitEffectsMatte)
+            }
+        }
+    }
+    
 }
 
 // MARK: - AVCaptureDepthDataOutputDelegate
@@ -2739,6 +2779,7 @@ extension NextLevel: AVCaptureDepthDataOutputDelegate {
     public func depthDataOutput(_ output: AVCaptureDepthDataOutput, didDrop depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection, reason: AVCaptureOutput.DataDroppedReason) {
             self.depthDataDelegate?.depthDataOutput(self, didDrop: depthData, timestamp: timestamp, reason: reason)
     }
+    
     
 }
 
@@ -3032,6 +3073,7 @@ extension NextLevel {
             // TODO: add delegate callback
         })
         
+
         self._observers.append(currentDevice.observe(\.iso, options: [.new]) { [weak self] (object, change) in
             // TODO: add delegate callback
         })
