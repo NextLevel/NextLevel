@@ -2490,6 +2490,7 @@ extension NextLevel {
                 
                 let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
                 photoSettings.isHighResolutionPhotoEnabled = self.photoConfiguration.isHighResolutionEnabled
+                photoOutput.isHighResolutionCaptureEnabled = self.photoConfiguration.isHighResolutionEnabled
                 
                 if #available(iOS 11.0, *) {
                     if photoOutput.isDepthDataDeliverySupported {
