@@ -25,7 +25,6 @@
 
 import Foundation
 import AVFoundation
-import CoreImage
 import CoreVideo
 #if USE_ARKIT
 import ARKit
