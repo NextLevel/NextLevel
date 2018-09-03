@@ -27,27 +27,6 @@ import UIKit
 import Foundation
 import AVFoundation
 
-extension AVCaptureDeviceInput {
-    
-    /// Returns the capture device input for the desired media type and capture session, otherwise nil.
-    ///
-    /// - Parameters:
-    ///   - mediaType: Specified media type. (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
-    ///   - captureSession: Capture session for which to query
-    /// - Returns: Desired capture device input for the associated media type, otherwise nil
-    public class func deviceInput(withMediaType mediaType: AVMediaType, captureSession: AVCaptureSession) -> AVCaptureDeviceInput? {
-        if let inputs = captureSession.inputs as? [AVCaptureDeviceInput] {
-            for deviceInput in inputs {
-                if deviceInput.device.hasMediaType(mediaType) {
-                    return deviceInput
-                }
-            }
-        }
-        return nil
-    }
-    
-}
-
 extension AVCaptureConnection {
     
     /// Returns the capture connection for the desired media type, otherwise nil.
@@ -69,9 +48,30 @@ extension AVCaptureConnection {
     
 }
 
+extension AVCaptureDeviceInput {
+    
+    /// Returns the capture device input for the desired media type and capture session, otherwise nil.
+    ///
+    /// - Parameters:
+    ///   - mediaType: Specified media type. (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
+    ///   - captureSession: Capture session for which to query
+    /// - Returns: Desired capture device input for the associated media type, otherwise nil
+    public class func deviceInput(withMediaType mediaType: AVMediaType, captureSession: AVCaptureSession) -> AVCaptureDeviceInput? {
+        if let inputs = captureSession.inputs as? [AVCaptureDeviceInput] {
+            for deviceInput in inputs {
+                if deviceInput.device.hasMediaType(mediaType) {
+                    return deviceInput
+                }
+            }
+        }
+        return nil
+    }
+    
+}
+
 extension AVCaptureDevice {
 
-    // MARK: device lookup
+    // MARK: - device lookup
 
     /// Returns the capture device for the desired device type and position.
     /// #protip, NextLevelDevicePosition.avfoundationType can provide the AVFoundation type.
@@ -218,44 +218,6 @@ extension AVCaptureDevice.Format {
     
 }
 
-extension AVCaptureVideoOrientation {
-    
-    /// UIKit orientation equivalent type
-    public var uikitType: UIDeviceOrientation {
-        switch self {
-        case .portrait:
-            return .portrait
-        case .landscapeLeft:
-            return .landscapeLeft
-        case .landscapeRight:
-            return .landscapeRight
-        case .portraitUpsideDown:
-            return .portraitUpsideDown
-        }
-    }
-
-    internal static func avorientationFromUIDeviceOrientation(_ orientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
-        var avorientation: AVCaptureVideoOrientation = .portrait
-        switch orientation {
-        case .portrait:
-            break
-        case .landscapeLeft:
-            avorientation = .landscapeRight
-            break
-        case .landscapeRight:
-            avorientation = .landscapeLeft
-            break
-        case .portraitUpsideDown:
-            avorientation = .portraitUpsideDown
-            break
-        default:
-            break
-        }
-        return avorientation
-    }
-    
-}
-
 extension AVCaptureDevice.Position {
     
     /// Checks if a camera device is available for a position.
@@ -294,6 +256,44 @@ extension AVCaptureDevice.WhiteBalanceGains {
         newGains.blueGain = Swift.min(captureDevice.maxWhiteBalanceGain, Swift.max(1.0, newGains.blueGain))
         
         return newGains
+    }
+    
+}
+
+extension AVCaptureVideoOrientation {
+    
+    /// UIKit orientation equivalent type
+    public var uikitType: UIDeviceOrientation {
+        switch self {
+        case .portrait:
+            return .portrait
+        case .landscapeLeft:
+            return .landscapeLeft
+        case .landscapeRight:
+            return .landscapeRight
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+        }
+    }
+    
+    internal static func avorientationFromUIDeviceOrientation(_ orientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
+        var avorientation: AVCaptureVideoOrientation = .portrait
+        switch orientation {
+        case .portrait:
+            break
+        case .landscapeLeft:
+            avorientation = .landscapeRight
+            break
+        case .landscapeRight:
+            avorientation = .landscapeLeft
+            break
+        case .portraitUpsideDown:
+            avorientation = .portraitUpsideDown
+            break
+        default:
+            break
+        }
+        return avorientation
     }
     
 }
