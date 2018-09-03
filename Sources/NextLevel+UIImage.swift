@@ -22,12 +22,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 //
-//  Created by BrikerMan on 2017/12/23.
-//  Copyright © 2017年 NextLevel. All rights reserved.
 
 import UIKit
 
 extension UIImage {
+
+    //  via by BrikerMan on 2017/12/23.
+
     /// EZSE: Returns cropped image from CGRect
     public func nx_croppedImage(to ratio: CGFloat) -> UIImage {
         let height = self.size.width * ratio
@@ -43,4 +44,5 @@ extension UIImage {
         let croppedImage: UIImage = UIImage(cgImage: imageRef!, scale: self.scale, orientation: UIImageOrientation.up)
         return croppedImage
     }
+    
 }
