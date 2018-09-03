@@ -254,14 +254,6 @@ public class NextLevel: NSObject {
     
     // camera configuration
     
-    /// Checks if a camera device is available for a position.
-    ///
-    /// - Parameter devicePosition: Camera device position to query.
-    /// - Returns: `true` if the camera device exists, otherwise false.
-    public func isCameraDeviceAvailable(withDevicePosition devicePosition: NextLevelDevicePosition) -> Bool {
-        return UIImagePickerController .isCameraDeviceAvailable(devicePosition.uikitType)
-    }
-    
     /// The current capture mode of the device.
     public var captureMode: NextLevelCaptureMode = .video {
         didSet {
@@ -1811,32 +1803,6 @@ extension NextLevel {
         } catch {
             print("NextLevel, setWhiteBalanceModeLocked failed to lock device for configuration")
         }
-    }
-    
-    /// Calculates focal length and principle point camera intrinsic parameters for OpenCV.
-    /// (see Hartley's Mutiple View Geometry, Chapter 6)
-    ///
-    /// - Parameters:
-    ///   - focalLengthX: focal length along the x-axis
-    ///   - focalLengthY: focal length along the y-axis
-    ///   - principlePointX: principle point x-coordinate
-    ///   - principlePointY: principle point y-coordinate
-    /// - Returns: `true` when the focal length and principle point parameters are successfully calculated.
-    public func focalLengthAndPrinciplePoint(focalLengthX: inout Float, focalLengthY: inout Float, principlePointX: inout Float, principlePointY: inout Float) -> Bool {
-        if let device: AVCaptureDevice = self._currentDevice {
-            let dimensions = CMVideoFormatDescriptionGetPresentationDimensions(device.activeFormat.formatDescription, true, true)
-        
-            principlePointX = Float(dimensions.width) * 0.5
-            principlePointY = Float(dimensions.height) * 0.5
-            
-            let horizontalFieldOfView = device.activeFormat.videoFieldOfView
-            let verticalFieldOfView = (horizontalFieldOfView / principlePointX) * principlePointY
-            
-            focalLengthX = fabs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * .pi / 2 )) )
-            focalLengthY = fabs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * .pi / 2 )) )
-            return true
-        }
-        return false
     }
     
     // private functions

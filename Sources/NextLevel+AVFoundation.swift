@@ -154,6 +154,30 @@ extension AVCaptureDevice {
         return AVCaptureDevice.default(for: AVMediaType.audio)
     }
     
+    // MARK: - utilities
+    
+    /// Calculates focal length and principle point camera intrinsic parameters for OpenCV.
+    /// (see Hartley's Mutiple View Geometry, Chapter 6)
+    ///
+    /// - Parameters:
+    ///   - focalLengthX: focal length along the x-axis
+    ///   - focalLengthY: focal length along the y-axis
+    ///   - principlePointX: principle point x-coordinate
+    ///   - principlePointY: principle point y-coordinate
+    /// - Returns: `true` when the focal length and principle point parameters are successfully calculated.
+    public func focalLengthAndPrinciplePoint(focalLengthX: inout Float, focalLengthY: inout Float, principlePointX: inout Float, principlePointY: inout Float) {
+        let dimensions = CMVideoFormatDescriptionGetPresentationDimensions(self.activeFormat.formatDescription, true, true)
+        
+        principlePointX = Float(dimensions.width) * 0.5
+        principlePointY = Float(dimensions.height) * 0.5
+        
+        let horizontalFieldOfView = self.activeFormat.videoFieldOfView
+        let verticalFieldOfView = (horizontalFieldOfView / principlePointX) * principlePointY
+        
+        focalLengthX = fabs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * .pi / 2 )) )
+        focalLengthY = fabs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * .pi / 2 )) )
+    }
+    
 }
 
 extension AVCaptureDevice.Format {
@@ -233,6 +257,14 @@ extension AVCaptureVideoOrientation {
 }
 
 extension AVCaptureDevice.Position {
+    
+    /// Checks if a camera device is available for a position.
+    ///
+    /// - Parameter devicePosition: Camera device position to query.
+    /// - Returns: `true` if the camera device exists, otherwise false.
+    public var isCameraDevicePositionAvailable: Bool {
+        return UIImagePickerController.isCameraDeviceAvailable(self.uikitType)
+    }
     
     /// UIKit device equivalent type
     public var uikitType: UIImagePickerControllerCameraDevice {
