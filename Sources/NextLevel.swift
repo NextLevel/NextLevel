@@ -828,7 +828,7 @@ extension NextLevel {
     
 }
 
-// MARK: - NextLevel private session configuration support
+// MARK: - private session configuration support
 
 extension NextLevel {
     
@@ -1286,7 +1286,7 @@ extension NextLevel {
     
 }
 
-// MARK: - capture mode and device settings (flash, torch, focus, exposure, white balance, and frame rate)
+// MARK: - preview
 
 extension NextLevel {
     
@@ -1305,8 +1305,153 @@ extension NextLevel {
             previewConnection.isEnabled = true
         }
     }
+}
+
+// MARK: - capture device switching
+
+extension NextLevel {
     
-    // flash and torch
+    /// Triggers a camera device position change.
+    public func flipCaptureDevicePosition() {
+        self.devicePosition = self.devicePosition == .back ? .front : .back
+    }
+    
+    /// Changes capture device if the desired device is available.
+    public func changeCaptureDeviceIfAvailable(captureDevice: NextLevelDeviceType) throws {
+        let deviceForUse = AVCaptureDevice.captureDevice(withType: captureDevice.avfoundationType, forPosition: .back)
+        if deviceForUse == nil {
+            throw NextLevelError.deviceNotAvailable
+        } else {
+            self.executeClosureAsyncOnSessionQueueIfNecessary {
+                self._requestedDevice = deviceForUse
+                self.configureSessionDevices()
+                self.updateVideoOrientation()
+            }
+        }
+    }
+    
+    internal func updateVideoOrientation() {
+        if let session = self._recordingSession {
+            if session.currentClipHasAudio == false && session.currentClipHasVideo == false {
+                session.reset()
+            }
+        }
+        
+        var didChangeOrientation = false
+        let currentOrientation = AVCaptureVideoOrientation.avorientationFromUIDeviceOrientation(UIDevice.current.orientation)
+        
+        if let previewConnection = self.previewLayer.connection {
+            if previewConnection.isVideoOrientationSupported && previewConnection.videoOrientation != currentOrientation {
+                previewConnection.videoOrientation = currentOrientation
+                didChangeOrientation = true
+            }
+        }
+        
+        if let videoOutput = self._videoOutput, let videoConnection = videoOutput.connection(with: AVMediaType.video) {
+            if videoConnection.isVideoOrientationSupported && videoConnection.videoOrientation != currentOrientation {
+                videoConnection.videoOrientation = currentOrientation
+                didChangeOrientation = true
+            }
+        }
+        
+        if let photoOutput = self._photoOutput, let photoConnection = photoOutput.connection(with: AVMediaType.video) {
+            if photoConnection.isVideoOrientationSupported && photoConnection.videoOrientation != currentOrientation {
+                photoConnection.videoOrientation = currentOrientation
+                didChangeOrientation = true
+            }
+        }
+        
+        if didChangeOrientation == true {
+            self.deviceDelegate?.nextLevel(self, didChangeDeviceOrientation: currentOrientation)
+        }
+    }
+    
+    internal func updateVideoOutputSettings() {
+        if let videoOutput = self._videoOutput {
+            if let videoConnection = videoOutput.connection(with: AVMediaType.video) {
+                if videoConnection.isVideoStabilizationSupported {
+                    videoConnection.preferredVideoStabilizationMode = self.videoStabilizationMode
+                }
+            }
+        }
+    }
+}
+
+// MARK: - mirroring
+
+extension NextLevel {
+    
+    // mirroring
+    
+    /// Changes the current capture device's mirroring mode.
+    public var mirroringMode: NextLevelMirroringMode {
+        get {
+            if let pc = self.previewLayer.connection {
+                if pc.isVideoMirroringSupported {
+                    if !pc.automaticallyAdjustsVideoMirroring {
+                        return pc.isVideoMirrored ? .on : .off
+                    } else {
+                        return .auto
+                    }
+                }
+            }
+            return .off
+        }
+        set {
+            guard let _ = self._captureSession,
+                let videoOutput = self._videoOutput
+                else {
+                    return
+            }
+            
+            switch newValue {
+            case .off:
+                if let vc = videoOutput.connection(with: AVMediaType.video) {
+                    if vc.isVideoMirroringSupported {
+                        vc.isVideoMirrored = false
+                    }
+                }
+                if let pc = self.previewLayer.connection {
+                    if pc.isVideoMirroringSupported {
+                        pc.automaticallyAdjustsVideoMirroring = false
+                        pc.isVideoMirrored = false
+                    }
+                }
+                break
+            case .on:
+                if let vc = videoOutput.connection(with: AVMediaType.video) {
+                    if vc.isVideoMirroringSupported {
+                        vc.isVideoMirrored = true
+                    }
+                }
+                if let pc = self.previewLayer.connection {
+                    if pc.isVideoMirroringSupported {
+                        pc.automaticallyAdjustsVideoMirroring = false
+                        pc.isVideoMirrored = true
+                    }
+                }
+                break
+            case .auto:
+                if let vc = videoOutput.connection(with: AVMediaType.video), let device = self._currentDevice {
+                    if vc.isVideoMirroringSupported {
+                        vc.isVideoMirrored = (device.position == .front)
+                    }
+                }
+                if let pc = self.previewLayer.connection {
+                    if pc.isVideoMirroringSupported {
+                        pc.automaticallyAdjustsVideoMirroring = true
+                    }
+                }
+                break
+            }
+        }
+    }
+    
+}
+
+// MARK: - flash and torch
+
+extension NextLevel {
     
     /// Checks if a flash is available.
     public var isFlashAvailable: Bool {
@@ -1379,6 +1524,11 @@ extension NextLevel {
             }
         }
     }
+}
+
+// MARK: - focus, exposure, white balance
+
+extension NextLevel {
     
     // focus, exposure, and white balance
     // note: focus and exposure modes change when adjusting on point
@@ -1980,72 +2130,11 @@ extension NextLevel {
             self.deviceDelegate?.nextLevelDidChangeWhiteBalance(self)
         }
     }
-    
-    // mirroring
-    
-    /// Changes the current capture device's mirroring mode.
-    public var mirroringMode: NextLevelMirroringMode {
-        get {
-            if let pc = self.previewLayer.connection {
-                if pc.isVideoMirroringSupported {
-                    if !pc.automaticallyAdjustsVideoMirroring {
-                        return pc.isVideoMirrored ? .on : .off
-                    } else {
-                        return .auto
-                    }
-                }
-            }
-            return .off
-        }
-        set {
-            guard let _ = self._captureSession,
-                  let videoOutput = self._videoOutput
-            else {
-                return
-            }
+}
 
-            switch newValue {
-            case .off:
-                if let vc = videoOutput.connection(with: AVMediaType.video) {
-                    if vc.isVideoMirroringSupported {
-                        vc.isVideoMirrored = false
-                    }
-                }
-                if let pc = self.previewLayer.connection {
-                    if pc.isVideoMirroringSupported {
-                        pc.automaticallyAdjustsVideoMirroring = false
-                        pc.isVideoMirrored = false
-                    }
-                }
-                break
-            case .on:
-                if let vc = videoOutput.connection(with: AVMediaType.video) {
-                    if vc.isVideoMirroringSupported {
-                        vc.isVideoMirrored = true
-                    }
-                }
-                if let pc = self.previewLayer.connection {
-                    if pc.isVideoMirroringSupported {
-                        pc.automaticallyAdjustsVideoMirroring = false
-                        pc.isVideoMirrored = true
-                    }
-                }
-                break
-            case .auto:
-                if let vc = videoOutput.connection(with: AVMediaType.video), let device = self._currentDevice {
-                    if vc.isVideoMirroringSupported {
-                        vc.isVideoMirrored = (device.position == .front)
-                    }
-                }
-                if let pc = self.previewLayer.connection {
-                    if pc.isVideoMirroringSupported {
-                        pc.automaticallyAdjustsVideoMirroring = true
-                    }
-                }
-                break
-            }
-        }
-    }
+// MARK: - frame rate support
+
+extension NextLevel {
     
     // frame rate
     
@@ -2148,76 +2237,6 @@ extension NextLevel {
                 print("Nextlevel, could not find a current device format matching the requirements")
             }
                 
-        }
-    }
-}
-
-// MARK: - capture device switching
-
-extension NextLevel {
-    
-    /// Triggers a camera device position change.
-    public func flipCaptureDevicePosition() {
-        self.devicePosition = self.devicePosition == .back ? .front : .back
-    }
-    
-    /// Changes capture device if the desired device is available.
-    public func changeCaptureDeviceIfAvailable(captureDevice: NextLevelDeviceType) throws {
-        let deviceForUse = AVCaptureDevice.captureDevice(withType: captureDevice.avfoundationType, forPosition: .back)
-        if deviceForUse == nil {
-            throw NextLevelError.deviceNotAvailable
-        } else {
-            self.executeClosureAsyncOnSessionQueueIfNecessary {
-                self._requestedDevice = deviceForUse
-                self.configureSessionDevices()
-                self.updateVideoOrientation()
-            }
-        }
-    }
-    
-    internal func updateVideoOrientation() {
-        if let session = self._recordingSession {
-            if session.currentClipHasAudio == false && session.currentClipHasVideo == false {
-                session.reset()
-            }
-        }
-        
-        var didChangeOrientation = false
-        let currentOrientation = AVCaptureVideoOrientation.avorientationFromUIDeviceOrientation(UIDevice.current.orientation)
-        
-        if let previewConnection = self.previewLayer.connection {
-            if previewConnection.isVideoOrientationSupported && previewConnection.videoOrientation != currentOrientation {
-                previewConnection.videoOrientation = currentOrientation
-                didChangeOrientation = true
-            }
-        }
-        
-        if let videoOutput = self._videoOutput, let videoConnection = videoOutput.connection(with: AVMediaType.video) {
-            if videoConnection.isVideoOrientationSupported && videoConnection.videoOrientation != currentOrientation {
-                videoConnection.videoOrientation = currentOrientation
-                didChangeOrientation = true
-            }
-        }
-        
-        if let photoOutput = self._photoOutput, let photoConnection = photoOutput.connection(with: AVMediaType.video) {
-            if photoConnection.isVideoOrientationSupported && photoConnection.videoOrientation != currentOrientation {
-                photoConnection.videoOrientation = currentOrientation
-                didChangeOrientation = true
-            }
-        }
-        
-        if didChangeOrientation == true {
-            self.deviceDelegate?.nextLevel(self, didChangeDeviceOrientation: currentOrientation)
-        }
-    }
-    
-    internal func updateVideoOutputSettings() {
-        if let videoOutput = self._videoOutput {
-            if let videoConnection = videoOutput.connection(with: AVMediaType.video) {
-                if videoConnection.isVideoStabilizationSupported {
-                    videoConnection.preferredVideoStabilizationMode = self.videoStabilizationMode
-                }
-            }
         }
     }
 }
