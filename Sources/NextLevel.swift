@@ -3133,52 +3133,64 @@ extension NextLevel {
     
     internal func addKeyValueObservers(_ currentDevice: AVCaptureDevice) {
         
-        self._observers.append(currentDevice.observe(\.isAdjustingFocus, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.isAdjustingFocus, options: [.new]) { [weak self] (object, change) in
             if object.isAdjustingFocus {
-                self.focusStarted()
+                self?.focusStarted()
             } else {
-                self.focusEnded()
+                self?.focusEnded()
             }
         })
 
-        self._observers.append(currentDevice.observe(\.isAdjustingExposure, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.isAdjustingExposure, options: [.new]) { [weak self] (object, change) in
             if object.isAdjustingExposure {
-                self.exposureStarted()
+                self?.exposureStarted()
             } else {
-                self.exposureEnded()
+                self?.exposureEnded()
             }
         })
 
-        self._observers.append(currentDevice.observe(\.isAdjustingWhiteBalance, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.isAdjustingWhiteBalance, options: [.new]) { [weak self] (object, change) in
             if object.isAdjustingWhiteBalance {
-                self.whiteBalanceStarted()
+                self?.whiteBalanceStarted()
             } else {
-                self.whiteBalanceEnded()
+                self?.whiteBalanceEnded()
             }
         })
 
-        self._observers.append(currentDevice.observe(\.isFlashAvailable, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.isFlashAvailable, options: [.new]) { [weak self] (object, change) in
+            guard let strongSelf = self else {
+                return
+            }
+
             DispatchQueue.main.async {
-                self.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(self)
+                strongSelf.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(strongSelf)
             }
         })
         
-        self._observers.append(currentDevice.observe(\.isTorchAvailable, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.isTorchAvailable, options: [.new]) { [weak self] (object, change) in
+            guard let strongSelf = self else {
+                return
+            }
+            
             DispatchQueue.main.async {
-                self.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(self)
+                strongSelf.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(strongSelf)
             }
         })
         
-        self._observers.append(currentDevice.observe(\.isFlashActive, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.isFlashActive, options: [.new]) { [weak self] (object, change) in
+            guard let strongSelf = self else {
+                return
+            }
+            
             // adjust white balance mode depending on the flash
-            let whiteBalanceMode = self.whiteBalanceModeBestForExposureMode(exposureMode: object.exposureMode)
+            let whiteBalanceMode = strongSelf.whiteBalanceModeBestForExposureMode(exposureMode: object.exposureMode)
             let currentWhiteBalanceMode = object.whiteBalanceMode
             
             if whiteBalanceMode != currentWhiteBalanceMode {
                 do {
                     try object.lockForConfiguration()
                     
-                    self.adjustWhiteBalanceForExposureMode(exposureMode: object.exposureMode)
+                    strongSelf.adjustWhiteBalanceForExposureMode(exposureMode: object.exposureMode)
                     
                     object.unlockForConfiguration()
                 }
@@ -3188,49 +3200,62 @@ extension NextLevel {
             }
             
             DispatchQueue.main.async {
-                self.flashDelegate?.nextLevelFlashActiveChanged(self)
+                strongSelf.flashDelegate?.nextLevelFlashActiveChanged(strongSelf)
             }
         })
         
-        self._observers.append(currentDevice.observe(\.isTorchActive, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.isTorchActive, options: [.new]) { [weak self] (object, change) in
+            guard let strongSelf = self else {
+                return
+            }
+            
             DispatchQueue.main.async {
-                self.flashDelegate?.nextLevelTorchActiveChanged(self)
+                strongSelf.flashDelegate?.nextLevelTorchActiveChanged(strongSelf)
             }
         })
 
-        self._observers.append(currentDevice.observe(\.lensPosition, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.lensPosition, options: [.new]) { [weak self] (object, change) in
+            guard let strongSelf = self else {
+                return
+            }
+            
             if object.focusMode != .locked {
                 DispatchQueue.main.async {
-                    self.deviceDelegate?.nextLevel(self, didChangeLensPosition: object.lensPosition)
+                    strongSelf.deviceDelegate?.nextLevel(strongSelf, didChangeLensPosition: object.lensPosition)
                 }
             }
         })
         
-        self._observers.append(currentDevice.observe(\.exposureDuration, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.exposureDuration, options: [.new]) { [weak self] (object, change) in
+            
             // TODO: add delegate callback
         })
         
-        self._observers.append(currentDevice.observe(\.ISO, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.ISO, options: [.new]) { [weak self] (object, change) in
             // TODO: add delegate callback
         })
         
-        self._observers.append(currentDevice.observe(\.exposureTargetBias, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.exposureTargetBias, options: [.new]) { [weak self] (object, change) in
             // TODO: add delegate callback
         })
         
-        self._observers.append(currentDevice.observe(\.exposureTargetOffset, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.exposureTargetOffset, options: [.new]) { [weak self] (object, change) in
             // TODO: add delegate callback
         })
         
-        self._observers.append(currentDevice.observe(\.deviceWhiteBalanceGains, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.deviceWhiteBalanceGains, options: [.new]) { [weak self] (object, change) in
             if object.exposureMode != .locked {
                 // TODO: add delegate callback
             }
         })
         
-        self._observers.append(currentDevice.observe(\.videoZoomFactor, options: [.new]) { (object, change) in
+        self._observers.append(currentDevice.observe(\.videoZoomFactor, options: [.new]) { [weak self] (object, change) in
+            guard let strongSelf = self else {
+                return
+            }
+            
             DispatchQueue.main.async {
-                self.videoDelegate?.nextLevel(self, didUpdateVideoZoomFactor: self.videoZoomFactor)
+                strongSelf.videoDelegate?.nextLevel(strongSelf, didUpdateVideoZoomFactor: strongSelf.videoZoomFactor)
             }
         })
     }
