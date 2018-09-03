@@ -303,16 +303,16 @@
 <ul>
 <li><code>4.2</code> - Target your Podfile to the <code>swift4.2</code> branch</li>
 <li><code>4.0</code> - Target your Podfile to the latest release or master</li>
-<li><code>3.2</code> - Target your Podfile to release <code>0.6.3</code> or the <code>swift3.2</code> branch</li>
+<li><code>3.2</code> - Target your Podfile to the <code>swift3.2</code> branch</li>
 </ul>
 <h2 id='quick-start' class='heading'>Quick Start</h2>
 <pre class="highlight ruby"><code>
 <span class="c1"># CocoaPods</span>
 <span class="n">swift_version</span> <span class="o">=</span> <span class="s2">"4.0"</span>
-<span class="n">pod</span> <span class="s2">"NextLevel"</span><span class="p">,</span> <span class="s2">"~&gt; 0.9.5"</span>
+<span class="n">pod</span> <span class="s2">"NextLevel"</span><span class="p">,</span> <span class="s2">"~&gt; 0.10.0"</span>
 
 <span class="c1"># Carthage</span>
-<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mf">0.9</span><span class="o">.</span><span class="mi">5</span>
+<span class="n">github</span> <span class="s2">"nextlevel/NextLevel"</span> <span class="o">~&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">10</span><span class="o">.</span><span class="mi">0</span>
 
 <span class="c1"># Swift PM</span>
 <span class="n">let</span> <span class="n">package</span> <span class="o">=</span> <span class="no">Package</span><span class="p">(</span>
@@ -326,16 +326,17 @@
 <p>Alternatively, drop the NextLevel <a href="https://github.com/NextLevel/NextLevel/tree/master/Sources">source files</a> or project file into your Xcode project.</p>
 <h2 id='arkit-capture' class='heading'>ARKit Capture</h2>
 
-<p>Starting with release <code>0.8.0</code>, NextLevel provides a mode for ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.</p>
+<p>Starting with <code>0.8.0</code>, NextLevel provides ARKit capture in addition to the AVFoundation functionality. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.
+The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement.</p>
 
-<p>The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement. It is not compiled by default without the inclusion of the Swift compiler flag <code>USE_ARKIT</code>, since Apple will <a href="https://github.com/NextLevel/NextLevel/issues/106">reject</a> apps that link ARKit and do not use it. To try it out, setup the AppDelegate to load the <code>MixedRealityViewController</code> class and include the xcode build settings flag.</p>
+<p>It is not compiled by default without the inclusion of the Swift compiler flag <code>USE_ARKIT</code>, since Apple will <a href="https://github.com/NextLevel/NextLevel/issues/106">reject</a> apps that link ARKit and do not use it.</p>
 
-<p>If you use Cocoapods, you can include <code>-DUSE_ARKIT</code> with the following podfile addition or by adding it to your Xcode build settings.</p>
+<p>If you use Cocoapods, you can include <code>-D USE_ARKIT</code> with the following <code>Podfile</code> addition or by adding it to your Xcode build settings.</p>
 <pre class="highlight ruby"><code>  <span class="n">installer</span><span class="p">.</span><span class="nf">pods_project</span><span class="p">.</span><span class="nf">targets</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">target</span><span class="o">|</span>
     <span class="c1"># setup NextLevel for ARKit use</span>
     <span class="k">if</span> <span class="n">target</span><span class="p">.</span><span class="nf">name</span> <span class="o">==</span> <span class="s1">'NextLevel'</span>
       <span class="n">target</span><span class="p">.</span><span class="nf">build_configurations</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-        <span class="n">config</span><span class="p">.</span><span class="nf">build_settings</span><span class="p">[</span><span class="s1">'OTHER_SWIFT_FLAGS'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'-DUSE_ARKIT'</span>
+        <span class="n">config</span><span class="p">.</span><span class="nf">build_settings</span><span class="p">[</span><span class="s1">'OTHER_SWIFT_FLAGS'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'$(inherited) -D USE_ARKIT'</span>
       <span class="k">end</span>
     <span class="k">end</span>
   <span class="k">end</span>
@@ -520,8 +521,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-08-08)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-09-03)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
