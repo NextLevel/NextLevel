@@ -69,14 +69,14 @@ public class NextLevelSession {
     /// Checks if the session is setup for recording video
     public var isVideoReady: Bool {
         get {
-            return self._videoInput?.isReadyForMoreMediaData ?? false
+            return self._videoInput != nil
         }
     }
     
     /// Checks if the session is setup for recording audio
     public var isAudioReady: Bool {
         get {
-            return self._audioInput?.isReadyForMoreMediaData ?? false
+            return self._audioInput != nil
         }
     }
 
@@ -239,9 +239,6 @@ extension NextLevelSession {
     ///   - formatDescription: sample buffer format description
     /// - Returns: True when setup completes successfully
     public func setupVideo(withSettings settings: [String : Any]?, configuration: NextLevelVideoConfiguration, formatDescription: CMFormatDescription? = nil) -> Bool {
-        guard _videoInput == nil else {
-            return true
-        }
         if let formatDescription = formatDescription {
             self._videoInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: settings, sourceFormatHint: formatDescription)
         } else {
@@ -286,9 +283,6 @@ extension NextLevelSession {
     ///   - formatDescription: sample buffer format description
     /// - Returns: True when setup completes successfully
     public func setupAudio(withSettings settings: [String : Any]?, configuration: NextLevelAudioConfiguration, formatDescription: CMFormatDescription) -> Bool {
-        guard _audioInput == nil else {
-            return true
-        }
         self._audioInput = AVAssetWriterInput(mediaType: AVMediaType.audio, outputSettings: settings, sourceFormatHint: formatDescription)
         if let audioInput = self._audioInput {
             audioInput.expectsMediaDataInRealTime = true
