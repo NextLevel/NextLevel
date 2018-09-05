@@ -75,7 +75,7 @@ public class NextLevelSession {
     /// Checks if the session is setup for recording video
     public var isVideoReady: Bool {
         get {
-            return self._videoInput?.isReadyForMoreMediaData ?? false
+            return self._videoInput != nil
         }
     }
     
@@ -88,7 +88,7 @@ public class NextLevelSession {
     /// Checks if the session is setup for recording audio
     public var isAudioReady: Bool {
         get {
-            return self._audioInput?.isReadyForMoreMediaData ?? false
+            return self._audioInput != nil
         }
     }
 

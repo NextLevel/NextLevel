@@ -3032,7 +3032,7 @@ extension NextLevel {
             // TODO: add delegate callback
         })
         
-        self._observers.append(currentDevice.observe(\.ISO, options: [.new]) { [weak self] (object, change) in
+        self._observers.append(currentDevice.observe(\.iso, options: [.new]) { [weak self] (object, change) in
             // TODO: add delegate callback
         })
         
