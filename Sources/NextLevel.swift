@@ -2337,7 +2337,7 @@ extension NextLevel {
     // sample buffer processing
     
     internal func handleVideoOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
-        if session.isVideoReady == false {
+        if session.isVideoSetup == false {
             if let settings = self.videoConfiguration.avcaptureSettingsDictionary(sampleBuffer: sampleBuffer),
                 let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 if !session.setupVideo(withSettings: settings, configuration: self.videoConfiguration, formatDescription: formatDescription) {
@@ -2349,7 +2349,7 @@ extension NextLevel {
             }
         }
         
-        if self._recording && (session.isAudioReady || self.captureMode == .videoWithoutAudio) && session.currentClipHasStarted {
+        if self._recording && (session.isAudioSetup || self.captureMode == .videoWithoutAudio) && session.currentClipHasStarted {
             self.beginRecordingNewClipIfNecessary()
             
             let minTimeBetweenFrames = 0.004
@@ -2411,7 +2411,7 @@ extension NextLevel {
     
     // Beta: handleVideoOutput(pixelBuffer:timestamp:session:) needs to be tested
     internal func handleVideoOutput(pixelBuffer: CVPixelBuffer, timestamp: TimeInterval, session: NextLevelSession) {
-        if session.isVideoReady == false {
+        if session.isVideoSetup == false {
             if let settings = self.videoConfiguration.avcaptureSettingsDictionary(pixelBuffer: pixelBuffer) {
                 if !session.setupVideo(withSettings: settings, configuration: self.videoConfiguration) {
                     print("NextLevel, could not setup video session")
@@ -2422,7 +2422,7 @@ extension NextLevel {
             }
         }
 
-        if self._recording && (session.isAudioReady || self.captureMode == .videoWithoutAudio) && session.currentClipHasStarted {
+        if self._recording && (session.isAudioSetup || self.captureMode == .videoWithoutAudio) && session.currentClipHasStarted {
             self.beginRecordingNewClipIfNecessary()
 
             let minTimeBetweenFrames = 0.004
@@ -2479,7 +2479,7 @@ extension NextLevel {
     }
     
     internal func handleAudioOutput(sampleBuffer: CMSampleBuffer, session: NextLevelSession) {
-        if session.isAudioReady == false {
+        if session.isAudioSetup == false {
             if let settings = self.audioConfiguration.avcaptureSettingsDictionary(sampleBuffer: sampleBuffer),
                 let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 if !session.setupAudio(withSettings: settings, configuration: self.audioConfiguration, formatDescription: formatDescription) {
@@ -2492,7 +2492,7 @@ extension NextLevel {
             }
         }
         
-        if self._recording && session.isVideoReady && session.currentClipHasStarted && session.currentClipHasVideo {
+        if self._recording && session.isVideoSetup && session.currentClipHasStarted && session.currentClipHasVideo {
             self.beginRecordingNewClipIfNecessary()
             
             session.appendAudio(withSampleBuffer: sampleBuffer, completionHandler: { (success: Bool) -> Void in
@@ -2598,9 +2598,7 @@ extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudi
             if let session = self._recordingSession {
                 self.handleVideoOutput(sampleBuffer: sampleBuffer, session: session)
             }
-            
-        }
-        else if let videoOutput = self._videoOutput,
+        } else if let videoOutput = self._videoOutput,
             let audioOutput = self._audioOutput {
             switch captureOutput {
             case videoOutput:
