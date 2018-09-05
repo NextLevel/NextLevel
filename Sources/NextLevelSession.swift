@@ -65,11 +65,23 @@ public class NextLevelSession {
             }
         }
     }
+    
+    public var isVideoSetup: Bool {
+        get {
+            return self._videoInput != nil
+        }
+    }
 
     /// Checks if the session is setup for recording video
     public var isVideoReady: Bool {
         get {
             return self._videoInput?.isReadyForMoreMediaData ?? false
+        }
+    }
+    
+    public var isAudioSetup: Bool {
+        get {
+            return self._audioInput != nil
         }
     }
     
@@ -272,7 +284,7 @@ extension NextLevelSession {
             
             self._pixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput, sourcePixelBufferAttributes: pixelBufferAttri)
         }
-        return self._videoInput != nil
+        return self.isVideoSetup
     }
     
     /// Prepares a session for recording audio.
@@ -288,7 +300,7 @@ extension NextLevelSession {
             audioInput.expectsMediaDataInRealTime = true
             self._audioConfiguration = configuration
         }
-        return self._audioInput != nil
+        return self.isAudioSetup
     }
     
     internal func setupWriter() {
