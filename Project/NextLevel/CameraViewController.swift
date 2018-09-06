@@ -717,6 +717,10 @@ extension CameraViewController: NextLevelPhotoDelegate {
     func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel) {
     }
     
+    @available(iOS 11.0, *)
+    func nextLevelDidFinishProcessingPhoto(_ nextLevel: NextLevel, photo: AVCapturePhoto) {
+    }
+    
 }
 
 // MARK: - KVO

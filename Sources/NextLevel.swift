@@ -351,6 +351,9 @@ public protocol NextLevelPhotoDelegate: AnyObject {
     
     func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel)
     
+    @available(iOS 11.0, *)
+    func nextLevelDidFinishProcessingPhoto(_ nextLevel: NextLevel, photo: AVCapturePhoto)
+    
 }
 
 // MARK: - NextLevelDepthDataDelegate
@@ -505,11 +508,6 @@ public class NextLevel: NSObject {
     
     /// When `true`, enables streaming depth data capture (use PhotoConfiguration for photos)
     public var depthDataCaptureEnabled: Bool = false
-    
-    // portrait effects matte data
-    
-    /// When `true`, enables streaming of portrait effects matte data capture (use PhotoConfiguration for photos)
-    public var portraitEffectsMatteCaptureEnabled: Bool = false
     
     // state
     
@@ -1000,11 +998,7 @@ extension NextLevel {
             let _ = self.addPhotoOutput()
             if self.depthDataCaptureEnabled {
                 let _ = self.addDepthDataOutput()
-                
-                // portrait effects matte needs depth to work
-                if self.portraitEffectsMatteCaptureEnabled {
-                    let _ = self.addPortraitEffectsMatteOutput()
-                }
+
             }
             break
         case .audio:
@@ -1228,26 +1222,6 @@ extension NextLevel {
             }
         }
         print("NextLevel, couldn't add depth data output to session")
-        return false
-    }
-    
-    private func addPortraitEffectsMatteOutput() -> Bool {
-        guard portraitEffectsMatteCaptureEnabled else {
-            return false
-        }
-        
-        if #available(iOS 12.0, *) {
-            guard let photoOutput = self._photoOutput else {
-                return false
-            }
-            
-            // enables portrait effects matte
-            if photoOutput.isPortraitEffectsMatteDeliverySupported {
-                photoOutput.isPortraitEffectsMatteDeliveryEnabled = true
-                return true
-            }
-        }
-        print("NextLevel, couldn't enable portrait effects matte delivery in the output")
         return false
     }
     
@@ -2539,6 +2513,12 @@ extension NextLevel {
                     }
                 }
                 
+                if #available(iOS 12.0, *) {
+                    if photoOutput.isPortraitEffectsMatteDeliverySupported {
+                        photoOutput.isPortraitEffectsMatteDeliveryEnabled = self.photoConfiguration.isPortraitEffectsMatteEnabled
+                    }
+                } 
+                
                 if self.isFlashAvailable {
                     photoSettings.flashMode = self.photoConfiguration.flashMode
                 }
@@ -2946,10 +2926,16 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
     
     @available(iOS 11.0, *)
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        DispatchQueue.main.async {
+            self.photoDelegate?.nextLevelDidFinishProcessingPhoto(self, photo: photo)
+        }
         
+        // MARK: Portrait Effects Matte Output
         if #available(iOS 12.0, *){
             if let portraitEffectsMatte = photo.portraitEffectsMatte {
-                self.portraitEffectsMatteDelegate?.portraitEffectsMatteOutput(self, didOutput: portraitEffectsMatte)
+                DispatchQueue.main.async {
+                    self.portraitEffectsMatteDelegate?.portraitEffectsMatteOutput(self, didOutput: portraitEffectsMatte)
+                }
             }
         }
     }

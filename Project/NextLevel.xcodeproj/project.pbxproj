@@ -33,6 +33,7 @@
 		06CF9CE71F7064170011CE09 /* NextLevel+CoreImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CF9CE51F7064170011CE09 /* NextLevel+CoreImage.swift */; };
 		06CF9CE91F70678D0011CE09 /* NextLevel+CoreMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CF9CE81F70678D0011CE09 /* NextLevel+CoreMedia.swift */; };
 		06CF9CEA1F70678D0011CE09 /* NextLevel+CoreMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CF9CE81F70678D0011CE09 /* NextLevel+CoreMedia.swift */; };
+		593934BD213B4C41009AAACF /* MixedRealityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D620D220B36DDB0000C3A4 /* MixedRealityViewController.swift */; };
 		6A3D083C1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3D083B1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift */; };
 		6A3D083D1FFCCC5A001E4AB1 /* NextLevel+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3D083B1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift */; };
 /* End PBXBuildFile section */
@@ -225,7 +226,7 @@
 				TargetAttributes = {
 					06AECC5E1AC3830800EFCD03 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = PW68C6MX6N;
+						DevelopmentTeam = N8MAFJDDC5;
 						LastSwiftMigration = 0900;
 					};
 					06C86E4E1D8208D900A43411 = {
@@ -291,6 +292,7 @@
 				063E5351211A1B4B001B6D33 /* NextLevel+Swift.swift in Sources */,
 				06AECC651AC3830800EFCD03 /* AppDelegate.swift in Sources */,
 				06CF9CE61F7064170011CE09 /* NextLevel+CoreImage.swift in Sources */,
+				593934BD213B4C41009AAACF /* MixedRealityViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,9 +435,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = PW68C6MX6N;
+				DEVELOPMENT_TEAM = N8MAFJDDC5;
 				INFOPLIST_FILE = NextLevel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D USE_ARKIT";
 				PRODUCT_BUNDLE_IDENTIFIER = engineering.NextLevel.NL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -447,9 +450,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = PW68C6MX6N;
+				DEVELOPMENT_TEAM = N8MAFJDDC5;
 				INFOPLIST_FILE = NextLevel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D USE_ARKIT";
 				PRODUCT_BUNDLE_IDENTIFIER = engineering.NextLevel.NL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
