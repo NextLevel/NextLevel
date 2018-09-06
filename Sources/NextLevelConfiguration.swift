@@ -349,6 +349,9 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     /// Enabled depth data capture with photo
     public var isDepthDataEnabled: Bool = false
     
+    /// Enables portrait effects matte output for the photo
+    public var isPortraitEffectsMatteEnabled: Bool = false
+    
     // MARK: - ivars
     
     // change flashMode with NextLevel.flashMode

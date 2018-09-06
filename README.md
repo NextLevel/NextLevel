@@ -12,7 +12,7 @@
 | &#128160; | [ARKit integration](https://developer.apple.com/arkit/) (beta) |
 | &#128247; | dual, wide angle, telephoto, & true depth support |
 | &#128034; | adjustable frame rate on supported hardware (ie fast/slow motion capture) |
-| &#127906; | depth data capture support |
+| &#127906; | depth data capture support & portrait effects matte support |
 | &#128269; | video zoom |
 | &#9878; | white balance, focus, and exposure adjustment |
 | &#128294; | flash and torch support |
