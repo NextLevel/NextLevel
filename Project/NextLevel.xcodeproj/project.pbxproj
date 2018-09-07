@@ -226,7 +226,6 @@
 				TargetAttributes = {
 					06AECC5E1AC3830800EFCD03 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = N8MAFJDDC5;
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
@@ -438,7 +437,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = N8MAFJDDC5;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = NextLevel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
@@ -456,7 +455,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = N8MAFJDDC5;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = NextLevel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
