@@ -158,7 +158,7 @@ public class NextLevelSession {
     internal var _identifier: UUID
     internal var _date: Date
     
-    internal var _totalDuration: CMTime = kCMTimeZero
+    internal var _totalDuration: CMTime = CMTime.zero
     internal var _clips: [NextLevelClip] = []
     internal var _clipFilenameCount: Int = 0
 
@@ -174,15 +174,15 @@ public class NextLevelSession {
     internal var _sessionQueue: DispatchQueue
     internal var _sessionQueueKey: DispatchSpecificKey<()>
     
-    internal var _currentClipDuration: CMTime = kCMTimeZero
+    internal var _currentClipDuration: CMTime = CMTime.zero
     internal var _currentClipHasAudio: Bool = false
     internal var _currentClipHasVideo: Bool = false
 
     internal var _currentClipHasStarted: Bool = false
-    internal var _timeOffset: CMTime = kCMTimeInvalid
-    internal var _startTimestamp: CMTime = kCMTimeInvalid
-    internal var _lastAudioTimestamp: CMTime = kCMTimeInvalid
-    internal var _lastVideoTimestamp: CMTime = kCMTimeInvalid
+    internal var _timeOffset: CMTime = CMTime.invalid
+    internal var _startTimestamp: CMTime = CMTime.invalid
+    internal var _lastAudioTimestamp: CMTime = CMTime.invalid
+    internal var _lastVideoTimestamp: CMTime = CMTime.invalid
     
     private let NextLevelSessionAudioQueueIdentifier = "engineering.NextLevel.session.audioQueue"
     private let NextLevelSessionQueueIdentifier = "engineering.NextLevel.sessionQueue"
@@ -316,8 +316,8 @@ extension NextLevelSession {
                     }
                     
                     if writer.startWriting() {
-                        self._timeOffset = kCMTimeZero
-                        self._startTimestamp = kCMTimeInvalid
+                        self._timeOffset = CMTime.zero
+                        self._startTimestamp = CMTime.invalid
                         self._currentClipHasStarted = true
                     } else {
                         print("NextLevel, writer encountered an error \(String(describing: writer.error))")
@@ -333,9 +333,9 @@ extension NextLevelSession {
     internal func destroyWriter() {
         self._writer = nil
         self._currentClipHasStarted = false
-        self._timeOffset = kCMTimeZero
-        self._startTimestamp = kCMTimeInvalid
-        self._currentClipDuration = kCMTimeZero
+        self._timeOffset = CMTime.zero
+        self._startTimestamp = CMTime.invalid
+        self._currentClipDuration = CMTime.zero
         self._currentClipHasVideo = false
         self._currentClipHasAudio = false
     }
@@ -364,7 +364,7 @@ extension NextLevelSession {
         
         if let timeScale = self._videoConfiguration?.timescale,
             timeScale != 1.0 {
-            let scaledDuration = CMTimeMultiplyByFloat64(minFrameDuration, timeScale)
+            let scaledDuration = CMTimeMultiplyByFloat64(minFrameDuration, multiplier: timeScale)
             if self._currentClipDuration.value > 0 {
                 self._timeOffset = CMTimeAdd(self._timeOffset, CMTimeSubtract(minFrameDuration, scaledDuration))
             }
@@ -412,7 +412,7 @@ extension NextLevelSession {
         
         if let timeScale = self._videoConfiguration?.timescale,
             timeScale != 1.0 {
-            let scaledDuration = CMTimeMultiplyByFloat64(minFrameDuration, timeScale)
+            let scaledDuration = CMTimeMultiplyByFloat64(minFrameDuration, multiplier: timeScale)
             if self._currentClipDuration.value > 0 {
                 self._timeOffset = CMTimeAdd(self._timeOffset, CMTimeSubtract(minFrameDuration, scaledDuration))
             }
@@ -505,7 +505,7 @@ extension NextLevelSession {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             if self._writer == nil {
                 self.setupWriter()
-                self._currentClipDuration = kCMTimeZero
+                self._currentClipDuration = CMTime.zero
                 self._currentClipHasAudio = false
                 self._currentClipHasVideo = false
             } else {
@@ -662,7 +662,7 @@ extension NextLevelSession {
                     self._clips.removeFirst()
                 }
             }
-            self._totalDuration = kCMTimeZero
+            self._totalDuration = CMTime.zero
         }
     }
 
@@ -739,7 +739,7 @@ extension NextLevelSession {
                     let videoAssetTracks = asset.tracks(withMediaType: AVMediaType.video)
                     let audioAssetTracks = asset.tracks(withMediaType: AVMediaType.audio)
                  
-                    var maxRange = kCMTimeInvalid
+                    var maxRange = CMTime.invalid
                     
                     var videoTime = currentTime
                     for videoAssetTrack in videoAssetTracks {
@@ -795,7 +795,7 @@ extension NextLevelSession {
             }
         }
         
-        if timeRange.duration > kCMTimeZero {
+        if timeRange.duration > CMTime.zero {
             do {
                 try compositionTrack.insertTimeRange(timeRange, of: track, at: startTime)
             } catch {

@@ -307,7 +307,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
                 }
                 
                 var layoutSize: Int = 0
-                if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, &layoutSize) {
+                if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, sizeOut: &layoutSize) {
                     let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count:layoutSize) : Data()
                     config[AVChannelLayoutKey] = currentChannelLayoutData
                 }

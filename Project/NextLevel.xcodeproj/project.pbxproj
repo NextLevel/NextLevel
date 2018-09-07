@@ -226,8 +226,8 @@
 				TargetAttributes = {
 					06AECC5E1AC3830800EFCD03 = {
 						CreatedOnToolsVersion = 6.2;
-						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = PW68C6MX6N;
+						LastSwiftMigration = 1000;
 					};
 					06C86E4E1D8208D900A43411 = {
 						CreatedOnToolsVersion = 8.0;
@@ -443,7 +443,7 @@
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = engineering.NextLevel.NL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -463,6 +463,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
