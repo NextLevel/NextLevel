@@ -56,7 +56,7 @@
 		06AECC8B1AC38B7C00EFCD03 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		06BA97681D7FFDF200CD20D7 /* NextLevel+Metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NextLevel+Metadata.swift"; path = "../Sources/NextLevel+Metadata.swift"; sourceTree = "<group>"; };
 		06C86E381D81DD5800A43411 /* NextLevel+AVFoundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NextLevel+AVFoundation.swift"; path = "../Sources/NextLevel+AVFoundation.swift"; sourceTree = "<group>"; };
-		06C86E4F1D8208D900A43411 /* NextLevel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NextLevel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		06C86E4F1D8208D900A43411 /* NextLevel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = NextLevel.framework; path = NextLevel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		06C86E511D8208D900A43411 /* NextLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NextLevel.h; path = ../../Sources/NextLevel.h; sourceTree = "<group>"; };
 		06C86E521D8208D900A43411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		06C86E5A1D83857500A43411 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = NextLevel/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -226,8 +226,9 @@
 				TargetAttributes = {
 					06AECC5E1AC3830800EFCD03 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = PW68C6MX6N;
+						DevelopmentTeam = N8MAFJDDC5;
 						LastSwiftMigration = 1000;
+						ProvisioningStyle = Automatic;
 					};
 					06C86E4E1D8208D900A43411 = {
 						CreatedOnToolsVersion = 8.0;
@@ -437,7 +438,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = N8MAFJDDC5;
 				INFOPLIST_FILE = NextLevel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
@@ -455,7 +456,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = N8MAFJDDC5;
 				INFOPLIST_FILE = NextLevel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
