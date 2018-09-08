@@ -179,6 +179,8 @@ public protocol NextLevelPhotoDelegate: AnyObject {
     
     func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel)
     
+    @available(iOS 11.0, *)
+    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhoto photo: AVCapturePhoto)
 }
 
 // MARK: - NextLevelDepthDataDelegate
