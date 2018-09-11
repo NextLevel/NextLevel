@@ -3080,24 +3080,43 @@ extension NextLevel {
         })
         
         self._observers.append(currentDevice.observe(\.exposureDuration, options: [.new]) { [weak self] (object, change) in
+            guard let _ = self else {
+                return
+            }
             
             // TODO: add delegate callback
         })
         
 
         self._observers.append(currentDevice.observe(\.iso, options: [.new]) { [weak self] (object, change) in
+            guard let _ = self else {
+                return
+            }
+            
             // TODO: add delegate callback
         })
         
         self._observers.append(currentDevice.observe(\.exposureTargetBias, options: [.new]) { [weak self] (object, change) in
+            guard let _ = self else {
+                return
+            }
+            
             // TODO: add delegate callback
         })
         
         self._observers.append(currentDevice.observe(\.exposureTargetOffset, options: [.new]) { [weak self] (object, change) in
+            guard let _ = self else {
+                return
+            }
+            
             // TODO: add delegate callback
         })
         
         self._observers.append(currentDevice.observe(\.deviceWhiteBalanceGains, options: [.new]) { [weak self] (object, change) in
+            guard let _ = self else {
+                return
+            }
+            
             if object.exposureMode != .locked {
                 // TODO: add delegate callback
             }
