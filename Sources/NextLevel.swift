@@ -2347,6 +2347,12 @@ extension NextLevel {
                         photoSettings.embedsDepthDataInPhoto = self.photoConfiguration.isDepthDataEnabled
                     }
                 }
+
+                if #available(iOS 12.0, *) {
+                    if photoOutput.isPortraitEffectsMatteDeliverySupported {
+                        photoOutput.isPortraitEffectsMatteDeliveryEnabled = self.photoConfiguration.isPortraitEffectsMatteEnabled
+                    }
+                 } 
                 
                 if self.isFlashAvailable {
                     photoSettings.flashMode = self.photoConfiguration.flashMode
@@ -2755,10 +2761,15 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
     
     @available(iOS 11.0, *)
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        
+        DispatchQueue.main.async {
+            self.photoDelegate?.nextLevel(self, didFinishProcessingPhoto: photo)
+        }
+
         if #available(iOS 12.0, *){
             if let portraitEffectsMatte = photo.portraitEffectsMatte {
-                self.portraitEffectsMatteDelegate?.portraitEffectsMatteOutput(self, didOutput: portraitEffectsMatte)
+                DispatchQueue.main.async {
+                    self.portraitEffectsMatteDelegate?.portraitEffectsMatteOutput(self, didOutput: portraitEffectsMatte)
+                }
             }
         }
     }
