@@ -166,7 +166,7 @@ extension AVCaptureDevice {
     ///   - principlePointY: principle point y-coordinate
     /// - Returns: `true` when the focal length and principle point parameters are successfully calculated.
     public func focalLengthAndPrinciplePoint(focalLengthX: inout Float, focalLengthY: inout Float, principlePointX: inout Float, principlePointY: inout Float) {
-        let dimensions = CMVideoFormatDescriptionGetPresentationDimensions(self.activeFormat.formatDescription, true, true)
+        let dimensions = CMVideoFormatDescriptionGetPresentationDimensions(self.activeFormat.formatDescription, usePixelAspectRatio: true, useCleanAperture: true)
         
         principlePointX = Float(dimensions.width) * 0.5
         principlePointY = Float(dimensions.height) * 0.5
@@ -174,8 +174,8 @@ extension AVCaptureDevice {
         let horizontalFieldOfView = self.activeFormat.videoFieldOfView
         let verticalFieldOfView = (horizontalFieldOfView / principlePointX) * principlePointY
         
-        focalLengthX = fabs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * .pi / 2 )) )
-        focalLengthY = fabs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * .pi / 2 )) )
+        focalLengthX = abs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * .pi / 2 )) )
+        focalLengthY = abs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * .pi / 2 )) )
     }
     
 }
@@ -229,7 +229,7 @@ extension AVCaptureDevice.Position {
     }
     
     /// UIKit device equivalent type
-    public var uikitType: UIImagePickerControllerCameraDevice {
+    public var uikitType: UIImagePickerController.CameraDevice {
         switch self {
         case .unspecified:
             fallthrough

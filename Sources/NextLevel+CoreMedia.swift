@@ -37,13 +37,13 @@ extension CMSampleBuffer {
     /// - Returns: Sample buffer with the desired time offset and duration, otherwise nil.
     public class func createSampleBuffer(fromSampleBuffer sampleBuffer: CMSampleBuffer, withTimeOffset timeOffset: CMTime, duration: CMTime?) -> CMSampleBuffer? {
         var itemCount: CMItemCount = 0
-        var status = CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, 0, nil, &itemCount)
+        var status = CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, entryCount: 0, arrayToFill: nil, entriesNeededOut: &itemCount)
         if status != 0 {
             return nil
         }
         
-        var timingInfo = [CMSampleTimingInfo](repeating: CMSampleTimingInfo(duration: CMTimeMake(0, 0), presentationTimeStamp: CMTimeMake(0, 0), decodeTimeStamp: CMTimeMake(0, 0)), count: itemCount)
-        status = CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, itemCount, &timingInfo, &itemCount);
+        var timingInfo = [CMSampleTimingInfo](repeating: CMSampleTimingInfo(duration: CMTimeMake(value: 0, timescale: 0), presentationTimeStamp: CMTimeMake(value: 0, timescale: 0), decodeTimeStamp: CMTimeMake(value: 0, timescale: 0)), count: itemCount)
+        status = CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, entryCount: itemCount, arrayToFill: &timingInfo, entriesNeededOut: &itemCount);
         if status != 0 {
             return nil
         }
@@ -62,7 +62,7 @@ extension CMSampleBuffer {
         }
         
         var sampleBufferOffset: CMSampleBuffer? = nil
-        CMSampleBufferCreateCopyWithNewTiming(kCFAllocatorDefault, sampleBuffer, itemCount, &timingInfo, &sampleBufferOffset);
+        CMSampleBufferCreateCopyWithNewTiming(allocator: kCFAllocatorDefault, sampleBuffer: sampleBuffer, sampleTimingEntryCount: itemCount, sampleTimingArray: &timingInfo, sampleBufferOut: &sampleBufferOffset);
         
         if let output = sampleBufferOffset {
             return output

@@ -33,14 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - UIApplicationDelegate
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame:UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.black
         
-        // ARSession-based recording sample or AVFoundation-based sample (uncomment for iOS 11 example)
-//        if #available(iOS 11.0, *) {
-//            self.window?.rootViewController = MixedRealityViewController()
-//        }
         self.window?.rootViewController = CameraViewController()
         self.window?.makeKeyAndVisible()
         
