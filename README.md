@@ -25,8 +25,8 @@
 | &#128038; | [Swift 4](https://developer.apple.com/swift/) |
 
 Need a different version of Swift?
-* `4.2` - Target your Podfile to the `swift4.2` branch
-* `4.0` - Target your Podfile to the latest release or master
+* `4.2` - Target your Podfile to the latest release or master
+* `4.0` - Target your Podfile to the `swift4.0` branch
 * `3.2` - Target your Podfile to the `swift3.2` branch
 
 ## Quick Start
@@ -34,11 +34,11 @@ Need a different version of Swift?
 ```ruby
 
 # CocoaPods
-swift_version = "4.0"
-pod "NextLevel", "~> 0.11.0"
+swift_version = "4.2"
+pod "NextLevel", "~> 0.12.0"
 
 # Carthage
-github "nextlevel/NextLevel" ~> 0.11.0
+github "nextlevel/NextLevel" ~> 0.12.0
 
 # Swift PM
 let package = Package(
@@ -53,10 +53,11 @@ Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/Ne
 
 ## ARKit Capture
 
-Starting with `0.8.0`, NextLevel provides ARKit capture in addition to the AVFoundation functionality. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.
-The ARKit mode is in beta, so please help out if you encounter an issue or by contributing ideas for improvement.
+Starting with `0.8.0`, NextLevel provides ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.
 
-It is not compiled by default without the inclusion of the Swift compiler flag `USE_ARKIT`, since Apple will [reject](https://github.com/NextLevel/NextLevel/issues/106) apps that link ARKit and do not use it.
+An example of ARKit mode can be found in the NextLevel [examples](https://github.com/NextLevel/examples) repository, there are a couple components coming that I haven’t added yet – watch this space.
+
+ARKit capture is enabled with the inclusion of the Swift compiler flag `USE_ARKIT`, since Apple will [reject](https://github.com/NextLevel/NextLevel/issues/106) apps that link ARKit and do not use it.
 
 If you use Cocoapods, you can include `-D USE_ARKIT` with the following `Podfile` addition or by adding it to your Xcode build settings.
 
