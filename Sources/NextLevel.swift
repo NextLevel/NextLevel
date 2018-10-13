@@ -2593,12 +2593,12 @@ extension NextLevel {
 
     private func setupContextIfNecessary() {
         if self._ciContext == nil {
-            let options : [String : AnyObject] = [convertFromCIContextOption(CIContextOption.workingColorSpace) : CGColorSpaceCreateDeviceRGB(),
-                                                  convertFromCIContextOption(CIContextOption.useSoftwareRenderer) : NSNumber(booleanLiteral: false)]
+            let options : [CIContextOption : Any] = [CIContextOption.workingColorSpace : CGColorSpaceCreateDeviceRGB(),
+                                                     CIContextOption.useSoftwareRenderer : NSNumber(booleanLiteral: false)]
             if let device = MTLCreateSystemDefaultDevice() {
-                self._ciContext = CIContext(mtlDevice: device, options: convertToOptionalCIContextOptionDictionary(options))
+                self._ciContext = CIContext(mtlDevice: device, options: options)
             } else if let eaglContext = EAGLContext(api: .openGLES2) {
-                self._ciContext = CIContext(eaglContext: eaglContext, options: convertToOptionalCIContextOptionDictionary(options))
+                self._ciContext = CIContext(eaglContext: eaglContext, options: options)
             }
         }
     }
@@ -3154,15 +3154,4 @@ extension NextLevel {
         self._observers.removeAll()
     }
 
-}
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertFromCIContextOption(_ input: CIContextOption) -> String {
-	return input.rawValue
-}
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertToOptionalCIContextOptionDictionary(_ input: [String: Any]?) -> [CIContextOption: Any]? {
-	guard let input = input else { return nil }
-	return Dictionary(uniqueKeysWithValues: input.map { key, value in (CIContextOption(rawValue: key), value)})
 }
