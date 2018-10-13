@@ -1008,7 +1008,21 @@ extension NextLevel {
         }
         
         // TODO configuration
+        guard let movieFileOutputConnection = self._movieFileOutput?.connection(with: .video) else {
+            self._movieFileOutput = nil
+            return false
+        }
         
+        movieFileOutputConnection.videoOrientation = self.deviceOrientation
+        
+        var videoSettings: [String: Any] = [:]
+        let codec = AVVideoCodecType(rawValue: self.videoConfiguration.codec)
+        if let availableVideoCodecTypes = self._movieFileOutput?.availableVideoCodecTypes,
+            availableVideoCodecTypes.contains(codec) {
+            videoSettings[AVVideoCodecKey] = codec
+        }
+        self._movieFileOutput?.setOutputSettings(videoSettings, for: movieFileOutputConnection)
+    
         if let session = self._captureSession, let movieOutput = self._movieFileOutput {
             if session.canAddOutput(movieOutput) {
                 session.addOutput(movieOutput)
