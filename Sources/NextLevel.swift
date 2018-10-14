@@ -400,6 +400,7 @@ public class NextLevel: NSObject {
     internal var _currentDevice: AVCaptureDevice?
     internal var _requestedDevice: AVCaptureDevice?
     internal var _observers = [NSKeyValueObservation]()
+    internal var _captureOutputObservers = [NSKeyValueObservation]()
     
     internal var _lastVideoFrame: CMSampleBuffer?
     internal var _lastAudioFrame: CMSampleBuffer?
@@ -993,6 +994,7 @@ extension NextLevel {
         if let session = self._captureSession, let photoOutput = self._photoOutput {
             if session.canAddOutput(photoOutput) {
                 session.addOutput(photoOutput)
+                self.addCaptureOutputObservers()
                 return true
             }
         }
@@ -1081,6 +1083,10 @@ extension NextLevel {
     }
     
     internal func removeOutputs(session: AVCaptureSession) {
+        if let _ = self._photoOutput {
+            self.removeCaptureOutputObservers()
+        }
+        
         for output in session.outputs {
             session.removeOutput(output)
         }
@@ -3044,33 +3050,6 @@ extension NextLevel {
             }
         })
         
-        self._observers.append(currentDevice.observe(\.isFlashActive, options: [.new]) { [weak self] (object, change) in
-            guard let strongSelf = self else {
-                return
-            }
-            
-            // adjust white balance mode depending on the flash
-            let whiteBalanceMode = strongSelf.whiteBalanceModeBestForExposureMode(exposureMode: object.exposureMode)
-            let currentWhiteBalanceMode = object.whiteBalanceMode
-            
-            if whiteBalanceMode != currentWhiteBalanceMode {
-                do {
-                    try object.lockForConfiguration()
-                    
-                    strongSelf.adjustWhiteBalanceForExposureMode(exposureMode: object.exposureMode)
-                    
-                    object.unlockForConfiguration()
-                }
-                catch {
-                    print("NextLevel, failed to lock device for white balance exposure configuration")
-                }
-            }
-            
-            DispatchQueue.main.async {
-                strongSelf.flashDelegate?.nextLevelFlashActiveChanged(strongSelf)
-            }
-        })
-        
         self._observers.append(currentDevice.observe(\.isTorchActive, options: [.new]) { [weak self] (object, change) in
             guard let strongSelf = self else {
                 return
@@ -3153,5 +3132,50 @@ extension NextLevel {
         }
         self._observers.removeAll()
     }
+    
+    internal func addCaptureOutputObservers() {
+        guard let photoOutput = self._photoOutput else {
+            return
+        }
+        
+        self._captureOutputObservers.append(photoOutput.observe(\.isFlashScene, options: [.new]) { [weak self] (object, change) in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            guard let captureDevice = strongSelf._currentDevice else {
+                return
+            }
+            
+            // adjust white balance mode depending on the scene
+            let whiteBalanceMode = strongSelf.whiteBalanceModeBestForExposureMode(exposureMode: captureDevice.exposureMode)
+            let currentWhiteBalanceMode = captureDevice.whiteBalanceMode
+            
+            if whiteBalanceMode != currentWhiteBalanceMode {
+                do {
+                    try captureDevice.lockForConfiguration()
+                    
+                    strongSelf.adjustWhiteBalanceForExposureMode(exposureMode: captureDevice.exposureMode)
+                    
+                    captureDevice.unlockForConfiguration()
+                }
+                catch {
+                    print("NextLevel, failed to lock device for white balance exposure configuration")
+                }
+            }
+            
+            DispatchQueue.main.async {
+                strongSelf.flashDelegate?.nextLevelFlashActiveChanged(strongSelf)
+            }
+        })
+        
+    }
 
+    internal func removeCaptureOutputObservers() {
+        for observer in self._captureOutputObservers {
+            observer.invalidate()
+        }
+        self._captureOutputObservers.removeAll()
+    }
+    
 }
