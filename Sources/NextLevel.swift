@@ -882,7 +882,7 @@ extension NextLevel {
             if let currentDeviceInput = AVCaptureDeviceInput.deviceInput(withMediaType: mediaType, captureSession: session) {
                 session.removeInput(currentDeviceInput)
                 if currentDeviceInput.device.hasMediaType(AVMediaType.video) {
-                    self.removeDeviceObservers(currentDeviceInput.device)
+                    self.removeCaptureDeviceObservers(currentDeviceInput.device)
                 }
             }
             
@@ -897,7 +897,7 @@ extension NextLevel {
                 session.addInput(input)
                 
                 if input.device.hasMediaType(AVMediaType.video) {
-                    self.addDeviceObservers(input.device)
+                    self.addCaptureDeviceObservers(input.device)
                     self.updateVideoOutputSettings()
                     self._videoInput = input
                 } else {
@@ -917,7 +917,7 @@ extension NextLevel {
             for input in inputs {
                 session.removeInput(input)
                 if input.device.hasMediaType(AVMediaType.video) {
-                    self.removeDeviceObservers(input.device)
+                    self.removeCaptureDeviceObservers(input.device)
                 }
             }
             self._videoInput = nil
@@ -2998,7 +2998,7 @@ extension NextLevel {
 
 extension NextLevel {
     
-    internal func addDeviceObservers(_ currentDevice: AVCaptureDevice) {
+    internal func addCaptureDeviceObservers(_ currentDevice: AVCaptureDevice) {
         
         self._observers.append(currentDevice.observe(\.isAdjustingFocus, options: [.new]) { [weak self] (object, change) in
             if object.isAdjustingFocus {
@@ -3147,7 +3147,7 @@ extension NextLevel {
         })
     }
     
-    internal func removeDeviceObservers(_ currentDevice: AVCaptureDevice) {
+    internal func removeCaptureDeviceObservers(_ currentDevice: AVCaptureDevice) {
         for observer in self._observers {
             observer.invalidate()
         }
