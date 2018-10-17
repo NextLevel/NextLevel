@@ -51,15 +51,13 @@ let package = Package(
 
 Alternatively, drop the NextLevel [source files](https://github.com/NextLevel/NextLevel/tree/master/Sources) or project file into your Xcode project.
 
-## ARKit Capture
+## Important Configuration Note for ARKit and True Depth
 
-Starting with `0.8.0`, NextLevel provides ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.
+ARKit and the True Depth Camera software features are enabled with the inclusion of the Swift compiler flag `USE_ARKIT` and `USE_TRUE_DEPTH` respectively.
 
-An example of ARKit mode can be found in the NextLevel [examples](https://github.com/NextLevel/examples) repository, there are a couple components coming that I haven’t added yet – watch this space.
+Apple will [reject](https://github.com/NextLevel/NextLevel/issues/106) apps that link against ARKit or the True Depth Camera API and do not use them.
 
-ARKit capture is enabled with the inclusion of the Swift compiler flag `USE_ARKIT`, since Apple will [reject](https://github.com/NextLevel/NextLevel/issues/106) apps that link ARKit and do not use it.
-
-If you use Cocoapods, you can include `-D USE_ARKIT` with the following `Podfile` addition or by adding it to your Xcode build settings.
+If you use Cocoapods, you can include `-D USE_ARKIT` or `-D USE_TRUE_DEPTH` with the following `Podfile` addition or by adding it to your Xcode build settings.
 
 ```ruby
   installer.pods_project.targets.each do |target|
@@ -230,6 +228,12 @@ nextLevel.videoCustomContextImageBuffer = modifiedFrame
 NextLevel was initally a weekend project that has now grown into a open community of camera platform enthusists. The software provides foundational components for managing media recording, camera interface customization, gestural interaction customization, and image streaming on iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
 
 The goal is to continue to provide a good foundation for quick integration (enabling projects to be taken to the next level) – allowing focus to placed on functionality that matters most whether it's realtime image processing, computer vision methods, augmented reality, or [computational photography](https://om.co/2018/07/23/even-leica-loves-computational-photography/).
+
+# ARKit
+
+NextLevel provides beta ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.
+
+An example of ARKit mode can be found in the NextLevel [examples](https://github.com/NextLevel/examples) repository, there are a couple more components coming that I haven’t added yet – watch this space.
 
 ## Documentation
 
