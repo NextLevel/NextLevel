@@ -59,7 +59,9 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
     case wideAngleCamera
     case telephotoCamera
     case duoCamera
+    #if USE_TRUE_DEPTH
     case trueDepthCamera
+    #endif
     
     public var avfoundationType: AVCaptureDevice.DeviceType {
         switch self {
@@ -75,12 +77,14 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
             } else {
                 return AVCaptureDevice.DeviceType.builtInDuoCamera
             }
+            #if USE_TRUE_DEPTH
         case .trueDepthCamera:
             if #available(iOS 11.1, *) {
                 return AVCaptureDevice.DeviceType.builtInTrueDepthCamera
             } else {
                 return AVCaptureDevice.DeviceType(rawValue: "Unavailable")
             }
+            #endif
         }
     }
     
@@ -95,8 +99,10 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
                 return "Telephoto Camera"
             case .duoCamera:
                 return "Duo Camera"
+                #if USE_TRUE_DEPTH
             case .trueDepthCamera:
                 return "True Depth Camera"
+                #endif
             }
         }
     }
@@ -203,7 +209,9 @@ public enum NextLevelError: Error, CustomStringConvertible {
 
 private let NextLevelCaptureSessionQueueIdentifier = "engineering.NextLevel.CaptureSession"
 private let NextLevelCaptureSessionQueueSpecificKey = DispatchSpecificKey<()>()
+#if USE_TRUE_DEPTH
 private let NextLevelDepthDataQueueIdentifier = "engineering.NextLevel.DepthData"
+#endif
 private let NextLevelRequiredMinimumStorageSpaceInBytes: UInt64 = 49999872 // ~47 MB
 
 // MARK: - NextLevel state
@@ -219,7 +227,9 @@ public class NextLevel: NSObject {
     public weak var flashDelegate: NextLevelFlashAndTorchDelegate?
     public weak var videoDelegate: NextLevelVideoDelegate?
     public weak var photoDelegate: NextLevelPhotoDelegate?
+    #if USE_TRUE_DEPTH
     public weak var depthDataDelegate: NextLevelDepthDataDelegate?
+    #endif
     public weak var portraitEffectsMatteDelegate: NextLevelPortraitEffectsMatteDelegate?
     
     // preview
@@ -268,12 +278,12 @@ public class NextLevel: NSObject {
                 self.configureSession()
                 self.configureSessionDevices()
                 self.updateVideoOrientation()
-
-#if USE_ARKIT
+                
+                #if USE_ARKIT
                 if self.captureMode == .arKit {
                     self.setupContextIfNecessary()
                 }
-#endif
+                #endif
                 self.delegate?.nextLevelCaptureModeDidChange(self)
             }
         }
@@ -319,7 +329,9 @@ public class NextLevel: NSObject {
     // depth data
     
     /// When `true`, enables streaming depth data capture (use PhotoConfiguration for photos)
+    #if USE_TRUE_DEPTH
     public var depthDataCaptureEnabled: Bool = false
+    #endif
     
     // portrait effects matte data
     
@@ -386,6 +398,7 @@ public class NextLevel: NSObject {
     internal var _audioOutput: AVCaptureAudioDataOutput?
     internal var _movieFileOutput: AVCaptureMovieFileOutput?
     internal var _photoOutput: AVCapturePhotoOutput?
+    #if USE_TRUE_DEPTH
     internal var _depthDataOutput: Any?
     @available(iOS 11.0, *)
     internal var depthDataOutput: AVCaptureDepthDataOutput? {
@@ -396,6 +409,7 @@ public class NextLevel: NSObject {
             self._depthDataOutput = newValue
         }
     }
+    #endif
     
     internal var _currentDevice: AVCaptureDevice?
     internal var _requestedDevice: AVCaptureDevice?
@@ -447,7 +461,9 @@ public class NextLevel: NSObject {
         self.flashDelegate = nil
         self.videoDelegate = nil
         self.photoDelegate = nil
+        #if USE_TRUE_DEPTH
         self.depthDataDelegate = nil
+        #endif
         
         self.removeApplicationObservers()
         self.removeSessionObservers()
@@ -535,13 +551,13 @@ extension NextLevel {
     /// - Throws: 'NextLevelError.authorization' when permissions are not authorized, 'NextLevelError.started' when the session has already started.
     public func start() throws {
         guard self._captureSession == nil
-        else {
-            throw NextLevelError.started
+            else {
+                throw NextLevelError.started
         }
         
         guard self.authorizationStatusForCurrentCameraMode() == .authorized
-        else {
-            throw NextLevelError.authorization
+            else {
+                throw NextLevelError.authorization
         }
         
         if self.captureMode == .arKit {
@@ -572,7 +588,7 @@ extension NextLevel {
             }
         }
         
-#if USE_ARKIT
+        #if USE_ARKIT
         if self.captureMode == .arKit {
             if #available(iOS 11.0, *) {
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
@@ -585,7 +601,7 @@ extension NextLevel {
                 }
             }
         }
-#endif
+        #endif
     }
     
     internal func setupAVSession() {
@@ -623,13 +639,13 @@ extension NextLevel {
     
     @available(iOS 11.0, *)
     internal func setupARSession() {
-#if USE_ARKIT
+        #if USE_ARKIT
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             if let config = self.arConfiguration?.config,
                 let options = self.arConfiguration?.runOptions {
                 self._captureSession = AVCaptureSession() // AV session is needed for device management and configuration
                 self._sessionConfigurationCount = 0
-
+                
                 // setup NL recording session
                 self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionQueueSpecificKey)
                 self.arConfiguration?.session?.delegateQueue = self._sessionQueue
@@ -655,7 +671,7 @@ extension NextLevel {
                 }
             }
         }
-#endif
+        #endif
     }
     
 }
@@ -669,7 +685,7 @@ extension NextLevel {
         guard let session = self._captureSession else {
             return
         }
-
+        
         self._sessionConfigurationCount += 1
         if self._sessionConfigurationCount == 1 {
             session.beginConfiguration()
@@ -777,9 +793,9 @@ extension NextLevel {
         guard let session = self._captureSession else {
             return
         }
-
+        
         self.beginConfiguration()
-            
+        
         // setup preset and mode
         
         self.removeUnusedOutputsForCurrentCameraMode(session: session)
@@ -800,9 +816,11 @@ extension NextLevel {
                 let _ = self.addAudioOuput()
             }
             let _ = self.addVideoOutput()
+            #if USE_TRUE_DEPTH
             if self.depthDataCaptureEnabled {
                 let _ = self.addDepthDataOutput()
             }
+            #endif
             break
         case .photo:
             if session.sessionPreset != self.photoConfiguration.preset {
@@ -814,6 +832,7 @@ extension NextLevel {
             }
             
             let _ = self.addPhotoOutput()
+            #if USE_TRUE_DEPTH
             if self.depthDataCaptureEnabled {
                 let _ = self.addDepthDataOutput()
                 
@@ -822,6 +841,7 @@ extension NextLevel {
                     let _ = self.addPortraitEffectsMatteOutput()
                 }
             }
+            #endif
             break
         case .audio:
             let _ = self.addAudioOuput()
@@ -1024,7 +1044,7 @@ extension NextLevel {
             videoSettings[AVVideoCodecKey] = codec
         }
         self._movieFileOutput?.setOutputSettings(videoSettings, for: movieFileOutputConnection)
-    
+        
         if let session = self._captureSession, let movieOutput = self._movieFileOutput {
             if session.canAddOutput(movieOutput) {
                 session.addOutput(movieOutput)
@@ -1036,6 +1056,7 @@ extension NextLevel {
         
     }
     
+    #if USE_TRUE_DEPTH
     private func addDepthDataOutput() -> Bool {
         guard depthDataCaptureEnabled else {
             return false
@@ -1061,6 +1082,7 @@ extension NextLevel {
         print("NextLevel, couldn't add depth data output to session")
         return false
     }
+    #endif
     
     private func addPortraitEffectsMatteOutput() -> Bool {
         guard portraitEffectsMatteCaptureEnabled else {
@@ -1095,7 +1117,9 @@ extension NextLevel {
         self._audioInput = nil
         self._photoOutput = nil
         self._movieFileOutput = nil
+        #if USE_TRUE_DEPTH
         self._depthDataOutput = nil
+        #endif
     }
     
     internal func removeUnusedOutputsForCurrentCameraMode(session: AVCaptureSession) {
@@ -1344,7 +1368,7 @@ extension NextLevel {
         }
         set {
             guard let device = self._currentDevice, device.hasFlash
-            else {
+                else {
                     return
             }
             
@@ -1384,8 +1408,8 @@ extension NextLevel {
                 guard let device = self._currentDevice,
                     device.hasTorch,
                     device.torchMode != newValue
-                else {
-                    return
+                    else {
+                        return
                 }
                 
                 do {
@@ -1452,8 +1476,8 @@ extension NextLevel {
                 guard let device = self._currentDevice,
                     device.isFocusModeSupported(newValue),
                     device.focusMode != newValue
-                else {
-                    return
+                    else {
+                        return
                 }
                 
                 do {
@@ -1505,8 +1529,8 @@ extension NextLevel {
         guard let device = self._currentDevice,
             !device.isAdjustingFocus,
             !device.isAdjustingExposure
-        else {
-            return
+            else {
+                return
         }
         
         do {
@@ -1544,10 +1568,10 @@ extension NextLevel {
     /// - Parameter adjustedPoint: The point of interest for focus
     public func focusAtAdjustedPointOfInterest(adjustedPoint: CGPoint) {
         guard let device = self._currentDevice,
-                !device.isAdjustingFocus,
-                !device.isAdjustingExposure
-        else {
-            return
+            !device.isAdjustingFocus,
+            !device.isAdjustingExposure
+            else {
+                return
         }
         
         do {
@@ -1624,8 +1648,8 @@ extension NextLevel {
     public func exposeAtAdjustedPointOfInterest(adjustedPoint: CGPoint) {
         guard let device = self._currentDevice,
             !device.isAdjustingExposure
-        else {
-            return
+            else {
+                return
         }
         
         do {
@@ -1652,7 +1676,7 @@ extension NextLevel {
     public func expose(withDuration duration: Double, durationPower: Double = 5, minDurationRangeLimit: Double = (1.0 / 1000.0)) {
         guard let device = self._currentDevice,
             !device.isAdjustingExposure
-        else {
+            else {
                 return
         }
         
@@ -1660,7 +1684,7 @@ extension NextLevel {
         
         let minDurationSeconds: Double = Swift.max(CMTimeGetSeconds(device.activeFormat.minExposureDuration), minDurationRangeLimit)
         let maxDurationSeconds: Double = CMTimeGetSeconds(device.activeFormat.maxExposureDuration)
-
+        
         let p: Double = pow(newDuration, durationPower)
         let newDurationSeconds: Double = (p * ( maxDurationSeconds - minDurationSeconds ) + minDurationSeconds)
         
@@ -1680,11 +1704,11 @@ extension NextLevel {
     /// - Parameter iso: The exposure ISO value.
     public func expose(withISO iso: Float) {
         guard let device = self._currentDevice,
-                !device.isAdjustingExposure
-        else {
-            return
+            !device.isAdjustingExposure
+            else {
+                return
         }
- 
+        
         let newISO = iso.clamped(to: device.activeFormat.minISO...device.activeFormat.maxISO)
         
         do {
@@ -1703,9 +1727,9 @@ extension NextLevel {
     /// - Parameter targetBias: The exposure target bias.
     public func expose(withTargetBias targetBias: Float) {
         guard let device = self._currentDevice,
-                !device.isAdjustingExposure
-        else {
-            return
+            !device.isAdjustingExposure
+            else {
+                return
         }
         
         let newTargetBias = targetBias.clamped(to: device.minExposureTargetBias...device.maxExposureTargetBias)
@@ -1756,8 +1780,8 @@ extension NextLevel {
                 guard let device = self._currentDevice,
                     device.isWhiteBalanceModeSupported(newValue),
                     device.whiteBalanceMode != newValue
-                else {
-                    return
+                    else {
+                        return
                 }
                 
                 do {
@@ -1838,7 +1862,7 @@ extension NextLevel {
     /// - Parameter whiteBalanceGains: Gains values for adjustment.
     public func adjustWhiteBalanceGains(_ whiteBalanceGains: AVCaptureDevice.WhiteBalanceGains) {
         guard let device = self._currentDevice else {
-                return
+            return
         }
         
         let newWhiteBalanceGains = whiteBalanceGains.normalize(device)
@@ -1860,8 +1884,8 @@ extension NextLevel {
         guard let device = self._currentDevice,
             !device.isAdjustingFocus,
             !device.isAdjustingExposure
-        else {
-            return
+            else {
+                return
         }
         
         if self.focusMode != .locked {
@@ -1911,9 +1935,9 @@ extension NextLevel {
     
     internal func focusEnded() {
         guard let device = self._currentDevice,
-                !device.isAdjustingFocus
-        else {
-            return
+            !device.isAdjustingFocus
+            else {
+                return
         }
         
         let isAutoFocusEnabled: Bool = (device.focusMode == .autoFocus ||
@@ -1946,8 +1970,8 @@ extension NextLevel {
         guard let device = self._currentDevice,
             !device.isAdjustingFocus,
             !device.isAdjustingExposure
-        else {
-            return
+            else {
+                return
         }
         
         let isContinuousAutoExposureEnabled: Bool = (device.exposureMode == .continuousAutoExposure)
@@ -2086,7 +2110,7 @@ extension NextLevel {
             } else {
                 print("Nextlevel, could not find a current device format matching the requirements")
             }
-                
+            
         }
     }
 }
@@ -2154,8 +2178,8 @@ extension NextLevel {
         
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             guard self._recordingSession != nil
-            else {
-                return
+                else {
+                    return
             }
             
             var buffer: CVPixelBuffer? = nil
@@ -2165,7 +2189,7 @@ extension NextLevel {
             } else if let arFrame = self._lastARFrame {
                 buffer = arFrame
             }
-
+            
             if self.isVideoCustomContextRenderingEnabled {
                 if let buffer = buffer {
                     if CVPixelBufferLockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: 0)) == kCVReturnSuccess {
@@ -2216,7 +2240,7 @@ extension NextLevel {
                     let photo = context.uiimage(withSampleBuffer: videoFrame) {
                     let croppedPhoto = ratio != nil ? photo.nx_croppedImage(to: ratio!) : photo
                     if let imageData = photo.jpegData(compressionQuality: 1),
-                    let croppedImageData = croppedPhoto.jpegData(compressionQuality: 1){
+                        let croppedImageData = croppedPhoto.jpegData(compressionQuality: 1){
                         if photoDict == nil {
                             photoDict = [:]
                         }
@@ -2293,7 +2317,7 @@ extension NextLevel {
             }
         }
     }
-        
+    
     /// Pauses video recording, preparing 'NextLevel' to start a new clip with 'record()' with completion handler.
     ///
     /// - Parameter completionHandler: Completion handler for when pause completes
@@ -2354,7 +2378,7 @@ extension NextLevel {
     /// Triggers a photo capture.
     public func capturePhoto() {
         if let photoOutput = self._photoOutput,
-           let _ = photoOutput.connection(with: AVMediaType.video) {
+            let _ = photoOutput.connection(with: AVMediaType.video) {
             if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
                 
                 let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
@@ -2362,17 +2386,19 @@ extension NextLevel {
                 photoOutput.isHighResolutionCaptureEnabled = self.photoConfiguration.isHighResolutionEnabled
                 
                 if #available(iOS 11.0, *) {
+                    #if USE_TRUE_DEPTH
                     if photoOutput.isDepthDataDeliverySupported {
                         photoOutput.isDepthDataDeliveryEnabled = self.photoConfiguration.isDepthDataEnabled
                         photoSettings.embedsDepthDataInPhoto = self.photoConfiguration.isDepthDataEnabled
                     }
+                    #endif
                 }
-
+                
                 if #available(iOS 12.0, *) {
                     if photoOutput.isPortraitEffectsMatteDeliverySupported {
                         photoOutput.isPortraitEffectsMatteDeliveryEnabled = self.photoConfiguration.isPortraitEffectsMatteEnabled
                     }
-                 } 
+                }
                 
                 if self.isFlashAvailable {
                     photoSettings.flashMode = self.photoConfiguration.flashMode
@@ -2427,7 +2453,7 @@ extension NextLevel {
             guard let device = self._currentDevice else {
                 return
             }
-
+            
             // when clients modify a frame using their rendering context, the resulting CVPixelBuffer is then passed in here with the original sampleBuffer for recording
             session.appendVideo(withSampleBuffer: sampleBuffer, customImageBuffer: self._sessionVideoCustomContextImageBuffer, minFrameDuration: device.activeVideoMinFrameDuration, completionHandler: { (success: Bool) -> Void in
                 // cleanup client rendering context
@@ -2478,16 +2504,16 @@ extension NextLevel {
                 self.videoDelegate?.nextLevel(self, didSetupVideoInSession: session)
             }
         }
-
+        
         if self._recording && (session.isAudioSetup || self.captureMode == .videoWithoutAudio) && session.currentClipHasStarted {
             self.beginRecordingNewClipIfNecessary()
-
+            
             let minTimeBetweenFrames = 0.004
             let sleepDuration = minTimeBetweenFrames - (CACurrentMediaTime() - self._lastVideoFrameTimeInterval)
             if sleepDuration > 0 {
                 Thread.sleep(forTimeInterval: sleepDuration)
             }
-
+            
             // check with the client to setup/maintain external render contexts
             let imageBuffer = self.isVideoCustomContextRenderingEnabled == true ? pixelBuffer : nil
             if let imageBuffer = imageBuffer {
@@ -2498,7 +2524,7 @@ extension NextLevel {
                     self._sessionVideoCustomContextImageBuffer = nil
                 }
             }
-
+            
             // when clients modify a frame using their rendering context, the resulting CVPixelBuffer is then passed in here with the original sampleBuffer for recording
             session.appendVideo(withPixelBuffer: pixelBuffer, customImageBuffer: self._sessionVideoCustomContextImageBuffer, timestamp: timestamp, minFrameDuration: CMTime(seconds: 1, preferredTimescale: 600), completionHandler: { (success: Bool) -> Void in
                 // cleanup client rendering context
@@ -2507,7 +2533,7 @@ extension NextLevel {
                         CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
                     }
                 }
-
+                
                 // process frame
                 self._lastVideoFrameTimeInterval = CACurrentMediaTime()
                 if success {
@@ -2521,12 +2547,12 @@ extension NextLevel {
                     }
                 }
             })
-
+            
             if session.currentClipHasVideo == false && (session.currentClipHasAudio == false || self.captureMode == .videoWithoutAudio) {
                 if let audioBuffer = self._lastAudioFrame {
                     let lastAudioEndTime = CMTimeAdd(CMSampleBufferGetPresentationTimeStamp(audioBuffer), CMSampleBufferGetDuration(audioBuffer))
                     let videoStartTime = CMTime(seconds: timestamp, preferredTimescale: 600)
-
+                    
                     if lastAudioEndTime > videoStartTime {
                         self.handleAudioOutput(sampleBuffer: audioBuffer, session: session)
                     }
@@ -2594,9 +2620,9 @@ extension NextLevel {
 }
 
 // MARK: - rendering support
-    
-extension NextLevel {
 
+extension NextLevel {
+    
     private func setupContextIfNecessary() {
         if self._ciContext == nil {
             let options : [CIContextOption : Any] = [CIContextOption.workingColorSpace : CGColorSpaceCreateDeviceRGB(),
@@ -2615,11 +2641,11 @@ extension NextLevel {
         let height = CVPixelBufferGetHeight(pixelBuffer)
         
         guard self._pixelBufferPool == nil ||
-              width != self._bufferWidth ||
-              height != self._bufferHeight ||
-              formatType != self._bufferFormatType
-        else {
-            return
+            width != self._bufferWidth ||
+            height != self._bufferHeight ||
+            formatType != self._bufferFormatType
+            else {
+                return
         }
         
         self._bufferWidth = width
@@ -2632,9 +2658,9 @@ extension NextLevel {
         // TODO: doesn't properly support orientation, should reference videoConfiguration settings
         let pixelBufferAttributes: [String:AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(self._bufferFormatType)),
                                                          String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferHeight), // flip
-                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferWidth), // flip
-                                                         String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
-                                                         String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
+            String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferWidth), // flip
+            String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
+            String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
         
         var pixelBufferPool: CVPixelBufferPool? = nil
         if CVPixelBufferPoolCreate(kCFAllocatorDefault, poolAttributes as CFDictionary, pixelBufferAttributes as CFDictionary, &pixelBufferPool) == kCVReturnSuccess {
@@ -2685,7 +2711,7 @@ extension NextLevel: AVCaptureFileOutputRecordingDelegate {
     
     public func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
     }
-
+    
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
     }
     
@@ -2784,7 +2810,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
         DispatchQueue.main.async {
             self.photoDelegate?.nextLevel(self, didFinishProcessingPhoto: photo)
         }
-
+        
         if #available(iOS 12.0, *){
             if let portraitEffectsMatte = photo.portraitEffectsMatte {
                 DispatchQueue.main.async {
@@ -2798,6 +2824,7 @@ extension NextLevel: AVCapturePhotoCaptureDelegate {
 
 // MARK: - AVCaptureDepthDataOutputDelegate
 
+#if USE_TRUE_DEPTH
 @available(iOS 11.0, *)
 extension NextLevel: AVCaptureDepthDataOutputDelegate {
     
@@ -2808,28 +2835,27 @@ extension NextLevel: AVCaptureDepthDataOutputDelegate {
     }
     
     public func depthDataOutput(_ output: AVCaptureDepthDataOutput, didDrop depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection, reason: AVCaptureOutput.DataDroppedReason) {
-            self.depthDataDelegate?.depthDataOutput(self, didDrop: depthData, timestamp: timestamp, reason: reason)
+        self.depthDataDelegate?.depthDataOutput(self, didDrop: depthData, timestamp: timestamp, reason: reason)
     }
-    
-    
 }
+#endif
 
 #if USE_ARKIT
 // MARK: - ARSession
 
 @available(iOS 11.0, *)
 extension NextLevel {
-   
+    
     public func arSession(_ session: ARSession, didUpdate frame: ARFrame) {
         var pixelBuffer = frame.capturedImage
         let timestamp = frame.timestamp
-
+        
         // TODO: support orientation changes, maybe use snapshot API instead
         self.setupPixelBufferPoolIfNecessary(pixelBuffer)
         if let pixelBufferPool = self._pixelBufferPool,
             let adjustedPixelBuffer = self._ciContext?.createPixelBuffer(fromPixelBuffer: pixelBuffer, withOrientation: .right, pixelBufferPool: pixelBufferPool) {
             pixelBuffer = adjustedPixelBuffer
-        
+            
             self.videoDelegate?.nextLevel(self, willProcessFrame: frame, pixelBuffer: pixelBuffer, timestamp: timestamp, onQueue: self._sessionQueue)
             self._lastARFrame = pixelBuffer
             
@@ -3013,7 +3039,7 @@ extension NextLevel {
                 self?.focusEnded()
             }
         })
-
+        
         self._observers.append(currentDevice.observe(\.isAdjustingExposure, options: [.new]) { [weak self] (object, change) in
             if object.isAdjustingExposure {
                 self?.exposureStarted()
@@ -3021,7 +3047,7 @@ extension NextLevel {
                 self?.exposureEnded()
             }
         })
-
+        
         self._observers.append(currentDevice.observe(\.isAdjustingWhiteBalance, options: [.new]) { [weak self] (object, change) in
             if object.isAdjustingWhiteBalance {
                 self?.whiteBalanceStarted()
@@ -3029,12 +3055,12 @@ extension NextLevel {
                 self?.whiteBalanceEnded()
             }
         })
-
+        
         self._observers.append(currentDevice.observe(\.isFlashAvailable, options: [.new]) { [weak self] (object, change) in
             guard let strongSelf = self else {
                 return
             }
-
+            
             DispatchQueue.main.async {
                 strongSelf.flashDelegate?.nextLevelFlashAndTorchAvailabilityChanged(strongSelf)
             }
@@ -3059,7 +3085,7 @@ extension NextLevel {
                 strongSelf.flashDelegate?.nextLevelTorchActiveChanged(strongSelf)
             }
         })
-
+        
         self._observers.append(currentDevice.observe(\.lensPosition, options: [.new]) { [weak self] (object, change) in
             guard let strongSelf = self else {
                 return
@@ -3080,7 +3106,7 @@ extension NextLevel {
             // TODO: add delegate callback
         })
         
-
+        
         self._observers.append(currentDevice.observe(\.iso, options: [.new]) { [weak self] (object, change) in
             guard let _ = self else {
                 return
@@ -3170,7 +3196,7 @@ extension NextLevel {
         })
         
     }
-
+    
     internal func removeCaptureOutputObservers() {
         for observer in self._captureOutputObservers {
             observer.invalidate()

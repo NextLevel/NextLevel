@@ -347,7 +347,9 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     public var isHighResolutionEnabled: Bool = false
     
     /// Enabled depth data capture with photo
+    #if USE_TRUE_DEPTH
     public var isDepthDataEnabled: Bool = false
+    #endif
     
     /// Enables portrait effects matte output for the photo
     public var isPortraitEffectsMatteEnabled: Bool = false

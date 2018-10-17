@@ -185,6 +185,7 @@ public protocol NextLevelPhotoDelegate: AnyObject {
 
 // MARK: - NextLevelDepthDataDelegate
 
+#if USE_TRUE_DEPTH
 /// Depth data delegate, provides depth data updates
 public protocol NextLevelDepthDataDelegate: AnyObject {
     
@@ -195,6 +196,7 @@ public protocol NextLevelDepthDataDelegate: AnyObject {
     func depthDataOutput(_ nextLevel: NextLevel, didDrop depthData: AVDepthData, timestamp: CMTime, reason: AVCaptureOutput.DataDroppedReason)
     
 }
+#endif
 
 // MARK: - NextLevelPortraitEffectsMatteDelegate
 
