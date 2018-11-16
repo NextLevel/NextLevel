@@ -22,6 +22,7 @@
 | &#9881; | configurable encoding and compression settings |
 | &#128736; | simple media capture and editing API |
 | &#127744; | extensible API for image processing and CV |
+| &#128526; | face recognition; qr- and bar-codes recognition |
 | &#128038; | [Swift 4](https://developer.apple.com/swift/) |
 
 Need a different version of Swift?
