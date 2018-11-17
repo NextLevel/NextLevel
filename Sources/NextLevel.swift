@@ -231,7 +231,8 @@ public class NextLevel: NSObject {
     public weak var depthDataDelegate: NextLevelDepthDataDelegate?
     #endif
     public weak var portraitEffectsMatteDelegate: NextLevelPortraitEffectsMatteDelegate?
-    
+    public weak var metadataObjectsDelegate: NextLevelMetadataOutputObjectsDelegate?
+
     // preview
     
     /// Live camera preview, add as a sublayer to the UIView's primary layer.
@@ -277,6 +278,7 @@ public class NextLevel: NSObject {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
                 self.configureSession()
                 self.configureSessionDevices()
+                self.configureMetadataObjects()
                 self.updateVideoOrientation()
                 
                 #if USE_ARKIT
@@ -337,6 +339,9 @@ public class NextLevel: NSObject {
     
     /// When `true`, enables streaming of portrait effects matte data capture (use PhotoConfiguration for photos)
     public var portraitEffectsMatteCaptureEnabled: Bool = false
+
+    /// Specifies types of metadata objects to detect
+    public var metadataObjectTypes: [AVMetadataObject.ObjectType]?
     
     // state
     
@@ -410,6 +415,7 @@ public class NextLevel: NSObject {
         }
     }
     #endif
+    internal var _metadataOutput: AVCaptureMetadataOutput?
     
     internal var _currentDevice: AVCaptureDevice?
     internal var _requestedDevice: AVCaptureDevice?
@@ -464,6 +470,7 @@ public class NextLevel: NSObject {
         #if USE_TRUE_DEPTH
         self.depthDataDelegate = nil
         #endif
+        self.metadataObjectsDelegate = nil
         
         self.removeApplicationObservers()
         self.removeSessionObservers()
@@ -622,6 +629,7 @@ extension NextLevel {
                 
                 self.configureSession()
                 self.configureSessionDevices()
+                self.configureMetadataObjects()
                 self.updateVideoOrientation()
                 
                 self.commitConfiguration()
@@ -855,6 +863,38 @@ extension NextLevel {
         }
         
         self.commitConfiguration()
+    }
+
+    private func configureMetadataObjects() {
+        guard let session = self._captureSession else {
+            return
+        }
+
+        guard let metadataObjectTypes = metadataObjectTypes,
+            metadataObjectTypes.count > 0 else {
+                return
+        }
+
+        if self._metadataOutput == nil {
+            self._metadataOutput = AVCaptureMetadataOutput()
+        }
+
+        guard let metadataOutput = self._metadataOutput else {
+            return
+        }
+
+        if !session.outputs.contains(metadataOutput),
+            session.canAddOutput(metadataOutput) {
+            session.addOutput(metadataOutput)
+
+            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+
+            let availableTypes = metadataObjectTypes.filter { type in
+                metadataOutput.availableMetadataObjectTypes.contains(type)
+            }
+
+            metadataOutput.metadataObjectTypes = availableTypes
+        }
     }
     
     // inputs
@@ -1120,6 +1160,7 @@ extension NextLevel {
         #if USE_TRUE_DEPTH
         self._depthDataOutput = nil
         #endif
+        self._metadataOutput = nil
     }
     
     internal func removeUnusedOutputsForCurrentCameraMode(session: AVCaptureSession) {
@@ -1148,6 +1189,10 @@ extension NextLevel {
             if let audioOutput = self._audioOutput, session.outputs.contains(audioOutput) {
                 session.removeOutput(audioOutput)
                 self._audioOutput = nil
+            }
+            if let metadataOutput = self._metadataOutput, session.outputs.contains(metadataOutput) {
+                session.removeOutput(metadataOutput)
+                self._metadataOutput = nil
             }
             break
         case .audio:
@@ -2874,6 +2919,22 @@ extension NextLevel {
     
 }
 #endif
+
+// MARK: - AVCaptureMetadataOutputObjectsDelegate
+
+extension NextLevel: AVCaptureMetadataOutputObjectsDelegate {
+
+    public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        // convert metadata object coordinates to preview layer coordinates
+        let convertedMetadataObjects = metadataObjects.compactMap { metadataObject in
+            return self.previewLayer.transformedMetadataObject(for: metadataObject)
+        }
+
+        // main queue is explicitly specified during configuration
+        self.metadataObjectsDelegate?.metadataOutputObjects(self, didOutput: convertedMetadataObjects)
+    }
+
+}
 
 // MARK: - queues
 

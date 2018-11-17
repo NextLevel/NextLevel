@@ -208,3 +208,10 @@ public protocol NextLevelPortraitEffectsMatteDelegate: AnyObject {
     
 }
 
+// MARK: - NextLevelMetadataOutputObjectsDelegate
+
+/// Metadata Output delegate, provides objects like faces and barcodes
+public protocol NextLevelMetadataOutputObjectsDelegate: AnyObject {
+
+    func metadataOutputObjects(_ nextLevel: NextLevel, didOutput metadataObjects: [AVMetadataObject])
+}

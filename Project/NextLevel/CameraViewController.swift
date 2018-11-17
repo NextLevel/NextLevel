@@ -41,6 +41,7 @@ class CameraViewController: UIViewController {
     internal var gestureView: UIView?
     internal var focusView: FocusIndicatorView?
     internal var controlDockView: UIView?
+    internal var metadataObjectViews: [UIView]?
 
     internal var recordButton: UIImageView?
     internal var flipButton: UIButton?
@@ -166,6 +167,7 @@ class CameraViewController: UIViewController {
         nextLevel.flashDelegate = self
         nextLevel.videoDelegate = self
         nextLevel.photoDelegate = self
+        nextLevel.metadataObjectsDelegate = self
         
         // video configuration
         nextLevel.videoConfiguration.preset = AVCaptureSession.Preset.hd1280x720
@@ -176,6 +178,9 @@ class CameraViewController: UIViewController {
 
         // audio configuration
         nextLevel.audioConfiguration.bitRate = 96000
+
+        // metadata objects configuration
+        nextLevel.metadataObjectTypes = [AVMetadataObject.ObjectType.face, AVMetadataObject.ObjectType.qr]
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -743,5 +748,35 @@ extension CameraViewController {
         }
     }
     
+}
+
+extension CameraViewController: NextLevelMetadataOutputObjectsDelegate {
+
+    func metadataOutputObjects(_ nextLevel: NextLevel, didOutput metadataObjects: [AVMetadataObject]) {
+        guard let previewView = self.previewView else {
+            return
+        }
+
+        if let metadataObjectViews = metadataObjectViews {
+            for view in metadataObjectViews {
+                view.removeFromSuperview()
+            }
+            self.metadataObjectViews = nil
+        }
+
+        self.metadataObjectViews = metadataObjects.map { metadataObject in
+            let view = UIView(frame: metadataObject.bounds)
+            view.backgroundColor = UIColor.clear
+            view.layer.borderColor = UIColor.yellow.cgColor
+            view.layer.borderWidth = 1
+            return view
+        }
+
+        if let metadataObjectViews = self.metadataObjectViews {
+            for view in metadataObjectViews {
+                previewView.addSubview(view)
+            }
+        }
+    }
 }
 
