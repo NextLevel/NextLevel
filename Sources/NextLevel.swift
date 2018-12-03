@@ -599,12 +599,9 @@ extension NextLevel {
         if self.captureMode == .arKit {
             if #available(iOS 11.0, *) {
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
-                    if self._arRunning == true {
-                        self.arConfiguration?.session?.pause()
-                        self._arRunning = false
-                        
-                        self._recordingSession = nil
-                    }
+                    self.arConfiguration?.session?.pause()
+                    self._arRunning = false
+                    self._recordingSession = nil
                 }
             }
         }
@@ -649,34 +646,34 @@ extension NextLevel {
     internal func setupARSession() {
         #if USE_ARKIT
         self.executeClosureAsyncOnSessionQueueIfNecessary {
-            if let config = self.arConfiguration?.config,
-                let options = self.arConfiguration?.runOptions {
-                self._captureSession = AVCaptureSession() // AV session is needed for device management and configuration
-                self._sessionConfigurationCount = 0
+            guard let config = self.arConfiguration?.config,
+                let options = self.arConfiguration?.runOptions else {
+                    return
+            }
+            
+            self._captureSession = AVCaptureSession() // AV session is needed for device management and configuration
+            self._sessionConfigurationCount = 0
+            
+            // setup NL recording session
+            self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionQueueSpecificKey)
+            self.arConfiguration?.session?.delegateQueue = self._sessionQueue
+            
+            if let session = self._captureSession {
+                session.automaticallyConfiguresApplicationAudioSession = self.automaticallyConfiguresApplicationAudioSession
                 
-                // setup NL recording session
-                self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionQueueSpecificKey)
-                self.arConfiguration?.session?.delegateQueue = self._sessionQueue
-                
-                if let session = self._captureSession {
-                    session.automaticallyConfiguresApplicationAudioSession = self.automaticallyConfiguresApplicationAudioSession
-                    
-                    self.beginConfiguration()
-                    self.configureSession()
-                    self.configureSessionDevices()
-                    self.updateVideoOrientation()
-                    self.commitConfiguration()
-                }
-                
-                if self._arRunning == false {
-                    self.delegate?.nextLevelSessionWillStart(self)
-                    self.arConfiguration?.session?.run(config, options: options)
-                    self._arRunning = true
-                    
-                    DispatchQueue.main.async {
-                        self.delegate?.nextLevelSessionDidStart(self)
-                    }
-                }
+                self.beginConfiguration()
+                self.configureSession()
+                self.configureSessionDevices()
+                self.updateVideoOrientation()
+                self.commitConfiguration()
+            }
+            
+            self.delegate?.nextLevelSessionWillStart(self)
+            self.arConfiguration?.session?.run(config, options: options)
+            self._arRunning = true
+            
+            DispatchQueue.main.async {
+                self.delegate?.nextLevelSessionDidStart(self)
             }
         }
         #endif
