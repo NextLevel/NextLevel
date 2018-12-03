@@ -14,7 +14,7 @@
     <a title="NextLevelVideoDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">NextLevel Docs</a> (62% documented)</p>
+        <p><a href="../index.html">NextLevel Docs</a> (63% documented)</p>
         <p class="header-right"><a href="https://github.com/NextLevel/NextLevel"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -163,13 +163,16 @@
                 <a href="../Protocols/NextLevelDelegate.html">NextLevelDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/NextLevelDepthDataDelegate.html">NextLevelDepthDataDelegate</a>
+                <a href="../Protocols.html#/NextLevelDepthDataDelegate">NextLevelDepthDataDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/NextLevelDeviceDelegate.html">NextLevelDeviceDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/NextLevelFlashAndTorchDelegate.html">NextLevelFlashAndTorchDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/NextLevelMetadataOutputObjectsDelegate.html">NextLevelMetadataOutputObjectsDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/NextLevelPhotoDelegate.html">NextLevelPhotoDelegate</a>
@@ -222,7 +225,7 @@
             <h1>NextLevelVideoDelegate</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
               </div>
@@ -253,7 +256,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didUpdateVideoZoomFactor</span> <span class="nv">videoZoomFactor</span><span class="p">:</span> <span class="kt">Float</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -280,7 +283,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">willProcessRawVideoSampleBuffer</span> <span class="nv">sampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">,</span> <span class="n">onQueue</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -307,7 +310,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">renderToCustomContextWithImageBuffer</span> <span class="nv">imageBuffer</span><span class="p">:</span> <span class="kt">CVPixelBuffer</span><span class="p">,</span> <span class="n">onQueue</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -334,7 +337,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">willProcessFrame</span> <span class="nv">frame</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">,</span> <span class="nv">pixelBuffer</span><span class="p">:</span> <span class="kt">CVPixelBuffer</span><span class="p">,</span> <span class="nv">timestamp</span><span class="p">:</span> <span class="kt">TimeInterval</span><span class="p">,</span> <span class="n">onQueue</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -361,7 +364,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didSetupVideoInSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -388,7 +391,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didSetupAudioInSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -415,7 +418,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didStartClipInSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -442,7 +445,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didCompleteClip</span> <span class="nv">clip</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelClip.html">NextLevelClip</a></span><span class="p">,</span> <span class="n">inSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -469,7 +472,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didAppendVideoSampleBuffer</span> <span class="nv">sampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">,</span> <span class="n">inSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -496,7 +499,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didSkipVideoSampleBuffer</span> <span class="nv">sampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">,</span> <span class="n">inSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -523,7 +526,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didAppendVideoPixelBuffer</span> <span class="nv">pixelBuffer</span><span class="p">:</span> <span class="kt">CVPixelBuffer</span><span class="p">,</span> <span class="nv">timestamp</span><span class="p">:</span> <span class="kt">TimeInterval</span><span class="p">,</span> <span class="n">inSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -550,7 +553,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didSkipVideoPixelBuffer</span> <span class="nv">pixelBuffer</span><span class="p">:</span> <span class="kt">CVPixelBuffer</span><span class="p">,</span> <span class="nv">timestamp</span><span class="p">:</span> <span class="kt">TimeInterval</span><span class="p">,</span> <span class="n">inSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -577,7 +580,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didAppendAudioSampleBuffer</span> <span class="nv">sampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">,</span> <span class="n">inSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -604,7 +607,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didSkipAudioSampleBuffer</span> <span class="nv">sampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">,</span> <span class="n">inSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -631,7 +634,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didCompleteSession</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -658,7 +661,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">nextLevel</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didCompletePhotoCaptureFromVideoFrame</span> <span class="nv">photoDict</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?)</span></code></pre>
 
                         </div>
                       </div>
@@ -670,8 +673,8 @@ All methods are called on the main queue with the exception of nextLevel:renderT
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-09-12)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-12-02)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

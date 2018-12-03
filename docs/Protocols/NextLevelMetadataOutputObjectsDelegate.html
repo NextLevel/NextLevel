@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>NextLevelDepthDataDelegate Protocol Reference</title>
+    <title>NextLevelMetadataOutputObjectsDelegate Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,11 +10,11 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/NextLevelDepthDataDelegate" class="dashAnchor"></a>
-    <a title="NextLevelDepthDataDelegate Protocol Reference"></a>
+    <a name="//apple_ref/swift/Protocol/NextLevelMetadataOutputObjectsDelegate" class="dashAnchor"></a>
+    <a title="NextLevelMetadataOutputObjectsDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">NextLevel Docs</a> (62% documented)</p>
+        <p><a href="../index.html">NextLevel Docs</a> (63% documented)</p>
         <p class="header-right"><a href="https://github.com/NextLevel/NextLevel"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">NextLevel Reference</a>
         <img id="carat" src="../img/carat.png" />
-        NextLevelDepthDataDelegate Protocol Reference
+        NextLevelMetadataOutputObjectsDelegate Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -163,13 +163,16 @@
                 <a href="../Protocols/NextLevelDelegate.html">NextLevelDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/NextLevelDepthDataDelegate.html">NextLevelDepthDataDelegate</a>
+                <a href="../Protocols.html#/NextLevelDepthDataDelegate">NextLevelDepthDataDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/NextLevelDeviceDelegate.html">NextLevelDeviceDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/NextLevelFlashAndTorchDelegate.html">NextLevelFlashAndTorchDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/NextLevelMetadataOutputObjectsDelegate.html">NextLevelMetadataOutputObjectsDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/NextLevelPhotoDelegate.html">NextLevelPhotoDelegate</a>
@@ -219,14 +222,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>NextLevelDepthDataDelegate</h1>
+            <h1>NextLevelMetadataOutputObjectsDelegate</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelDepthDataDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelMetadataOutputObjectsDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
               </div>
-            <p>Depth data delegate, provides depth data updates</p>
+            <p>Metadata Output delegate, provides objects like faces and barcodes</p>
 
           </section>
           <section class="section task-group-section">
@@ -235,9 +238,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevel0aB17DepthDataDelegateP05depthD6Output_03didG09timestampyA2AC_So07AVDepthD0CSo6CMTimeatF"></a>
-                    <a name="//apple_ref/swift/Method/depthDataOutput(_:didOutput:timestamp:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB17DepthDataDelegateP05depthD6Output_03didG09timestampyA2AC_So07AVDepthD0CSo6CMTimeatF">depthDataOutput(_:didOutput:timestamp:)</a>
+                    <a name="/s:9NextLevel0aB29MetadataOutputObjectsDelegateP08metadatadE0_03didD0yA2AC_SaySo16AVMetadataObjectCGtF"></a>
+                    <a name="//apple_ref/swift/Method/metadataOutputObjects(_:didOutput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevel0aB29MetadataOutputObjectsDelegateP08metadatadE0_03didD0yA2AC_SaySo16AVMetadataObjectCGtF">metadataOutputObjects(_:didOutput:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -252,34 +255,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelDepthDataDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9NextLevel0aB17DepthDataDelegateP05depthD6Output_7didDrop9timestamp6reasonyA2AC_So07AVDepthD0CSo6CMTimeaSo09AVCapturegD13DroppedReasonVtF"></a>
-                    <a name="//apple_ref/swift/Method/depthDataOutput(_:didDrop:timestamp:reason:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB17DepthDataDelegateP05depthD6Output_7didDrop9timestamp6reasonyA2AC_So07AVDepthD0CSo6CMTimeaSo09AVCapturegD13DroppedReasonVtF">depthDataOutput(_:didDrop:timestamp:reason:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelDepthDataDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">metadataOutputObjects</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextLevel</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevel.html">NextLevel</a></span><span class="p">,</span> <span class="n">didOutput</span> <span class="nv">metadataObjects</span><span class="p">:</span> <span class="p">[</span><span class="kt">AVMetadataObject</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -291,8 +267,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-09-12)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-12-02)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

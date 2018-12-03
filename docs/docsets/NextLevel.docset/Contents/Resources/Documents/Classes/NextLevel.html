@@ -14,7 +14,7 @@
     <a title="NextLevel Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">NextLevel Docs</a> (62% documented)</p>
+        <p><a href="../index.html">NextLevel Docs</a> (63% documented)</p>
         <p class="header-right"><a href="https://github.com/NextLevel/NextLevel"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -163,13 +163,16 @@
                 <a href="../Protocols/NextLevelDelegate.html">NextLevelDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/NextLevelDepthDataDelegate.html">NextLevelDepthDataDelegate</a>
+                <a href="../Protocols.html#/NextLevelDepthDataDelegate">NextLevelDepthDataDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/NextLevelDeviceDelegate.html">NextLevelDeviceDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/NextLevelFlashAndTorchDelegate.html">NextLevelFlashAndTorchDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/NextLevelMetadataOutputObjectsDelegate.html">NextLevelMetadataOutputObjectsDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/NextLevelPhotoDelegate.html">NextLevelPhotoDelegate</a>
@@ -222,7 +225,7 @@
             <h1>NextLevel</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
 
                 </div>
               </div>
@@ -252,7 +255,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/NextLevelDelegate.html">NextLevelDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -279,7 +282,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">previewDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/NextLevelPreviewDelegate.html">NextLevelPreviewDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -306,7 +309,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">deviceDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/NextLevelDeviceDelegate.html">NextLevelDeviceDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -333,7 +336,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">flashDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/NextLevelFlashAndTorchDelegate.html">NextLevelFlashAndTorchDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -360,7 +363,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">videoDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/NextLevelVideoDelegate.html">NextLevelVideoDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -387,7 +390,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">photoDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/NextLevelPhotoDelegate.html">NextLevelPhotoDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -397,9 +400,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevelAAC17depthDataDelegateAA0ab5DepthdE0_pSgXwvp"></a>
+                    <a name="/"></a>
                     <a name="//apple_ref/swift/Property/depthDataDelegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevelAAC17depthDataDelegateAA0ab5DepthdE0_pSgXwvp">depthDataDelegate</a>
+                    <a class="token" href="#/">depthDataDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -407,16 +410,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
-
-                        </div>
+                        
                       </div>
                     </section>
                   </div>
@@ -441,7 +435,34 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">portraitEffectsMatteDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/NextLevelPortraitEffectsMatteDelegate.html">NextLevelPortraitEffectsMatteDelegate</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9NextLevelAAC23metadataObjectsDelegateAA0ab14MetadataOutputdE0_pSgXwvp"></a>
+                    <a name="//apple_ref/swift/Property/metadataObjectsDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevelAAC23metadataObjectsDelegateAA0ab14MetadataOutputdE0_pSgXwvp">metadataObjectsDelegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">metadataObjectsDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/NextLevelMetadataOutputObjectsDelegate.html">NextLevelMetadataOutputObjectsDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -468,7 +489,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">previewLayer</span><span class="p">:</span> <span class="kt">AVCaptureVideoPreviewLayer</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">previewLayer</span><span class="p">:</span> <span class="kt">AVCaptureVideoPreviewLayer</span></code></pre>
 
                         </div>
                       </div>
@@ -495,7 +516,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelVideoConfiguration.html">NextLevelVideoConfiguration</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelVideoConfiguration.html">NextLevelVideoConfiguration</a></span></code></pre>
 
                         </div>
                       </div>
@@ -522,7 +543,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">audioConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelAudioConfiguration.html">NextLevelAudioConfiguration</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">audioConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelAudioConfiguration.html">NextLevelAudioConfiguration</a></span></code></pre>
 
                         </div>
                       </div>
@@ -549,7 +570,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">photoConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelPhotoConfiguration.html">NextLevelPhotoConfiguration</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">photoConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelPhotoConfiguration.html">NextLevelPhotoConfiguration</a></span></code></pre>
 
                         </div>
                       </div>
@@ -576,7 +597,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">arConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelARConfiguration.html">NextLevelARConfiguration</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -603,7 +624,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">automaticallyConfiguresApplicationAudioSession</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">automaticallyConfiguresApplicationAudioSession</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -630,7 +651,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">captureMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/NextLevelCaptureMode.html">NextLevelCaptureMode</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">video</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">captureMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/NextLevelCaptureMode.html">NextLevelCaptureMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -657,7 +678,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">devicePosition</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB14DevicePositiona">NextLevelDevicePosition</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">back</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">devicePosition</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB14DevicePositiona">NextLevelDevicePosition</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -684,7 +705,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">automaticallyUpdatesDeviceOrientation</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">automaticallyUpdatesDeviceOrientation</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -711,7 +732,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">deviceOrientation</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB17DeviceOrientationa">NextLevelDeviceOrientation</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">portrait</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">deviceOrientation</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB17DeviceOrientationa">NextLevelDeviceOrientation</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -738,7 +759,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">photoStabilizationEnabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">photoStabilizationEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -765,7 +786,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoStabilizationMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB22VideoStabilizationModea">NextLevelVideoStabilizationMode</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">auto</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoStabilizationMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB22VideoStabilizationModea">NextLevelVideoStabilizationMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -775,9 +796,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevelAAC23depthDataCaptureEnabledSbvp"></a>
+                    <a name="/"></a>
                     <a name="//apple_ref/swift/Property/depthDataCaptureEnabled" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevelAAC23depthDataCaptureEnabledSbvp">depthDataCaptureEnabled</a>
+                    <a class="token" href="#/">depthDataCaptureEnabled</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -787,14 +808,6 @@
                       <div class="abstract">
                         <p>When <code>true</code>, enables streaming depth data capture (use PhotoConfiguration for photos)</p>
 
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">depthDataCaptureEnabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
-
-                        </div>
                       </div>
                     </section>
                   </div>
@@ -819,7 +832,34 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">portraitEffectsMatteCaptureEnabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">portraitEffectsMatteCaptureEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9NextLevelAAC19metadataObjectTypesSaySo010AVMetadataD4TypeaGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/metadataObjectTypes" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevelAAC19metadataObjectTypesSaySo010AVMetadataD4TypeaGSgvp">metadataObjectTypes</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies types of metadata objects to detect</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">metadataObjectTypes</span><span class="p">:</span> <span class="p">[</span><span class="kt">AVMetadataObject</span><span class="o">.</span><span class="kt">ObjectType</span><span class="p">]?</span></code></pre>
 
                         </div>
                       </div>
@@ -846,7 +886,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isRecording</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isRecording</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -873,7 +913,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isRunning</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isRunning</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -901,7 +941,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">session</span><span class="p">:</span> <span class="kt"><a href="../Classes/NextLevelSession.html">NextLevelSession</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -939,7 +979,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">shared</span> <span class="o">=</span> <span class="kt">NextLevel</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">shared</span><span class="p">:</span> <span class="kt">NextLevel</span></code></pre>
 
                         </div>
                       </div>
@@ -977,7 +1017,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="nf">init</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -987,6 +1027,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/authorization"></a>
+                <a name="//apple_ref/swift/Section/authorization" class="dashAnchor"></a>
+                <a href="#/authorization">
+                  <h3 class="section-name">authorization</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -1008,7 +1055,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizationStatus</span><span class="p">(</span><span class="n">forMediaType</span> <span class="nv">mediaType</span><span class="p">:</span> <span class="kt">AVMediaType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/NextLevelAuthorizationStatus.html">NextLevelAuthorizationStatus</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizationStatus</span><span class="p">(</span><span class="n">forMediaType</span> <span class="nv">mediaType</span><span class="p">:</span> <span class="kt">AVMediaType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/NextLevelAuthorizationStatus.html">NextLevelAuthorizationStatus</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1058,7 +1105,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestAuthorization</span><span class="p">(</span><span class="n">forMediaType</span> <span class="nv">mediaType</span><span class="p">:</span> <span class="kt">AVMediaType</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestAuthorization</span><span class="p">(</span><span class="n">forMediaType</span> <span class="nv">mediaType</span><span class="p">:</span> <span class="kt">AVMediaType</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1087,6 +1134,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/session%20start/stop"></a>
+                <a name="//apple_ref/swift/Section/session start/stop" class="dashAnchor"></a>
+                <a href="#/session%20start/stop">
+                  <h3 class="section-name">session start/stop</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -1113,7 +1167,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">start</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">start</span><span class="p">()</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1140,7 +1194,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">stop</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">stop</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1150,6 +1204,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/preview"></a>
+                <a name="//apple_ref/swift/Section/preview" class="dashAnchor"></a>
+                <a href="#/preview">
+                  <h3 class="section-name">preview</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -1171,7 +1232,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">freezePreview</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">freezePreview</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1198,7 +1259,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unfreezePreview</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unfreezePreview</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1208,6 +1269,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/capture%20device%20switching"></a>
+                <a name="//apple_ref/swift/Section/capture device switching" class="dashAnchor"></a>
+                <a href="#/capture%20device%20switching">
+                  <h3 class="section-name">capture device switching</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -1229,7 +1297,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">flipCaptureDevicePosition</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">flipCaptureDevicePosition</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1256,7 +1324,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">changeCaptureDeviceIfAvailable</span><span class="p">(</span><span class="nv">captureDevice</span><span class="p">:</span> <span class="kt"><a href="../Enums/NextLevelDeviceType.html">NextLevelDeviceType</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">changeCaptureDeviceIfAvailable</span><span class="p">(</span><span class="nv">captureDevice</span><span class="p">:</span> <span class="kt"><a href="../Enums/NextLevelDeviceType.html">NextLevelDeviceType</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1266,6 +1334,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/mirroring"></a>
+                <a name="//apple_ref/swift/Section/mirroring" class="dashAnchor"></a>
+                <a href="#/mirroring">
+                  <h3 class="section-name">mirroring</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -1287,7 +1362,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">mirroringMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/NextLevelMirroringMode.html">NextLevelMirroringMode</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">mirroringMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/NextLevelMirroringMode.html">NextLevelMirroringMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1297,6 +1372,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/flash%20and%20torch"></a>
+                <a name="//apple_ref/swift/Section/flash and torch" class="dashAnchor"></a>
+                <a href="#/flash%20and%20torch">
+                  <h3 class="section-name">flash and torch</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -1318,7 +1400,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isFlashAvailable</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isFlashAvailable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1345,7 +1427,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">flashMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB9FlashModea">NextLevelFlashMode</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">flashMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB9FlashModea">NextLevelFlashMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1372,7 +1454,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isTorchAvailable</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isTorchAvailable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1399,7 +1481,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">torchMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB9TorchModea">NextLevelTorchMode</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">torchMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB9TorchModea">NextLevelTorchMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1409,6 +1491,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/focus,%20exposure,%20white%20balance"></a>
+                <a name="//apple_ref/swift/Section/focus, exposure, white balance" class="dashAnchor"></a>
+                <a href="#/focus,%20exposure,%20white%20balance">
+                  <h3 class="section-name">focus, exposure, white balance</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -1430,7 +1519,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isFocusPointOfInterestSupported</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isFocusPointOfInterestSupported</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1457,7 +1546,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isFocusLockSupported</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isFocusLockSupported</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1484,7 +1573,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isAdjustingFocus</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isAdjustingFocus</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1511,7 +1600,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">focusMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB9FocusModea">NextLevelFocusMode</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">focusMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB9FocusModea">NextLevelFocusMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1538,7 +1627,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lensPosition</span><span class="p">:</span> <span class="kt">Float</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lensPosition</span><span class="p">:</span> <span class="kt">Float</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1565,7 +1654,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">focusExposeAndAdjustWhiteBalance</span><span class="p">(</span><span class="n">atAdjustedPoint</span> <span class="nv">adjustedPoint</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">focusExposeAndAdjustWhiteBalance</span><span class="p">(</span><span class="n">atAdjustedPoint</span> <span class="nv">adjustedPoint</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1611,7 +1700,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">focusAtAdjustedPointOfInterest</span><span class="p">(</span><span class="nv">adjustedPoint</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">focusAtAdjustedPointOfInterest</span><span class="p">(</span><span class="nv">adjustedPoint</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1657,7 +1746,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isExposureLockSupported</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isExposureLockSupported</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1684,7 +1773,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isAdjustingExposure</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isAdjustingExposure</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1711,7 +1800,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">exposureMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB12ExposureModea">NextLevelExposureMode</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">exposureMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB12ExposureModea">NextLevelExposureMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1738,7 +1827,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">exposeAtAdjustedPointOfInterest</span><span class="p">(</span><span class="nv">adjustedPoint</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">exposeAtAdjustedPointOfInterest</span><span class="p">(</span><span class="nv">adjustedPoint</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1784,7 +1873,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">expose</span><span class="p">(</span><span class="n">withDuration</span> <span class="nv">duration</span><span class="p">:</span> <span class="kt">Double</span><span class="p">,</span> <span class="nv">durationPower</span><span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="nv">minDurationRangeLimit</span><span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">))</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">expose</span><span class="p">(</span><span class="n">withDuration</span> <span class="nv">duration</span><span class="p">:</span> <span class="kt">Double</span><span class="p">,</span> <span class="nv">durationPower</span><span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="nv">minDurationRangeLimit</span><span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">))</span></code></pre>
 
                         </div>
                       </div>
@@ -1854,7 +1943,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">expose</span><span class="p">(</span><span class="n">withISO</span> <span class="nv">iso</span><span class="p">:</span> <span class="kt">Float</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">expose</span><span class="p">(</span><span class="n">withISO</span> <span class="nv">iso</span><span class="p">:</span> <span class="kt">Float</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1900,7 +1989,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">expose</span><span class="p">(</span><span class="n">withTargetBias</span> <span class="nv">targetBias</span><span class="p">:</span> <span class="kt">Float</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">expose</span><span class="p">(</span><span class="n">withTargetBias</span> <span class="nv">targetBias</span><span class="p">:</span> <span class="kt">Float</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1946,7 +2035,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isWhiteBalanceLockSupported</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isWhiteBalanceLockSupported</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1973,7 +2062,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isAdjustingWhiteBalance</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isAdjustingWhiteBalance</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2000,24 +2089,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">whiteBalanceMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB16WhiteBalanceModea">NextLevelWhiteBalanceMode</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">whiteBalanceMode</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9NextLevel0aB16WhiteBalanceModea">NextLevelWhiteBalanceMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/TODO:%20chromaticity%20support?"></a>
-                <a name="//apple_ref/swift/Section/TODO: chromaticity support?" class="dashAnchor"></a>
-                <a href="#/TODO:%20chromaticity%20support?">
-                  <h3 class="section-name">TODO: chromaticity support?</h3>
-                </a>
-              </div>
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -2038,7 +2116,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">whiteBalanceTemperature</span><span class="p">:</span> <span class="kt">Float</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2065,7 +2143,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">whiteBalanceTint</span><span class="p">:</span> <span class="kt">Float</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2092,7 +2170,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">adjustWhiteBalanceGains</span><span class="p">(</span><span class="n">_</span> <span class="nv">whiteBalanceGains</span><span class="p">:</span> <span class="kt">AVCaptureDevice</span><span class="o">.</span><span class="kt">WhiteBalanceGains</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">adjustWhiteBalanceGains</span><span class="p">(</span><span class="n">_</span> <span class="nv">whiteBalanceGains</span><span class="p">:</span> <span class="kt">AVCaptureDevice</span><span class="o">.</span><span class="kt">WhiteBalanceGains</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2121,6 +2199,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/frame%20rate%20support"></a>
+                <a name="//apple_ref/swift/Section/frame rate support" class="dashAnchor"></a>
+                <a href="#/frame%20rate%20support">
+                  <h3 class="section-name">frame rate support</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -2142,7 +2227,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2169,7 +2254,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">updateDeviceFormat</span><span class="p">(</span><span class="n">withFrameRate</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">,</span> <span class="nv">dimensions</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">updateDeviceFormat</span><span class="p">(</span><span class="n">withFrameRate</span> <span class="nv">frameRate</span><span class="p">:</span> <span class="kt">CMTimeScale</span><span class="p">,</span> <span class="nv">dimensions</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2210,6 +2295,13 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/video%20capture"></a>
+                <a name="//apple_ref/swift/Section/video capture" class="dashAnchor"></a>
+                <a href="#/video%20capture">
+                  <h3 class="section-name">video capture</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -2231,7 +2323,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isVideoCaptureSupported</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isVideoCaptureSupported</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2258,7 +2350,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">canCaptureVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">canCaptureVideo</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2285,7 +2377,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoZoomFactor</span><span class="p">:</span> <span class="kt">Float</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoZoomFactor</span><span class="p">:</span> <span class="kt">Float</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2312,7 +2404,7 @@ The session provides features such as &lsquo;undo&rsquo;.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">capturePhotoFromVideo</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">capturePhotoFromVideo</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -2340,7 +2432,7 @@ videoDelegate, func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithI
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isVideoCustomContextRenderingEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isVideoCustomContextRenderingEnabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2368,7 +2460,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoCustomContextImageBuffer</span><span class="p">:</span> <span class="kt">CVPixelBuffer</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoCustomContextImageBuffer</span><span class="p">:</span> <span class="kt">CVPixelBuffer</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2395,7 +2487,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">record</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">record</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -2422,7 +2514,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">pause</span><span class="p">(</span><span class="n">withCompletionHandler</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">pause</span><span class="p">(</span><span class="n">withCompletionHandler</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2451,6 +2543,13 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/photo%20capture"></a>
+                <a name="//apple_ref/swift/Section/photo capture" class="dashAnchor"></a>
+                <a href="#/photo%20capture">
+                  <h3 class="section-name">photo capture</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -2472,7 +2571,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">canCapturePhoto</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">canCapturePhoto</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -2499,7 +2598,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">capturePhoto</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">capturePhoto</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -2509,6 +2608,13 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/AVCaptureVideoDataOutputSampleBufferDelegate,%20AVCaptureAudioDataOutputSampleBufferDelegate"></a>
+                <a name="//apple_ref/swift/Section/AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate" class="dashAnchor"></a>
+                <a href="#/AVCaptureVideoDataOutputSampleBufferDelegate,%20AVCaptureAudioDataOutputSampleBufferDelegate">
+                  <h3 class="section-name">AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -2530,7 +2636,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">captureOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">captureOutput</span><span class="p">:</span> <span class="kt">AVCaptureOutput</span><span class="p">,</span> <span class="n">didOutput</span> <span class="nv">sampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">,</span> <span class="n">from</span> <span class="nv">connection</span><span class="p">:</span> <span class="kt">AVCaptureConnection</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2540,6 +2646,13 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/AVCaptureFileOutputDelegate"></a>
+                <a name="//apple_ref/swift/Section/AVCaptureFileOutputDelegate" class="dashAnchor"></a>
+                <a href="#/AVCaptureFileOutputDelegate">
+                  <h3 class="section-name">AVCaptureFileOutputDelegate</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -2561,7 +2674,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">fileOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">output</span><span class="p">:</span> <span class="kt">AVCaptureFileOutput</span><span class="p">,</span> <span class="n">didStartRecordingTo</span> <span class="nv">fileURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="n">from</span> <span class="nv">connections</span><span class="p">:</span> <span class="p">[</span><span class="kt">AVCaptureConnection</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -2588,7 +2701,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">fileOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">output</span><span class="p">:</span> <span class="kt">AVCaptureFileOutput</span><span class="p">,</span> <span class="n">didFinishRecordingTo</span> <span class="nv">outputFileURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="n">from</span> <span class="nv">connections</span><span class="p">:</span> <span class="p">[</span><span class="kt">AVCaptureConnection</span><span class="p">],</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2598,6 +2711,13 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/AVCapturePhotoCaptureDelegate"></a>
+                <a name="//apple_ref/swift/Section/AVCapturePhotoCaptureDelegate" class="dashAnchor"></a>
+                <a href="#/AVCapturePhotoCaptureDelegate">
+                  <h3 class="section-name">AVCapturePhotoCaptureDelegate</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -2619,7 +2739,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">photoOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">captureOutput</span><span class="p">:</span> <span class="kt">AVCapturePhotoOutput</span><span class="p">,</span> <span class="n">willCapturePhotoFor</span> <span class="nv">resolvedSettings</span><span class="p">:</span> <span class="kt">AVCaptureResolvedPhotoSettings</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2646,7 +2766,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">photoOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">output</span><span class="p">:</span> <span class="kt">AVCapturePhotoOutput</span><span class="p">,</span> <span class="n">didCapturePhotoFor</span> <span class="nv">resolvedSettings</span><span class="p">:</span> <span class="kt">AVCaptureResolvedPhotoSettings</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2673,7 +2793,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">photoOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">captureOutput</span><span class="p">:</span> <span class="kt">AVCapturePhotoOutput</span><span class="p">,</span> <span class="n">didFinishProcessingPhoto</span> <span class="nv">photoSampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">?,</span> <span class="n">previewPhoto</span> <span class="nv">previewPhotoSampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">?,</span> <span class="nv">resolvedSettings</span><span class="p">:</span> <span class="kt">AVCaptureResolvedPhotoSettings</span><span class="p">,</span> <span class="nv">bracketSettings</span><span class="p">:</span> <span class="kt">AVCaptureBracketedStillImageSettings</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2700,7 +2820,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">photoOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">captureOutput</span><span class="p">:</span> <span class="kt">AVCapturePhotoOutput</span><span class="p">,</span> <span class="n">didFinishProcessingRawPhoto</span> <span class="nv">rawSampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">?,</span> <span class="n">previewPhoto</span> <span class="nv">previewPhotoSampleBuffer</span><span class="p">:</span> <span class="kt">CMSampleBuffer</span><span class="p">?,</span> <span class="nv">resolvedSettings</span><span class="p">:</span> <span class="kt">AVCaptureResolvedPhotoSettings</span><span class="p">,</span> <span class="nv">bracketSettings</span><span class="p">:</span> <span class="kt">AVCaptureBracketedStillImageSettings</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2727,7 +2847,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">photoOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">captureOutput</span><span class="p">:</span> <span class="kt">AVCapturePhotoOutput</span><span class="p">,</span> <span class="n">didFinishCaptureFor</span> <span class="nv">resolvedSettings</span><span class="p">:</span> <span class="kt">AVCaptureResolvedPhotoSettings</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2754,7 +2874,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">photoOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">output</span><span class="p">:</span> <span class="kt">AVCapturePhotoOutput</span><span class="p">,</span> <span class="n">didFinishProcessingPhoto</span> <span class="nv">photo</span><span class="p">:</span> <span class="kt">AVCapturePhoto</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2764,13 +2884,20 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/AVCaptureMetadataOutputObjectsDelegate"></a>
+                <a name="//apple_ref/swift/Section/AVCaptureMetadataOutputObjectsDelegate" class="dashAnchor"></a>
+                <a href="#/AVCaptureMetadataOutputObjectsDelegate">
+                  <h3 class="section-name">AVCaptureMetadataOutputObjectsDelegate</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:@CM@NextLevel@objc(cs)NextLevel(im)depthDataOutput:didOutputDepthData:timestamp:connection:"></a>
-                    <a name="//apple_ref/swift/Method/depthDataOutput(_:didOutput:timestamp:connection:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@CM@NextLevel@objc(cs)NextLevel(im)depthDataOutput:didOutputDepthData:timestamp:connection:">depthDataOutput(_:didOutput:timestamp:connection:)</a>
+                    <a name="/c:@CM@NextLevel@objc(cs)NextLevel(im)captureOutput:didOutputMetadataObjects:fromConnection:"></a>
+                    <a name="//apple_ref/swift/Method/metadataOutput(_:didOutput:from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@NextLevel@objc(cs)NextLevel(im)captureOutput:didOutputMetadataObjects:fromConnection:">metadataOutput(_:didOutput:from:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2785,34 +2912,7 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:@CM@NextLevel@objc(cs)NextLevel(im)depthDataOutput:didDropDepthData:timestamp:connection:reason:"></a>
-                    <a name="//apple_ref/swift/Method/depthDataOutput(_:didDrop:timestamp:connection:reason:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@CM@NextLevel@objc(cs)NextLevel(im)depthDataOutput:didDropDepthData:timestamp:connection:reason:">depthDataOutput(_:didDrop:timestamp:connection:reason:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">metadataOutput</span><span class="p">(</span><span class="n">_</span> <span class="nv">output</span><span class="p">:</span> <span class="kt">AVCaptureMetadataOutput</span><span class="p">,</span> <span class="n">didOutput</span> <span class="nv">metadataObjects</span><span class="p">:</span> <span class="p">[</span><span class="kt">AVMetadataObject</span><span class="p">],</span> <span class="n">from</span> <span class="nv">connection</span><span class="p">:</span> <span class="kt">AVCaptureConnection</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2822,6 +2922,13 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/NSNotifications"></a>
+                <a name="//apple_ref/swift/Section/NSNotifications" class="dashAnchor"></a>
+                <a href="#/NSNotifications">
+                  <h3 class="section-name">NSNotifications</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -2843,7 +2950,8 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleSessionWasInterrupted</span><span class="p">(</span><span class="n">_</span> <span class="nv">notification</span><span class="p">:</span> <span class="kt">Notification</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2870,7 +2978,8 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevel</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleSessionInterruptionEnded</span><span class="p">(</span><span class="n">_</span> <span class="nv">notification</span><span class="p">:</span> <span class="kt">Notification</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2882,8 +2991,8 @@ The property is only observed when &lsquo;isVideoCustomContextRenderingEnabled&r
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-09-12)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-12-02)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
