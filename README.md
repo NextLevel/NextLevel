@@ -36,10 +36,10 @@ Need a different version of Swift?
 
 # CocoaPods
 swift_version = "4.2"
-pod "NextLevel", "~> 0.12.0"
+pod "NextLevel", "~> 0.13.0"
 
 # Carthage
-github "nextlevel/NextLevel" ~> 0.12.0
+github "nextlevel/NextLevel" ~> 0.13.0
 
 # Swift PM
 let package = Package(
