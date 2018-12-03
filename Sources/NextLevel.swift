@@ -2071,24 +2071,25 @@ extension NextLevel {
         }
         set {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
-                if let device: AVCaptureDevice = self._currentDevice {
-                    guard device.activeFormat.isSupported(withFrameRate: newValue)
-                        else {
-                            print("unsupported frame rate for current device format config, \(newValue) fps")
-                            return
-                    }
+                guard let device: AVCaptureDevice = self._currentDevice else {
+                    return
+                }
+                guard device.activeFormat.isSupported(withFrameRate: newValue)
+                    else {
+                        print("unsupported frame rate for current device format config, \(newValue) fps")
+                        return
+                }
                     
-                    let fps: CMTime = CMTimeMake(value: 1, timescale: newValue)
-                    do {
-                        try device.lockForConfiguration()
-                        
-                        device.activeVideoMaxFrameDuration = fps
-                        device.activeVideoMinFrameDuration = fps
-                        
-                        device.unlockForConfiguration()
-                    } catch {
-                        print("NextLevel, frame rate failed to lock device for configuration")
-                    }
+                let fps: CMTime = CMTimeMake(value: 1, timescale: newValue)
+                do {
+                    try device.lockForConfiguration()
+                    
+                    device.activeVideoMaxFrameDuration = fps
+                    device.activeVideoMinFrameDuration = fps
+                    
+                    device.unlockForConfiguration()
+                } catch {
+                    print("NextLevel, frame rate failed to lock device for configuration")
                 }
             }
         }
