@@ -557,13 +557,7 @@ extension NextLevel {
     ///
     /// - Throws: 'NextLevelError.authorization' when permissions are not authorized, 'NextLevelError.started' when the session has already started.
     public func start() throws {
-        guard self._captureSession == nil
-            else {
-                throw NextLevelError.started
-        }
-        
-        guard self.authorizationStatusForCurrentCameraMode() == .authorized
-            else {
+        guard self.authorizationStatusForCurrentCameraMode() == .authorized else {
                 throw NextLevelError.authorization
         }
         
@@ -571,9 +565,14 @@ extension NextLevel {
             if #available(iOS 11.0, *) {
                 setupARSession()
             }
-        } else {
-            setupAVSession()
+            return
         }
+        
+        guard self._captureSession == nil else {
+            throw NextLevelError.started
+        }
+        
+        setupAVSession()
     }
     
     /// Stops the current recording session.
@@ -647,16 +646,20 @@ extension NextLevel {
         #if USE_ARKIT
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             guard let config = self.arConfiguration?.config,
-                let options = self.arConfiguration?.runOptions else {
+                  let options = self.arConfiguration?.runOptions else {
                     return
             }
             
-            self._captureSession = AVCaptureSession() // AV session is needed for device management and configuration
-            self._sessionConfigurationCount = 0
+            if self._captureSession == nil {
+                self._captureSession = AVCaptureSession() // AV session is needed for device management and configuration
+                self._sessionConfigurationCount = 0
+            }
             
             // setup NL recording session
-            self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionQueueSpecificKey)
-            self.arConfiguration?.session?.delegateQueue = self._sessionQueue
+            if self._recordingSession == nil {
+                self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionQueueSpecificKey)
+                self.arConfiguration?.session?.delegateQueue = self._sessionQueue
+            }
             
             if let session = self._captureSession {
                 session.automaticallyConfiguresApplicationAudioSession = self.automaticallyConfiguresApplicationAudioSession
