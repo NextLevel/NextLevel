@@ -557,13 +557,7 @@ extension NextLevel {
     ///
     /// - Throws: 'NextLevelError.authorization' when permissions are not authorized, 'NextLevelError.started' when the session has already started.
     public func start() throws {
-        guard self._captureSession == nil
-            else {
-                throw NextLevelError.started
-        }
-        
-        guard self.authorizationStatusForCurrentCameraMode() == .authorized
-            else {
+        guard self.authorizationStatusForCurrentCameraMode() == .authorized else {
                 throw NextLevelError.authorization
         }
         
@@ -571,9 +565,14 @@ extension NextLevel {
             if #available(iOS 11.0, *) {
                 setupARSession()
             }
-        } else {
-            setupAVSession()
+            return
         }
+        
+        guard self._captureSession == nil else {
+            throw NextLevelError.started
+        }
+        
+        setupAVSession()
     }
     
     /// Stops the current recording session.
@@ -599,12 +598,9 @@ extension NextLevel {
         if self.captureMode == .arKit {
             if #available(iOS 11.0, *) {
                 self.executeClosureAsyncOnSessionQueueIfNecessary {
-                    if self._arRunning == true {
-                        self.arConfiguration?.session?.pause()
-                        self._arRunning = false
-                        
-                        self._recordingSession = nil
-                    }
+                    self.arConfiguration?.session?.pause()
+                    self._arRunning = false
+                    self._recordingSession = nil
                 }
             }
         }
@@ -649,34 +645,38 @@ extension NextLevel {
     internal func setupARSession() {
         #if USE_ARKIT
         self.executeClosureAsyncOnSessionQueueIfNecessary {
-            if let config = self.arConfiguration?.config,
-                let options = self.arConfiguration?.runOptions {
+            guard let config = self.arConfiguration?.config,
+                  let options = self.arConfiguration?.runOptions else {
+                    return
+            }
+            
+            if self._captureSession == nil {
                 self._captureSession = AVCaptureSession() // AV session is needed for device management and configuration
                 self._sessionConfigurationCount = 0
-                
-                // setup NL recording session
+            }
+            
+            // setup NL recording session
+            if self._recordingSession == nil {
                 self._recordingSession = NextLevelSession(queue: self._sessionQueue, queueKey: NextLevelCaptureSessionQueueSpecificKey)
                 self.arConfiguration?.session?.delegateQueue = self._sessionQueue
+            }
+            
+            if let session = self._captureSession {
+                session.automaticallyConfiguresApplicationAudioSession = self.automaticallyConfiguresApplicationAudioSession
                 
-                if let session = self._captureSession {
-                    session.automaticallyConfiguresApplicationAudioSession = self.automaticallyConfiguresApplicationAudioSession
-                    
-                    self.beginConfiguration()
-                    self.configureSession()
-                    self.configureSessionDevices()
-                    self.updateVideoOrientation()
-                    self.commitConfiguration()
-                }
-                
-                if self._arRunning == false {
-                    self.delegate?.nextLevelSessionWillStart(self)
-                    self.arConfiguration?.session?.run(config, options: options)
-                    self._arRunning = true
-                    
-                    DispatchQueue.main.async {
-                        self.delegate?.nextLevelSessionDidStart(self)
-                    }
-                }
+                self.beginConfiguration()
+                self.configureSession()
+                self.configureSessionDevices()
+                self.updateVideoOrientation()
+                self.commitConfiguration()
+            }
+            
+            self.delegate?.nextLevelSessionWillStart(self)
+            self.arConfiguration?.session?.run(config, options: options)
+            self._arRunning = true
+            
+            DispatchQueue.main.async {
+                self.delegate?.nextLevelSessionDidStart(self)
             }
         }
         #endif
@@ -2074,24 +2074,25 @@ extension NextLevel {
         }
         set {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
-                if let device: AVCaptureDevice = self._currentDevice {
-                    guard device.activeFormat.isSupported(withFrameRate: newValue)
-                        else {
-                            print("unsupported frame rate for current device format config, \(newValue) fps")
-                            return
-                    }
+                guard let device: AVCaptureDevice = self._currentDevice else {
+                    return
+                }
+                guard device.activeFormat.isSupported(withFrameRate: newValue)
+                    else {
+                        print("unsupported frame rate for current device format config, \(newValue) fps")
+                        return
+                }
                     
-                    let fps: CMTime = CMTimeMake(value: 1, timescale: newValue)
-                    do {
-                        try device.lockForConfiguration()
-                        
-                        device.activeVideoMaxFrameDuration = fps
-                        device.activeVideoMinFrameDuration = fps
-                        
-                        device.unlockForConfiguration()
-                    } catch {
-                        print("NextLevel, frame rate failed to lock device for configuration")
-                    }
+                let fps: CMTime = CMTimeMake(value: 1, timescale: newValue)
+                do {
+                    try device.lockForConfiguration()
+                    
+                    device.activeVideoMaxFrameDuration = fps
+                    device.activeVideoMinFrameDuration = fps
+                    
+                    device.unlockForConfiguration()
+                } catch {
+                    print("NextLevel, frame rate failed to lock device for configuration")
                 }
             }
         }

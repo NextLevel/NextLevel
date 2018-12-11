@@ -304,41 +304,43 @@ extension NextLevelSession {
     }
     
     internal func setupWriter() {
-        if let url = self.nextFileURL() {
-            do {
-                self._writer = try AVAssetWriter(url: url, fileType: self.fileType)
-                if let writer = self._writer {
-                    writer.shouldOptimizeForNetworkUse = true
-                    writer.metadata = NextLevel.assetWriterMetadata()
-                    
-                    if let videoInput = self._videoInput {
-                        if writer.canAdd(videoInput) {
-                            writer.add(videoInput)
-                        } else {
-                            print("NextLevel, could not add video input to session")
-                        }
-                    }
-                    
-                    if let audioInput = self._audioInput {
-                        if writer.canAdd(audioInput) {
-                            writer.add(audioInput)
-                        } else {
-                            print("NextLevel, could not add audio input to session")
-                        }
-                    }
-                    
-                    if writer.startWriting() {
-                        self._timeOffset = CMTime.zero
-                        self._startTimestamp = CMTime.invalid
-                        self._currentClipHasStarted = true
+        guard let url = self.nextFileURL() else {
+            return
+        }
+        
+        do {
+            self._writer = try AVAssetWriter(url: url, fileType: self.fileType)
+            if let writer = self._writer {
+                writer.shouldOptimizeForNetworkUse = true
+                writer.metadata = NextLevel.assetWriterMetadata()
+                
+                if let videoInput = self._videoInput {
+                    if writer.canAdd(videoInput) {
+                        writer.add(videoInput)
                     } else {
-                        print("NextLevel, writer encountered an error \(String(describing: writer.error))")
-                        self._writer = nil
+                        print("NextLevel, could not add video input to session")
                     }
                 }
-            } catch {
-                print("NextLevel could not create asset writer")
+                
+                if let audioInput = self._audioInput {
+                    if writer.canAdd(audioInput) {
+                        writer.add(audioInput)
+                    } else {
+                        print("NextLevel, could not add audio input to session")
+                    }
+                }
+                
+                if writer.startWriting() {
+                    self._timeOffset = CMTime.zero
+                    self._startTimestamp = CMTime.invalid
+                    self._currentClipHasStarted = true
+                } else {
+                    print("NextLevel, writer encountered an error \(String(describing: writer.error))")
+                    self._writer = nil
+                }
             }
+        } catch {
+            print("NextLevel could not create asset writer")
         }
     }
     
