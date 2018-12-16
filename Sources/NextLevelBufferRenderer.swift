@@ -32,8 +32,9 @@ import SceneKit
 #endif
 
 /// NextLevelBufferRenderer, provides the ability to render/record SceneKit frames
+@available(iOS 11.0, *)
 public class NextLevelBufferRenderer {
-
+    
     // MARK: - properties
     
     /// Rendered video buffer output (using to write video file)
@@ -60,24 +61,25 @@ public class NextLevelBufferRenderer {
     internal var _ciContext: CIContext?
     internal var _pixelBufferPool: CVPixelBufferPool?
     internal var _videoBufferOutput: CVPixelBuffer?
-
+    
     #if USE_ARKIT
     internal weak var _arView: ARSCNView?
     internal var _renderSemaphore: DispatchSemaphore = DispatchSemaphore(value: 3)
     internal var _renderer: SCNRenderer?
-
+    
     // MARK: - object lifecycle
-
-    convenience init(arView: ARSCNView) {
+    
+    convenience init(view: ARSCNView) {
         self.init()
         
         #if !( targetEnvironment(simulator) )
-        self._device = sceneView.device
-        self._renderer = SCNRenderer(device: sceneView.device, options: nil)
-        self._renderer?.scene = sceneView.scene
+        self._device = view.device
+        self._renderer = SCNRenderer(device: view.device, options: nil)
+        self._renderer?.scene = view.scene
         #endif
-        self._arView = sceneView
-        self._presentationFrame = sceneView.bounds
+        
+        self._arView = view
+        self._presentationFrame = view.bounds
     }
     #endif
     
@@ -87,7 +89,7 @@ public class NextLevelBufferRenderer {
         self._commandQueue = nil
         self._renderPassDescriptor = nil
         self._texture = nil
-
+        
         self._ciContext = nil
         self._pixelBufferPool = nil
         self._videoBufferOutput = nil
@@ -103,6 +105,7 @@ public class NextLevelBufferRenderer {
 
 // MARK: - setup
 
+@available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
     
     internal func setupContextIfNecessary() {
@@ -118,7 +121,7 @@ extension NextLevelBufferRenderer {
         let options : [CIContextOption : Any] = [.workingColorSpace : CGColorSpaceCreateDeviceRGB(),
                                                  .useSoftwareRenderer : NSNumber(booleanLiteral: false)]
         self._ciContext = CIContext(mtlDevice: device, options: options)
-
+        
         // setup pixel buffer rendering
         #if USE_ARKIT
         self._renderer = SCNRenderer(device: device, options: nil)
@@ -178,8 +181,7 @@ extension NextLevelBufferRenderer {
 
 // MARK: - rendering
 
-#if USE_ARKIT
-
+@available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
     
     internal func createVideoBufferOutput(withPixelBuffer pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) -> CVPixelBuffer? {
@@ -205,7 +207,9 @@ extension NextLevelBufferRenderer {
         }
         return nil
     }
-
+    
+    #if USE_ARKIT
+    
     /// SCNSceneRendererDelegate hook for rendering
     ///
     /// - Parameters:
@@ -214,10 +218,10 @@ extension NextLevelBufferRenderer {
     ///   - time: SCNSceneRendererDelegate time
     public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
         guard let arView = self._arView,
-              let pixelBuffer = arView.session.currentFrame?.capturedImage,
-              let pointOfView = arView.pointOfView,
-              let device = self._device else {
-            return
+            let pixelBuffer = arView.session.currentFrame?.capturedImage,
+            let pointOfView = arView.pointOfView,
+            let device = self._device else {
+                return
         }
         
         self.setupContextIfNecessary()
@@ -271,7 +275,7 @@ extension NextLevelBufferRenderer {
         self._videoBufferOutput = self.createVideoBufferOutput(withPixelBuffer: pixelBuffer, orientation: .downMirrored)
         CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
     }
-
+    
+    #endif
+    
 }
-
-#endif
