@@ -204,7 +204,7 @@ public class NextLevelClip {
     /// - Parameters:
     ///   - url: URL and filename of the specified media asset
     ///   - infoDict: Dictionary with NextLevelClip metadata information
-    convenience init(url: URL?, infoDict: [String : Any]?) {
+    public convenience init(url: URL?, infoDict: [String : Any]?) {
         self.init()
         self.url = url
         self._infoDict = infoDict
@@ -215,7 +215,7 @@ public class NextLevelClip {
     /// - Parameters:
     ///   - directoryPath: Directory where the media asset is located
     ///   - representationDict: Dictionary containing defining metadata about the clip
-    convenience init(directoryPath: String, representationDict: [String : Any]?) {
+    public convenience init(directoryPath: String, representationDict: [String : Any]?) {
         if let clipDict = representationDict,
            let filename = clipDict[NextLevelClipFilenameKey] as? String,
            let url: URL = NextLevelClip.clipURL(withFilename: filename, directoryPath: directoryPath) {

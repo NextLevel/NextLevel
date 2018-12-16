@@ -170,7 +170,7 @@ public class NextLevelSession {
     internal var _identifier: UUID
     internal var _date: Date
     
-    internal var _totalDuration: CMTime = CMTime.zero
+    internal var _totalDuration: CMTime = .zero
     internal var _clips: [NextLevelClip] = []
     internal var _clipFilenameCount: Int = 0
 
@@ -186,7 +186,7 @@ public class NextLevelSession {
     internal var _sessionQueue: DispatchQueue
     internal var _sessionQueueKey: DispatchSpecificKey<()>
     
-    internal var _currentClipDuration: CMTime = CMTime.zero
+    internal var _currentClipDuration: CMTime = .zero
     internal var _currentClipHasAudio: Bool = false
     internal var _currentClipHasVideo: Bool = false
 
@@ -207,7 +207,7 @@ public class NextLevelSession {
     /// - Parameters:
     ///   - queue: Queue for a session operations
     ///   - queueKey: Key for re-calling the session queue from the system
-    convenience init(queue: DispatchQueue, queueKey: DispatchSpecificKey<()>) {
+    public convenience init(queue: DispatchQueue, queueKey: DispatchSpecificKey<()>) {
         self.init()
         self._sessionQueue = queue
         self._sessionQueueKey = queueKey
