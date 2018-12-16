@@ -35,6 +35,8 @@
 		06CF9CE71F7064170011CE09 /* NextLevel+CoreImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CF9CE51F7064170011CE09 /* NextLevel+CoreImage.swift */; };
 		06CF9CE91F70678D0011CE09 /* NextLevel+CoreMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CF9CE81F70678D0011CE09 /* NextLevel+CoreMedia.swift */; };
 		06CF9CEA1F70678D0011CE09 /* NextLevel+CoreMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CF9CE81F70678D0011CE09 /* NextLevel+CoreMedia.swift */; };
+		06DB04A521C5ABA9007877CC /* NextLevelBufferRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DB04A421C5ABA9007877CC /* NextLevelBufferRenderer.swift */; };
+		06DB04A621C5ABA9007877CC /* NextLevelBufferRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DB04A421C5ABA9007877CC /* NextLevelBufferRenderer.swift */; };
 		6A3D083C1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3D083B1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift */; };
 		6A3D083D1FFCCC5A001E4AB1 /* NextLevel+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3D083B1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift */; };
 /* End PBXBuildFile section */
@@ -65,6 +67,7 @@
 		06CF9CE51F7064170011CE09 /* NextLevel+CoreImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NextLevel+CoreImage.swift"; path = "../Sources/NextLevel+CoreImage.swift"; sourceTree = "<group>"; };
 		06CF9CE81F70678D0011CE09 /* NextLevel+CoreMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NextLevel+CoreMedia.swift"; path = "../Sources/NextLevel+CoreMedia.swift"; sourceTree = "<group>"; };
 		06D620D220B36DDB0000C3A4 /* MixedRealityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixedRealityViewController.swift; sourceTree = "<group>"; };
+		06DB04A421C5ABA9007877CC /* NextLevelBufferRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NextLevelBufferRenderer.swift; path = ../Sources/NextLevelBufferRenderer.swift; sourceTree = "<group>"; };
 		6A3D083B1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NextLevel+UIImage.swift"; path = "../Sources/NextLevel+UIImage.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -148,6 +151,7 @@
 				06AECC871AC38B3700EFCD03 /* NextLevel.swift */,
 				060D50F01D5BF09F00247AD0 /* NextLevelConfiguration.swift */,
 				067FCFCA213DB3B700B9B6C2 /* NextLevelProtocols.swift */,
+				06DB04A421C5ABA9007877CC /* NextLevelBufferRenderer.swift */,
 			);
 			name = NextLevel;
 			sourceTree = "<group>";
@@ -289,6 +293,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06DB04A521C5ABA9007877CC /* NextLevelBufferRenderer.swift in Sources */,
 				6A3D083C1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift in Sources */,
 				06AECC671AC3830800EFCD03 /* CameraViewController.swift in Sources */,
 				06C86E391D81DD5800A43411 /* NextLevel+AVFoundation.swift in Sources */,
@@ -319,6 +324,7 @@
 				06250AA11D8C57B20008C903 /* NextLevel+Foundation.swift in Sources */,
 				06250A9F1D8C57AD0008C903 /* NextLevelSession.swift in Sources */,
 				06250AA21D8C57B50008C903 /* NextLevel+Metadata.swift in Sources */,
+				06DB04A621C5ABA9007877CC /* NextLevelBufferRenderer.swift in Sources */,
 				06250A9D1D8C57A60008C903 /* NextLevel.swift in Sources */,
 				063E5352211A1B4B001B6D33 /* NextLevel+Swift.swift in Sources */,
 				06250AA31D8C57B70008C903 /* NextLevel+AVFoundation.swift in Sources */,
