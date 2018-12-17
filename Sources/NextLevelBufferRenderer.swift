@@ -69,7 +69,7 @@ public class NextLevelBufferRenderer {
     
     // MARK: - object lifecycle
     
-    convenience init(view: ARSCNView) {
+    public convenience init(view: ARSCNView) {
         self.init()
         
         #if !( targetEnvironment(simulator) )
