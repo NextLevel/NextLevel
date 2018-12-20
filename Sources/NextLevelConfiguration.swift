@@ -141,7 +141,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
         
     // MARK: - object lifecycle
     
-    override init() {
+    public override init() {
         if #available(iOS 11.0, *) {
             self.codec = AVVideoCodecType.h264.rawValue
         } else {
@@ -157,7 +157,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     ///
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Video configuration dictionary for AVFoundation
-    override public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String : Any]? {
+    public override func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String : Any]? {
         
         // if the client specified custom options, use those instead
         if let options = self.options {
@@ -279,7 +279,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
 
     // MARK: - object lifecycle
     
-    override init() {
+    public override init() {
         super.init()
     }
 
@@ -289,7 +289,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
     ///
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Audio configuration dictionary for AVFoundation
-    override public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
+    public override func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
         // if the client specified custom options, use those instead
         if let options = self.options {
             return options
