@@ -2698,7 +2698,7 @@ extension NextLevel {
         self._bufferHeight = height
         self._bufferFormatType = formatType
         
-        let pixelBufferPoolMinimumCount = 3
+        let pixelBufferPoolMinimumCount = 2
         let poolAttributes: [String:AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey): NSNumber(integerLiteral: pixelBufferPoolMinimumCount)]
         
         // TODO: doesn't properly support orientation, should reference videoConfiguration settings
