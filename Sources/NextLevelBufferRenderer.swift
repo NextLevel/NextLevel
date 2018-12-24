@@ -183,31 +183,7 @@ extension NextLevelBufferRenderer {
 
 @available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
-    
-    internal func createVideoBufferOutput(withPixelBuffer pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) -> CVPixelBuffer? {
-        // setup and allocate a pool
-        self.setupPixelBufferPoolIfNecessary(pixelBuffer, orientation: orientation)
-        guard let pixelBufferPool = self._pixelBufferPool, let texture = self._texture else {
-            return nil
-        }
-        
-        // allocate a pixel buffer and render into it
-        var updatedPixelBuffer: CVPixelBuffer? = nil
-        if CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess {
-            if let updatedPixelBuffer = updatedPixelBuffer {
-                // update orientation to match Metal's origin
-                let ciImage = CIImage(mtlTexture: texture, options: nil)
-                if let orientedImage = ciImage?.oriented(orientation) {
-                    CVPixelBufferLockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-                    self._ciContext?.render(orientedImage, to: updatedPixelBuffer)
-                    CVPixelBufferUnlockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-                    return updatedPixelBuffer
-                }
-            }
-        }
-        return nil
-    }
-    
+
     #if USE_ARKIT
     
     /// SCNSceneRendererDelegate hook for rendering
@@ -272,7 +248,12 @@ extension NextLevelBufferRenderer {
             commandBuffer.commit()
         }
         
-        self._videoBufferOutput = self.createVideoBufferOutput(withPixelBuffer: pixelBuffer, orientation: .downMirrored)
+        if let pixelBufferPool = self._pixelBufferPool,
+            let texture = self._texture,
+            let newPixelBuffer = self._ciContext?.createPixelBuffer(fromPixelBuffer: pixelBuffer, withOrientation: .downMirrored, pixelBufferPool: pixelBufferPool) {
+            self._videoBufferOutput = newPixelBuffer
+        }
+        
         CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
     }
     
