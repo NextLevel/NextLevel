@@ -160,9 +160,7 @@ extension NextLevelBufferRenderer {
         }
         self._bufferFormatType = formatType
         
-        let pixelBufferPoolMinimumCount = 3
-        let poolAttributes: [String:AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey) : NSNumber(integerLiteral: pixelBufferPoolMinimumCount)]
-        
+        let poolAttributes: [String : AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey): NSNumber(integerLiteral: 1)]
         let pixelBufferAttributes: [String : AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(self._bufferFormatType)),
                                                            String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferWidth),
                                                            String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferHeight),

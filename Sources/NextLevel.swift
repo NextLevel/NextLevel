@@ -2698,15 +2698,14 @@ extension NextLevel {
         self._bufferHeight = height
         self._bufferFormatType = formatType
         
-        let pixelBufferPoolMinimumCount = 2
-        let poolAttributes: [String:AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey): NSNumber(integerLiteral: pixelBufferPoolMinimumCount)]
+        let poolAttributes: [String : AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey): NSNumber(integerLiteral: 1)]
         
         // TODO: doesn't properly support orientation, should reference videoConfiguration settings
         let pixelBufferAttributes: [String:AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(self._bufferFormatType)),
                                                          String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferHeight), // flip
-            String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferWidth), // flip
-            String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
-            String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
+                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferWidth), // flip
+                                                         String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
+                                                         String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
         
         var pixelBufferPool: CVPixelBufferPool? = nil
         if CVPixelBufferPoolCreate(kCFAllocatorDefault, poolAttributes as CFDictionary, pixelBufferAttributes as CFDictionary, &pixelBufferPool) == kCVReturnSuccess {
