@@ -558,21 +558,19 @@ extension NextLevel {
     /// - Throws: 'NextLevelError.authorization' when permissions are not authorized, 'NextLevelError.started' when the session has already started.
     public func start() throws {
         guard self.authorizationStatusForCurrentCameraMode() == .authorized else {
-                throw NextLevelError.authorization
+            throw NextLevelError.authorization
         }
         
         if self.captureMode == .arKit {
             if #available(iOS 11.0, *) {
                 setupARSession()
             }
-            return
+        } else {
+            guard self._captureSession == nil else {
+                throw NextLevelError.started
+            }
+            setupAVSession()
         }
-        
-        guard self._captureSession == nil else {
-            throw NextLevelError.started
-        }
-        
-        setupAVSession()
     }
     
     /// Stops the current recording session.
