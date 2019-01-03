@@ -171,8 +171,6 @@ extension NextLevelBufferRenderer {
         if CVPixelBufferPoolCreate(kCFAllocatorDefault, poolAttributes as CFDictionary, pixelBufferAttributes as CFDictionary, &pixelBufferPool) == kCVReturnSuccess {
             self._pixelBufferPool = pixelBufferPool
         }
-        
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
     }
     
 }
