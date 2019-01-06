@@ -142,7 +142,7 @@ public class NextLevelConfiguration {
     public var preset: AVCaptureSession.Preset
     
     /// Setting an options dictionary overrides all other properties set on a configuration object but allows full customization
-    public var options: [String: Any]?
+    public var options: [String : Any]?
     
     // MARK: - object lifecycle
     
@@ -192,7 +192,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     public var profileLevel: String?
 
     /// Video scaling mode, AV dictionary key AVVideoScalingModeKey
-    public var scalingMode: String?
+    public var scalingMode: String = AVVideoScalingModeResizeAspectFill
 
     /// Maximum interval between key frames, 1 meaning key frames only, AV dictionary key AVVideoMaxKeyFrameIntervalKey
     public var maxKeyFrameInterval: Int?
@@ -211,7 +211,6 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
         } else {
             self.codec = AVVideoCodecType(rawValue: AVVideoCodecH264)
         }
-        self.scalingMode = AVVideoScalingModeResizeAspectFill
         super.init()
     }
     
@@ -263,6 +262,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.height))
                 break
             }
+            
         } else if let pixelBuffer = pixelBuffer {
             let width = CVPixelBufferGetWidth(pixelBuffer)
             let height = CVPixelBufferGetHeight(pixelBuffer)
@@ -273,10 +273,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
         config = self.update(config: config)
         
         config[AVVideoCodecKey] = self.codec
-        
-        if let scalingMode = self.scalingMode {
-            config[AVVideoScalingModeKey] = scalingMode
-        }
+        config[AVVideoScalingModeKey] = self.scalingMode
         
         var compressionDict: [String : Any] = [:]
         compressionDict[AVVideoAverageBitRateKey] = NSNumber(integerLiteral: self.bitRate)
