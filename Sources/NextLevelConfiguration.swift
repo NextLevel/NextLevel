@@ -186,7 +186,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     public var transform: CGAffineTransform = .identity
 
     /// Codec used to encode video, AV dictionary key AVVideoCodecKey
-    public var codec: String
+    public var codec: AVVideoCodecType
 
     /// Profile level for the configuration, AV dictionary key AVVideoProfileLevelKey (H.264 codec only)
     public var profileLevel: String?
@@ -207,9 +207,9 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     
     public override init() {
         if #available(iOS 11.0, *) {
-            self.codec = AVVideoCodecType.h264.rawValue
+            self.codec = AVVideoCodecType.h264
         } else {
-            self.codec = AVVideoCodecH264
+            self.codec = AVVideoCodecType(rawValue: AVVideoCodecH264)
         }
         self.scalingMode = AVVideoScalingModeResizeAspectFill
         super.init()
@@ -270,7 +270,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
         }
         
-        config = update(config: config)
+        config = self.update(config: config)
         
         config[AVVideoCodecKey] = self.codec
         
@@ -406,7 +406,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
 public class NextLevelPhotoConfiguration : NextLevelConfiguration {
 
     /// Codec used to encode photo, AV dictionary key AVVideoCodecKey
-    public var codec: String
+    public var codec: AVVideoCodecType
 
     /// When true, NextLevel should generate a thumbnail for the photo
     public var generateThumbnail: Bool = false
@@ -431,9 +431,9 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     
     override init() {
         if #available(iOS 11.0, *) {
-            self.codec = AVVideoCodecType.jpeg.rawValue
+            self.codec = AVVideoCodecType.hevc
         } else {
-            self.codec = AVVideoCodecJPEG
+            self.codec = AVVideoCodecType(rawValue: AVVideoCodecJPEG)
         }
         super.init()
     }

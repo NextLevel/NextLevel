@@ -1076,10 +1076,9 @@ extension NextLevel {
         movieFileOutputConnection.videoOrientation = self.deviceOrientation
         
         var videoSettings: [String: Any] = [:]
-        let codec = AVVideoCodecType(rawValue: self.videoConfiguration.codec)
         if let availableVideoCodecTypes = self._movieFileOutput?.availableVideoCodecTypes,
-            availableVideoCodecTypes.contains(codec) {
-            videoSettings[AVVideoCodecKey] = codec
+            availableVideoCodecTypes.contains(self.videoConfiguration.codec) {
+            videoSettings[AVVideoCodecKey] = self.videoConfiguration.codec
         }
         self._movieFileOutput?.setOutputSettings(videoSettings, for: movieFileOutputConnection)
         
