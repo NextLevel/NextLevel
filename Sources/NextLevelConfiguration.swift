@@ -299,20 +299,18 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     ///   - config: Input configuration dictionary
     ///   - divisibleBy: Divisor
     /// - Returns: Configuration with appropriately divided sizes
-    private func update(config: [String : Any], withSizeValuesDivisibleBy divisibleBy: Int? = 16) -> [String : Any] {
+    private func update(config: [String : Any], withSizeValuesDivisibleBy divisibleBy: Int = 16) -> [String : Any] {
         var config = config
         
-        if let divisibleBy = divisibleBy {
-            if let width = config[AVVideoWidthKey] as? Int {
-                let newWidth = width - (width % divisibleBy)
-                config[AVVideoWidthKey] = NSNumber(integerLiteral: newWidth)
-            }
-            if let height = config[AVVideoHeightKey] as? Int {
-                let newHeight = height - (height % divisibleBy)
-                config[AVVideoHeightKey] = NSNumber(integerLiteral: newHeight)
-            }
+        if let width = config[AVVideoWidthKey] as? Int {
+            let newWidth = width - (width % divisibleBy)
+            config[AVVideoWidthKey] = NSNumber(integerLiteral: newWidth)
         }
-        
+        if let height = config[AVVideoHeightKey] as? Int {
+            let newHeight = height - (height % divisibleBy)
+            config[AVVideoHeightKey] = NSNumber(integerLiteral: newHeight)
+        }
+    
         return config
     }
     
