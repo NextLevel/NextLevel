@@ -1,5 +1,5 @@
 //
-//  NextLevel+CoreVideo.swift
+//  NextLevel+CMSampleBuffer.swift
 //  NextLevel (http://nextlevel.engineering/)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
