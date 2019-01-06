@@ -37,7 +37,7 @@ public class NextLevelConfiguration {
 
     // MARK: - types
     
-    /// Output aspect ratio, specifies dimensions for video output automatically
+    /// Aspect ratio, specifies dimensions for video output
     ///
     /// - active: active preset or specified dimensions (default)
     /// - square: 1:1 square
@@ -49,7 +49,7 @@ public class NextLevelConfiguration {
     /// - instagramLandscape: 5:4 Instagram landscape
     /// - cinematic: 2.35:1 cinematic
     /// - custom: custom aspect ratio
-    public enum OutputAspectRatio: CustomStringConvertible {
+    public enum AspectRatio: CustomStringConvertible {
         case active
         case square
         case standard
@@ -180,7 +180,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     public var dimensions: CGSize?
 
     /// Output aspect ratio automatically sizes output dimensions, `active` indicates NextLevelVideoConfiguration.preset or NextLevelVideoConfiguration.dimensions
-    public var aspectRatio: OutputAspectRatio = .active
+    public var aspectRatio: AspectRatio = .active
 
     /// Video output transform for display
     public var transform: CGAffineTransform = .identity
@@ -234,7 +234,9 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(dimensions.width))
             config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(dimensions.height))
         } else if let sampleBuffer = sampleBuffer,
-            let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+                  let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+
+            // TODO: this is incorrect and needs to be fixed
             let videoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
             switch self.aspectRatio {
             case .standard:
