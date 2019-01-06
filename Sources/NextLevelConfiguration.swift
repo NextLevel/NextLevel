@@ -297,20 +297,18 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
         
         var config: [String : Any] = [AVEncoderBitRateKey : NSNumber(integerLiteral: self.bitRate)]
         
-        if let sampleBuffer = sampleBuffer {
-            if let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
-                if let _ = self.sampleRate, let _ = self.channelsCount {
-                    // loading user provided settings after buffer use
-                } else if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
-                    self.sampleRate = streamBasicDescription.pointee.mSampleRate
-                    self.channelsCount = Int(streamBasicDescription.pointee.mChannelsPerFrame)
-                }
-                
-                var layoutSize: Int = 0
-                if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, sizeOut: &layoutSize) {
-                    let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count:layoutSize) : Data()
-                    config[AVChannelLayoutKey] = currentChannelLayoutData
-                }
+        if let sampleBuffer = sampleBuffer, let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
+            if let _ = self.sampleRate, let _ = self.channelsCount {
+                // loading user provided settings after buffer use
+            } else if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
+                self.sampleRate = streamBasicDescription.pointee.mSampleRate
+                self.channelsCount = Int(streamBasicDescription.pointee.mChannelsPerFrame)
+            }
+            
+            var layoutSize: Int = 0
+            if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, sizeOut: &layoutSize) {
+                let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count:layoutSize) : Data()
+                config[AVChannelLayoutKey] = currentChannelLayoutData
             }
         }
         
