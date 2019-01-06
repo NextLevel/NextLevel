@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>NextLevelAuthorizationStatus Enumeration Reference</title>
+    <title>NextLevelBufferRenderer Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/NextLevelAuthorizationStatus" class="dashAnchor"></a>
-    <a title="NextLevelAuthorizationStatus Enumeration Reference"></a>
+    <a name="//apple_ref/swift/Class/NextLevelBufferRenderer" class="dashAnchor"></a>
+    <a title="NextLevelBufferRenderer Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">NextLevel Docs</a> (61% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">NextLevel Reference</a>
         <img id="carat" src="../img/carat.png" />
-        NextLevelAuthorizationStatus Enumeration Reference
+        NextLevelBufferRenderer Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -225,19 +225,32 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>NextLevelAuthorizationStatus</h1>
-            <p>Undocumented</p>
+            <h1>NextLevelBufferRenderer</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevelBufferRenderer</span></code></pre>
+
+                </div>
+              </div>
+            <p>NextLevelBufferRenderer, provides the ability to render/record SceneKit frames</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/properties"></a>
+                <a name="//apple_ref/swift/Section/properties" class="dashAnchor"></a>
+                <a href="#/properties">
+                  <h3 class="section-name">properties</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevel0aB19AuthorizationStatusO13notDeterminedyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/notDetermined" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB19AuthorizationStatusO13notDeterminedyA2CmF">notDetermined</a>
+                    <a name="/s:9NextLevel0aB14BufferRendererC05videoC6OutputSo11CVBufferRefaSgvp"></a>
+                    <a name="//apple_ref/swift/Property/videoBufferOutput" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9NextLevel0aB14BufferRendererC05videoC6OutputSo11CVBufferRefaSgvp">videoBufferOutput</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -245,8 +258,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Rendered video buffer output (using to write video file)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoBufferOutput</span><span class="p">:</span> <span class="kt">CVPixelBuffer</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -254,59 +275,20 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/object%20lifecycle"></a>
+                <a name="//apple_ref/swift/Section/object lifecycle" class="dashAnchor"></a>
+                <a href="#/object%20lifecycle">
+                  <h3 class="section-name">object lifecycle</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9NextLevel0aB19AuthorizationStatusO13notAuthorizedyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/notAuthorized" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB19AuthorizationStatusO13notAuthorizedyA2CmF">notAuthorized</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9NextLevel0aB19AuthorizationStatusO10authorizedyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/authorized" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9NextLevel0aB19AuthorizationStatusO10authorizedyA2CmF">authorized</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:s23CustomStringConvertibleP11descriptionSSvp"></a>
-                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
-                    <a class="token" href="#/s:s23CustomStringConvertibleP11descriptionSSvp">description</a>
+                    <a name="/"></a>
+                    <a name="//apple_ref/swift/Method/init(view:)" class="dashAnchor"></a>
+                    <a class="token" href="#/">init(view:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -320,7 +302,38 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevelBufferRenderer</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/"></a>
+                    <a name="//apple_ref/swift/Method/renderer(_:didRenderScene:atTime:)" class="dashAnchor"></a>
+                    <a class="token" href="#/">renderer(_:didRenderScene:atTime:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>SCNSceneRendererDelegate hook for rendering</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">NextLevelBufferRenderer</span></code></pre>
 
                         </div>
                       </div>

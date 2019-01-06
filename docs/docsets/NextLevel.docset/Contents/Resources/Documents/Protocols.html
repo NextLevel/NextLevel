@@ -10,11 +10,10 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Section/Protocols" class="dashAnchor"></a>
     <a title="Protocols  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">NextLevel Docs</a> (63% documented)</p>
+        <p><a href="index.html">NextLevel Docs</a> (61% documented)</p>
         <p class="header-right"><a href="https://github.com/NextLevel/NextLevel"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -41,10 +40,16 @@
                 <a href="Classes/NextLevelAudioConfiguration.html">NextLevelAudioConfiguration</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/NextLevelBufferRenderer.html">NextLevelBufferRenderer</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/NextLevelClip.html">NextLevelClip</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/NextLevelConfiguration.html">NextLevelConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/NextLevelConfiguration/AspectRatio.html">– AspectRatio</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/NextLevelPhotoConfiguration.html">NextLevelPhotoConfiguration</a>
@@ -54,9 +59,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/NextLevelVideoConfiguration.html">NextLevelVideoConfiguration</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/NextLevelVideoConfiguration/OutputAspectRatio.html">– OutputAspectRatio</a>
               </li>
             </ul>
           </li>
@@ -257,7 +259,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -285,7 +287,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPreviewDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPreviewDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -313,7 +315,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelDeviceDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelDeviceDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -352,7 +354,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelFlashAndTorchDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelFlashAndTorchDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -392,7 +394,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelVideoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -431,7 +433,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPhotoDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -500,7 +502,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPortraitEffectsMatteDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelPortraitEffectsMatteDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -539,7 +541,7 @@ All methods are called on the main queue with the exception of nextLevel:renderT
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelMetadataOutputObjectsDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">NextLevelMetadataOutputObjectsDelegate</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -551,8 +553,8 @@ All methods are called on the main queue with the exception of nextLevel:renderT
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2018-12-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2019-01-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
