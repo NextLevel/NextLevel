@@ -192,6 +192,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     public var profileLevel: String?
 
     /// Video scaling mode, AV dictionary key AVVideoScalingModeKey
+    /// (AVVideoScalingModeResizeAspectFill, AVVideoScalingModeResizeAspect, AVVideoScalingModeResize, AVVideoScalingModeFit)
     public var scalingMode: String = AVVideoScalingModeResizeAspectFill
 
     /// Maximum interval between key frames, 1 meaning key frames only, AV dictionary key AVVideoMaxKeyFrameIntervalKey
