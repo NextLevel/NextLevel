@@ -136,8 +136,45 @@ public class NextLevelConfiguration {
         }
     }
     
+    // MARK: - properties
+    
+    /// AVFoundation configuration preset, see AVCaptureSession.h
+    public var preset: AVCaptureSession.Preset
+    
+    /// Setting an options dictionary overrides all other properties set on a configuration object but allows full customization
+    public var options: [String: Any]?
+    
+    // MARK: - object lifecycle
+    
+    public init() {
+        self.preset = AVCaptureSession.Preset.high
+        self.options = nil
+    }
+    
+    // MARK: - func
+    
+    /// Provides an AVFoundation friendly dictionary for configuring output.
+    ///
+    /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
+    /// - Returns: Configuration dictionary for AVFoundation
+    public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
+        return self.options
+    }
+}
+
+// MARK: - VideoConfiguration
+
+/// NextLevelVideoConfiguration, video capture configuration object
+public class NextLevelVideoConfiguration: NextLevelConfiguration {
+    
+    // MARK: - types
+    
+    public static let VideoBitRateDefault: Int = 2000000
+    
+    // MARK: - properties
+    
     /// Average video bit rate (bits per second), AV dictionary key AVVideoAverageBitRateKey
-    public var bitRate: Int = NextLevelVideoConfigurationDefaultBitRate
+    public var bitRate: Int = NextLevelVideoConfiguration.VideoBitRateDefault
 
     /// Dimensions for video output, AV dictionary keys AVVideoWidthKey, AVVideoHeightKey
     public var dimensions: CGSize?
@@ -284,15 +321,19 @@ public class NextLevelConfiguration {
 
 // MARK: - AudioConfiguration
 
-let NextLevelAudioConfigurationDefaultBitRate: Int = 128000
-let NextLevelAudioConfigurationDefaultSampleRate: Float64 = 44100
-let NextLevelAudioConfigurationDefaultChannelsCount: Int = 2
-
 /// NextLevelAudioConfiguration, audio capture configuration object
 public class NextLevelAudioConfiguration: NextLevelConfiguration {
 
+    // MARK: - types
+    
+    public static let AudioBitRateDefault: Int = 128000
+    public static let AudioSampleRateDefault: Float64 = 44100
+    public static let AudioChannelsCountDefault: Int = 2
+    
+    // MARK: - properties
+    
     /// Audio bit rate, AV dictionary key AVEncoderBitRateKey
-    public var bitRate: Int = NextLevelAudioConfigurationDefaultBitRate
+    public var bitRate: Int = NextLevelAudioConfiguration.AudioBitRateDefault
 
     /// Sample rate in hertz, AV dictionary key AVSampleRateKey
     public var sampleRate: Float64?
@@ -340,15 +381,15 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
         }
         
         if let sampleRate = self.sampleRate {
-            config[AVSampleRateKey] = sampleRate == 0 ? NSNumber(value: NextLevelAudioConfigurationDefaultSampleRate) : NSNumber(value: sampleRate)
+            config[AVSampleRateKey] = sampleRate == 0 ? NSNumber(value: NextLevelAudioConfiguration.AudioSampleRateDefault) : NSNumber(value: sampleRate)
         } else {
-            config[AVSampleRateKey] = NSNumber(value: NextLevelAudioConfigurationDefaultSampleRate)
+            config[AVSampleRateKey] = NSNumber(value: NextLevelAudioConfiguration.AudioSampleRateDefault)
         }
         
         if let channels = self.channelsCount {
-            config[AVNumberOfChannelsKey] = channels == 0 ? NSNumber(integerLiteral: NextLevelAudioConfigurationDefaultChannelsCount) : NSNumber(integerLiteral: channels)
+            config[AVNumberOfChannelsKey] = channels == 0 ? NSNumber(integerLiteral: NextLevelAudioConfiguration.AudioChannelsCountDefault) : NSNumber(integerLiteral: channels)
         } else {
-            config[AVNumberOfChannelsKey] = NSNumber(integerLiteral: NextLevelAudioConfigurationDefaultChannelsCount)
+            config[AVNumberOfChannelsKey] = NSNumber(integerLiteral: NextLevelAudioConfiguration.AudioChannelsCountDefault)
         }
         
         config[AVFormatIDKey] = NSNumber(value: self.format as UInt32)
