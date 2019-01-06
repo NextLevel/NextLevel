@@ -35,58 +35,55 @@ import ARKit
 /// NextLevelConfiguration, media capture configuration object
 public class NextLevelConfiguration {
 
-    /// AVFoundation configuration preset, see AVCaptureSession.h
-    public var preset: AVCaptureSession.Preset
+    // MARK: - types
     
-    /// Setting an options dictionary overrides all other properties set on a configuration object but allows full customization
-    public var options: [String: Any]?
-    
-    // MARK: - object lifecycle
-    
-    public init() {
-        self.preset = AVCaptureSession.Preset.high
-        self.options = nil
-    }
-    
-    // MARK: - func
-    
-    /// Provides an AVFoundation friendly dictionary for configuring output.
-    ///
-    /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
-    /// - Returns: Configuration dictionary for AVFoundation
-    public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
-        return self.options
-    }
-}
-
-// MARK: - VideoConfiguration
-
-let NextLevelVideoConfigurationDefaultBitRate: Int = 2000000
-
-/// NextLevelVideoConfiguration, video capture configuration object
-public class NextLevelVideoConfiguration: NextLevelConfiguration {
-
     /// Output aspect ratio, specifies dimensions for video output automatically
+    ///
+    /// - active: active preset or specified dimensions (default)
+    /// - square: 1:1 square
+    /// - standard: 3:4
+    /// - standardLandscape: 4:3, landscape
+    /// - widescreen: 9:16 HD
+    /// - widescreenLandscape: 16:9 HD landscape
+    /// - instagram: 4:5 Instagram
+    /// - instagramLandscape: 5:4 Instagram landscape
+    /// - cinematic: 2.35:1 cinematic
+    /// - custom: custom aspect ratio
     public enum OutputAspectRatio: CustomStringConvertible {
-        case active      // active preset or specified dimensions (default)
-        case standard    // 4:3
-        case square      // 1:1
-        case widescreen  // 16:9
+        case active
+        case square
+        case standard
+        case standardLandscape
+        case widescreen
+        case widescreenLandscape
+        case instagram
+        case instagramLandscape
+        case cinematic
         case custom(w: Int, h: Int)
         
-        public var description: String {
+        public var dimensions: CGSize? {
             get {
                 switch self {
                 case .active:
-                    return "Active"
-                case .standard:
-                    return "Standard"
+                    return nil
                 case .square:
-                    return "Square"
+                    return CGSize(width: 1, height: 1)
+                case .standard:
+                    return CGSize(width: 3, height: 4)
+                case .standardLandscape:
+                    return CGSize(width: 4, height: 3)
                 case .widescreen:
-                    return "Widescreen"
+                    return CGSize(width: 9, height: 16)
+                case .widescreenLandscape:
+                    return CGSize(width: 16, height: 9)
+                case .instagram:
+                    return CGSize(width: 4, height: 5)
+                case .instagramLandscape:
+                    return CGSize(width: 5, height: 4)
+                case .cinematic:
+                    return CGSize(width: 2.35, height: 1)
                 case .custom(let w, let h):
-                    return "custom \(w):\(h)"
+                    return CGSize(width: w, height: h)
                 }
             }
         }
@@ -96,14 +93,44 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 switch self {
                 case .active:
                     return nil
-                case .standard:
-                    return 3 / 4
                 case .square:
                     return 1
-                case .widescreen:
-                    return 9 / 16
                 case .custom(let w, let h):
                     return CGFloat(h) / CGFloat(w)
+                default:
+                    if let w = self.dimensions?.width,
+                       let h = self.dimensions?.height {
+                        return h / w
+                    } else {
+                        return nil
+                    }
+                }
+            }
+        }
+        
+        public var description: String {
+            get {
+                switch self {
+                case .active:
+                    return "Active"
+                case .square:
+                    return "1:1 Square"
+                case .standard:
+                    return "3:4 Standard"
+                case .standardLandscape:
+                    return "4:3 Standard Landscape"
+                case .widescreen:
+                    return "9:16 Widescreen HD"
+                case .widescreenLandscape:
+                    return "16:9 Widescreen Landscape HD"
+                case .instagram:
+                    return "4:5 Instagram"
+                case .instagramLandscape:
+                    return "5:4 Instagram Landscape"
+                case .cinematic:
+                    return "2.35:1 Cinematic"
+                case .custom(let w, let h):
+                    return "\(w):\(h) Custom"
                 }
             }
         }
