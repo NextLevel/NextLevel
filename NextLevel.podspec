@@ -6,6 +6,7 @@ Pod::Spec.new do |s|
   s.homepage = 'https://github.com/nextlevel/NextLevel'
   s.authors = { 'patrick piemonte' => 'patrick.piemonte@gmail.com' }
   s.source = { :git => 'https://github.com/nextlevel/NextLevel.git', :tag => s.version }
+  s.documentation_url = 'https://nextlevel.github.io/NextLevel/'
   s.ios.deployment_target = '10.0'
   s.source_files = 'Sources/*.swift'
   s.requires_arc = true
