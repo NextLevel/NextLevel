@@ -65,7 +65,7 @@ If you use Cocoapods, you can include `-D USE_ARKIT` or `-D USE_TRUE_DEPTH` with
     # setup NextLevel for ARKit use
     if target.name == 'NextLevel'
       target.build_configurations.each do |config|
-        config.build_settings['OTHER_SWIFT_FLAGS'] = '$(inherited) -D USE_ARKIT'
+        config.build_settings['OTHER_SWIFT_FLAGS'] = ['$(inherited)', '-DUSE_ARKIT']
       end
     end
   end
