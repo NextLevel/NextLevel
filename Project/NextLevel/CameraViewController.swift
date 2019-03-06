@@ -185,17 +185,16 @@ class CameraViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let nextLevel = NextLevel.shared
-        if nextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
-            nextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
+        if NextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
+           NextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
             do {
-                try nextLevel.start()
+                try NextLevel.shared.start()
             } catch {
                 print("NextLevel, failed to start camera session")
             }
         } else {
-            nextLevel.requestAuthorization(forMediaType: AVMediaType.video)
-            nextLevel.requestAuthorization(forMediaType: AVMediaType.audio)
+            NextLevel.requestAuthorization(forMediaType: AVMediaType.video)
+            NextLevel.requestAuthorization(forMediaType: AVMediaType.audio)
         }
     }
     
@@ -421,8 +420,8 @@ extension CameraViewController: NextLevelDelegate {
     // permission
     func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: AVMediaType) {
         print("NextLevel, authorization updated for media \(mediaType) status \(status)")
-        if nextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
-            nextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
+        if NextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
+           NextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
             do {
                 try nextLevel.start()
             } catch {

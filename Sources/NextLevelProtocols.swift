@@ -52,7 +52,7 @@ public let NextLevelPhotoThumbnailKey = "NextLevelPhotoThumbnailKey"
 /// NextLevel delegate, provides updates for authorization, configuration changes, session state, preview state, and mode changes.
 public protocol NextLevelDelegate: AnyObject {
     
-    // permission
+    @available(iOS, deprecated, message: "Use NextLevel.requestAuthorization(forMediaType:completionHandler)")
     func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: AVMediaType)
     
     // configuration

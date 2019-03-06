@@ -501,7 +501,7 @@ extension NextLevel {
     ///
     /// - Parameter mediaType: Specified media type (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
     /// - Returns: Authorization status for the desired media type.
-    public func authorizationStatus(forMediaType mediaType: AVMediaType) -> NextLevelAuthorizationStatus {
+    public static func authorizationStatus(forMediaType mediaType: AVMediaType) -> NextLevelAuthorizationStatus {
         let status = AVCaptureDevice.authorizationStatus(for: mediaType)
         var nextLevelStatus: NextLevelAuthorizationStatus = .notDetermined
         switch status {
@@ -519,32 +519,44 @@ extension NextLevel {
     
     /// Requests authorization permission.
     ///
-    /// - Parameter mediaType: Specified media type (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
-    public func requestAuthorization(forMediaType mediaType: AVMediaType) {
+    /// - Parameters:
+    ///   - mediaType: Specified media type (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
+    ///   - completionHandler: A block called with the responding access request result
+    public static func requestAuthorization(forMediaType mediaType: AVMediaType, completionHandler: ((AVMediaType, NextLevelAuthorizationStatus) -> Void)? = nil ) {
         AVCaptureDevice.requestAccess(for: mediaType) { (granted: Bool) in
-            let status: NextLevelAuthorizationStatus = (granted == true) ? .authorized : .notAuthorized
+            // According to documentation, requestAccess runs on an arbitary queue
             DispatchQueue.main.async {
-                self.delegate?.nextLevel(self, didUpdateAuthorizationStatus: status, forMediaType: mediaType)
+                completionHandler?(mediaType, (granted ? .authorized : .notAuthorized))
             }
         }
     }
     
-    internal func authorizationStatusForCurrentCameraMode() -> NextLevelAuthorizationStatus {
+    /// Deprecated, use NextLevel.requestAuthorization.
+    @available(iOS, deprecated, message: "Use NextLevel.requestAuthorization(forMediaType:completionHandler)")
+    public func requestAuthorization(forMediaType mediaType: AVMediaType) {
+        AVCaptureDevice.requestAccess(for: mediaType) { (granted: Bool) in
+            DispatchQueue.main.async {
+                self.delegate?.nextLevel(self, didUpdateAuthorizationStatus: (granted ? .authorized : .notAuthorized), forMediaType: mediaType)
+            }
+        }
+    }
+    
+    internal func authorizationStatusForCurrentCaptureMode() -> NextLevelAuthorizationStatus {
         switch self.captureMode {
         case .audio:
-            return self.authorizationStatus(forMediaType: AVMediaType.audio)
+            return NextLevel.authorizationStatus(forMediaType: AVMediaType.audio)
         case .videoWithoutAudio:
-            return self.authorizationStatus(forMediaType: AVMediaType.video)
+            return NextLevel.authorizationStatus(forMediaType: AVMediaType.video)
         case .arKit:
             fallthrough
         case .movie:
             fallthrough
         case .video:
-            let audioStatus = self.authorizationStatus(forMediaType: AVMediaType.audio)
-            let videoStatus = self.authorizationStatus(forMediaType: AVMediaType.video)
+            let audioStatus = NextLevel.authorizationStatus(forMediaType: AVMediaType.audio)
+            let videoStatus = NextLevel.authorizationStatus(forMediaType: AVMediaType.video)
             return (audioStatus == .authorized && videoStatus == .authorized) ? .authorized : .notAuthorized
         case .photo:
-            return self.authorizationStatus(forMediaType: AVMediaType.video)
+            return NextLevel.authorizationStatus(forMediaType: AVMediaType.video)
         }
     }
 }
@@ -557,7 +569,7 @@ extension NextLevel {
     ///
     /// - Throws: 'NextLevelError.authorization' when permissions are not authorized, 'NextLevelError.started' when the session has already started.
     public func start() throws {
-        guard self.authorizationStatusForCurrentCameraMode() == .authorized else {
+        guard self.authorizationStatusForCurrentCaptureMode() == .authorized else {
             throw NextLevelError.authorization
         }
         
