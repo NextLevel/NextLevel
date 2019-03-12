@@ -230,7 +230,7 @@ NextLevel was initally a weekend project that has now grown into a open communit
 
 The goal is to continue to provide a good foundation for quick integration (enabling projects to be taken to the next level) – allowing focus to placed on functionality that matters most whether it's realtime image processing, computer vision methods, augmented reality, or [computational photography](https://om.co/2018/07/23/even-leica-loves-computational-photography/).
 
-# ARKit
+## ARKit
 
 NextLevel provides beta ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.
 
