@@ -224,6 +224,8 @@ NextLevel will check this property when writing buffers to a destination file. T
 nextLevel.videoCustomContextImageBuffer = modifiedFrame
 ```
 
+If you are trying to capture frames from SceneKit for ARKit recording, here is an [example](https://gist.github.com/piemonte/4fd443818430952c187eeca544e700d5).
+
 ## About
 
 NextLevel was initally a weekend project that has now grown into a open community of camera platform enthusists. The software provides foundational components for managing media recording, camera interface customization, gestural interaction customization, and image streaming on iOS. The same capabilities can also be found in apps such as [Snapchat](http://snapchat.com), [Instagram](http://instagram.com), and [Vine](http://vine.co).
