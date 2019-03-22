@@ -118,7 +118,8 @@ extension NextLevelBufferRenderer {
         }
         
         // setup a context for buffer conversion
-        let options : [CIContextOption : Any] = [.workingColorSpace : CGColorSpaceCreateDeviceRGB(),
+        let options : [CIContextOption : Any] = [.outputColorSpace : CGColorSpaceCreateDeviceRGB(),
+                                                 .outputPremultiplied : true,
                                                  .useSoftwareRenderer : NSNumber(booleanLiteral: false)]
         self._ciContext = CIContext(mtlDevice: device, options: options)
         

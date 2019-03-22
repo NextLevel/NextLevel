@@ -2679,14 +2679,17 @@ extension NextLevel {
 extension NextLevel {
     
     private func setupContextIfNecessary() {
-        if self._ciContext == nil {
-            let options : [CIContextOption : Any] = [CIContextOption.workingColorSpace : CGColorSpaceCreateDeviceRGB(),
-                                                     CIContextOption.useSoftwareRenderer : NSNumber(booleanLiteral: false)]
-            if let device = MTLCreateSystemDefaultDevice() {
-                self._ciContext = CIContext(mtlDevice: device, options: options)
-            } else if let eaglContext = EAGLContext(api: .openGLES2) {
-                self._ciContext = CIContext(eaglContext: eaglContext, options: options)
-            }
+        if self._ciContext != nil {
+            return
+        }
+        
+        let options : [CIContextOption : Any] = [.outputColorSpace : CGColorSpaceCreateDeviceRGB(),
+                                                 .outputPremultiplied: true,
+                                                 .useSoftwareRenderer : NSNumber(booleanLiteral: false)]
+        if let device = MTLCreateSystemDefaultDevice() {
+            self._ciContext = CIContext(mtlDevice: device, options: options)
+        } else if let eaglContext = EAGLContext(api: .openGLES2) {
+            self._ciContext = CIContext(eaglContext: eaglContext, options: options)
         }
     }
     
