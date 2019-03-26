@@ -26,7 +26,7 @@
 | &#128038; | [Swift 4](https://developer.apple.com/swift/) |
 
 Need a different version of Swift?
-* `4.2` - Target your Podfile to the latest release or master
+* `4.2` - Target your Podfile to the `swift4.2` branch
 * `4.0` - Target your Podfile to the `swift4.0` branch
 * `3.2` - Target your Podfile to the `swift3.2` branch
 
@@ -112,7 +112,7 @@ override func viewDidLoad() {
     NextLevel.shared.deviceDelegate = self
     NextLevel.shared.videoDelegate = self
     NextLevel.shared.photoDelegate = self
-    
+
     // modify .videoConfiguration, .audioConfiguration, .photoConfiguration properties
     // Compression, resolution, and maximum recording time options are available
     NextLevel.shared.videoConfiguration.maximumCaptureDuration = CMTimeMakeWithSeconds(5, 600)
@@ -179,7 +179,7 @@ Videos can also be processed using the [NextLevelSessionExporter](https://github
 
 ## Custom Buffer Rendering
 
-‘NextLevel’ was designed for sample buffer analysis and custom modification in real-time along side a rich set of camera features. 
+‘NextLevel’ was designed for sample buffer analysis and custom modification in real-time along side a rich set of camera features.
 
 Just to note, modifications performed on a buffer and provided back to NextLevel may potentially effect frame rate.
 
@@ -193,7 +193,7 @@ Optional hook that allows reading `sampleBuffer` for analysis.
 
 ```swift
 extension CameraViewController: NextLevelVideoDelegate {
-    
+
     // ...
 
     // video frame processing
