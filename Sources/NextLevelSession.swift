@@ -636,7 +636,7 @@ extension NextLevelSession {
     /// - Parameter clip: Clip to be removed
     public func remove(clip: NextLevelClip) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            if let idx = self._clips.index(where: { (clipToEvaluate) -> Bool in
+            if let idx = self._clips.firstIndex(where: { (clipToEvaluate) -> Bool in
                 return clip.uuid == clipToEvaluate.uuid
             }) {
                 self._clips.remove(at: idx)

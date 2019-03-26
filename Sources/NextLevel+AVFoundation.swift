@@ -231,12 +231,14 @@ extension AVCaptureDevice.Position {
     /// UIKit device equivalent type
     public var uikitType: UIImagePickerController.CameraDevice {
         switch self {
+        case .front:
+            return .front
         case .unspecified:
             fallthrough
         case .back:
+            fallthrough
+        @unknown default:
             return .rear
-        case .front:
-            return .front
         }
     }
     
@@ -273,6 +275,8 @@ extension AVCaptureVideoOrientation {
             return .landscapeRight
         case .portraitUpsideDown:
             return .portraitUpsideDown
+        @unknown default:
+            return .unknown
         }
     }
     

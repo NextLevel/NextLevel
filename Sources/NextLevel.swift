@@ -513,6 +513,9 @@ extension NextLevel {
             break
         case .notDetermined:
             break
+        @unknown default:
+            debugPrint("unknown authorization type")
+            break
         }
         return nextLevelStatus
     }

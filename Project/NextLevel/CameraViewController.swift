@@ -300,8 +300,9 @@ extension CameraViewController {
             })
             break
         case .authorized:
-            
             break
+        @unknown default:
+            fatalError("unknown authorization type")
         }
     }
     
