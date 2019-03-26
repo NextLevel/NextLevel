@@ -2,7 +2,7 @@
 
 `NextLevel` is a [Swift](https://developer.apple.com/swift/) camera system designed for easy integration, customized media capture, and image streaming in iOS. Integration can optionally leverage `AVFoundation` or `ARKit`.
 
-[![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) [![Pod Version](https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat)](http://cocoadocs.org/docsets/NextLevel/) [![Swift Version](https://img.shields.io/badge/language-swift%204.2-brightgreen.svg)](https://developer.apple.com/swift) [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/NextLevel/NextLevel/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/NextLevel/NextLevel.svg?branch=master)](https://travis-ci.org/NextLevel/NextLevel) [![Pod Version](https://img.shields.io/cocoapods/v/NextLevel.svg?style=flat)](http://cocoadocs.org/docsets/NextLevel/) [![Swift Version](https://img.shields.io/badge/language-swift%205.0-brightgreen.svg)](https://developer.apple.com/swift) [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/NextLevel/NextLevel/blob/master/LICENSE)
 
 |  | Features |
 |:---------:|:---------------------------------------------------------------|
@@ -23,7 +23,7 @@
 | &#128736; | simple media capture and editing API |
 | &#127744; | extensible API for image processing and CV |
 | &#128526; | face recognition; qr- and bar-codes recognition |
-| &#128038; | [Swift 4](https://developer.apple.com/swift/) |
+| &#128038; | [Swift 5](https://developer.apple.com/swift/) |
 
 Need a different version of Swift?
 * `5.0` - Target your Podfile to the latest release or master
