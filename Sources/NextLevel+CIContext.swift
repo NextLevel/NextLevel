@@ -67,20 +67,29 @@ extension CIContext {
     ///   - pixelBuffer: Pixel buffer input
     ///   - orientation: CGImage orientation for the new pixel buffer
     ///   - pixelBufferPool: Pixel buffer pool at which to allocate the new buffer
+    ///   - texture: MTLTexture input
     /// - Returns: Oriented pixel buffer, otherwise nil
     @available(iOS 11.0, *)
-    public func createPixelBuffer(fromPixelBuffer pixelBuffer: CVPixelBuffer, withOrientation orientation: CGImagePropertyOrientation, pixelBufferPool: CVPixelBufferPool) -> CVPixelBuffer? {
+    public func createPixelBuffer(fromPixelBuffer pixelBuffer: CVPixelBuffer, withOrientation orientation: CGImagePropertyOrientation, pixelBufferPool: CVPixelBufferPool, texture: MTLTexture? = nil) -> CVPixelBuffer? {
         var updatedPixelBuffer: CVPixelBuffer? = nil
         if CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess {
             if let updatedPixelBuffer = updatedPixelBuffer {
                 CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
                 
-                let ciImage = CIImage(cvPixelBuffer: pixelBuffer, options: nil)
-                let orientedImage = ciImage.oriented(orientation)
-                self.render(orientedImage, to: updatedPixelBuffer)
-
-                CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
-                return updatedPixelBuffer
+                let ciImage: CIImage?
+                
+                if let texture = texture {
+                    ciImage = CIImage(mtlTexture: texture, options: nil)
+                } else {
+                    ciImage = CIImage(cvPixelBuffer: pixelBuffer, options: nil)
+                }
+                
+                if let orientedImage = ciImage?.oriented(orientation) {
+                    self.render(orientedImage, to: updatedPixelBuffer)
+                    
+                    CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+                    return updatedPixelBuffer
+                }
             }
         }
         return nil

@@ -245,9 +245,10 @@ extension NextLevelBufferRenderer {
             commandBuffer.commit()
         }
         
+        self.setupPixelBufferPoolIfNecessary(pixelBuffer, orientation: .downMirrored)
+        
         if let pixelBufferPool = self._pixelBufferPool,
-            let texture = self._texture,
-            let newPixelBuffer = self._ciContext?.createPixelBuffer(fromPixelBuffer: pixelBuffer, withOrientation: .downMirrored, pixelBufferPool: pixelBufferPool) {
+            let newPixelBuffer = self._ciContext?.createPixelBuffer(fromPixelBuffer: pixelBuffer, withOrientation: .downMirrored, pixelBufferPool: pixelBufferPool, texture: self._texture) {
             self._videoBufferOutput = newPixelBuffer
         }
         
