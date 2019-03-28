@@ -181,6 +181,27 @@ extension NextLevelBufferRenderer {
 @available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
 
+    private func createPixelBufferOutput(withPixelBuffer pixelBuffer: CVPixelBuffer,
+                                         orientation: CGImagePropertyOrientation,
+                                         pixelBufferPool: CVPixelBufferPool,
+                                         texture: MTLTexture) -> CVPixelBuffer? {
+        // allocate a pixel buffer and render into it
+        var updatedPixelBuffer: CVPixelBuffer? = nil
+        if CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess {
+            if let updatedPixelBuffer = updatedPixelBuffer {
+                // update orientation to match Metal's origin
+                let ciImage = CIImage(mtlTexture: texture, options: nil)
+                if let orientedImage = ciImage?.oriented(orientation) {
+                    CVPixelBufferLockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+                    self._ciContext?.render(orientedImage, to: updatedPixelBuffer)
+                    CVPixelBufferUnlockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+                    return updatedPixelBuffer
+                }
+            }
+        }
+        return nil
+    }
+    
     #if USE_ARKIT
     
     /// SCNSceneRendererDelegate hook for rendering
@@ -245,10 +266,14 @@ extension NextLevelBufferRenderer {
             commandBuffer.commit()
         }
         
-        if let pixelBufferPool = self._pixelBufferPool,
-            let texture = self._texture,
-            let newPixelBuffer = self._ciContext?.createPixelBuffer(fromPixelBuffer: pixelBuffer, withOrientation: .downMirrored, pixelBufferPool: pixelBufferPool) {
-            self._videoBufferOutput = newPixelBuffer
+        self.setupPixelBufferPoolIfNecessary(pixelBuffer, orientation: orientation)
+        if let pixelBufferPool = self._pixelBufferPool, let texture = self._texture {
+            if let pixelBufferOutput = self.createPixelBufferOutput(withPixelBuffer: pixelBuffer,
+                                                                    orientation: .downMirrored,
+                                                                    pixelBufferPool: pixelBufferPool,
+                                                                    texture: texture) {
+                self._videoBufferOutput = pixelBufferOutput
+            }
         }
         
         CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
