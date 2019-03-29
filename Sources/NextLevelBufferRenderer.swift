@@ -266,10 +266,11 @@ extension NextLevelBufferRenderer {
             commandBuffer.commit()
         }
         
+        let orientation: CGImagePropertyOrientation = .downMirrored
         self.setupPixelBufferPoolIfNecessary(pixelBuffer, orientation: orientation)
         if let pixelBufferPool = self._pixelBufferPool, let texture = self._texture {
             if let pixelBufferOutput = self.createPixelBufferOutput(withPixelBuffer: pixelBuffer,
-                                                                    orientation: .downMirrored,
+                                                                    orientation: orientation,
                                                                     pixelBufferPool: pixelBufferPool,
                                                                     texture: texture) {
                 self._videoBufferOutput = pixelBufferOutput
