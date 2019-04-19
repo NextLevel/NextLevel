@@ -193,8 +193,36 @@ class CameraViewController: UIViewController {
                 print("NextLevel, failed to start camera session")
             }
         } else {
-            NextLevel.requestAuthorization(forMediaType: AVMediaType.video)
-            NextLevel.requestAuthorization(forMediaType: AVMediaType.audio)
+            NextLevel.requestAuthorization(forMediaType: AVMediaType.video) { (mediaType, status) in
+                print("NextLevel, authorization updated for media \(mediaType) status \(status)")
+                if NextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
+                    NextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
+                    do {
+                        let nextLevel = NextLevel.shared
+                        try nextLevel.start()
+                    } catch {
+                        print("NextLevel, failed to start camera session")
+                    }
+                } else if status == .notAuthorized {
+                    // gracefully handle when audio/video is not authorized
+                    print("NextLevel doesn't have authorization for audio or video")
+                }
+            }
+            NextLevel.requestAuthorization(forMediaType: AVMediaType.audio) { (mediaType, status) in
+                print("NextLevel, authorization updated for media \(mediaType) status \(status)")
+                if NextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
+                    NextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
+                    do {
+                        let nextLevel = NextLevel.shared
+                        try nextLevel.start()
+                    } catch {
+                        print("NextLevel, failed to start camera session")
+                    }
+                } else if status == .notAuthorized {
+                    // gracefully handle when audio/video is not authorized
+                    print("NextLevel doesn't have authorization for audio or video")
+                }
+            }
         }
     }
     
@@ -420,18 +448,6 @@ extension CameraViewController: NextLevelDelegate {
 
     // permission
     func nextLevel(_ nextLevel: NextLevel, didUpdateAuthorizationStatus status: NextLevelAuthorizationStatus, forMediaType mediaType: AVMediaType) {
-        print("NextLevel, authorization updated for media \(mediaType) status \(status)")
-        if NextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
-           NextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
-            do {
-                try nextLevel.start()
-            } catch {
-                print("NextLevel, failed to start camera session")
-            }
-        } else if status == .notAuthorized {
-            // gracefully handle when audio/video is not authorized
-            print("NextLevel doesn't have authorization for audio or video")
-        }
     }
     
     // configuration
