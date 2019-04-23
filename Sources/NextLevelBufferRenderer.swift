@@ -72,14 +72,15 @@ public class NextLevelBufferRenderer {
     public convenience init(view: ARSCNView) {
         self.init()
         
+        self._arView = view
+        self._presentationFrame = view.bounds
+
         #if !( targetEnvironment(simulator) )
         self._device = view.device
         self._renderer = SCNRenderer(device: view.device, options: nil)
         self._renderer?.scene = view.scene
         #endif
         
-        self._arView = view
-        self._presentationFrame = view.bounds
     }
     #endif
     
@@ -117,7 +118,6 @@ extension NextLevelBufferRenderer {
             return
         }
         
-        // setup a context for buffer conversion
         let options : [CIContextOption : Any] = [.outputColorSpace : CGColorSpaceCreateDeviceRGB(),
                                                  .outputPremultiplied : true,
                                                  .useSoftwareRenderer : NSNumber(booleanLiteral: false)]
@@ -132,13 +132,13 @@ extension NextLevelBufferRenderer {
     }
     
     internal func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) {
-        let formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
-        
         guard self._pixelBufferPool == nil else {
             return
         }
+        
+        let formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
         
         // check dimension/orientation/format changed
         if width == self._bufferWidth && height == self._bufferHeight && formatType == self._bufferFormatType {
