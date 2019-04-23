@@ -525,21 +525,11 @@ extension NextLevel {
     /// - Parameters:
     ///   - mediaType: Specified media type (i.e. AVMediaTypeVideo, AVMediaTypeAudio, etc.)
     ///   - completionHandler: A block called with the responding access request result
-    public static func requestAuthorization(forMediaType mediaType: AVMediaType, completionHandler: ((AVMediaType, NextLevelAuthorizationStatus) -> Void)? = nil ) {
+    public static func requestAuthorization(forMediaType mediaType: AVMediaType, completionHandler: @escaping ((AVMediaType, NextLevelAuthorizationStatus) -> Void) ) {
         AVCaptureDevice.requestAccess(for: mediaType) { (granted: Bool) in
             // According to documentation, requestAccess runs on an arbitary queue
             DispatchQueue.main.async {
-                completionHandler?(mediaType, (granted ? .authorized : .notAuthorized))
-            }
-        }
-    }
-    
-    /// Deprecated, use NextLevel.requestAuthorization.
-    @available(iOS, deprecated, message: "Use NextLevel.requestAuthorization(forMediaType:completionHandler)")
-    public func requestAuthorization(forMediaType mediaType: AVMediaType) {
-        AVCaptureDevice.requestAccess(for: mediaType) { (granted: Bool) in
-            DispatchQueue.main.async {
-                self.delegate?.nextLevel(self, didUpdateAuthorizationStatus: (granted ? .authorized : .notAuthorized), forMediaType: mediaType)
+                completionHandler(mediaType, (granted ? .authorized : .notAuthorized))
             }
         }
     }
