@@ -2260,11 +2260,10 @@ extension NextLevel {
                 
                 // add JPEG, thumbnail
                 
-                if let context = self._ciContext,
-                    let photo = context.uiimage(withPixelBuffer: customFrame) {
+                if let photo = self._ciContext?.uiimage(withPixelBuffer: customFrame) {
                     let croppedPhoto = ratio != nil ? photo.nx_croppedImage(to: ratio!) : photo
                     if let imageData = photo.jpegData(compressionQuality: 1),
-                        let croppedImageData = croppedPhoto.jpegData(compressionQuality: 1){
+                        let croppedImageData = croppedPhoto.jpegData(compressionQuality: 1) {
                         if photoDict == nil {
                             photoDict = [:]
                         }
@@ -2272,6 +2271,7 @@ extension NextLevel {
                         photoDict?[NextLevelPhotoCroppedJPEGKey] = croppedImageData
                     }
                 }
+                
             } else if let videoFrame = self._lastVideoFrame {
                 
                 // append exif metadata
@@ -2284,8 +2284,7 @@ extension NextLevel {
                 }
                 
                 // add JPEG, thumbnail
-                if let context = self._ciContext,
-                    let photo = context.uiimage(withSampleBuffer: videoFrame) {
+                if let photo = self._ciContext?.uiimage(withSampleBuffer: videoFrame) {
                     let croppedPhoto = ratio != nil ? photo.nx_croppedImage(to: ratio!) : photo
                     if let imageData = photo.jpegData(compressionQuality: 1),
                         let croppedImageData = croppedPhoto.jpegData(compressionQuality: 1){
@@ -2672,7 +2671,7 @@ extension NextLevel {
 extension NextLevel {
     
     private func setupContextIfNecessary() {
-        if self._ciContext != nil {
+        guard self._ciContext == nil else {
             return
         }
         
@@ -2902,6 +2901,7 @@ extension NextLevel {
         
         // TODO: support orientation changes, maybe use snapshot API instead
         self.setupPixelBufferPoolIfNecessary(pixelBuffer)
+        
         if let pixelBufferPool = self._pixelBufferPool,
             let adjustedPixelBuffer = self._ciContext?.createPixelBuffer(fromPixelBuffer: pixelBuffer, withOrientation: .right, pixelBufferPool: pixelBufferPool) {
             pixelBuffer = adjustedPixelBuffer
