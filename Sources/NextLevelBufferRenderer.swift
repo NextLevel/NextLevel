@@ -25,6 +25,7 @@
 
 import UIKit
 import Foundation
+import CoreImage
 import Metal
 #if USE_ARKIT
 import ARKit
@@ -211,6 +212,10 @@ extension NextLevelBufferRenderer {
     ///   - scene: SCNSceneRendererDelegate scene
     ///   - time: SCNSceneRendererDelegate time
     public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
+        #if !USE_ARKIT
+        fatalError("USE_ARKIT was not enabled for buffer renderering")
+        #endif
+
         guard let arView = self._arView,
             let pixelBuffer = arView.session.currentFrame?.capturedImage,
             let pointOfView = arView.pointOfView,
