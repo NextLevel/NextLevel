@@ -234,6 +234,9 @@ extension NextLevelBufferRenderer {
                                                                              height: self._bufferHeight,
                                                                              mipmapped: false)
             textureDescriptor.usage = [.shaderRead, .renderTarget]
+            textureDescriptor.storageMode = .private
+            textureDescriptor.textureType = .type2D
+            textureDescriptor.sampleCount = 1
             self._texture = device.makeTexture(descriptor: textureDescriptor)
         }
         
