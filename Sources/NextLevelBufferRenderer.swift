@@ -268,6 +268,7 @@ extension NextLevelBufferRenderer {
             
             self._renderer?.scene = scene
             self._renderer?.pointOfView = pointOfView
+            self._renderer?.autoenablesDefaultLighting = true
             self._renderer?.render(atTime: time, viewport: viewport, commandBuffer: commandBuffer, passDescriptor: renderPassDescriptor)
             
             commandBuffer.commit()
