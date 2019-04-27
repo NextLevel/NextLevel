@@ -249,8 +249,6 @@ extension NextLevelBufferRenderer {
             renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1.0);
             renderPassDescriptor.colorAttachments[0].storeAction = .store
             
-            var viewport = CGRect(x: 0, y: 0, width: texture.width, height: texture.height)
-            
             let presentationAspectRatio = self._presentationFrame.size.width > self._presentationFrame.size.height ?
                 self._presentationFrame.size.width / self._presentationFrame.size.height :
                 self._presentationFrame.size.height / self._presentationFrame.size.width
@@ -259,6 +257,7 @@ extension NextLevelBufferRenderer {
                 CGFloat(texture.width) / CGFloat(texture.height) :
                 CGFloat(texture.height) / CGFloat(texture.width)
             
+            var viewport = CGRect(x: 0, y: 0, width: texture.width, height: texture.height)
             if presentationAspectRatio != textureAspectRatio {
                 // aspectFill
                 // print("texture \(texture.width) \(texture.height) \(self._presentationFrame.size.width) \(self._presentationFrame.size.height)")
@@ -269,7 +268,7 @@ extension NextLevelBufferRenderer {
             
             self._renderer?.scene = scene
             self._renderer?.pointOfView = pointOfView
-            self._renderer?.render(atTime: renderer.sceneTime, viewport: viewport, commandBuffer: commandBuffer, passDescriptor: renderPassDescriptor)
+            self._renderer?.render(atTime: time, viewport: viewport, commandBuffer: commandBuffer, passDescriptor: renderPassDescriptor)
             
             commandBuffer.commit()
         }
