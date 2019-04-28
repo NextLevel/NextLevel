@@ -45,6 +45,15 @@ public class NextLevelBufferRenderer {
         }
     }
     
+    /// Specifies if the renderer should automatically light up scenes that have no light source.
+    public var autoenablesDefaultLighting: Bool = true {
+        didSet {
+            #if USE_ARKIT
+            self._renderer?.autoenablesDefaultLighting = self.autoenablesDefaultLighting
+            #endif
+        }
+    }
+    
     // MARK: - ivars
     
     internal var _device: MTLDevice?
@@ -75,13 +84,16 @@ public class NextLevelBufferRenderer {
         
         self._arView = view
         self._presentationFrame = view.bounds
-
+        
         #if !( targetEnvironment(simulator) )
         self._device = view.device
         self._renderer = SCNRenderer(device: view.device, options: nil)
         self._renderer?.scene = view.scene
+        self._renderer?.autoenablesDefaultLighting = self.autoenablesDefaultLighting
         #endif
         
+        self._commandQueue = view.device?.makeCommandQueue()
+        self._renderPassDescriptor = MTLRenderPassDescriptor()
     }
     #endif
     
@@ -123,13 +135,6 @@ extension NextLevelBufferRenderer {
                                                  .outputPremultiplied : true,
                                                  .useSoftwareRenderer : NSNumber(booleanLiteral: false)]
         self._ciContext = CIContext(mtlDevice: device, options: options)
-        
-        // setup pixel buffer rendering
-        #if USE_ARKIT
-        self._renderer = SCNRenderer(device: device, options: nil)
-        self._commandQueue = device.makeCommandQueue()
-        self._renderPassDescriptor = MTLRenderPassDescriptor()
-        #endif
     }
     
     internal func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) {
@@ -181,7 +186,7 @@ extension NextLevelBufferRenderer {
 
 @available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
-
+    
     private func createPixelBufferOutput(withPixelBuffer pixelBuffer: CVPixelBuffer,
                                          orientation: CGImagePropertyOrientation,
                                          pixelBufferPool: CVPixelBufferPool,
@@ -215,7 +220,7 @@ extension NextLevelBufferRenderer {
         #if !USE_ARKIT
         fatalError("USE_ARKIT was not enabled for buffer renderering")
         #endif
-
+        
         guard let arView = self._arView,
             let pixelBuffer = arView.session.currentFrame?.capturedImage,
             let pointOfView = arView.pointOfView,
@@ -268,7 +273,6 @@ extension NextLevelBufferRenderer {
             
             self._renderer?.scene = scene
             self._renderer?.pointOfView = pointOfView
-            self._renderer?.autoenablesDefaultLighting = true
             self._renderer?.render(atTime: time, viewport: viewport, commandBuffer: commandBuffer, passDescriptor: renderPassDescriptor)
             
             commandBuffer.commit()
