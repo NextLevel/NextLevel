@@ -33,22 +33,43 @@ private let NextLevelGIFCreatorQueueIdentifier = "engineering.NextLevel.GIF"
 
 public class NextLevelGIFCreator {
     
+    // MARK: - properties
+    
+    /// Output directory where the GIF is created, default is tmp
+    public var outputDirectory: String
+    
     // MARK: - ivars
 
-    fileprivate var _queue: DispatchQueue = DispatchQueue(label: NextLevelGIFCreatorQueueIdentifier, attributes: .concurrent)
     fileprivate var _outputFilePath: URL?
+    fileprivate var _fileExtension: String = "gif"
+
+    fileprivate var _queue: DispatchQueue = DispatchQueue(label: NextLevelGIFCreatorQueueIdentifier, attributes: .concurrent)
+
+    // MARK: - object lifecycle
+    
+    public init() {
+        self.outputDirectory = NSTemporaryDirectory()
+    }
+
+    // MARK: - internal
     
     fileprivate func createOutputFilePath() -> URL? {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        if let documentsDirectory = paths.first {
-            let outputFilePath = "\(documentsDirectory)/\(Date().iso8601())-NL.gif"
-            return URL(fileURLWithPath: outputFilePath, isDirectory: false)
-        }
-        return nil
+        let filename = "\(Date().iso8601())-NL.\(self._fileExtension)"
+        
+        var gifURL = URL(fileURLWithPath: outputDirectory, isDirectory: true)
+        gifURL.appendPathComponent(filename)
+        return gifURL
     }
     
     // MARK: - factory
     
+    /// Creates an animated GIF from a sequence of images.
+    ///
+    /// - Parameters:
+    ///   - images: Frames for creating the sequence
+    ///   - delay: Time between each frame
+    ///   - loopCount: Number of loops built into the sequence, default is 0
+    ///   - completionHandler: Completion handler called when the operation finishes with success or failure
     public func create(gifWithImages images: [UIImage], delay: Float, loopCount: Int = 0, completionHandler: ((_ completed: Bool, _ gifPath: URL?) -> Void)? = nil) {
         guard let outputFilePath = self.createOutputFilePath() else {
             DispatchQueue.main.async {
