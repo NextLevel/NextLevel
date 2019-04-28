@@ -25,6 +25,7 @@
 
 import UIKit
 import Foundation
+import CoreImage
 import Metal
 #if USE_ARKIT
 import ARKit
@@ -41,6 +42,15 @@ public class NextLevelBufferRenderer {
     public var videoBufferOutput: CVPixelBuffer? {
         get {
             return self._videoBufferOutput
+        }
+    }
+    
+    /// Specifies if the renderer should automatically light up scenes that have no light source.
+    public var autoenablesDefaultLighting: Bool = true {
+        didSet {
+            #if USE_ARKIT
+            self._renderer?.autoenablesDefaultLighting = self.autoenablesDefaultLighting
+            #endif
         }
     }
     
@@ -72,14 +82,18 @@ public class NextLevelBufferRenderer {
     public convenience init(view: ARSCNView) {
         self.init()
         
+        self._arView = view
+        self._presentationFrame = view.bounds
+        
         #if !( targetEnvironment(simulator) )
         self._device = view.device
         self._renderer = SCNRenderer(device: view.device, options: nil)
         self._renderer?.scene = view.scene
+        self._renderer?.autoenablesDefaultLighting = self.autoenablesDefaultLighting
         #endif
         
-        self._arView = view
-        self._presentationFrame = view.bounds
+        self._commandQueue = view.device?.makeCommandQueue()
+        self._renderPassDescriptor = MTLRenderPassDescriptor()
     }
     #endif
     
@@ -117,28 +131,20 @@ extension NextLevelBufferRenderer {
             return
         }
         
-        // setup a context for buffer conversion
         let options : [CIContextOption : Any] = [.outputColorSpace : CGColorSpaceCreateDeviceRGB(),
                                                  .outputPremultiplied : true,
                                                  .useSoftwareRenderer : NSNumber(booleanLiteral: false)]
         self._ciContext = CIContext(mtlDevice: device, options: options)
-        
-        // setup pixel buffer rendering
-        #if USE_ARKIT
-        self._renderer = SCNRenderer(device: device, options: nil)
-        self._commandQueue = device.makeCommandQueue()
-        self._renderPassDescriptor = MTLRenderPassDescriptor()
-        #endif
     }
     
     internal func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) {
-        let formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
-        
         guard self._pixelBufferPool == nil else {
             return
         }
+        
+        let formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
         
         // check dimension/orientation/format changed
         if width == self._bufferWidth && height == self._bufferHeight && formatType == self._bufferFormatType {
@@ -180,7 +186,7 @@ extension NextLevelBufferRenderer {
 
 @available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
-
+    
     private func createPixelBufferOutput(withPixelBuffer pixelBuffer: CVPixelBuffer,
                                          orientation: CGImagePropertyOrientation,
                                          pixelBufferPool: CVPixelBufferPool,
@@ -211,6 +217,10 @@ extension NextLevelBufferRenderer {
     ///   - scene: SCNSceneRendererDelegate scene
     ///   - time: SCNSceneRendererDelegate time
     public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
+        #if !USE_ARKIT
+        fatalError("USE_ARKIT was not enabled for buffer renderering")
+        #endif
+        
         guard let arView = self._arView,
             let pixelBuffer = arView.session.currentFrame?.capturedImage,
             let pointOfView = arView.pointOfView,
@@ -229,6 +239,9 @@ extension NextLevelBufferRenderer {
                                                                              height: self._bufferHeight,
                                                                              mipmapped: false)
             textureDescriptor.usage = [.shaderRead, .renderTarget]
+            textureDescriptor.storageMode = .private
+            textureDescriptor.textureType = .type2D
+            textureDescriptor.sampleCount = 1
             self._texture = device.makeTexture(descriptor: textureDescriptor)
         }
         
@@ -241,8 +254,6 @@ extension NextLevelBufferRenderer {
             renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1.0);
             renderPassDescriptor.colorAttachments[0].storeAction = .store
             
-            var viewport = CGRect(x: 0, y: 0, width: texture.width, height: texture.height)
-            
             let presentationAspectRatio = self._presentationFrame.size.width > self._presentationFrame.size.height ?
                 self._presentationFrame.size.width / self._presentationFrame.size.height :
                 self._presentationFrame.size.height / self._presentationFrame.size.width
@@ -251,6 +262,7 @@ extension NextLevelBufferRenderer {
                 CGFloat(texture.width) / CGFloat(texture.height) :
                 CGFloat(texture.height) / CGFloat(texture.width)
             
+            var viewport = CGRect(x: 0, y: 0, width: texture.width, height: texture.height)
             if presentationAspectRatio != textureAspectRatio {
                 // aspectFill
                 // print("texture \(texture.width) \(texture.height) \(self._presentationFrame.size.width) \(self._presentationFrame.size.height)")
@@ -261,7 +273,7 @@ extension NextLevelBufferRenderer {
             
             self._renderer?.scene = scene
             self._renderer?.pointOfView = pointOfView
-            self._renderer?.render(atTime: renderer.sceneTime, viewport: viewport, commandBuffer: commandBuffer, passDescriptor: renderPassDescriptor)
+            self._renderer?.render(atTime: time, viewport: viewport, commandBuffer: commandBuffer, passDescriptor: renderPassDescriptor)
             
             commandBuffer.commit()
         }
