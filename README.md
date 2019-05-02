@@ -231,11 +231,9 @@ The goal is to continue to provide a good foundation for quick integration (enab
 
 ## ARKit
 
-NextLevel provides beta ARKit capture in addition to AVFoundation. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.
+NextLevel provides components for capturing ARKit video and photo. This enables a variety of new camera features while leveraging the existing recording capabilities and media management of NextLevel.
 
-If you are trying to capture frames from SceneKit for ARKit recording, here is an [example](https://gist.github.com/piemonte/4fd443818430952c187eeca544e700d5).
-
-Haven't had the opportunity to provide an example for ARKit mode aside from the [gist](https://gist.github.com/piemonte/4fd443818430952c187eeca544e700d5) but one would be welcome, NextLevel [examples](https://github.com/NextLevel/examples).
+If you are trying to capture frames from SceneKit for ARKit recording, check out the [examples](https://github.com/NextLevel/examples) project.
 
 ## Documentation
 
