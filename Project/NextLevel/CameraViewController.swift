@@ -334,6 +334,12 @@ extension CameraViewController {
         }
     }
     
+}
+
+// MARK: - media utilities
+
+extension CameraViewController {
+    
     internal func saveVideo(withURL url: URL) {
         PHPhotoLibrary.shared().performChanges({
             let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle)
@@ -366,6 +372,43 @@ extension CameraViewController {
             }
         })
     }
+    
+    internal func savePhoto(photoImage: UIImage) {
+        let NextLevelAlbumTitle = "NextLevel"
+        
+        PHPhotoLibrary.shared().performChanges({
+            
+            let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle)
+            if albumAssetCollection == nil {
+                let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: NextLevelAlbumTitle)
+                let _ = changeRequest.placeholderForCreatedAssetCollection
+            }
+            
+        }, completionHandler: { (success1: Bool, error1: Error?) in
+            
+            if success1 == true {
+                if let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle) {
+                    PHPhotoLibrary.shared().performChanges({
+                        let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photoImage)
+                        let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
+                        let enumeration: NSArray = [assetChangeRequest.placeholderForCreatedAsset!]
+                        assetCollectionChangeRequest?.addAssets(enumeration)
+                    }, completionHandler: { (success2: Bool, error2: Error?) in
+                        if success2 == true {
+                            let alertController = UIAlertController(title: "Photo Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alertController.addAction(okAction)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    })
+                }
+            } else if let _ = error1 {
+                print("failure capturing photo from video frame \(String(describing: error1))")
+            }
+            
+        })
+    }
+    
 }
 
 // MARK: - UIButton
@@ -632,47 +675,11 @@ extension CameraViewController: NextLevelVideoDelegate {
     // video frame photo
 
     func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String : Any]?) {
-        
         if let dictionary = photoDict,
-            let photoData = dictionary[NextLevelPhotoJPEGKey] {
-            
-            PHPhotoLibrary.shared().performChanges({
-                
-                let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle)
-                if albumAssetCollection == nil {
-                    let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: NextLevelAlbumTitle)
-                    let _ = changeRequest.placeholderForCreatedAssetCollection
-                }
-            
-            }, completionHandler: { (success1: Bool, error1: Error?) in
-                
-                if success1 == true {
-                    if let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle) {
-                        PHPhotoLibrary.shared().performChanges({
-                            if let data = photoData as? Data,
-                                let photoImage = UIImage(data: data) {
-                                let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photoImage)
-                                let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
-                                let enumeration: NSArray = [assetChangeRequest.placeholderForCreatedAsset!]
-                                assetCollectionChangeRequest?.addAssets(enumeration)
-                            }
-                        }, completionHandler: { (success2: Bool, error2: Error?) in
-                            if success2 == true {
-                                let alertController = UIAlertController(title: "Photo Saved!", message: "Saved to the camera roll.", preferredStyle: .alert)
-                                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                                alertController.addAction(okAction)
-                                self.present(alertController, animated: true, completion: nil)
-                            }
-                        })
-                    }
-                } else if let _ = error1 {
-                    print("failure capturing photo from video frame \(String(describing: error1))")
-                }
-                
-            })
-        
+            let photoData = dictionary[NextLevelPhotoJPEGKey] as? Data,
+            let photoImage = UIImage(data: photoData) {
+            self.savePhoto(photoImage: photoImage)
         }
-        
     }
     
 }
