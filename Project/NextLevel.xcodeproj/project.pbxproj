@@ -66,7 +66,6 @@
 		06C86E5A1D83857500A43411 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = NextLevel/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		06CF9CE51F7064170011CE09 /* NextLevel+CIContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NextLevel+CIContext.swift"; path = "../Sources/NextLevel+CIContext.swift"; sourceTree = "<group>"; };
 		06CF9CE81F70678D0011CE09 /* NextLevel+CMSampleBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NextLevel+CMSampleBuffer.swift"; path = "../Sources/NextLevel+CMSampleBuffer.swift"; sourceTree = "<group>"; };
-		06D620D220B36DDB0000C3A4 /* MixedRealityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixedRealityViewController.swift; sourceTree = "<group>"; };
 		06DB04A421C5ABA9007877CC /* NextLevelBufferRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NextLevelBufferRenderer.swift; path = ../Sources/NextLevelBufferRenderer.swift; sourceTree = "<group>"; };
 		6A3D083B1FFCCC4B001E4AB1 /* NextLevel+UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NextLevel+UIImage.swift"; path = "../Sources/NextLevel+UIImage.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -131,7 +130,6 @@
 			children = (
 				06AECC641AC3830800EFCD03 /* AppDelegate.swift */,
 				06AECC661AC3830800EFCD03 /* CameraViewController.swift */,
-				06D620D220B36DDB0000C3A4 /* MixedRealityViewController.swift */,
 				0684A22F1EC22C1C00A9F9EB /* FocusIndicatorView.swift */,
 				06AECC621AC3830800EFCD03 /* Supporting Files */,
 			);
