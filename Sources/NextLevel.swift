@@ -2847,16 +2847,12 @@ extension NextLevel: AVCaptureDepthDataOutputDelegate {
 @available(iOS 11.0, *)
 extension NextLevel {
     
-    public func arSession(_ session: ARSession, didUpdate frame: ARFrame, pixelBufferPool: CVPixelBufferPool) {
-        guard let adjustedPixelBuffer = self.sharedCIContext?.createPixelBuffer(fromPixelBuffer: frame.capturedImage, withOrientation: .right, pixelBufferPool: pixelBufferPool) else {
-            return
-        }
-        
-        self.videoDelegate?.nextLevel(self, willProcessFrame: frame, pixelBuffer: adjustedPixelBuffer, timestamp: frame.timestamp, onQueue: self._sessionQueue)
-        self._lastARFrame = adjustedPixelBuffer
+    public func arSession(_ session: ARSession, didUpdate frame: ARFrame, pixelBuffer: CVPixelBuffer) {
+        self.videoDelegate?.nextLevel(self, willProcessFrame: frame, pixelBuffer: pixelBuffer, timestamp: frame.timestamp, onQueue: self._sessionQueue)
+        self._lastARFrame = pixelBuffer
         
         if let session = self._recordingSession {
-            self.handleVideoOutput(pixelBuffer: adjustedPixelBuffer, timestamp: frame.timestamp, session: session)
+            self.handleVideoOutput(pixelBuffer: pixelBuffer, timestamp: frame.timestamp, session: session)
         }
     }
     
