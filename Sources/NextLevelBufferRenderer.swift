@@ -101,18 +101,17 @@ public class NextLevelBufferRenderer {
         self._device = nil
         self._library = nil
         self._commandQueue = nil
-        self._renderPassDescriptor = nil
         self._texture = nil
-        
-        self._ciContext = nil
-        self._pixelBufferPool = nil
-        self._videoBufferOutput = nil
         
         #if USE_ARKIT
         self._renderer?.scene = nil
         self._renderer = nil
         self._arView = nil
         #endif
+    
+        self._ciContext = nil
+        self._pixelBufferPool = nil
+        self._videoBufferOutput = nil
     }
     
 }
@@ -122,7 +121,7 @@ public class NextLevelBufferRenderer {
 @available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
     
-    internal func setupContextIfNecessary() {
+    fileprivate func setupContextIfNecessary() {
         guard self._ciContext == nil else {
             return
         }
@@ -131,13 +130,10 @@ extension NextLevelBufferRenderer {
             return
         }
         
-        let options : [CIContextOption : Any] = [.outputColorSpace : CGColorSpaceCreateDeviceRGB(),
-                                                 .outputPremultiplied : true,
-                                                 .useSoftwareRenderer : NSNumber(booleanLiteral: false)]
-        self._ciContext = CIContext(mtlDevice: device, options: options)
+        self._ciContext = CIContext.createDefaultCIContext(device)
     }
     
-    internal func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) {
+    fileprivate func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) {
         let formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
         let width = CVPixelBufferGetWidth(pixelBuffer)
         let height = CVPixelBufferGetHeight(pixelBuffer)
@@ -183,27 +179,6 @@ extension NextLevelBufferRenderer {
 @available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
     
-    private func createPixelBufferOutput(withPixelBuffer pixelBuffer: CVPixelBuffer,
-                                         orientation: CGImagePropertyOrientation,
-                                         pixelBufferPool: CVPixelBufferPool,
-                                         texture: MTLTexture) -> CVPixelBuffer? {
-        // allocate a pixel buffer and render into it
-        var updatedPixelBuffer: CVPixelBuffer? = nil
-        if CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess {
-            if let updatedPixelBuffer = updatedPixelBuffer {
-                // update orientation to match Metal's origin
-                let ciImage = CIImage(mtlTexture: texture, options: nil)
-                if let orientedImage = ciImage?.oriented(orientation) {
-                    CVPixelBufferLockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-                    self._ciContext?.render(orientedImage, to: updatedPixelBuffer)
-                    CVPixelBufferUnlockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-                    return updatedPixelBuffer
-                }
-            }
-        }
-        return nil
-    }
-    
     #if USE_ARKIT
     
     /// SCNSceneRendererDelegate hook for rendering
@@ -214,9 +189,9 @@ extension NextLevelBufferRenderer {
     ///   - time: SCNSceneRendererDelegate time
     public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {        
         guard let arView = self._arView,
-            let pixelBuffer = arView.session.currentFrame?.capturedImage,
-            let pointOfView = arView.pointOfView,
-            let device = self._device else {
+              let pixelBuffer = arView.session.currentFrame?.capturedImage,
+              let pointOfView = arView.pointOfView,
+              let device = self._device else {
                 return
         }
         
@@ -237,10 +212,12 @@ extension NextLevelBufferRenderer {
             self._texture = device.makeTexture(descriptor: textureDescriptor)
         }
         
-        if let commandBuffer = self._commandQueue?.makeCommandBuffer(),
-            let renderPassDescriptor = self._renderPassDescriptor,
-            let texture = self._texture {
-            
+        guard let text = self._texture else {
+            CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+            return
+        }
+        
+        if let commandBuffer = self._commandQueue?.makeCommandBuffer() {
             renderPassDescriptor.colorAttachments[0].texture = texture
             renderPassDescriptor.colorAttachments[0].loadAction = .clear
             renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1.0);
@@ -271,12 +248,10 @@ extension NextLevelBufferRenderer {
         }
         
         let orientation: CGImagePropertyOrientation = .downMirrored
+        
         self.setupPixelBufferPoolIfNecessary(pixelBuffer, orientation: orientation)
-        if let pixelBufferPool = self._pixelBufferPool, let texture = self._texture {
-            if let pixelBufferOutput = self.createPixelBufferOutput(withPixelBuffer: pixelBuffer,
-                                                                    orientation: orientation,
-                                                                    pixelBufferPool: pixelBufferPool,
-                                                                    texture: texture) {
+        if let pixelBufferPool = self._pixelBufferPool {
+            if let pixelBufferOutput = self._ciContext?.createPixelBuffer(withTexture: texture, withOrientation: orientation, pixelBufferPool: pixelBufferPool) {
                 self._videoBufferOutput = pixelBufferOutput
             }
         }
