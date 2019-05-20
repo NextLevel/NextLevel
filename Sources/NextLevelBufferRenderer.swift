@@ -38,13 +38,6 @@ public class NextLevelBufferRenderer {
     
     // MARK: - properties
     
-    /// Rendered video buffer output (using to write video file)
-    public var videoBufferOutput: CVPixelBuffer? {
-        get {
-            return self._videoBufferOutput
-        }
-    }
-    
     /// Specifies if the renderer should automatically light up scenes that have no light source.
     public var autoenablesDefaultLighting: Bool = true {
         didSet {
@@ -54,15 +47,17 @@ public class NextLevelBufferRenderer {
         }
     }
     
+    
+    
+    /// Rendered video buffer output (using to write video file)
+    public var videoBufferOutput: CVPixelBuffer? {
+        get {
+            return self._videoBufferOutput
+        }
+    }
+
     // MARK: - ivars
     
-    
-    internal var _texture: MTLTexture?
-    
-    internal var _bufferWidth: Int = 0
-    internal var _bufferHeight: Int = 0
-    internal var _bufferFormatType: OSType = OSType(kCVPixelFormatType_32BGRA)
-    internal var _presentationFrame: CGRect = .zero
     fileprivate var _device: MTLDevice?
     fileprivate var _library: MTLLibrary?
     fileprivate var _commandQueue: MTLCommandQueue?
@@ -70,16 +65,19 @@ public class NextLevelBufferRenderer {
     
     fileprivate var _texture: MTLTexture?
     
-    #if USE_ARKIT
-    internal weak var _arView: ARSCNView?
-    internal var _renderSemaphore: DispatchSemaphore = DispatchSemaphore(value: 3)
-    internal var _renderer: SCNRenderer?
+    fileprivate var _bufferWidth: Int = 0
+    fileprivate var _bufferHeight: Int = 0
+    fileprivate var _bufferFormatType: OSType = OSType(kCVPixelFormatType_32BGRA)
+    fileprivate var _presentationFrame: CGRect = .zero
     
-    // MARK: - object lifecycle
     fileprivate var _ciContext: CIContext?
     fileprivate var _pixelBufferPool: CVPixelBufferPool?
     fileprivate var _videoBufferOutput: CVPixelBuffer?
-    
+
+    #if USE_ARKIT
+    fileprivate weak var _arView: ARSCNView?
+    fileprivate var _renderer: SCNRenderer?
+
     public convenience init(view: ARSCNView) {
         self.init()
         
