@@ -218,10 +218,10 @@ extension NextLevelBufferRenderer {
         }
         
         if let commandBuffer = self._commandQueue?.makeCommandBuffer() {
-            renderPassDescriptor.colorAttachments[0].texture = texture
-            renderPassDescriptor.colorAttachments[0].loadAction = .clear
-            renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1.0);
-            renderPassDescriptor.colorAttachments[0].storeAction = .store
+            self._renderPassDescriptor.colorAttachments[0].texture = texture
+            self._renderPassDescriptor.colorAttachments[0].loadAction = .clear
+            self._renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1.0);
+            self._renderPassDescriptor.colorAttachments[0].storeAction = .store
             
             let presentationAspectRatio = self._presentationFrame.size.width > self._presentationFrame.size.height ?
                 self._presentationFrame.size.width / self._presentationFrame.size.height :
@@ -242,7 +242,7 @@ extension NextLevelBufferRenderer {
             
             self._renderer?.scene = scene
             self._renderer?.pointOfView = pointOfView
-            self._renderer?.render(atTime: time, viewport: viewport, commandBuffer: commandBuffer, passDescriptor: renderPassDescriptor)
+            self._renderer?.render(atTime: time, viewport: viewport, commandBuffer: commandBuffer, passDescriptor: self._renderPassDescriptor)
             
             commandBuffer.commit()
         }
