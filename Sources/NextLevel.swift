@@ -2685,31 +2685,38 @@ extension NextLevel {
         }
     }
     
-    private func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer) {
+    private func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation = .downMirrored) {
         let formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
         let width = CVPixelBufferGetWidth(pixelBuffer)
         let height = CVPixelBufferGetHeight(pixelBuffer)
         
-        guard self._pixelBufferPool == nil ||
-            width != self._bufferWidth ||
-            height != self._bufferHeight ||
-            formatType != self._bufferFormatType
-            else {
-                return
+        let bufferChanged: Bool = width != self._bufferWidth || height != self._bufferHeight || formatType != self._bufferFormatType
+        if self._pixelBufferPool != nil && !bufferChanged {
+            return
         }
         
-        self._bufferWidth = width
-        self._bufferHeight = height
+        switch orientation {
+        case .up:
+            fallthrough
+        case .upMirrored:
+            fallthrough
+        case .down:
+            fallthrough
+        case .downMirrored:
+            self._bufferWidth = height
+            self._bufferHeight = width
+            break
+        default:
+            break
+        }
         self._bufferFormatType = formatType
         
         let poolAttributes: [String : AnyObject] = [String(kCVPixelBufferPoolMinimumBufferCountKey): NSNumber(integerLiteral: 1)]
-        
-        // TODO: doesn't properly support orientation, should reference videoConfiguration settings
-        let pixelBufferAttributes: [String:AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(self._bufferFormatType)),
-                                                         String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferHeight), // flip
-                                                         String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferWidth), // flip
-                                                         String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
-                                                         String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
+        let pixelBufferAttributes: [String : AnyObject] = [String(kCVPixelBufferPixelFormatTypeKey) : NSNumber(integerLiteral: Int(self._bufferFormatType)),
+                                                           String(kCVPixelBufferWidthKey) : NSNumber(value: self._bufferWidth),
+                                                           String(kCVPixelBufferHeightKey) : NSNumber(value: self._bufferHeight),
+                                                           String(kCVPixelBufferMetalCompatibilityKey) : NSNumber(booleanLiteral: true),
+                                                           String(kCVPixelBufferIOSurfacePropertiesKey) : [:] as AnyObject ]
         
         var pixelBufferPool: CVPixelBufferPool? = nil
         if CVPixelBufferPoolCreate(kCFAllocatorDefault, poolAttributes as CFDictionary, pixelBufferAttributes as CFDictionary, &pixelBufferPool) == kCVReturnSuccess {
@@ -2899,7 +2906,6 @@ extension NextLevel {
         var pixelBuffer = frame.capturedImage
         let timestamp = frame.timestamp
         
-        // TODO: support orientation changes, maybe use snapshot API instead
         self.setupPixelBufferPoolIfNecessary(pixelBuffer)
         
         if let pixelBufferPool = self._pixelBufferPool,
