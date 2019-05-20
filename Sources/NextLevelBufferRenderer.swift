@@ -59,7 +59,6 @@ public class NextLevelBufferRenderer {
     internal var _device: MTLDevice?
     internal var _library: MTLLibrary?
     internal var _commandQueue: MTLCommandQueue?
-    internal var _renderPassDescriptor: MTLRenderPassDescriptor?
     
     internal var _texture: MTLTexture?
     
@@ -67,6 +66,7 @@ public class NextLevelBufferRenderer {
     internal var _bufferHeight: Int = 0
     internal var _bufferFormatType: OSType = OSType(kCVPixelFormatType_32BGRA)
     internal var _presentationFrame: CGRect = .zero
+    fileprivate var _renderPassDescriptor: MTLRenderPassDescriptor = MTLRenderPassDescriptor()
     
     internal var _ciContext: CIContext?
     internal var _pixelBufferPool: CVPixelBufferPool?
@@ -212,7 +212,7 @@ extension NextLevelBufferRenderer {
             self._texture = device.makeTexture(descriptor: textureDescriptor)
         }
         
-        guard let text = self._texture else {
+        guard let texture = self._texture else {
             CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
             return
         }
@@ -250,8 +250,9 @@ extension NextLevelBufferRenderer {
         let orientation: CGImagePropertyOrientation = .downMirrored
         
         self.setupPixelBufferPoolIfNecessary(pixelBuffer, orientation: orientation)
+        
         if let pixelBufferPool = self._pixelBufferPool {
-            if let pixelBufferOutput = self._ciContext?.createPixelBuffer(withTexture: texture, withOrientation: orientation, pixelBufferPool: pixelBufferPool) {
+            if let pixelBufferOutput = self._ciContext?.createPixelBuffer(fromMTLTexture: texture, withOrientation: orientation, pixelBufferPool: pixelBufferPool) {
                 self._videoBufferOutput = pixelBufferOutput
             }
         }
