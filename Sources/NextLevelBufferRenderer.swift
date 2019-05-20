@@ -138,16 +138,12 @@ extension NextLevelBufferRenderer {
     }
     
     internal func setupPixelBufferPoolIfNecessary(_ pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) {
-        guard self._pixelBufferPool == nil else {
-            return
-        }
-        
         let formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
         let width = CVPixelBufferGetWidth(pixelBuffer)
         let height = CVPixelBufferGetHeight(pixelBuffer)
         
-        // check dimension/orientation/format changed
-        if width == self._bufferWidth && height == self._bufferHeight && formatType == self._bufferFormatType {
+        let bufferChanged: Bool = width != self._bufferWidth || height != self._bufferHeight || formatType != self._bufferFormatType
+        if self._pixelBufferPool != nil && !bufferChanged {
             return
         }
         
@@ -216,11 +212,7 @@ extension NextLevelBufferRenderer {
     ///   - renderer: SCNSceneRendererDelegate renderer
     ///   - scene: SCNSceneRendererDelegate scene
     ///   - time: SCNSceneRendererDelegate time
-    public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
-        #if !USE_ARKIT
-        fatalError("USE_ARKIT was not enabled for buffer renderering")
-        #endif
-        
+    public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {        
         guard let arView = self._arView,
             let pixelBuffer = arView.session.currentFrame?.capturedImage,
             let pointOfView = arView.pointOfView,
