@@ -56,9 +56,6 @@ public class NextLevelBufferRenderer {
     
     // MARK: - ivars
     
-    internal var _device: MTLDevice?
-    internal var _library: MTLLibrary?
-    internal var _commandQueue: MTLCommandQueue?
     
     internal var _texture: MTLTexture?
     
@@ -66,11 +63,12 @@ public class NextLevelBufferRenderer {
     internal var _bufferHeight: Int = 0
     internal var _bufferFormatType: OSType = OSType(kCVPixelFormatType_32BGRA)
     internal var _presentationFrame: CGRect = .zero
+    fileprivate var _device: MTLDevice?
+    fileprivate var _library: MTLLibrary?
+    fileprivate var _commandQueue: MTLCommandQueue?
     fileprivate var _renderPassDescriptor: MTLRenderPassDescriptor = MTLRenderPassDescriptor()
     
-    internal var _ciContext: CIContext?
-    internal var _pixelBufferPool: CVPixelBufferPool?
-    internal var _videoBufferOutput: CVPixelBuffer?
+    fileprivate var _texture: MTLTexture?
     
     #if USE_ARKIT
     internal weak var _arView: ARSCNView?
@@ -78,6 +76,9 @@ public class NextLevelBufferRenderer {
     internal var _renderer: SCNRenderer?
     
     // MARK: - object lifecycle
+    fileprivate var _ciContext: CIContext?
+    fileprivate var _pixelBufferPool: CVPixelBufferPool?
+    fileprivate var _videoBufferOutput: CVPixelBuffer?
     
     public convenience init(view: ARSCNView) {
         self.init()
@@ -93,7 +94,6 @@ public class NextLevelBufferRenderer {
         #endif
         
         self._commandQueue = view.device?.makeCommandQueue()
-        self._renderPassDescriptor = MTLRenderPassDescriptor()
     }
     #endif
     
