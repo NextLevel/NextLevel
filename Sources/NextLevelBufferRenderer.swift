@@ -47,7 +47,19 @@ public class NextLevelBufferRenderer {
         }
     }
     
+    /// Rendering context based on the ARSCNView metal device
+    public var ciContext: CIContext? {
+        get {
+            return self._ciContext
+        }
+    }
     
+    /// Pixel buffer pool for sharing
+    public var pixelBufferPool: CVPixelBufferPool? {
+        get {
+            return self._pixelBufferPool
+        }
+    }
     
     /// Rendered video buffer output (using to write video file)
     public var videoBufferOutput: CVPixelBuffer? {
