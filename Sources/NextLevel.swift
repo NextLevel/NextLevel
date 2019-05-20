@@ -2248,13 +2248,15 @@ extension NextLevel {
                 }
             }
             
-            // create a render context
-            
-            self.setupContextIfNecessary()
-            
             var photoDict: [String: Any]? = nil
             let ratio = self.videoConfiguration.aspectRatio.ratio
             if let customFrame = self._sessionVideoCustomContextImageBuffer {
+            
+                // create a render context
+                
+                if self._ciContext == nil {
+                    self._ciContext = CIContext.createDefaultCIContext()
+                }
                 
                 // TODO append exif metadata
                 
@@ -2274,6 +2276,12 @@ extension NextLevel {
                 
             } else if let videoFrame = self._lastVideoFrame {
                 
+                // create a render context
+                
+                if self._ciContext == nil {
+                    self._ciContext = CIContext.createDefaultCIContext()
+                }
+
                 // append exif metadata
                 videoFrame.append(metadataAdditions: NextLevel.tiffMetadata())
                 if let metadata = videoFrame.metadata() {
@@ -2298,11 +2306,16 @@ extension NextLevel {
                 
             } else if let arFrame = self._lastARFrame {
                 
+                // create a render context
+                
+                if self._ciContext == nil {
+                    self._ciContext = CIContext.createDefaultCIContext()
+                }
+
                 // TODO append exif metadata
                 
                 // add JPEG, thumbnail
-                if let context = self._ciContext,
-                    let photo = context.uiimage(withPixelBuffer: arFrame),
+                if let photo = self._ciContext?.uiimage(withPixelBuffer: arFrame),
                     let imageData = photo.jpegData(compressionQuality: 1) {
                     
                     if photoDict == nil {

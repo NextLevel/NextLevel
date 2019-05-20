@@ -30,6 +30,25 @@ import Foundation
 
 extension CIContext {
     
+    /// Factory for creating a CIContext using the available graphics API.
+    ///
+    /// - Parameter mtlDevice: Processor for computing
+    /// - Returns: Default configuration rendering context, otherwise nil.
+    public class func createDefaultCIContext(_ mtlDevice: MTLDevice? = nil) -> CIContext? {
+        let options : [CIContextOption : Any] = [.outputColorSpace : CGColorSpaceCreateDeviceRGB(),
+                                                 .outputPremultiplied: true,
+                                                 .useSoftwareRenderer : NSNumber(booleanLiteral: false)]
+        if let device = mtlDevice {
+            return CIContext(mtlDevice: device, options: options)
+        } else if let device = MTLCreateSystemDefaultDevice() {
+            return CIContext(mtlDevice: device, options: options)
+        } else if let eaglContext = EAGLContext(api: .openGLES2) {
+            return CIContext(eaglContext: eaglContext, options: options)
+        } else {
+            return nil
+        }
+    }
+    
     /// Creates a UIImage from the given sample buffer input
     ///
     /// - Parameter sampleBuffer: sample buffer input
