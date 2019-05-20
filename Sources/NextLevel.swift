@@ -350,9 +350,11 @@ public class NextLevel: NSObject {
     public var isRunning: Bool {
         get {
             #if USE_ARKIT
+            if #available(iOS 11.0, *) {
                 if self.captureMode == .arKit {
                     return self._arRunning
                 }
+            }
             #endif
             if let session = self._captureSession {
                 return session.isRunning
@@ -453,7 +455,9 @@ public class NextLevel: NSObject {
         self.audioConfiguration = NextLevelAudioConfiguration()
         self.photoConfiguration = NextLevelPhotoConfiguration()
         #if USE_ARKIT
-        self._arConfiguration = NextLevelARConfiguration()
+        if #available(iOS 11.0, *) {
+            self._arConfiguration = NextLevelARConfiguration()
+        }
         #endif
         
         super.init()
@@ -572,7 +576,9 @@ extension NextLevel {
         
         if self.captureMode == .arKit {
             #if USE_ARKIT
+            if #available(iOS 11.0, *) {
                 setupARSession()
+            }
             #endif
         } else {
             guard self._captureSession == nil else {
@@ -602,11 +608,13 @@ extension NextLevel {
         }
         
         #if USE_ARKIT
-        if self.captureMode == .arKit {
-            self.executeClosureAsyncOnSessionQueueIfNecessary {
-                self.arConfiguration?.session?.pause()
-                self._arRunning = false
-                self._recordingSession = nil
+        if #available(iOS 11.0, *) {
+            if self.captureMode == .arKit {
+                self.executeClosureAsyncOnSessionQueueIfNecessary {
+                    self.arConfiguration?.session?.pause()
+                    self._arRunning = false
+                    self._recordingSession = nil
+                }
             }
         }
         #endif
