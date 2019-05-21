@@ -243,6 +243,56 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:So9CIContextC9NextLevelE013createDefaultA0yABSgSo9MTLDevice_pSgFZ"></a>
+                    <a name="//apple_ref/swift/Method/createDefaultCIContext(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9CIContextC9NextLevelE013createDefaultA0yABSgSo9MTLDevice_pSgFZ">createDefaultCIContext(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Factory for creating a CIContext using the available graphics API.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">createDefaultCIContext</span><span class="p">(</span><span class="n">_</span> <span class="nv">mtlDevice</span><span class="p">:</span> <span class="kt">MTLDevice</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CIContext</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>mtlDevice</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Processor for computing</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Default configuration rendering context, otherwise nil.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:So9CIContextC9NextLevelE7uiimage16withSampleBufferSo7UIImageCSgSo08CMSampleG3Refa_tF"></a>
                     <a name="//apple_ref/swift/Method/uiimage(withSampleBuffer:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:So9CIContextC9NextLevelE7uiimage16withSampleBufferSo7UIImageCSgSo08CMSampleG3Refa_tF">uiimage(withSampleBuffer:)</a>
@@ -415,12 +465,87 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9CIContextC9NextLevelE17createPixelBuffer14fromMTLTexture15withOrientation05pixelF4PoolSo11CVBufferRefaSgSo0H0_p_So015CGImagePropertyJ0VSo07CVPixelflN0atF"></a>
+                    <a name="//apple_ref/swift/Method/createPixelBuffer(fromMTLTexture:withOrientation:pixelBufferPool:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9CIContextC9NextLevelE17createPixelBuffer14fromMTLTexture15withOrientation05pixelF4PoolSo11CVBufferRefaSgSo0H0_p_So015CGImagePropertyJ0VSo07CVPixelflN0atF">createPixelBuffer(fromMTLTexture:withOrientation:pixelBufferPool:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a pixel buffer from a MTLTexture and orientation value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@available(iOS 11.0, *)</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">createPixelBuffer</span><span class="p">(</span><span class="n">fromMTLTexture</span> <span class="nv">mtlTexture</span><span class="p">:</span> <span class="kt">MTLTexture</span><span class="p">,</span> <span class="n">withOrientation</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt">CGImagePropertyOrientation</span><span class="p">,</span> <span class="nv">pixelBufferPool</span><span class="p">:</span> <span class="kt">CVPixelBufferPool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CVPixelBuffer</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>mtlTexture</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Input texture to render</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>orientation</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>CGImage orientation for the new pixel buffer</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>pixelBufferPool</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Pixel buffer pool at which to allocate the new buffer</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Oriented pixel buffer, otherwise nil</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2019-04-28)</p>
+          <p>&copy; 2019 <a class="link" href="http://nextlevel.engineering" target="_blank" rel="external">Patrick Piemonte</a>. All rights reserved. (Last updated: 2019-05-21)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
