@@ -629,7 +629,7 @@ extension CameraViewController: NextLevelVideoDelegate {
     }
     
     @available(iOS 11.0, *)
-    func nextLevel(_ nextLevel: NextLevel, willProcessFrame frame: AnyObject, pixelBuffer: CVPixelBuffer, timestamp: TimeInterval, onQueue queue: DispatchQueue) {
+    func nextLevel(_ nextLevel: NextLevel, willProcessFrame frame: AnyObject, timestamp: TimeInterval, onQueue queue: DispatchQueue) {
     }
     
     // enabled by isCustomContextVideoRenderingEnabled
