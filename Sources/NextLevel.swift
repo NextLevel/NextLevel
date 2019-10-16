@@ -972,7 +972,6 @@ extension NextLevel {
                 
                 if input.device.hasMediaType(AVMediaType.video) {
                     self.addCaptureDeviceObservers(input.device)
-                    self.updateVideoOutputSettings()
                     self._videoInput = input
                 } else {
                     self._audioInput = input
@@ -1032,6 +1031,9 @@ extension NextLevel {
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
                 videoOutput.setSampleBufferDelegate(self, queue: self._sessionQueue)
+                
+                self.updateVideoOutputSettings()
+                
                 return true
             }
         }
