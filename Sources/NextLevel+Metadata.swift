@@ -102,9 +102,15 @@ extension NextLevel {
         artistItem.value = NextLevelMetadataArtist as (NSCopying & NSObjectProtocol)
         
         let creationDateItem = AVMutableMetadataItem()
-        creationDateItem.keySpace = AVMetadataKeySpace.common
-        creationDateItem.key = AVMetadataKey.commonKeyCreationDate as (NSCopying & NSObjectProtocol)
-        creationDateItem.value = Date().iso8601() as (NSCopying & NSObjectProtocol)
+        creationDateItem.keySpace = .common
+        
+        if #available(iOS 13.0, *) {
+            creationDateItem.key = AVMetadataKey.commonKeyCreationDate as NSString
+            creationDateItem.value = Date() as NSDate
+        } else {
+            creationDateItem.key = AVMetadataKey.commonKeyCreationDate as (NSCopying & NSObjectProtocol)
+            creationDateItem.value = Date().iso8601() as (NSCopying & NSObjectProtocol)
+        }
         
         return [modelItem, softwareItem, artistItem, creationDateItem]
     }
