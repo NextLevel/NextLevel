@@ -165,6 +165,10 @@ public class NextLevelSession {
         }
     }
     
+    /// Specifies custom metadata that should be attached to the output file
+    public var outputMetadata: [AVMetadataItem] = []
+    
+    
     // MARK: - private instance vars
     
     internal var _identifier: UUID
@@ -312,7 +316,7 @@ extension NextLevelSession {
             self._writer = try AVAssetWriter(url: url, fileType: self.fileType)
             if let writer = self._writer {
                 writer.shouldOptimizeForNetworkUse = true
-                writer.metadata = NextLevel.assetWriterMetadata()
+                writer.metadata = NextLevel.assetWriterMetadata() + outputMetadata
                 
                 if let videoInput = self._videoInput {
                     if writer.canAdd(videoInput) {

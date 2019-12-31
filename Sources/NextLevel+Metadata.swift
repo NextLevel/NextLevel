@@ -28,6 +28,7 @@ import Foundation
 import AVFoundation
 import CoreMedia
 import ImageIO
+import class CoreLocation.CLLocation
 
 extension CMSampleBuffer {
     
