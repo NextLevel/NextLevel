@@ -196,6 +196,8 @@ public class NextLevelSession {
     internal var _lastAudioTimestamp: CMTime = CMTime.invalid
     internal var _lastVideoTimestamp: CMTime = CMTime.invalid
     
+    internal var _skippedAudioBuffers:[CMSampleBuffer] = []
+    
     private let NextLevelSessionAudioQueueIdentifier = "engineering.NextLevel.session.audioQueue"
     private let NextLevelSessionQueueIdentifier = "engineering.NextLevel.sessionQueue"
     private let NextLevelSessionSpecificKey = DispatchSpecificKey<()>()
@@ -463,29 +465,40 @@ extension NextLevelSession {
     ///   - completionHandler: Handler when a frame appending operation completes or fails
     public func appendAudio(withSampleBuffer sampleBuffer: CMSampleBuffer, completionHandler: @escaping NextLevelSessionAppendSampleBufferCompletionHandler) {
         self.startSessionIfNecessary(timestamp: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
-        
-        let duration = CMSampleBufferGetDuration(sampleBuffer)
-        if let adjustedBuffer = CMSampleBuffer.createSampleBuffer(fromSampleBuffer: sampleBuffer, withTimeOffset: self._timeOffset, duration: duration) {
-            let presentationTimestamp = CMSampleBufferGetPresentationTimeStamp(adjustedBuffer)
-            let lastTimestamp = CMTimeAdd(presentationTimestamp, duration)
+        self._audioQueue.async {
             
-            self._audioQueue.async {
-                if let audioInput = self._audioInput,
-                    audioInput.isReadyForMoreMediaData,
-                    audioInput.append(adjustedBuffer) {
-                    self._lastAudioTimestamp = lastTimestamp
+            var hasFailed = false
+            
+            let buffers = self._skippedAudioBuffers + [sampleBuffer]
+            self._skippedAudioBuffers = []
+            var failedBuffers: [CMSampleBuffer] = []
+            
+            buffers.forEach { buffer in
+                let duration = CMSampleBufferGetDuration(buffer)
+                if let adjustedBuffer = CMSampleBuffer.createSampleBuffer(fromSampleBuffer: buffer, withTimeOffset: self._timeOffset, duration: duration) {
+                    let presentationTimestamp = CMSampleBufferGetPresentationTimeStamp(adjustedBuffer)
+                    let lastTimestamp = CMTimeAdd(presentationTimestamp, duration)
                     
-                    if !self.currentClipHasVideo {
-                        self._currentClipDuration = CMTimeSubtract(lastTimestamp, self._startTimestamp)
+                    if let audioInput = self._audioInput,
+                        audioInput.isReadyForMoreMediaData,
+                        audioInput.append(adjustedBuffer) {
+                        self._lastAudioTimestamp = lastTimestamp
+                        
+                        if !self.currentClipHasVideo {
+                            self._currentClipDuration = CMTimeSubtract(lastTimestamp, self._startTimestamp)
+                        }
+                        
+                        self._currentClipHasAudio = true
+                        
+                    } else {
+                        failedBuffers.append(buffer)
+                        hasFailed = true
                     }
-                    
-                    self._currentClipHasAudio = true
-                    
-                    completionHandler(true)
-                } else {
-                    completionHandler(false)
                 }
             }
+            
+            self._skippedAudioBuffers = failedBuffers
+            completionHandler(!hasFailed)
         }
     }
     
@@ -496,7 +509,7 @@ extension NextLevelSession {
             self._videoInput = nil
             self._audioInput = nil
             self._pixelBufferAdapter = nil
-            
+            self._skippedAudioBuffers = []
             self._videoConfiguration = nil
             self._audioConfiguration = nil
         }
