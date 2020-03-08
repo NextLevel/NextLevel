@@ -54,12 +54,14 @@ extension CIContext {
     /// - Parameter sampleBuffer: sample buffer input
     /// - Returns: UIImage from the sample buffer, otherwise nil
     public func uiimage(withSampleBuffer sampleBuffer: CMSampleBuffer) -> UIImage? {
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return nil
+        }
+       
+        let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
         var sampleBufferImage: UIImage? = nil
-        if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-            let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
-            if let cgimage = self.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
-                sampleBufferImage = UIImage(cgImage: cgimage)
-            }
+        if let cgimage = self.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
+            sampleBufferImage = UIImage(cgImage: cgimage)
         }
         return sampleBufferImage
     }
@@ -70,13 +72,16 @@ extension CIContext {
     /// - Returns: UIImage from the pixel buffer, otherwise nil
     public func uiimage(withPixelBuffer pixelBuffer: CVPixelBuffer) -> UIImage? {
         var pixelBufferImage: UIImage? = nil
-        if CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly) == kCVReturnSuccess {
-            let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
-            if let cgimage = self.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
-                pixelBufferImage = UIImage(cgImage: cgimage)
-            }
-            CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+        guard CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly) == kCVReturnSuccess else {
+            return nil
         }
+
+        let ciimage = CIImage(cvPixelBuffer: pixelBuffer)
+        if let cgimage = self.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) {
+            pixelBufferImage = UIImage(cgImage: cgimage)
+        }
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+        
         return pixelBufferImage
     }
 
@@ -90,15 +95,17 @@ extension CIContext {
     @available(iOS 11.0, *)
     public func createPixelBuffer(fromPixelBuffer pixelBuffer: CVPixelBuffer, withOrientation orientation: CGImagePropertyOrientation, pixelBufferPool: CVPixelBufferPool) -> CVPixelBuffer? {
         var updatedPixelBuffer: CVPixelBuffer? = nil
-        if CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess {
-            if let updatedPixelBuffer = updatedPixelBuffer {
-                CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
-                let ciImage = CIImage(cvPixelBuffer: pixelBuffer, options: nil)
-                let orientedImage = ciImage.oriented(orientation)
-                self.render(orientedImage, to: updatedPixelBuffer)
-                CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
-                return updatedPixelBuffer
-            }
+        guard CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess else {
+            return nil
+        }
+        
+        if let updatedPixelBuffer = updatedPixelBuffer {
+            CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+            let ciImage = CIImage(cvPixelBuffer: pixelBuffer, options: nil)
+            let orientedImage = ciImage.oriented(orientation)
+            self.render(orientedImage, to: updatedPixelBuffer)
+            CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly)
+            return updatedPixelBuffer
         }
         return nil
     }
@@ -113,16 +120,18 @@ extension CIContext {
     @available(iOS 11.0, *)
     public func createPixelBuffer(fromMTLTexture mtlTexture: MTLTexture, withOrientation orientation: CGImagePropertyOrientation, pixelBufferPool: CVPixelBufferPool) -> CVPixelBuffer? {
         var updatedPixelBuffer: CVPixelBuffer? = nil
-        if CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess {
-            if let updatedPixelBuffer = updatedPixelBuffer {
-                // update orientation to match Metal's origin
-                let ciImage = CIImage(mtlTexture: mtlTexture, options: nil)
-                if let orientedImage = ciImage?.oriented(orientation) {
-                    CVPixelBufferLockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-                    self.render(orientedImage, to: updatedPixelBuffer)
-                    CVPixelBufferUnlockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-                    return updatedPixelBuffer
-                }
+        guard CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess else {
+            return nil
+        }
+        
+        if let updatedPixelBuffer = updatedPixelBuffer {
+            // update orientation to match Metal's origin
+            let ciImage = CIImage(mtlTexture: mtlTexture, options: nil)
+            if let orientedImage = ciImage?.oriented(orientation) {
+                CVPixelBufferLockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+                self.render(orientedImage, to: updatedPixelBuffer)
+                CVPixelBufferUnlockBaseAddress(updatedPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+                return updatedPixelBuffer
             }
         }
         return nil
