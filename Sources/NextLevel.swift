@@ -1284,6 +1284,27 @@ extension NextLevel {
     }
 }
 
+// MARK: - audio device
+
+extension NextLevel {
+    
+    /// Removes the active audio device from the capture session. Will be useful for enabling haptics; as haptics will not work when the audio input device is active
+    public func disableAudioDevice() {
+        if let audioInput = self._audioInput, let session = self._captureSession {
+            session.removeInput(audioInput)
+        }
+    }
+    
+    /// Enables the audio input device for the capture session
+    public func enableAudioDevice() {
+        if let audioInput = self._audioInput, let session = self._captureSession {
+            if (session.canAddInput(audioInput)) {
+                session.addInput(audioInput)
+            }
+        }
+    }
+}
+
 // MARK: - capture device switching
 
 extension NextLevel {
