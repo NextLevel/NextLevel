@@ -58,6 +58,7 @@ public class NextLevelConfiguration {
         case widescreenLandscape
         case instagram
         case instagramLandscape
+        case instagramStories
         case cinematic
         case custom(w: Int, h: Int)
         
@@ -80,6 +81,8 @@ public class NextLevelConfiguration {
                     return CGSize(width: 4, height: 5)
                 case .instagramLandscape:
                     return CGSize(width: 5, height: 4)
+                case .instagramStories:
+                    return CGSize(width: 9, height: 16)
                 case .cinematic:
                     return CGSize(width: 2.35, height: 1)
                 case .custom(let w, let h):
@@ -127,6 +130,8 @@ public class NextLevelConfiguration {
                     return "4:5 Instagram"
                 case .instagramLandscape:
                     return "5:4 Instagram Landscape"
+                case .instagramStories:
+                    return "9:16 Instagram Stories"
                 case .cinematic:
                     return "2.35:1 Cinematic"
                 case .custom(let w, let h):
