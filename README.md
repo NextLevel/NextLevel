@@ -35,10 +35,10 @@ Need a different version of Swift?
 ```ruby
 
 # CocoaPods
-pod "NextLevel", "~> 0.16.2"
+pod "NextLevel", "~> 0.16.3"
 
 # Carthage
-github "nextlevel/NextLevel" ~> 0.16.2
+github "nextlevel/NextLevel" ~> 0.16.3
 
 # Swift PM
 let package = Package(
