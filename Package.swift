@@ -1,3 +1,4 @@
+// swift-tools-version:5.2
 //
 //  Package.swift
 //  NextLevel (http://nextlevel.engineering/)
@@ -22,7 +23,6 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 //
-// swift-tools-version:5.2
 import PackageDescription
 
 let package = Package(
