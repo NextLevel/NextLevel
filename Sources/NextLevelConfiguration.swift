@@ -199,9 +199,6 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     /// Video output transform for display
     public var transform: CGAffineTransform = .identity
 
-    /// Video output pixel buffer format type, ex: kCVPixelFormatType_32BGRA
-    public var videoPixelBufferPixelFormatType: OSType = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
-
     /// Codec used to encode video, AV dictionary key AVVideoCodecKey
     public var codec: AVVideoCodecType
 
@@ -220,7 +217,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
 
     /// Maximum recording duration, when set, session finishes automatically
     public var maximumCaptureDuration: CMTime?
-            
+        
     // MARK: - object lifecycle
     
     public override init() {
