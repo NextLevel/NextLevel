@@ -375,7 +375,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
             return options
         }
         
-        var config: [String : Any] = [AVEncoderBitRateKey : NSNumber(integerLiteral: self.bitRate)]
+        var config: [String : Any] = [String : Any]()
         
         if let sampleBuffer = sampleBuffer, let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
             if let _ = self.sampleRate, let _ = self.channelsCount {
