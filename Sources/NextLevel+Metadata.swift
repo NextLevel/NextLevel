@@ -77,13 +77,13 @@ fileprivate let NextLevelMetadataArtist = "http://nextlevel.engineering/"
 
 extension NextLevel {
     
-    internal class func tiffMetadata() -> [String: Any] {
+    internal class var tiffMetadata: [String: Any] {
         return [ kCGImagePropertyTIFFSoftware as String : NextLevelMetadataTitle,
                  kCGImagePropertyTIFFArtist as String : NextLevelMetadataArtist,
                  kCGImagePropertyTIFFDateTime as String : Date().iso8601() ]
     }
     
-    internal class func assetWriterMetadata() -> [AVMutableMetadataItem] {
+    internal class var assetWriterMetadata: [AVMutableMetadataItem] {
         let currentDevice = UIDevice.current
         
         let modelItem = AVMutableMetadataItem()

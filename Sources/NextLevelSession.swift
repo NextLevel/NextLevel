@@ -314,7 +314,7 @@ extension NextLevelSession {
             self._writer = try AVAssetWriter(url: url, fileType: self.fileType)
             if let writer = self._writer {
                 writer.shouldOptimizeForNetworkUse = true
-                writer.metadata = NextLevel.assetWriterMetadata()
+                writer.metadata = NextLevel.assetWriterMetadata
                 
                 if let videoInput = self._videoInput {
                     if writer.canAdd(videoInput) {

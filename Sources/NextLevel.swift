@@ -2307,7 +2307,7 @@ extension NextLevel {
             } else if let videoFrame = self._lastVideoFrame {
                 
                 // append exif metadata
-                videoFrame.append(metadataAdditions: NextLevel.tiffMetadata())
+                videoFrame.append(metadataAdditions: NextLevel.tiffMetadata)
                 if let metadata = videoFrame.metadata() {
                     if photoDict == nil {
                         photoDict = [:]
