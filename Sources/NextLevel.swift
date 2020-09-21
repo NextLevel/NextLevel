@@ -2455,31 +2455,38 @@ extension NextLevel {
     
     /// Triggers a photo capture.
     public func capturePhoto() {
-        if let photoOutput = self._photoOutput,
-            let _ = photoOutput.connection(with: AVMediaType.video) {
-            if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
-                
-                let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
-                photoSettings.isHighResolutionPhotoEnabled = self.photoConfiguration.isHighResolutionEnabled
-                photoOutput.isHighResolutionCaptureEnabled = self.photoConfiguration.isHighResolutionEnabled
-                
-                #if USE_TRUE_DEPTH
-                if photoOutput.isDepthDataDeliverySupported {
-                    photoOutput.isDepthDataDeliveryEnabled = self.photoConfiguration.isDepthDataEnabled
-                    photoSettings.embedsDepthDataInPhoto = self.photoConfiguration.isDepthDataEnabled
+        guard let photoOutput = self._photoOutput, let _ = photoOutput.connection(with: AVMediaType.video) else {
+            return
+        }
+        
+        if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
+            
+            if self.photoConfiguration.isRawCaptureEnabled {
+                if let _ = photoOutput.availableRawPhotoPixelFormatTypes.first {
+                    // TODO
                 }
-                #endif
-                
-                if photoOutput.isPortraitEffectsMatteDeliverySupported {
-                    photoOutput.isPortraitEffectsMatteDeliveryEnabled = self.photoConfiguration.isPortraitEffectsMatteEnabled
-                }
-                
-                if self.isFlashAvailable {
-                    photoSettings.flashMode = self.photoConfiguration.flashMode
-                }
-                
-                photoOutput.capturePhoto(with: photoSettings, delegate: self)
             }
+            
+            let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
+            photoSettings.isHighResolutionPhotoEnabled = self.photoConfiguration.isHighResolutionEnabled
+            photoOutput.isHighResolutionCaptureEnabled = self.photoConfiguration.isHighResolutionEnabled
+                        
+            #if USE_TRUE_DEPTH
+            if photoOutput.isDepthDataDeliverySupported {
+                photoOutput.isDepthDataDeliveryEnabled = self.photoConfiguration.isDepthDataEnabled
+                photoSettings.embedsDepthDataInPhoto = self.photoConfiguration.isDepthDataEnabled
+            }
+            #endif
+            
+            if photoOutput.isPortraitEffectsMatteDeliverySupported {
+                photoOutput.isPortraitEffectsMatteDeliveryEnabled = self.photoConfiguration.isPortraitEffectsMatteEnabled
+            }
+            
+            if self.isFlashAvailable {
+                photoSettings.flashMode = self.photoConfiguration.flashMode
+            }
+            
+            photoOutput.capturePhoto(with: photoSettings, delegate: self)
         }
     }
     
@@ -2745,105 +2752,61 @@ extension NextLevel: AVCaptureFileOutputRecordingDelegate {
 extension NextLevel: AVCapturePhotoCaptureDelegate {
     
     public func photoOutput(_ output: AVCapturePhotoOutput, willBeginCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        DispatchQueue.main.async {
+            self.photoDelegate?.nextLevel(self, output: output, willBeginCaptureFor: resolvedSettings, photoConfiguration: self.photoConfiguration)
+        }
     }
 
     public func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
         DispatchQueue.main.async {
-            self.photoDelegate?.nextLevel(self, willCapturePhotoWithConfiguration: self.photoConfiguration)
+            self.photoDelegate?.nextLevel(self, output: output, willCapturePhotoFor: resolvedSettings, photoConfiguration: self.photoConfiguration)
         }
     }
     
     public func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
         DispatchQueue.main.async {
-            self.photoDelegate?.nextLevel(self, didCapturePhotoWithConfiguration: self.photoConfiguration)
+            self.photoDelegate?.nextLevel(self, output: output, didCapturePhotoFor: resolvedSettings, photoConfiguration: self.photoConfiguration)
         }
     }
     
-    
-    public func photoOutput(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        if let sampleBuffer = photoSampleBuffer {
-            
-            // output dictionary
-            var photoDict: [String: Any] = [:]
-            
-            // append tiff metadata
-            sampleBuffer.append(metadataAdditions: NextLevel.tiffMetadata())
-            
-            // add exif metadata
-            if let metadata = sampleBuffer.metadata() {
-                photoDict[NextLevelPhotoMetadataKey] = metadata
-            }
-            
-            // add JPEG, thumbnail
-            let imageData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: sampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
-            if let data = imageData {
-                photoDict[NextLevelPhotoJPEGKey] = data
-            }
-            
-            // add explicit thumbnail
-            //let thumbnailData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: previewBuffer, previewPhotoSampleBuffer: nil)
-            //if let tData = thumbnailData {
-            //    photoDict[NextLevelPhotoThumbnailKey] = tData
-            //}
-            
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        // output dictionary
+        var photoDict: [String: Any] = [:]
+        
+        // exif metadata
+        photoDict[NextLevelPhotoMetadataKey] = photo.metadata
+        NextLevel.tiffMetadata.forEach { (key, value) in photoDict[key] = value }
+        
+        // add file data
+        let imageData = photo.fileDataRepresentation()
+        if let data = imageData {
+            photoDict[NextLevelPhotoFileDataKey] = data
+        }
+        
+        DispatchQueue.main.async {
+            self.photoDelegate?.nextLevel(self, didFinishProcessingPhoto: photo, photoDict: photoDict, photoConfiguration: self.photoConfiguration)
+        }
+                
+        if let portraitEffectsMatte = photo.portraitEffectsMatte {
             DispatchQueue.main.async {
-                self.photoDelegate?.nextLevel(self, didProcessPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
+                self.portraitEffectsMatteDelegate?.portraitEffectsMatteOutput(self, didOutput: portraitEffectsMatte)
             }
         }
     }
+
     
-    public func photoOutput(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingRawPhoto rawSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        if let sampleBuffer = rawSampleBuffer {
-            
-            // output dictionary
-            var photoDict: [String: Any] = [:]
-            
-            // append tiff metadata
-            sampleBuffer.append(metadataAdditions: NextLevel.tiffMetadata())
-            
-            // add exif metadata
-            if let metadata = sampleBuffer.metadata() {
-                photoDict[NextLevelPhotoMetadataKey] = metadata
-            }
-            
-            // add Raw + thumbnail
-            let imageData = AVCapturePhotoOutput.dngPhotoDataRepresentation(forRawSampleBuffer: sampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
-            if let data = imageData {
-                photoDict[NextLevelPhotoRawImageKey] = data
-            }
-            
-            // add explicit thumbnail
-            // TODO based on configuration pixel buffer
-            //let thumbnailData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: previewBuffer, previewPhotoSampleBuffer: nil)
-            //if let tData = thumbnailData {
-            //    photoDict[NextLevelPhotoThumbnailKey] = tData
-            //}
-            
-            DispatchQueue.main.async {
-                self.photoDelegate?.nextLevel(self, didProcessRawPhotoCaptureWith: photoDict, photoConfiguration: self.photoConfiguration)
-            }
-        }
-    }
-    
-    public func photoOutput(_ captureOutput: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
         DispatchQueue.main.async {
             self.photoDelegate?.nextLevelDidCompletePhotoCapture(self)
         }
     }
     
-    @available(iOS 11.0, *)
-    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        DispatchQueue.main.async {
-            self.photoDelegate?.nextLevel(self, didFinishProcessingPhoto: photo)
-        }
-        
-        if #available(iOS 12.0, *){
-            if let portraitEffectsMatte = photo.portraitEffectsMatte {
-                DispatchQueue.main.async {
-                    self.portraitEffectsMatteDelegate?.portraitEffectsMatteOutput(self, didOutput: portraitEffectsMatte)
-                }
-            }
-        }
+    // live photo
+    
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishRecordingLivePhotoMovieForEventualFileAt outputFileURL: URL, resolvedSettings: AVCaptureResolvedPhotoSettings) {
+    }
+    
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingLivePhotoToMovieFileAt outputFileURL: URL, duration: CMTime, photoDisplayTime: CMTime, resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
     }
     
 }

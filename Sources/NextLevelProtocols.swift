@@ -47,6 +47,9 @@ public let NextLevelPhotoRawImageKey = "NextLevelPhotoRawImageKey"
 /// Delegate callback dictionary key for a photo thumbnail
 public let NextLevelPhotoThumbnailKey = "NextLevelPhotoThumbnailKey"
 
+/// Delegate callback dictionary key for file data, configure using NextLevelPhotoConfiguration.outputFileDataFormat
+public let NextLevelPhotoFileDataKey = "NextLevelPhotoFileDataKey"
+
 // MARK: - NextLevelDelegate
 
 /// NextLevel delegate, provides updates for authorization, configuration changes, session state, preview state, and mode changes.
@@ -167,16 +170,13 @@ public protocol NextLevelVideoDelegate: AnyObject {
 
 /// Photo delegate, provides updates on photo related capture functionality.
 public protocol NextLevelPhotoDelegate: AnyObject {
-    
-    func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
-    func nextLevel(_ nextLevel: NextLevel, didCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
-    
-    func nextLevel(_ nextLevel: NextLevel, didProcessPhotoCaptureWith photoDict: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration)
-    func nextLevel(_ nextLevel: NextLevel, didProcessRawPhotoCaptureWith photoDict: [String: Any]?, photoConfiguration: NextLevelPhotoConfiguration)
+    func nextLevel(_ nextLevel: NextLevel, output: AVCapturePhotoOutput, willBeginCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, photoConfiguration: NextLevelPhotoConfiguration)
+    func nextLevel(_ nextLevel: NextLevel, output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings, photoConfiguration: NextLevelPhotoConfiguration)
+    func nextLevel(_ nextLevel: NextLevel, output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings, photoConfiguration: NextLevelPhotoConfiguration)
+        
+    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhoto photo: AVCapturePhoto, photoDict: [String : Any], photoConfiguration: NextLevelPhotoConfiguration)
     
     func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel)
-    
-    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhoto photo: AVCapturePhoto)
 }
 
 // MARK: - NextLevelDepthDataDelegate

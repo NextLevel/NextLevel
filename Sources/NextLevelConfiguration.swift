@@ -427,6 +427,8 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     /// Enables portrait effects matte output for the photo
     public var isPortraitEffectsMatteEnabled: Bool = false
     
+    public var isRawCaptureEnabled: Bool = false
+    
     // MARK: - ivars
     
     // change flashMode with NextLevel.flashMode
