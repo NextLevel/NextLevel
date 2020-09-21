@@ -59,6 +59,7 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
     case wideAngleCamera
     case telephotoCamera
     case duoCamera
+    case dualWideCamera
     case ultraWideAngleCamera
     case tripleCamera
     #if USE_TRUE_DEPTH
@@ -79,6 +80,12 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
         case .trueDepthCamera:
             return AVCaptureDevice.DeviceType.builtInTrueDepthCamera
             #endif
+        case .dualWideCamera:
+            if #available(iOS 13.0, *) {
+                return AVCaptureDevice.DeviceType.builtInDualWideCamera
+            } else {
+                return AVCaptureDevice.DeviceType(rawValue: "Unavailable")
+            }
         case .ultraWideAngleCamera:
             if #available(iOS 13.0, *) {
                 return AVCaptureDevice.DeviceType.builtInUltraWideCamera
@@ -105,6 +112,8 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
                 return "Telephoto Camera"
             case .duoCamera:
                 return "Duo Camera"
+            case .dualWideCamera:
+                return "Dual Wide Camera"
             case .ultraWideAngleCamera:
                 return "Ultra Wide Angle Camera"
             case .tripleCamera:
