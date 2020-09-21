@@ -200,7 +200,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     public var transform: CGAffineTransform = .identity
 
     /// Codec used to encode video, AV dictionary key AVVideoCodecKey
-    public var codec: AVVideoCodecType
+    public var codec: AVVideoCodecType = AVVideoCodecType.h264
 
     /// Profile level for the configuration, AV dictionary key AVVideoProfileLevelKey (H.264 codec only)
     public var profileLevel: String?
@@ -221,11 +221,6 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     // MARK: - object lifecycle
     
     public override init() {
-        if #available(iOS 11.0, *) {
-            self.codec = AVVideoCodecType.h264
-        } else {
-            self.codec = AVVideoCodecType(rawValue: AVVideoCodecH264)
-        }
         super.init()
     }
     
@@ -416,7 +411,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
 public class NextLevelPhotoConfiguration : NextLevelConfiguration {
 
     /// Codec used to encode photo, AV dictionary key AVVideoCodecKey
-    public var codec: AVVideoCodecType
+    public var codec: AVVideoCodecType = AVVideoCodecType.hevc
 
     /// When true, NextLevel should generate a thumbnail for the photo
     public var generateThumbnail: Bool = false
@@ -440,11 +435,6 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
     // MARK: - object lifecycle
     
     override init() {
-        if #available(iOS 11.0, *) {
-            self.codec = AVVideoCodecType.hevc
-        } else {
-            self.codec = AVVideoCodecType(rawValue: AVVideoCodecJPEG)
-        }
         super.init()
     }
     
@@ -475,7 +465,6 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
 
 // MARK: - ARConfiguration
 
-@available(iOS 11.0, *)
 /// NextLevelARConfiguration, augmented reality configuration object
 public class NextLevelARConfiguration : NextLevelConfiguration {
 

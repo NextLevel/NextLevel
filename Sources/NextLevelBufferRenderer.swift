@@ -33,7 +33,6 @@ import SceneKit
 #endif
 
 /// NextLevelBufferRenderer, provides the ability to render/record SceneKit frames
-@available(iOS 11.0, *)
 public class NextLevelBufferRenderer {
     
     // MARK: - properties
@@ -128,7 +127,6 @@ public class NextLevelBufferRenderer {
 
 // MARK: - setup
 
-@available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
     
     fileprivate func setupContextIfNecessary() {
@@ -192,7 +190,6 @@ extension NextLevelBufferRenderer {
 
 // MARK: - rendering
 
-@available(iOS 11.0, *)
 extension NextLevelBufferRenderer {
     
     #if USE_ARKIT

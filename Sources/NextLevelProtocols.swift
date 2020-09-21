@@ -136,7 +136,6 @@ public protocol NextLevelVideoDelegate: AnyObject {
     func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue)
     
     // ARKit video processing
-    @available(iOS 11.0, *)
     func nextLevel(_ nextLevel: NextLevel, willProcessFrame frame: AnyObject, timestamp: TimeInterval, onQueue queue: DispatchQueue)
     
     // video recording session
@@ -177,7 +176,6 @@ public protocol NextLevelPhotoDelegate: AnyObject {
     
     func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel)
     
-    @available(iOS 11.0, *)
     func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhoto photo: AVCapturePhoto)
 }
 
@@ -186,13 +184,8 @@ public protocol NextLevelPhotoDelegate: AnyObject {
 #if USE_TRUE_DEPTH
 /// Depth data delegate, provides depth data updates
 public protocol NextLevelDepthDataDelegate: AnyObject {
-    
-    @available(iOS 11.0, *)
     func depthDataOutput(_ nextLevel: NextLevel, didOutput depthData: AVDepthData, timestamp: CMTime)
-    
-    @available(iOS 11.0, *)
     func depthDataOutput(_ nextLevel: NextLevel, didDrop depthData: AVDepthData, timestamp: CMTime, reason: AVCaptureOutput.DataDroppedReason)
-    
 }
 #endif
 
@@ -200,16 +193,12 @@ public protocol NextLevelDepthDataDelegate: AnyObject {
 
 /// Portrait Effects Matte delegate, provides portrait effects matte updates
 public protocol NextLevelPortraitEffectsMatteDelegate: AnyObject {
-    
-    @available(iOS 12.0, *)
     func portraitEffectsMatteOutput(_ nextLevel: NextLevel, didOutput portraitEffectsMatte: AVPortraitEffectsMatte)
-    
 }
 
 // MARK: - NextLevelMetadataOutputObjectsDelegate
 
 /// Metadata Output delegate, provides objects like faces and barcodes
 public protocol NextLevelMetadataOutputObjectsDelegate: AnyObject {
-
     func metadataOutputObjects(_ nextLevel: NextLevel, didOutput metadataObjects: [AVMetadataObject])
 }

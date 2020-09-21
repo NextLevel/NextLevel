@@ -329,6 +329,8 @@ extension CameraViewController {
             break
         case .authorized:
             break
+        case .limited:
+            break
         @unknown default:
             fatalError("unknown authorization type")
         }
@@ -628,7 +630,6 @@ extension CameraViewController: NextLevelVideoDelegate {
     func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer, onQueue queue: DispatchQueue) {
     }
     
-    @available(iOS 11.0, *)
     func nextLevel(_ nextLevel: NextLevel, willProcessFrame frame: AnyObject, timestamp: TimeInterval, onQueue queue: DispatchQueue) {
     }
     
@@ -744,7 +745,6 @@ extension CameraViewController: NextLevelPhotoDelegate {
     func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel) {
     }
     
-    @available(iOS 11.0, *)
     func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhoto photo: AVCapturePhoto) {
     }
     

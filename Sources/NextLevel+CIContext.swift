@@ -42,8 +42,6 @@ extension CIContext {
             return CIContext(mtlDevice: device, options: options)
         } else if let device = MTLCreateSystemDefaultDevice() {
             return CIContext(mtlDevice: device, options: options)
-        } else if let eaglContext = EAGLContext(api: .openGLES2) {
-            return CIContext(eaglContext: eaglContext, options: options)
         } else {
             return nil
         }
@@ -92,7 +90,6 @@ extension CIContext {
     ///   - orientation: CGImage orientation for the new pixel buffer
     ///   - pixelBufferPool: Pixel buffer pool at which to allocate the new buffer
     /// - Returns: Oriented pixel buffer, otherwise nil
-    @available(iOS 11.0, *)
     public func createPixelBuffer(fromPixelBuffer pixelBuffer: CVPixelBuffer, withOrientation orientation: CGImagePropertyOrientation, pixelBufferPool: CVPixelBufferPool) -> CVPixelBuffer? {
         var updatedPixelBuffer: CVPixelBuffer? = nil
         guard CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess else {
@@ -117,7 +114,6 @@ extension CIContext {
     ///   - orientation: CGImage orientation for the new pixel buffer
     ///   - pixelBufferPool: Pixel buffer pool at which to allocate the new buffer
     /// - Returns: Oriented pixel buffer, otherwise nil
-    @available(iOS 11.0, *)
     public func createPixelBuffer(fromMTLTexture mtlTexture: MTLTexture, withOrientation orientation: CGImagePropertyOrientation, pixelBufferPool: CVPixelBufferPool) -> CVPixelBuffer? {
         var updatedPixelBuffer: CVPixelBuffer? = nil
         guard CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, &updatedPixelBuffer) == kCVReturnSuccess else {
