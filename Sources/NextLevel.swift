@@ -2461,11 +2461,13 @@ extension NextLevel {
         
         if let formatDictionary = self.photoConfiguration.avcaptureDictionary() {
             
+            #if !( targetEnvironment(simulator) )
             if self.photoConfiguration.isRawCaptureEnabled {
-                if let _ = photoOutput.availableRawPhotoPixelFormatTypes.first {
-                    // TODO
-                }
+//                if let _ = photoOutput.availableRawPhotoPixelFormatTypes.first {
+//                    // TODO
+//                }
             }
+            #endif
             
             let photoSettings = AVCapturePhotoSettings(format: formatDictionary)
             photoSettings.isHighResolutionPhotoEnabled = self.photoConfiguration.isHighResolutionEnabled
