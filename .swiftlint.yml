@@ -1,0 +1,34 @@
+disabled_rules:
+  - identifier_name
+  - line_length
+  - function_body_length
+  - file_length
+  - cyclomatic_complexity
+  - multiple_closures_with_trailing_closure
+  - vertical_parameter_alignment
+  - type_body_length
+  - large_tuple
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - modifier_order
+  - unneeded_parentheses_in_closure_argument
+  - convenience_type
+  - fatal_error_message
+  - first_where
+  - toggle_bool
+  - implicit_return
+  - multiline_function_chains
+  - redundant_nil_coalescing
+  - unused_capture_list
+  - weak_delegate
+  - unused_import
+  - prefer_self_type_over_type_of_self
+included:
+  - Sources
+force_cast:
+  severity: warning
+shorthand_operator:
+  severity: warning
+empty_count:
+  severity: warning

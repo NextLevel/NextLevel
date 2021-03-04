@@ -24,8 +24,6 @@
 
 import UIKit
 
-let NextLevelAlbumTitle = "NextLevel"
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -33,13 +31,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - UIApplicationDelegate
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        self.window = UIWindow(frame:UIScreen.main.bounds)
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.black
-        
+
         self.window?.rootViewController = CameraViewController()
         self.window?.makeKeyAndVisible()
-        
+
         return true
     }
 
@@ -59,4 +58,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-

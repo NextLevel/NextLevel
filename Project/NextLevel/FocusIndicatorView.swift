@@ -26,13 +26,13 @@ import UIKit
 import Foundation
 
 public class FocusIndicatorView: UIView {
-    
+
     // MARK: - ivars
-    
-    internal var _focusRingView: UIImageView?
-    
+
+    internal var focusRingView: UIImageView?
+
     // MARK: - object lifecycle
-    
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .clear
@@ -43,14 +43,14 @@ public class FocusIndicatorView: UIView {
             self.addSubview(focusRingView)
         }
         self.frame = self._focusRingView?.frame ?? frame
-        
+
         self.prepareAnimation()
     }
-    
+
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         self._focusRingView?.layer.removeAllAnimations()
     }
@@ -65,26 +65,26 @@ extension FocusIndicatorView {
         self._focusRingView?.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         self._focusRingView?.alpha = 0
     }
-    
+
     public func startAnimation() {
         self._focusRingView?.layer.removeAllAnimations()
-        
+
         // animate
-        UIView.animate(withDuration: 0.2) { 
+        UIView.animate(withDuration: 0.2) {
             self._focusRingView?.alpha = 1
         }
-        UIView.animate(withDuration: 0.5) { 
+        UIView.animate(withDuration: 0.5) {
             self._focusRingView?.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         }
     }
-    
+
     public func stopAnimation() {
         self._focusRingView?.layer.removeAllAnimations()
- 
+
         UIView.animate(withDuration: 0.2) {
             self._focusRingView?.alpha = 0
         }
-        UIView.animate(withDuration: 0.2, animations: { 
+        UIView.animate(withDuration: 0.2, animations: {
             self._focusRingView?.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         }) { (completed) in
             if completed {
@@ -92,5 +92,5 @@ extension FocusIndicatorView {
             }
         }
     }
-    
+
 }
