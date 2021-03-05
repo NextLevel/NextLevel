@@ -160,8 +160,21 @@ class CameraViewController: UIViewController {
             }
         }
         
+        // Audio Session configuration
+        
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord,
+                                         options: [.mixWithOthers, .defaultToSpeaker, .allowBluetoothA2DP, .allowBluetooth])
+            try audioSession.setActive(true)
+        } catch let error {
+            print(error.localizedDescription)
+            fatalError("Error Setting Up Audio Session")
+        }
+        
         // Configure NextLevel by modifying the configuration ivars
         let nextLevel = NextLevel.shared
+        nextLevel.automaticallyConfiguresApplicationAudioSession = false
         nextLevel.delegate = self
         nextLevel.deviceDelegate = self
         nextLevel.flashDelegate = self
