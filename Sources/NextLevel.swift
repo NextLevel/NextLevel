@@ -155,7 +155,7 @@ public enum NextLevelCaptureMode: Int, CustomStringConvertible {
             case .arKit:
                 return "ARKit"
             case .arKitWithoutAudio:
-                return "ARKit"
+                return "ARKit without Audio"
             }
         }
     }
@@ -370,15 +370,21 @@ public class NextLevel: NSObject {
     /// Checks if the current capture session is running
     public var isRunning: Bool {
         get {
+            switch self.captureMode {
             #if USE_ARKIT
-            if self.captureMode == .arKit {
+            case .arKit:
                 return self._arRunning
-            }
+            case .arKitWithoutAudio:
+                return self._arRunning
             #endif
-            if let session = self._captureSession {
-                return session.isRunning
+            default:
+                if let session = self._captureSession {
+                    return session.isRunning
+                }
+                return false
             }
-            return false
+
+
         }
     }
 
@@ -594,11 +600,12 @@ extension NextLevel {
             throw NextLevelError.authorization
         }
 
-        if self.captureMode == .arKit {
-            #if USE_ARKIT
+        switch self.captureMode {
+        #if USE_ARKIT
+        case .arKit, .arKitWithoutAudio:
             setupARSession()
-            #endif
-        } else {
+        #endif
+        default:
             guard self._captureSession == nil else {
                 throw NextLevelError.started
             }
@@ -626,7 +633,7 @@ extension NextLevel {
         }
 
         #if USE_ARKIT
-        if self.captureMode == .arKit {
+        if self.captureMode == .arKit || self.captureMode == .arKitWithoutAudio {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
                 self.arConfiguration?.session?.pause()
                 self._arRunning = false
@@ -675,7 +682,7 @@ extension NextLevel {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
             guard let config = self.arConfiguration?.config,
                   let options = self.arConfiguration?.runOptions else {
-                    return
+                return
             }
 
             if self._captureSession == nil {
