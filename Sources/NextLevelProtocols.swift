@@ -1,6 +1,6 @@
 //
 //  NextLevelProtocols.swift
-//  NextLevel (http://nextlevel.engineering/)
+//  NextLevel (http://github.com/NextLevel/)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
@@ -54,75 +54,75 @@ public let NextLevelPhotoFileDataKey = "NextLevelPhotoFileDataKey"
 
 /// NextLevel delegate, provides updates for authorization, configuration changes, session state, preview state, and mode changes.
 public protocol NextLevelDelegate: AnyObject {
-    
+
     // configuration
     func nextLevel(_ nextLevel: NextLevel, didUpdateVideoConfiguration videoConfiguration: NextLevelVideoConfiguration)
     func nextLevel(_ nextLevel: NextLevel, didUpdateAudioConfiguration audioConfiguration: NextLevelAudioConfiguration)
-    
+
     // session
     func nextLevelSessionWillStart(_ nextLevel: NextLevel)
     func nextLevelSessionDidStart(_ nextLevel: NextLevel)
     func nextLevelSessionDidStop(_ nextLevel: NextLevel)
-    
+
     // session interruption
     func nextLevelSessionWasInterrupted(_ nextLevel: NextLevel)
     func nextLevelSessionInterruptionEnded(_ nextLevel: NextLevel)
-    
+
     // mode
     func nextLevelCaptureModeWillChange(_ nextLevel: NextLevel)
     func nextLevelCaptureModeDidChange(_ nextLevel: NextLevel)
-    
+
 }
 
 /// Preview delegate, provides update for
 public protocol NextLevelPreviewDelegate: AnyObject {
-    
+
     // preview
     func nextLevelWillStartPreview(_ nextLevel: NextLevel)
     func nextLevelDidStopPreview(_ nextLevel: NextLevel)
-    
+
 }
 
 /// Device delegate, provides updates on device position, orientation, clean aperture, focus, exposure, and white balances changes.
 public protocol NextLevelDeviceDelegate: AnyObject {
-    
+
     // position, orientation
     func nextLevelDevicePositionWillChange(_ nextLevel: NextLevel)
     func nextLevelDevicePositionDidChange(_ nextLevel: NextLevel)
     func nextLevel(_ nextLevel: NextLevel, didChangeDeviceOrientation deviceOrientation: NextLevelDeviceOrientation)
-    
+
     // format
     func nextLevel(_ nextLevel: NextLevel, didChangeDeviceFormat deviceFormat: AVCaptureDevice.Format)
-    
+
     // aperture, lens
     func nextLevel(_ nextLevel: NextLevel, didChangeCleanAperture cleanAperture: CGRect)
     func nextLevel(_ nextLevel: NextLevel, didChangeLensPosition lensPosition: Float)
-    
+
     // focus, exposure, white balance
     func nextLevelWillStartFocus(_ nextLevel: NextLevel)
     func nextLevelDidStopFocus(_  nextLevel: NextLevel)
-    
+
     func nextLevelWillChangeExposure(_ nextLevel: NextLevel)
     func nextLevelDidChangeExposure(_ nextLevel: NextLevel)
-    
+
     func nextLevelWillChangeWhiteBalance(_ nextLevel: NextLevel)
     func nextLevelDidChangeWhiteBalance(_ nextLevel: NextLevel)
-    
+
 }
 
 // MARK: - NextLevelFlashAndTorchDelegate
 
 /// Flash and torch delegate, provides updates on active flash and torch related changes.
 public protocol NextLevelFlashAndTorchDelegate: AnyObject {
-    
+
     func nextLevelDidChangeFlashMode(_ nextLevel: NextLevel)
     func nextLevelDidChangeTorchMode(_ nextLevel: NextLevel)
-    
+
     func nextLevelFlashActiveChanged(_ nextLevel: NextLevel)
     func nextLevelTorchActiveChanged(_ nextLevel: NextLevel)
-    
+
     func nextLevelFlashAndTorchAvailabilityChanged(_ nextLevel: NextLevel)
-    
+
 }
 
 // MARK: - NextLevelVideoDelegate
@@ -130,40 +130,40 @@ public protocol NextLevelFlashAndTorchDelegate: AnyObject {
 /// Video delegate, provides updates on video related recording and capture functionality.
 /// All methods are called on the main queue with the exception of nextLevel:renderToCustomContextWithSampleBuffer:onQueue.
 public protocol NextLevelVideoDelegate: AnyObject {
-    
+
     // video zoom
     func nextLevel(_ nextLevel: NextLevel, didUpdateVideoZoomFactor videoZoomFactor: Float)
-    
+
     // video processing
     func nextLevel(_ nextLevel: NextLevel, willProcessRawVideoSampleBuffer sampleBuffer: CMSampleBuffer, onQueue queue: DispatchQueue)
     func nextLevel(_ nextLevel: NextLevel, renderToCustomContextWithImageBuffer imageBuffer: CVPixelBuffer, onQueue queue: DispatchQueue)
-    
+
     // ARKit video processing
     func nextLevel(_ nextLevel: NextLevel, willProcessFrame frame: AnyObject, timestamp: TimeInterval, onQueue queue: DispatchQueue)
-    
+
     // video recording session
     func nextLevel(_ nextLevel: NextLevel, didSetupVideoInSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didSetupAudioInSession session: NextLevelSession)
-    
+
     // clip start/stop
     func nextLevel(_ nextLevel: NextLevel, didStartClipInSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didCompleteClip clip: NextLevelClip, inSession session: NextLevelSession)
-    
+
     // clip file I/O
     func nextLevel(_ nextLevel: NextLevel, didAppendVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didSkipVideoSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
-    
+
     func nextLevel(_ nextLevel: NextLevel, didAppendVideoPixelBuffer pixelBuffer: CVPixelBuffer, timestamp: TimeInterval, inSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didSkipVideoPixelBuffer pixelBuffer: CVPixelBuffer, timestamp: TimeInterval, inSession session: NextLevelSession)
-    
+
     func nextLevel(_ nextLevel: NextLevel, didAppendAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
     func nextLevel(_ nextLevel: NextLevel, didSkipAudioSampleBuffer sampleBuffer: CMSampleBuffer, inSession session: NextLevelSession)
-    
+
     func nextLevel(_ nextLevel: NextLevel, didCompleteSession session: NextLevelSession)
-    
+
     // video frame photo
-    func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String : Any]?)
-    
+    func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String: Any]?)
+
 }
 
 // MARK: - NextLevelPhotoDelegate
@@ -173,9 +173,9 @@ public protocol NextLevelPhotoDelegate: AnyObject {
     func nextLevel(_ nextLevel: NextLevel, output: AVCapturePhotoOutput, willBeginCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, photoConfiguration: NextLevelPhotoConfiguration)
     func nextLevel(_ nextLevel: NextLevel, output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings, photoConfiguration: NextLevelPhotoConfiguration)
     func nextLevel(_ nextLevel: NextLevel, output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings, photoConfiguration: NextLevelPhotoConfiguration)
-        
-    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhoto photo: AVCapturePhoto, photoDict: [String : Any], photoConfiguration: NextLevelPhotoConfiguration)
-    
+
+    func nextLevel(_ nextLevel: NextLevel, didFinishProcessingPhoto photo: AVCapturePhoto, photoDict: [String: Any], photoConfiguration: NextLevelPhotoConfiguration)
+
     func nextLevelDidCompletePhotoCapture(_ nextLevel: NextLevel)
 }
 

@@ -1,6 +1,6 @@
 //
 //  NextLevel+Foundation.swift
-//  NextLevel (http://nextlevel.engineering/)
+//  NextLevel (http://github.com/NextLevel/)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
@@ -29,23 +29,23 @@ import AVFoundation
 // MARK: - Comparable
 
 extension Comparable {
-    
+
     public func clamped(to limits: ClosedRange<Self>) -> Self {
-        return min(max(self, limits.lowerBound), limits.upperBound)
+        min(max(self, limits.lowerBound), limits.upperBound)
     }
-    
+
 }
 
 // MARK: - Data
 
 extension Data {
-    
+
     /// Outputs a `Data` object with the desired metadata dictionary
     ///
     /// - Parameter metadata: metadata dictionary to be added
     /// - Returns: JPEG formatted image data
     public func jpegData(withMetadataDictionary metadata: [String: Any]) -> Data? {
-        var imageDataWithMetadata: Data? = nil
+        var imageDataWithMetadata: Data?
         if let source = CGImageSourceCreateWithData(self as CFData, nil),
             let sourceType = CGImageSourceGetType(source) {
             let mutableData = NSMutableData()
@@ -61,13 +61,13 @@ extension Data {
         }
         return imageDataWithMetadata
     }
-    
+
 }
 
 // MARK: - Date
 
 extension Date {
-    
+
     static let dateFormatter: DateFormatter = iso8601DateFormatter()
     fileprivate static func iso8601DateFormatter() -> DateFormatter {
         let formatter = DateFormatter()
@@ -77,13 +77,13 @@ extension Date {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
         return formatter
     }
-    
+
     // http://nshipster.com/nsformatter/
     // http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
     public func iso8601() -> String {
-        return Date.iso8601DateFormatter().string(from: self)
+        Date.iso8601DateFormatter().string(from: self)
     }
-    
+
 }
 
 // MARK: - FileManager

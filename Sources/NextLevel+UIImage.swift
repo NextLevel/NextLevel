@@ -1,6 +1,6 @@
 //
 //  NextLevel+UIImage.swift
-//  NextLevel (http://nextlevel.engineering/)
+//  NextLevel (http://github.com/NextLevel/)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
@@ -33,16 +33,16 @@ extension UIImage {
     public func nx_croppedImage(to ratio: CGFloat) -> UIImage {
         let height = self.size.width * ratio
         let y = (self.size.height - height) / 2
-        
+
         let bound = CGRect(x: 0, y: y, width: self.size.width, height: height)
         let scaledBounds: CGRect = CGRect(x: bound.origin.x * self.scale,
                                           y: bound.origin.y * self.scale,
                                           width: bound.width * self.scale,
                                           height: bound.height * self.scale)
         let imageRef = self.cgImage?.cropping(to: scaledBounds)
-        
+
         let croppedImage: UIImage = UIImage(cgImage: imageRef!, scale: self.scale, orientation: UIImage.Orientation.up)
         return croppedImage
     }
-    
+
 }

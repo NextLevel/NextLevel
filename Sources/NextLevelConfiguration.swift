@@ -1,6 +1,6 @@
 //
 //  NextLevelConfiguration.swift
-//  NextLevel (http://nextlevel.engineering/)
+//  NextLevel (http://github.com/NextLevel/)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
@@ -29,14 +29,14 @@ import AVFoundation
 #if USE_ARKIT
 import ARKit
 #endif
-    
+
 // MARK: - MediaTypeConfiguration
 
 /// NextLevelConfiguration, media capture configuration object
 public class NextLevelConfiguration {
 
     // MARK: - types
-    
+
     /// Aspect ratio, specifies dimensions for video output
     ///
     /// - active: active preset or specified dimensions (default)
@@ -64,7 +64,7 @@ public class NextLevelConfiguration {
         case instagramStories
         case cinematic
         case custom(w: Int, h: Int)
-        
+
         public var dimensions: CGSize? {
             get {
                 switch self {
@@ -95,7 +95,7 @@ public class NextLevelConfiguration {
                 }
             }
         }
-        
+
         public var ratio: CGFloat? {
             get {
                 switch self {
@@ -115,7 +115,7 @@ public class NextLevelConfiguration {
                 }
             }
         }
-        
+
         public var description: String {
             get {
                 switch self {
@@ -149,30 +149,30 @@ public class NextLevelConfiguration {
             }
         }
     }
-    
+
     // MARK: - properties
-    
+
     /// AVFoundation configuration preset, see AVCaptureSession.h
     public var preset: AVCaptureSession.Preset
-    
+
     /// Setting an options dictionary overrides all other properties set on a configuration object but allows full customization
-    public var options: [String : Any]?
-    
+    public var options: [String: Any]?
+
     // MARK: - object lifecycle
-    
+
     public init() {
         self.preset = AVCaptureSession.Preset.high
         self.options = nil
     }
-    
+
     // MARK: - func
-    
+
     /// Provides an AVFoundation friendly dictionary for configuring output.
     ///
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Configuration dictionary for AVFoundation
     public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
-        return self.options
+        self.options
     }
 }
 
@@ -180,13 +180,13 @@ public class NextLevelConfiguration {
 
 /// NextLevelVideoConfiguration, video capture configuration object
 public class NextLevelVideoConfiguration: NextLevelConfiguration {
-    
+
     // MARK: - types
-    
+
     public static let VideoBitRateDefault: Int = 2000000
-    
+
     // MARK: - properties
-    
+
     /// Average video bit rate (bits per second), AV dictionary key AVVideoAverageBitRateKey
     public var bitRate: Int = NextLevelVideoConfiguration.VideoBitRateDefault
 
@@ -217,28 +217,28 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
 
     /// Maximum recording duration, when set, session finishes automatically
     public var maximumCaptureDuration: CMTime?
-        
+
     // MARK: - object lifecycle
-    
-    public override init() {
+
+    override public init() {
         super.init()
     }
-    
+
     // MARK: - func
-    
+
     /// Provides an AVFoundation friendly dictionary for configuring output.
     ///
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Video configuration dictionary for AVFoundation
-    public override func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String : Any]? {
-        
+    override public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
+
         // if the client specified custom options, use those instead
         if let options = self.options {
             return options
         }
-        
-        var config: [String : Any] = [:]
-        
+
+        var config: [String: Any] = [:]
+
         if let dimensions = self.dimensions {
             config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(dimensions.width))
             config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(dimensions.height))
@@ -272,20 +272,20 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
                 config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(videoDimensions.height))
                 break
             }
-            
+
         } else if let pixelBuffer = pixelBuffer {
             let width = CVPixelBufferGetWidth(pixelBuffer)
             let height = CVPixelBufferGetHeight(pixelBuffer)
             config[AVVideoWidthKey] = NSNumber(integerLiteral: Int(width))
             config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
         }
-        
+
         config = self.update(config: config)
-        
+
         config[AVVideoCodecKey] = self.codec
         config[AVVideoScalingModeKey] = self.scalingMode
-        
-        var compressionDict: [String : Any] = [:]
+
+        var compressionDict: [String: Any] = [:]
         compressionDict[AVVideoAverageBitRateKey] = NSNumber(integerLiteral: self.bitRate)
         compressionDict[AVVideoAllowFrameReorderingKey] = NSNumber(booleanLiteral: false)
         compressionDict[AVVideoExpectedSourceFrameRateKey] = NSNumber(integerLiteral: 30)
@@ -295,11 +295,11 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
         if let maxKeyFrameInterval = self.maxKeyFrameInterval {
             compressionDict[AVVideoMaxKeyFrameIntervalKey] = NSNumber(integerLiteral: maxKeyFrameInterval)
         }
-        
+
         config[AVVideoCompressionPropertiesKey] = (compressionDict as NSDictionary)
         return config
     }
-    
+
     /// Update configuration with size values.
     ///     With MPEG-2 and MPEG-4 (and other DCT based codecs), compression is applied to a grid of 16x16 pixel macroblocks.
     ///     With MPEG-4 Part 10 (AVC/H.264), multiple of 4 and 8 also works, but 16 is most efficient.
@@ -309,9 +309,9 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     ///   - config: Input configuration dictionary
     ///   - divisibleBy: Divisor
     /// - Returns: Configuration with appropriately divided sizes
-    private func update(config: [String : Any], withSizeValuesDivisibleBy divisibleBy: Int = 16) -> [String : Any] {
+    private func update(config: [String: Any], withSizeValuesDivisibleBy divisibleBy: Int = 16) -> [String: Any] {
         var config = config
-        
+
         if let width = config[AVVideoWidthKey] as? Int {
             let newWidth = width - (width % divisibleBy)
             config[AVVideoWidthKey] = NSNumber(integerLiteral: newWidth)
@@ -320,10 +320,10 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             let newHeight = height - (height % divisibleBy)
             config[AVVideoHeightKey] = NSNumber(integerLiteral: newHeight)
         }
-    
+
         return config
     }
-    
+
 }
 
 // MARK: - AudioConfiguration
@@ -332,13 +332,13 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
 public class NextLevelAudioConfiguration: NextLevelConfiguration {
 
     // MARK: - types
-    
+
     public static let AudioBitRateDefault: Int = 96000
     public static let AudioSampleRateDefault: Float64 = 44100
     public static let AudioChannelsCountDefault: Int = 2
-    
+
     // MARK: - properties
-    
+
     /// Audio bit rate, AV dictionary key AVEncoderBitRateKey
     public var bitRate: Int = NextLevelAudioConfiguration.AudioBitRateDefault
 
@@ -353,8 +353,8 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
     public var format: AudioFormatID = kAudioFormatMPEG4AAC
 
     // MARK: - object lifecycle
-    
-    public override init() {
+
+    override public init() {
         super.init()
     }
 
@@ -364,14 +364,14 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
     ///
     /// - Parameter sampleBuffer: Sample buffer for extracting configuration information
     /// - Returns: Audio configuration dictionary for AVFoundation
-    public override func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
+    override public func avcaptureSettingsDictionary(sampleBuffer: CMSampleBuffer? = nil, pixelBuffer: CVPixelBuffer? = nil) -> [String: Any]? {
         // if the client specified custom options, use those instead
         if let options = self.options {
             return options
         }
-        
-        var config: [String : Any] = [AVEncoderBitRateKey : NSNumber(integerLiteral: self.bitRate)]
-        
+
+        var config: [String: Any] = [AVEncoderBitRateKey: NSNumber(integerLiteral: self.bitRate)]
+
         if let sampleBuffer = sampleBuffer, let formatDescription: CMFormatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
             if let _ = self.sampleRate, let _ = self.channelsCount {
                 // loading user provided settings after buffer use
@@ -379,28 +379,28 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
                 self.sampleRate = streamBasicDescription.pointee.mSampleRate
                 self.channelsCount = Int(streamBasicDescription.pointee.mChannelsPerFrame)
             }
-            
+
             var layoutSize: Int = 0
             if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, sizeOut: &layoutSize) {
-                let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count:layoutSize) : Data()
+                let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count: layoutSize) : Data()
                 config[AVChannelLayoutKey] = currentChannelLayoutData
             }
         }
-        
+
         if let sampleRate = self.sampleRate {
             config[AVSampleRateKey] = sampleRate == 0 ? NSNumber(value: NextLevelAudioConfiguration.AudioSampleRateDefault) : NSNumber(value: sampleRate)
         } else {
             config[AVSampleRateKey] = NSNumber(value: NextLevelAudioConfiguration.AudioSampleRateDefault)
         }
-        
+
         if let channels = self.channelsCount {
             config[AVNumberOfChannelsKey] = channels == 0 ? NSNumber(integerLiteral: NextLevelAudioConfiguration.AudioChannelsCountDefault) : NSNumber(integerLiteral: channels)
         } else {
             config[AVNumberOfChannelsKey] = NSNumber(integerLiteral: NextLevelAudioConfiguration.AudioChannelsCountDefault)
         }
-        
+
         config[AVFormatIDKey] = NSNumber(value: self.format as UInt32)
-        
+
         return config
     }
 }
@@ -408,7 +408,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
 // MARK: - PhotoConfiguration
 
 /// NextLevelPhotoConfiguration, photo capture configuration object
-public class NextLevelPhotoConfiguration : NextLevelConfiguration {
+public class NextLevelPhotoConfiguration: NextLevelConfiguration {
 
     /// Codec used to encode photo, AV dictionary key AVVideoCodecKey
     public var codec: AVVideoCodecType = AVVideoCodecType.hevc
@@ -418,30 +418,30 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
 
     /// Enabled high resolution capture
     public var isHighResolutionEnabled: Bool = false
-    
+
     /// Enabled depth data capture with photo
     #if USE_TRUE_DEPTH
     public var isDepthDataEnabled: Bool = false
     #endif
-    
+
     /// Enables portrait effects matte output for the photo
     public var isPortraitEffectsMatteEnabled: Bool = false
-    
+
     public var isRawCaptureEnabled: Bool = false
-    
+
     // MARK: - ivars
-    
+
     // change flashMode with NextLevel.flashMode
     internal var flashMode: AVCaptureDevice.FlashMode = .off
 
     // MARK: - object lifecycle
-    
+
     override init() {
         super.init()
     }
-    
+
     // MARK: - funcs
-    
+
     /// Provides an AVFoundation friendly dictionary dictionary for configuration output.
     ///
     /// - Returns: Configuration dictionary for AVFoundation
@@ -468,18 +468,17 @@ public class NextLevelPhotoConfiguration : NextLevelConfiguration {
 // MARK: - ARConfiguration
 
 /// NextLevelARConfiguration, augmented reality configuration object
-public class NextLevelARConfiguration : NextLevelConfiguration {
+public class NextLevelARConfiguration: NextLevelConfiguration {
 
     #if USE_ARKIT
     /// ARKit configuration
     public var config: ARConfiguration?
-    
+
     /// ARKit session, note: the delegate queue will be overriden
     public var session: ARSession?
-    
+
     /// Session run options
     public var runOptions: ARSession.RunOptions?
     #endif
 
 }
-

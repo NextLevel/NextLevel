@@ -1,6 +1,6 @@
 //
 //  NextLevelGIFCreator.swift
-//  NextLevel (http://nextlevel.engineering/)
+//  NextLevel (http://github.com/NextLevel/)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
@@ -32,12 +32,12 @@ import MobileCoreServices
 private let NextLevelGIFCreatorQueueIdentifier = "engineering.NextLevel.GIF"
 
 public class NextLevelGIFCreator {
-    
+
     // MARK: - properties
-    
+
     /// Output directory where the GIF is created, default is tmp
     public var outputDirectory: String
-    
+
     // MARK: - ivars
 
     fileprivate var _outputFilePath: URL?
@@ -46,23 +46,23 @@ public class NextLevelGIFCreator {
     fileprivate var _queue: DispatchQueue = DispatchQueue(label: NextLevelGIFCreatorQueueIdentifier, attributes: .concurrent)
 
     // MARK: - object lifecycle
-    
+
     public init() {
         self.outputDirectory = NSTemporaryDirectory()
     }
 
     // MARK: - internal
-    
+
     fileprivate func createOutputFilePath() -> URL? {
         let filename = "\(Date().iso8601())-NL.\(self._fileExtension)"
-        
+
         var gifURL = URL(fileURLWithPath: outputDirectory, isDirectory: true)
         gifURL.appendPathComponent(filename)
         return gifURL
     }
-    
+
     // MARK: - factory
-    
+
     /// Creates an animated GIF from a sequence of images.
     ///
     /// - Parameters:
@@ -77,7 +77,7 @@ public class NextLevelGIFCreator {
             }
             return
         }
-        
+
         self._outputFilePath = outputFilePath
         self._queue.async {
             guard let destination = CGImageDestinationCreateWithURL(outputFilePath as CFURL, kUTTypeGIF, images.count, nil) else {
@@ -96,7 +96,7 @@ public class NextLevelGIFCreator {
                     CGImageDestinationAddImage(destination, cgImage, frameProperties)
                 }
             }
-            
+
             if CGImageDestinationFinalize(destination) {
                 DispatchQueue.main.async {
                     completionHandler?(true, self._outputFilePath)
@@ -108,5 +108,5 @@ public class NextLevelGIFCreator {
             }
         }
     }
-    
+
 }

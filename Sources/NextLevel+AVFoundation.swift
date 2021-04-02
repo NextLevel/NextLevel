@@ -1,6 +1,6 @@
 //
 //  NextLevel+AVFoundation.swift
-//  NextLevel (http://nextlevel.engineering/)
+//  NextLevel (http://github.com/NextLevel/)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
@@ -28,7 +28,7 @@ import Foundation
 import AVFoundation
 
 extension AVCaptureConnection {
-    
+
     /// Returns the capture connection for the desired media type, otherwise nil.
     ///
     /// - Parameters:
@@ -45,11 +45,11 @@ extension AVCaptureConnection {
         }
         return nil
     }
-    
+
 }
 
 extension AVCaptureDeviceInput {
-    
+
     /// Returns the capture device input for the desired media type and capture session, otherwise nil.
     ///
     /// - Parameters:
@@ -66,7 +66,7 @@ extension AVCaptureDeviceInput {
         }
         return nil
     }
-    
+
 }
 
 extension AVCaptureDevice {
@@ -87,7 +87,7 @@ extension AVCaptureDevice {
         }
         return nil
     }
-    
+
     /// Returns the default wide angle video device for the desired position, otherwise nil.
     ///
     /// - Parameter position: Desired position of the device
@@ -99,7 +99,7 @@ extension AVCaptureDevice {
         }
         return nil
     }
-    
+
     /// Returns the default telephoto video device for the desired position, otherwise nil.
     ///
     /// - Parameter position: Desired position of the device
@@ -111,7 +111,7 @@ extension AVCaptureDevice {
         }
         return nil
     }
-    
+
     /// Returns the primary duo camera video device, if available, else the default wide angel camera, otherwise nil.
     ///
     /// - Parameter position: Desired position of the device
@@ -119,33 +119,33 @@ extension AVCaptureDevice {
     public class func primaryVideoDevice(forPosition position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         var deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInWideAngleCamera]
         deviceTypes.append(.builtInDualCamera)
-        
+
         // prioritize duo camera systems before wide angle
         let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: position)
         for device in discoverySession.devices {
-            if (device.deviceType == AVCaptureDevice.DeviceType.builtInDualCamera) {
+            if device.deviceType == AVCaptureDevice.DeviceType.builtInDualCamera {
                 return device
             }
         }
         return discoverySession.devices.first
     }
-    
+
     /// Returns the default video capture device, otherwise nil.
     ///
     /// - Returns: Default video capture device, otherwise nil
     public class func videoDevice() -> AVCaptureDevice? {
-        return AVCaptureDevice.default(for: AVMediaType.video)
+        AVCaptureDevice.default(for: AVMediaType.video)
     }
-    
+
     /// Returns the default audio capture device, otherwise nil.
     ///
     /// - Returns: default audio capture device, otherwise nil
     public class func audioDevice() -> AVCaptureDevice? {
-        return AVCaptureDevice.default(for: AVMediaType.audio)
+        AVCaptureDevice.default(for: AVMediaType.audio)
     }
-    
+
     // MARK: - utilities
-    
+
     /// Calculates focal length and principle point camera intrinsic parameters for OpenCV.
     /// (see Hartley's Mutiple View Geometry, Chapter 6)
     ///
@@ -157,21 +157,21 @@ extension AVCaptureDevice {
     /// - Returns: `true` when the focal length and principle point parameters are successfully calculated.
     public func focalLengthAndPrinciplePoint(focalLengthX: inout Float, focalLengthY: inout Float, principlePointX: inout Float, principlePointY: inout Float) {
         let dimensions = CMVideoFormatDescriptionGetPresentationDimensions(self.activeFormat.formatDescription, usePixelAspectRatio: true, useCleanAperture: true)
-        
+
         principlePointX = Float(dimensions.width) * 0.5
         principlePointY = Float(dimensions.height) * 0.5
-        
+
         let horizontalFieldOfView = self.activeFormat.videoFieldOfView
         let verticalFieldOfView = (horizontalFieldOfView / principlePointX) * principlePointY
-        
+
         focalLengthX = abs( Float(dimensions.width) / (2.0 * tan(horizontalFieldOfView / 180.0 * .pi / 2 )) )
         focalLengthY = abs( Float(dimensions.height) / (2.0 * tan(verticalFieldOfView / 180.0 * .pi / 2 )) )
     }
-    
+
 }
 
 extension AVCaptureDevice.Format {
-    
+
     /// Returns the maximum capable framerate for the desired capture format and minimum, otherwise zero.
     ///
     /// - Parameters:
@@ -187,7 +187,7 @@ extension AVCaptureDevice.Format {
         }
         return lowestTimeScale
     }
-    
+
     /// Checks if the specified capture device format supports a desired framerate and dimensions.
     ///
     /// - Parameters:
@@ -196,7 +196,7 @@ extension AVCaptureDevice.Format {
     /// - Returns: `true` if the capture device format supports the given criteria, otherwise false
     public func isSupported(withFrameRate frameRate: CMTimeScale, dimensions: CMVideoDimensions = CMVideoDimensions(width: 0, height: 0)) -> Bool {
         let formatDimensions = CMVideoFormatDescriptionGetDimensions(self.formatDescription)
-        if (formatDimensions.width >= dimensions.width && formatDimensions.height >= dimensions.height) {
+        if formatDimensions.width >= dimensions.width && formatDimensions.height >= dimensions.height {
             for frameRateRange in self.videoSupportedFrameRateRanges {
                 if frameRateRange.minFrameDuration.timescale >= frameRate && frameRateRange.maxFrameDuration.timescale <= frameRate {
                     return true
@@ -205,19 +205,19 @@ extension AVCaptureDevice.Format {
         }
         return false
     }
-    
+
 }
 
 extension AVCaptureDevice.Position {
-    
+
     /// Checks if a camera device is available for a position.
     ///
     /// - Parameter devicePosition: Camera device position to query.
     /// - Returns: `true` if the camera device exists, otherwise false.
     public var isCameraDevicePositionAvailable: Bool {
-        return UIImagePickerController.isCameraDeviceAvailable(self.uikitType)
+        UIImagePickerController.isCameraDeviceAvailable(self.uikitType)
     }
-    
+
     /// UIKit device equivalent type
     public var uikitType: UIImagePickerController.CameraDevice {
         switch self {
@@ -231,11 +231,11 @@ extension AVCaptureDevice.Position {
             return .rear
         }
     }
-    
+
 }
 
 extension AVCaptureDevice.WhiteBalanceGains {
-    
+
     /// Normalize gain values for a capture device.
     ///
     /// - Parameter captureDevice: Device used for adjustment.
@@ -246,14 +246,14 @@ extension AVCaptureDevice.WhiteBalanceGains {
         newGains.redGain = Swift.min(captureDevice.maxWhiteBalanceGain, Swift.max(1.0, newGains.redGain))
         newGains.greenGain = Swift.min(captureDevice.maxWhiteBalanceGain, Swift.max(1.0, newGains.greenGain))
         newGains.blueGain = Swift.min(captureDevice.maxWhiteBalanceGain, Swift.max(1.0, newGains.blueGain))
-        
+
         return newGains
     }
-    
+
 }
 
 extension AVCaptureVideoOrientation {
-    
+
     /// UIKit orientation equivalent type
     public var uikitType: UIDeviceOrientation {
         switch self {
@@ -269,7 +269,7 @@ extension AVCaptureVideoOrientation {
             return .unknown
         }
     }
-    
+
     internal static func avorientationFromUIDeviceOrientation(_ orientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
         var avorientation: AVCaptureVideoOrientation = .portrait
         switch orientation {
@@ -289,5 +289,5 @@ extension AVCaptureVideoOrientation {
         }
         return avorientation
     }
-    
+
 }

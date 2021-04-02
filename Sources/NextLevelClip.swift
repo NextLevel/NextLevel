@@ -1,6 +1,6 @@
 //
 //  NextLevelClip.swift
-//  NextLevel (http://nextlevel.engineering/)
+//  NextLevel (http://github.com/NextLevel)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
@@ -38,17 +38,17 @@ public class NextLevelClip {
     /// Unique identifier for a clip
     public var uuid: UUID {
         get {
-            return self._uuid
+            self._uuid
         }
     }
-    
+
     /// URL of the clip
     public var url: URL? {
         didSet {
             self._asset = nil
         }
     }
-    
+
     /// True, if the clip's file exists
     public var fileExists: Bool {
         get {
@@ -58,7 +58,7 @@ public class NextLevelClip {
             return false
         }
     }
-    
+
     /// `AVAsset` of the clip
     public var asset: AVAsset? {
         get {
@@ -70,28 +70,28 @@ public class NextLevelClip {
             return self._asset
         }
     }
-    
+
     /// Duration of the clip, otherwise invalid.
     public var duration: CMTime {
         get {
-            return self.asset?.duration ?? CMTime.zero
+            self.asset?.duration ?? CMTime.zero
         }
     }
-  
+
     /// Set to true if the clip's audio should be muted in the merged file
     public var isMutedOnMerge = false
-  
+
     /// If it doesn't already exist, generates a thumbnail image of the clip.
     public var thumbnailImage: UIImage? {
         get {
             guard self._thumbnailImage == nil else {
                 return self._thumbnailImage
             }
-            
+
             if let asset = self.asset {
                 let imageGenerator: AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
                 imageGenerator.appliesPreferredTrackTransform = true
-                
+
                 do {
                     let cgimage: CGImage = try imageGenerator.copyCGImage(at: CMTime.zero, actualTime: nil)
                     let uiimage: UIImage = UIImage(cgImage: cgimage)
@@ -104,7 +104,7 @@ public class NextLevelClip {
             return self._thumbnailImage
         }
     }
-    
+
     /// If it doesn't already exist, generates an image for the last frame of the clip.
     public var lastFrameImage: UIImage? {
         get {
@@ -113,10 +113,10 @@ public class NextLevelClip {
             else {
                 return self._lastFrameImage
             }
-            
+
             let imageGenerator: AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
             imageGenerator.appliesPreferredTrackTransform = true
-        
+
             do {
                 let cgimage: CGImage = try imageGenerator.copyCGImage(at: self.duration, actualTime: nil)
                 let uiimage: UIImage = UIImage(cgImage: cgimage)
@@ -125,11 +125,11 @@ public class NextLevelClip {
                 print("NextLevel, unable to generate lastFrameImage for \(String(describing: self.url?.absoluteString))")
                 self._lastFrameImage = nil
             }
-            
+
             return self._lastFrameImage
         }
     }
-    
+
     /// Frame rate at which the asset was recorded.
     public var frameRate: Float {
         get {
@@ -142,31 +142,31 @@ public class NextLevelClip {
             return 0
         }
     }
-    
+
     /// Dictionary containing metadata about the clip.
     public var infoDict: [String: Any]? {
         get {
-            return self._infoDict
+            self._infoDict
         }
     }
-    
+
     /// Dictionary containing data for re-initialization of the clip.
-    public var representationDict: [String:Any]? {
+    public var representationDict: [String: Any]? {
         get {
             if let infoDict = self.infoDict,
                let url = self.url {
-                return [NextLevelClipFilenameKey:url.lastPathComponent,
-                        NextLevelClipInfoDictKey:infoDict]
+                return [NextLevelClipFilenameKey: url.lastPathComponent,
+                        NextLevelClipInfoDictKey: infoDict]
             } else if let url = self.url {
-                return [NextLevelClipFilenameKey:url.lastPathComponent]
+                return [NextLevelClipFilenameKey: url.lastPathComponent]
             } else {
                 return nil
             }
         }
     }
-    
+
     // MARK: - class functions
-    
+
     /// Class method initializer for a clip URL
     ///
     /// - Parameters:
@@ -178,7 +178,7 @@ public class NextLevelClip {
         clipURL.appendPathComponent(filename)
         return clipURL
     }
-    
+
     /// Class method initializer for a NextLevelClip
     ///
     /// - Parameters:
@@ -186,57 +186,57 @@ public class NextLevelClip {
     ///   - infoDict: Dictionary containing metadata about the clip
     /// - Returns: Returns a NextLevelClip
     public class func clip(withUrl url: URL?, infoDict: [String: Any]?) -> NextLevelClip {
-        return NextLevelClip(url: url, infoDict: infoDict)
+        NextLevelClip(url: url, infoDict: infoDict)
     }
-    
+
     // MARK: - private instance vars
-    
+
     internal var _uuid: UUID = UUID()
     internal var _asset: AVAsset?
-    internal var _infoDict: [String : Any]?
+    internal var _infoDict: [String: Any]?
     internal var _thumbnailImage: UIImage?
     internal var _lastFrameImage: UIImage?
-    
+
     // MARK: - object lifecycle
-    
+
     /// Initialize a clip from a URL and dictionary.
     ///
     /// - Parameters:
     ///   - url: URL and filename of the specified media asset
     ///   - infoDict: Dictionary with NextLevelClip metadata information
-    public convenience init(url: URL?, infoDict: [String : Any]?) {
+    public convenience init(url: URL?, infoDict: [String: Any]?) {
         self.init()
         self.url = url
         self._infoDict = infoDict
     }
-    
+
     /// Initialize a clip from a dictionary representation and directory name
     ///
     /// - Parameters:
     ///   - directoryPath: Directory where the media asset is located
     ///   - representationDict: Dictionary containing defining metadata about the clip
-    public convenience init(directoryPath: String, representationDict: [String : Any]?) {
+    public convenience init(directoryPath: String, representationDict: [String: Any]?) {
         if let clipDict = representationDict,
            let filename = clipDict[NextLevelClipFilenameKey] as? String,
            let url: URL = NextLevelClip.clipURL(withFilename: filename, directoryPath: directoryPath) {
-            let infoDict = clipDict[NextLevelClipInfoDictKey] as? [String : Any]
+            let infoDict = clipDict[NextLevelClipInfoDictKey] as? [String: Any]
             self.init(url: url, infoDict: infoDict)
         } else {
             self.init()
         }
     }
-    
+
     deinit {
         self._asset = nil
         self._infoDict = nil
         self._thumbnailImage = nil
         self._lastFrameImage = nil
     }
-    
+
     // MARK: - functions
-    
+
     /// Removes the associated file representation on disk.
-    public func removeFile()  {
+    public func removeFile() {
         do {
             if let url = self.url {
                 try FileManager.default.removeItem(at: url)
@@ -246,5 +246,5 @@ public class NextLevelClip {
             print("NextLevel, error deleting a clip's file \(String(describing: self.url?.absoluteString))")
         }
     }
-    
+
 }

@@ -1,6 +1,6 @@
 //
 //  NextLevel+Metadata.swift
-//  NextLevel (http://nextlevel.engineering/)
+//  NextLevel (http://github.com/NextLevel/)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
@@ -30,28 +30,28 @@ import CoreMedia
 import ImageIO
 
 extension CMSampleBuffer {
-    
+
     /// Extracts the metadata dictionary from a `CMSampleBuffer`.
     ///  (ie EXIF: Aperture, Brightness, Exposure, FocalLength, etc)
     ///
     /// - Parameter sampleBuffer: sample buffer to be processed
     /// - Returns: metadata dictionary from the provided sample buffer
-    public func metadata() -> [String : Any]? {
-        
+    public func metadata() -> [String: Any]? {
+
         if let cfmetadata = CMCopyDictionaryOfAttachments(allocator: kCFAllocatorDefault, target: self, attachmentMode: kCMAttachmentMode_ShouldPropagate) {
-            if let metadata = cfmetadata as? [String : Any] {
+            if let metadata = cfmetadata as? [String: Any] {
                 return metadata
             }
         }
         return nil
-        
+
     }
-    
+
     /// Appends the provided metadata dictionary key/value pairs.
     ///
     /// - Parameter metadataAdditions: Metadata key/value pairs to be appended.
     public func append(metadataAdditions: [String: Any]) {
-        
+
         // append tiff metadata to buffer for proagation
         if let tiffDict: CFDictionary = CMCopyDictionaryOfAttachments(allocator: kCFAllocatorDefault, target: kCGImagePropertyTIFFDictionary, attachmentMode: kCMAttachmentMode_ShouldPropagate) {
             let tiffNSDict = tiffDict as NSDictionary
@@ -69,41 +69,41 @@ extension CMSampleBuffer {
             CMSetAttachment(self, key: kCGImagePropertyTIFFDictionary, value: metadataAdditions as CFTypeRef?, attachmentMode: kCMAttachmentMode_ShouldPropagate)
         }
     }
-    
+
 }
 
-fileprivate let NextLevelMetadataTitle = "NextLevel"
-fileprivate let NextLevelMetadataArtist = "http://nextlevel.engineering/"
+private let NextLevelMetadataTitle = "NextLevel"
+private let NextLevelMetadataArtist = "http://github.com/NextLevel/"
 
 extension NextLevel {
-    
+
     internal class var tiffMetadata: [String: Any] {
-        return [ kCGImagePropertyTIFFSoftware as String : NextLevelMetadataTitle,
-                 kCGImagePropertyTIFFArtist as String : NextLevelMetadataArtist,
-                 kCGImagePropertyTIFFDateTime as String : Date().iso8601() ]
+        [ kCGImagePropertyTIFFSoftware as String: NextLevelMetadataTitle,
+                 kCGImagePropertyTIFFArtist as String: NextLevelMetadataArtist,
+                 kCGImagePropertyTIFFDateTime as String: Date().iso8601() ]
     }
-    
+
     internal class var assetWriterMetadata: [AVMutableMetadataItem] {
         let currentDevice = UIDevice.current
-        
+
         let modelItem = AVMutableMetadataItem()
         modelItem.keySpace = AVMetadataKeySpace.common
         modelItem.key = AVMetadataKey.commonKeyModel as (NSCopying & NSObjectProtocol)
         modelItem.value = currentDevice.localizedModel as (NSCopying & NSObjectProtocol)
-        
+
         let softwareItem = AVMutableMetadataItem()
         softwareItem.keySpace = AVMetadataKeySpace.common
         softwareItem.key = AVMetadataKey.commonKeySoftware as (NSCopying & NSObjectProtocol)
         softwareItem.value = NextLevelMetadataTitle as (NSCopying & NSObjectProtocol)
-        
+
         let artistItem = AVMutableMetadataItem()
         artistItem.keySpace = AVMetadataKeySpace.common
         artistItem.key = AVMetadataKey.commonKeyArtist as (NSCopying & NSObjectProtocol)
         artistItem.value = NextLevelMetadataArtist as (NSCopying & NSObjectProtocol)
-        
+
         let creationDateItem = AVMutableMetadataItem()
         creationDateItem.keySpace = .common
-        
+
         if #available(iOS 13.0, *) {
             creationDateItem.key = AVMetadataKey.commonKeyCreationDate as NSString
             creationDateItem.value = Date() as NSDate
@@ -111,7 +111,7 @@ extension NextLevel {
             creationDateItem.key = AVMetadataKey.commonKeyCreationDate as (NSCopying & NSObjectProtocol)
             creationDateItem.value = Date().iso8601() as (NSCopying & NSObjectProtocol)
         }
-        
+
         return [modelItem, softwareItem, artistItem, creationDateItem]
     }
 
