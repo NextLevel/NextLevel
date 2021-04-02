@@ -291,8 +291,8 @@ extension CameraViewController {
                 self.saveVideo(withURL: lastClipUrl)
             } else if session.currentClipHasStarted {
                 session.endClip(completionHandler: { (clip, error) in
-                    if error == nil {
-                        self.saveVideo(withURL: (clip?.url)!)
+                    if error == nil, let url = clip?.url {
+                        self.saveVideo(withURL: url)
                     } else {
                         print("Error saving video: \(error?.localizedDescription ?? "")")
                     }
