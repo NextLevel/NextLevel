@@ -137,6 +137,7 @@ public enum NextLevelCaptureMode: Int, CustomStringConvertible {
     case videoWithoutAudio
     case movie
     case arKit
+    case arKitWithoutAudio
 
     public var description: String {
         get {
@@ -152,6 +153,8 @@ public enum NextLevelCaptureMode: Int, CustomStringConvertible {
             case .movie:
                 return "Movie"
             case .arKit:
+                return "ARKit"
+            case .arKitWithoutAudio:
                 return "ARKit"
             }
         }
@@ -562,7 +565,11 @@ extension NextLevel {
         case .videoWithoutAudio:
             return NextLevel.authorizationStatus(forMediaType: AVMediaType.video)
         case .arKit:
-            fallthrough
+            let audioStatus = NextLevel.authorizationStatus(forMediaType: AVMediaType.audio)
+            let videoStatus = NextLevel.authorizationStatus(forMediaType: AVMediaType.video)
+            return (audioStatus == .authorized && videoStatus == .authorized) ? .authorized : .notAuthorized
+        case .arKitWithoutAudio:
+            return NextLevel.authorizationStatus(forMediaType: AVMediaType.video)
         case .movie:
             fallthrough
         case .video:
@@ -759,6 +766,10 @@ extension NextLevel {
             // TODO
             break
         case .arKit:
+            shouldConfigureAudio = true
+            shouldConfigureVideo = true
+            break
+        case .arKitWithoutAudio:
             shouldConfigureVideo = true
             break
         }
@@ -878,7 +889,7 @@ extension NextLevel {
         case .movie:
             // TODO
             break
-        case .arKit:
+        case .arKit, .arKitWithoutAudio:
             // no AV inputs to setup
             break
         }
@@ -1242,6 +1253,12 @@ extension NextLevel {
             if let photoOutput = self._photoOutput, session.outputs.contains(photoOutput) {
                 session.removeOutput(photoOutput)
                 self._photoOutput = nil
+            }
+            break
+        case .arKitWithoutAudio:
+            if let videoOutput = self._videoOutput, session.outputs.contains(videoOutput) {
+                session.removeOutput(videoOutput)
+                self._videoOutput = nil
             }
             break
         }
@@ -2698,7 +2715,8 @@ extension NextLevel {
 extension NextLevel: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
 
     public func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        if self.captureMode == .videoWithoutAudio && captureOutput == self._videoOutput {
+        if (self.captureMode == .videoWithoutAudio ||  self.captureMode == .arKitWithoutAudio) &&
+            captureOutput == self._videoOutput {
             self.videoDelegate?.nextLevel(self, willProcessRawVideoSampleBuffer: sampleBuffer, onQueue: self._sessionQueue)
             self._lastVideoFrame = sampleBuffer
             if let session = self._recordingSession {
