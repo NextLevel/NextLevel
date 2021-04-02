@@ -1,6 +1,6 @@
 //
 //  CameraViewController.swift
-//  NextLevel (http://nextlevel.engineering/)
+//  NextLevel (http://github.com/NextLevel)
 //
 //  Copyright (c) 2016-present patrick piemonte (http://patrickpiemonte.com)
 //
@@ -29,7 +29,7 @@ import Photos
 
 class CameraViewController: UIViewController {
 
-    let nextLevelAlbumTitle = "NextLevel"
+    static let nextLevelAlbumTitle = "NextLevel"
 
     // MARK: - UIViewController
 
@@ -55,8 +55,8 @@ class CameraViewController: UIViewController {
     internal var focusTapGestureRecognizer: UITapGestureRecognizer?
     internal var flipDoubleTapGestureRecognizer: UITapGestureRecognizer?
 
-    internal var panStartPoint: CGPoint = .zero
-    internal var panStartZoom: CGFloat = 0.0
+    private var _panStartPoint: CGPoint = .zero
+    private var _panStartZoom: CGFloat = 0.0
 
     // MARK: - object lifecycle
 
@@ -346,12 +346,12 @@ extension CameraViewController {
 
     internal func saveVideo(withURL url: URL) {
         PHPhotoLibrary.shared().performChanges({
-            let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle)
+            let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewController.nextLevelAlbumTitle)
             if albumAssetCollection == nil {
-                let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: NextLevelAlbumTitle)
+                let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: CameraViewController.nextLevelAlbumTitle)
                 _ = changeRequest.placeholderForCreatedAssetCollection
             }}, completionHandler: { (_: Bool, _: Error?) in
-                if let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle) {
+                if let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewController.nextLevelAlbumTitle) {
                     PHPhotoLibrary.shared().performChanges({
                         if let assetChangeRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) {
                             let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
@@ -381,16 +381,16 @@ extension CameraViewController {
 
         PHPhotoLibrary.shared().performChanges({
 
-            let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle)
+            let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewController.nextLevelAlbumTitle)
             if albumAssetCollection == nil {
-                let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: NextLevelAlbumTitle)
+                let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: CameraViewController.nextLevelAlbumTitle)
                 _ = changeRequest.placeholderForCreatedAssetCollection
             }
 
         }, completionHandler: { (success1: Bool, error1: Error?) in
 
             if success1 == true {
-                if let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle) {
+                if let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewController.nextLevelAlbumTitle) {
                     PHPhotoLibrary.shared().performChanges({
                         let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: photoImage)
                         let assetCollectionChangeRequest = PHAssetCollectionChangeRequest(for: albumAssetCollection)
@@ -702,16 +702,16 @@ extension CameraViewController: NextLevelPhotoDelegate {
 
             PHPhotoLibrary.shared().performChanges({
 
-                let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle)
+                let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewController.nextLevelAlbumTitle)
                 if albumAssetCollection == nil {
-                    let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: NextLevelAlbumTitle)
+                    let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: CameraViewController.nextLevelAlbumTitle)
                     _ = changeRequest.placeholderForCreatedAssetCollection
                 }
 
             }, completionHandler: { (success1: Bool, error1: Error?) in
 
                 if success1 == true {
-                    if let albumAssetCollection = self.albumAssetCollection(withTitle: NextLevelAlbumTitle) {
+                    if let albumAssetCollection = self.albumAssetCollection(withTitle: CameraViewController.nextLevelAlbumTitle) {
                         PHPhotoLibrary.shared().performChanges({
                             if let data = photoDict[NextLevelPhotoFileDataKey] as? Data,
                                let photoImage = UIImage(data: data) {
