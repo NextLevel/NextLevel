@@ -292,7 +292,7 @@ public class NextLevel: NSObject {
                 self.captureMode != oldValue
                 else {
                     return
-            }
+                }
 
             self.delegate?.nextLevelCaptureModeWillChange(self)
 
@@ -2216,6 +2216,48 @@ extension NextLevel {
 
         }
     }
+    
+    /// Changes the current device frame rate to the highest frame rate supported by the device
+    public func configureDeviceForHighestFrameRate() {
+        self.executeClosureAsyncOnSessionQueueIfNecessary {
+            guard let device = self._currentDevice else {
+                return
+            }
+            
+            var bestFormat: AVCaptureDevice.Format?
+            var bestFrameRateRange: AVFrameRateRange?
+            
+            for format in device.formats {
+               for range in format.videoSupportedFrameRateRanges {
+                   if range.maxFrameRate > bestFrameRateRange?.maxFrameRate ?? 0 {
+                       bestFormat = format
+                       bestFrameRateRange = range
+                   }
+               }
+            }
+            
+            if let bestFormat = bestFormat,
+               let bestFrameRateRange = bestFrameRateRange {
+                do {
+                    try device.lockForConfiguration()
+                    
+                    // Set the device's active format.
+                    device.activeFormat = bestFormat
+                    
+                    // Set the device's min/max frame duration.
+                    let duration = bestFrameRateRange.minFrameDuration
+                    device.activeVideoMinFrameDuration = duration
+                    device.activeVideoMaxFrameDuration = duration
+                    
+                    device.unlockForConfiguration()
+                } catch {
+                    // Handle error.
+                    print("NextLevel, failed to lock device on the highest frame rate")
+                }
+            }
+        }
+    }
+    
 }
 
 // MARK: - video capture
