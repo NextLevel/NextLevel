@@ -1327,7 +1327,7 @@ extension NextLevel {
 
     /// Changes capture device if the desired device is available.
     public func changeCaptureDeviceIfAvailable(captureDevice: NextLevelDeviceType) throws {
-        let deviceForUse = AVCaptureDevice.captureDevice(withType: captureDevice.avfoundationType, forPosition: .back)
+        let deviceForUse = AVCaptureDevice.captureDevice(withType: captureDevice.avfoundationType, forPosition: self.devicePosition)
         if deviceForUse == nil {
             throw NextLevelError.deviceNotAvailable
         } else {
