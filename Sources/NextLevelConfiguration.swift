@@ -419,6 +419,9 @@ public class NextLevelPhotoConfiguration: NextLevelConfiguration {
     /// Enabled high resolution capture
     public var isHighResolutionEnabled: Bool = false
 
+	/// Photo quality prioritization
+	public var photoQualityPrioritization: AVCapturePhotoOutput.QualityPrioritization = .balanced
+
     /// Enabled depth data capture with photo
     #if USE_TRUE_DEPTH
     public var isDepthDataEnabled: Bool = false

@@ -2531,6 +2531,9 @@ extension NextLevel {
             photoSettings.isHighResolutionPhotoEnabled = self.photoConfiguration.isHighResolutionEnabled
             photoOutput.isHighResolutionCaptureEnabled = self.photoConfiguration.isHighResolutionEnabled
 
+			photoSettings.photoQualityPrioritization = photoConfiguration.photoQualityPrioritization
+			photoOutput.maxPhotoQualityPrioritization = photoConfiguration.photoQualityPrioritization
+
             #if USE_TRUE_DEPTH
             if photoOutput.isDepthDataDeliverySupported {
                 photoOutput.isDepthDataDeliveryEnabled = self.photoConfiguration.isDepthDataEnabled
