@@ -1708,6 +1708,16 @@ extension NextLevel {
         }
     }
 
+	/// Checks if custom exposure mode is supported.
+	public var isCustomExposureSupported: Bool {
+		get {
+			if let device: AVCaptureDevice = self._currentDevice {
+				return device.isExposureModeSupported(.custom)
+			}
+			return false
+		}
+	}
+
     /// Checks if an exposure adjustment is progress.
     public var isAdjustingExposure: Bool {
         get {
@@ -1795,7 +1805,9 @@ extension NextLevel {
         do {
             try device.lockForConfiguration()
 
-            device.setExposureModeCustom(duration: CMTimeMakeWithSeconds( newDurationSeconds, preferredTimescale: 1000*1000*1000 ), iso: AVCaptureDevice.currentISO, completionHandler: nil)
+			if device.isExposureModeSupported(.custom) {
+				device.setExposureModeCustom(duration: CMTimeMakeWithSeconds( newDurationSeconds, preferredTimescale: 1000*1000*1000 ), iso: AVCaptureDevice.currentISO, completionHandler: nil)
+			}
 
             device.unlockForConfiguration()
         } catch {
@@ -1818,7 +1830,9 @@ extension NextLevel {
         do {
             try device.lockForConfiguration()
 
-            device.setExposureModeCustom(duration: AVCaptureDevice.currentExposureDuration, iso: newISO, completionHandler: nil)
+			if device.isExposureModeSupported(.custom) {
+				device.setExposureModeCustom(duration: AVCaptureDevice.currentExposureDuration, iso: newISO, completionHandler: nil)
+			}
 
             device.unlockForConfiguration()
         } catch {
