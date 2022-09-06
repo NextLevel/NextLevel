@@ -218,6 +218,9 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     /// Maximum recording duration, when set, session finishes automatically
     public var maximumCaptureDuration: CMTime?
 
+	// Video dimensions evenly dividable by this number of pixeld
+	public var sizeDivisibleBy: Int? = 16
+
     // MARK: - object lifecycle
 
     override public init() {
@@ -280,7 +283,9 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
             config[AVVideoHeightKey] = NSNumber(integerLiteral: Int(height))
         }
 
-        config = self.update(config: config)
+		if let sizeDivisibleBy = sizeDivisibleBy {
+			config = adjustConfigurationDimensions(config: config, withSizeValuesDivisibleBy: sizeDivisibleBy)
+		}
 
         config[AVVideoCodecKey] = self.codec
         config[AVVideoScalingModeKey] = self.scalingMode
@@ -309,7 +314,7 @@ public class NextLevelVideoConfiguration: NextLevelConfiguration {
     ///   - config: Input configuration dictionary
     ///   - divisibleBy: Divisor
     /// - Returns: Configuration with appropriately divided sizes
-    private func update(config: [String: Any], withSizeValuesDivisibleBy divisibleBy: Int = 16) -> [String: Any] {
+    private func adjustConfigurationDimensions(config: [String: Any], withSizeValuesDivisibleBy divisibleBy: Int = 16) -> [String: Any] {
         var config = config
 
         if let width = config[AVVideoWidthKey] as? Int {
