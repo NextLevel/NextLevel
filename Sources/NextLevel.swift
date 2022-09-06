@@ -3169,12 +3169,15 @@ extension NextLevel {
             }
         })
 
-        self._observers.append(currentDevice.observe(\.exposureDuration, options: [.new]) { [weak self] _, _ in
-            guard let _ = self else {
-                return
-            }
+        self._observers.append(currentDevice.observe(\.exposureDuration, options: [.new]) { [weak self] _, change in
+			guard let strongSelf = self,
+				  let exposureDuration = change.newValue else {
+				return
+			}
 
-            // TODO: add delegate callback
+			DispatchQueue.main.async {
+				strongSelf.deviceDelegate?.nextLevel(strongSelf, didChangeExposureDuration: exposureDuration)
+			}
         })
 
         self._observers.append(currentDevice.observe(\.iso, options: [.new]) { [weak self] _, _ in
