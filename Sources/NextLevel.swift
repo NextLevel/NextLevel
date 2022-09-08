@@ -1787,7 +1787,7 @@ extension NextLevel {
     /// - Parameter duration: The exposure duration in seconds.
     /// - Parameter durationPower: Larger power values will increase the sensitivity at shorter durations.
     /// - Parameter minDurationRangeLimit: Minimum limitation for duration.
-    public func expose(withDuration duration: Double, durationPower: Double = 5, minDurationRangeLimit: Double = (1.0 / 1000.0)) {
+    public func expose(withDuration duration: Double, durationPower: Double = 5, minDurationRangeLimit: Double = (1.0 / 1000.0), completionHandler: ((CMTime) -> Void)? = nil) {
         guard let device = self._currentDevice,
             !device.isAdjustingExposure
             else {
@@ -1806,7 +1806,7 @@ extension NextLevel {
             try device.lockForConfiguration()
 
 			if device.isExposureModeSupported(.custom) {
-				device.setExposureModeCustom(duration: CMTimeMakeWithSeconds( newDurationSeconds, preferredTimescale: 1000*1000*1000 ), iso: AVCaptureDevice.currentISO, completionHandler: nil)
+				device.setExposureModeCustom(duration: CMTimeMakeWithSeconds( newDurationSeconds, preferredTimescale: 1000*1000*1000 ), iso: AVCaptureDevice.currentISO, completionHandler: completionHandler)
 			}
 
             device.unlockForConfiguration()
