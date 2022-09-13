@@ -322,8 +322,10 @@ public class NextLevel: NSObject {
     /// The current orientation of the device.
     public var deviceOrientation: NextLevelDeviceOrientation = .portrait {
         didSet {
-            self.automaticallyUpdatesDeviceOrientation = false
-            self.updateVideoOrientation()
+            automaticallyUpdatesDeviceOrientation = false
+			_sessionQueue.sync {
+				updateVideoOrientation()
+			}
         }
     }
 
