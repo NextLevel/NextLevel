@@ -112,23 +112,15 @@ extension AVCaptureDevice {
         return nil
     }
 
-    /// Returns the primary duo camera video device, if available, else the default wide angel camera, otherwise nil.
-    ///
-    /// - Parameter position: Desired position of the device
-    /// - Returns: Primary video capture device found, otherwise nil
-    public class func primaryVideoDevice(forPosition position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-        var deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInWideAngleCamera]
-        deviceTypes.append(.builtInDualCamera)
-
-        // prioritize duo camera systems before wide angle
-        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: position)
-        for device in discoverySession.devices {
-            if device.deviceType == AVCaptureDevice.DeviceType.builtInDualCamera {
-                return device
-            }
-        }
-        return discoverySession.devices.first
-    }
+	/// Returns the first available camera device of specified types.
+	///
+	/// - Parameters:
+	///   - position: Desired position of the device
+	///   - prioritizedDeviceTypes: Device types of interest, in descending order
+	/// - Returns: Primary video capture device found, otherwise nil
+	public class func primaryVideoDevice(forPosition position: AVCaptureDevice.Position, prioritizedDeviceTypes: [AVCaptureDevice.DeviceType] = [/* .builtInTripleCamera,*/ .builtInDualCamera, .builtInWideAngleCamera]) -> AVCaptureDevice? {
+		AVCaptureDevice.DiscoverySession(deviceTypes: prioritizedDeviceTypes, mediaType: AVMediaType.video, position: position).devices.first
+	}
 
     /// Returns the default video capture device, otherwise nil.
     ///

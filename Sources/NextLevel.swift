@@ -1789,6 +1789,7 @@ extension NextLevel {
     /// - Parameter duration: The exposure duration in seconds.
     /// - Parameter durationPower: Larger power values will increase the sensitivity at shorter durations.
     /// - Parameter minDurationRangeLimit: Minimum limitation for duration.
+	/// - Parameter completionHandler: Called at completion.
     public func expose(withDuration duration: Double, durationPower: Double = 5, minDurationRangeLimit: Double = (1.0 / 1000.0), completionHandler: ((CMTime) -> Void)? = nil) {
         guard let device = self._currentDevice,
             !device.isAdjustingExposure
@@ -1845,9 +1846,11 @@ extension NextLevel {
     /// Adjusts exposure to the specified target bias.
     ///
     /// - Parameter targetBias: The exposure target bias.
-    public func expose(withTargetBias targetBias: Float) {
+	/// - Parameter force: Change even if adjust is already in progress.
+	/// - Parameter completionHandler: Called at completion.
+    public func expose(withTargetBias targetBias: Float, force: Bool = false, completionHandler: ((CMTime) -> Void)? = nil) {
         guard let device = self._currentDevice,
-            !device.isAdjustingExposure
+            !device.isAdjustingExposure || force
             else {
                 return
         }
@@ -1857,7 +1860,7 @@ extension NextLevel {
         do {
             try device.lockForConfiguration()
 
-            device.setExposureTargetBias(newTargetBias, completionHandler: nil)
+            device.setExposureTargetBias(newTargetBias, completionHandler: completionHandler)
 
             device.unlockForConfiguration()
         } catch {
@@ -2319,8 +2322,7 @@ extension NextLevel {
                     do {
                         try device.lockForConfiguration()
 
-                        let zoom: Float = max(1, min(newValue, Float(device.activeFormat.videoMaxZoomFactor)))
-                        device.videoZoomFactor = CGFloat(zoom)
+                        device.videoZoomFactor = max(device.minAvailableVideoZoomFactor, min(CGFloat(newValue), device.activeFormat.videoMaxZoomFactor))
 
                         device.unlockForConfiguration()
                     } catch {
@@ -2330,6 +2332,19 @@ extension NextLevel {
             }
         }
     }
+
+	//
+	/// Fetch threshold value where a device of the specified type might be chosen when zooming in using a composite camera.
+	///
+	/// - Returns: Zoom threshold  or nil
+	public func switchOverVideoZoomFactorForDeviceType(_ deviceType: AVCaptureDevice.DeviceType) -> Float? {
+		guard let device = _currentDevice,
+			  let index = device.constituentDevices.firstIndex(where: { $0.deviceType == deviceType }) else {
+			return nil
+		}
+
+		return index > 0 ? device.virtualDeviceSwitchOverVideoZoomFactors[index - 1].floatValue : Float(device.minAvailableVideoZoomFactor)
+	}
 
     /// Triggers a photo capture from the last video frame.
     public func capturePhotoFromVideo() {
