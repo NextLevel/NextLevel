@@ -1789,6 +1789,7 @@ extension NextLevel {
     /// - Parameter duration: The exposure duration in seconds.
     /// - Parameter durationPower: Larger power values will increase the sensitivity at shorter durations.
     /// - Parameter minDurationRangeLimit: Minimum limitation for duration.
+	/// - Parameter completionHandler: Called at completion.
     public func expose(withDuration duration: Double, durationPower: Double = 5, minDurationRangeLimit: Double = (1.0 / 1000.0), completionHandler: ((CMTime) -> Void)? = nil) {
         guard let device = self._currentDevice,
             !device.isAdjustingExposure
@@ -1845,9 +1846,11 @@ extension NextLevel {
     /// Adjusts exposure to the specified target bias.
     ///
     /// - Parameter targetBias: The exposure target bias.
-    public func expose(withTargetBias targetBias: Float) {
+	/// - Parameter force: Change even if adjust is already in progress.
+	/// - Parameter completionHandler: Called at completion.
+    public func expose(withTargetBias targetBias: Float, force: Bool = false, completionHandler: ((CMTime) -> Void)? = nil) {
         guard let device = self._currentDevice,
-            !device.isAdjustingExposure
+            !device.isAdjustingExposure || force
             else {
                 return
         }
@@ -1857,7 +1860,7 @@ extension NextLevel {
         do {
             try device.lockForConfiguration()
 
-            device.setExposureTargetBias(newTargetBias, completionHandler: nil)
+            device.setExposureTargetBias(newTargetBias, completionHandler: completionHandler)
 
             device.unlockForConfiguration()
         } catch {
