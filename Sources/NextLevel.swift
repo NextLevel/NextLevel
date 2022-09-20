@@ -2330,6 +2330,19 @@ extension NextLevel {
         }
     }
 
+	//
+	/// Fetch threshold value where a device of the specified type might be chosen when zooming in using a composite camera.
+	///
+	/// - Returns: Zoom threshold  or nil
+	public func switchOverVideoZoomFactorForDeviceType(_ deviceType: AVCaptureDevice.DeviceType) -> Float? {
+		guard let device = _currentDevice,
+			  let index = device.constituentDevices.firstIndex(where: { $0.deviceType == deviceType }) else {
+			return nil
+		}
+
+		return index > 0 ? device.virtualDeviceSwitchOverVideoZoomFactors[index - 1].floatValue : Float(device.minAvailableVideoZoomFactor)
+	}
+
     /// Triggers a photo capture from the last video frame.
     public func capturePhotoFromVideo() {
 
