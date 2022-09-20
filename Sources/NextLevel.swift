@@ -2319,8 +2319,7 @@ extension NextLevel {
                     do {
                         try device.lockForConfiguration()
 
-                        let zoom: Float = max(1, min(newValue, Float(device.activeFormat.videoMaxZoomFactor)))
-                        device.videoZoomFactor = CGFloat(zoom)
+                        device.videoZoomFactor = max(device.minAvailableVideoZoomFactor, min(CGFloat(newValue), device.activeFormat.videoMaxZoomFactor))
 
                         device.unlockForConfiguration()
                     } catch {
