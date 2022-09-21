@@ -2273,11 +2273,13 @@ extension NextLevel {
     /// Checks if video capture is supported by the hardware.
     public var isVideoCaptureSupported: Bool {
         get {
-            var deviceTypes: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera,
+            let deviceTypes: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera,
                                                              .builtInTelephotoCamera,
                                                              .builtInDualCamera,
-                                                             .builtInTrueDepthCamera]
-            deviceTypes.append(contentsOf: [.builtInUltraWideCamera, .builtInDualWideCamera, .builtInTripleCamera])
+                                                             .builtInTrueDepthCamera,
+                                                             .builtInUltraWideCamera,
+                                                             .builtInDualWideCamera,
+                                                             .builtInTripleCamera]
             let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: .unspecified)
             return discoverySession.devices.count > 0
         }
