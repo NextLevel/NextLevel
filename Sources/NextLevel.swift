@@ -81,23 +81,11 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
             return AVCaptureDevice.DeviceType.builtInTrueDepthCamera
             #endif
         case .dualWideCamera:
-            if #available(iOS 13.0, *) {
-                return AVCaptureDevice.DeviceType.builtInDualWideCamera
-            } else {
-                return AVCaptureDevice.DeviceType(rawValue: "Unavailable")
-            }
+            return AVCaptureDevice.DeviceType.builtInDualWideCamera
         case .ultraWideAngleCamera:
-            if #available(iOS 13.0, *) {
-                return AVCaptureDevice.DeviceType.builtInUltraWideCamera
-            } else {
-                return AVCaptureDevice.DeviceType(rawValue: "Unavailable")
-            }
+            return AVCaptureDevice.DeviceType.builtInUltraWideCamera
         case .tripleCamera:
-            if #available(iOS 13.0, *) {
-                return AVCaptureDevice.DeviceType.builtInTripleCamera
-            } else {
-                return AVCaptureDevice.DeviceType(rawValue: "Unavailable")
-            }
+            return AVCaptureDevice.DeviceType.builtInTripleCamera
         }
     }
 
@@ -2289,10 +2277,7 @@ extension NextLevel {
                                                              .builtInTelephotoCamera,
                                                              .builtInDualCamera,
                                                              .builtInTrueDepthCamera]
-            if #available(iOS 13.0, *) {
-                deviceTypes.append(contentsOf: [.builtInUltraWideCamera, .builtInDualWideCamera, .builtInTripleCamera])
-            }
-
+            deviceTypes.append(contentsOf: [.builtInUltraWideCamera, .builtInDualWideCamera, .builtInTripleCamera])
             let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: .unspecified)
             return discoverySession.devices.count > 0
         }
