@@ -650,6 +650,7 @@ extension NextLevel {
 
                 self.configureSession()
                 self.configureSessionDevices()
+                self.updateVideoOutputSettings()
                 self.configureMetadataObjects()
                 self.updateVideoOrientation()
 
@@ -691,6 +692,7 @@ extension NextLevel {
                 self.beginConfiguration()
                 self.configureSession()
                 self.configureSessionDevices()
+                self.updateVideoOutputSettings()
                 self.updateVideoOrientation()
                 self.commitConfiguration()
             }
