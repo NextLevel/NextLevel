@@ -63,7 +63,7 @@ Add the following to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/NextLevel/NextLevel", from: "0.19.0")
+    .package(url: "https://github.com/NextLevel/NextLevel", from: "0.19.1")
 ]
 ```
 
@@ -72,7 +72,7 @@ Or add it directly in Xcode: **File → Add Package Dependencies...**
 ### CocoaPods
 
 ```ruby
-pod "NextLevel", "~> 0.19.0"
+pod "NextLevel", "~> 0.19.1"
 ```
 
 ### Manual Integration
