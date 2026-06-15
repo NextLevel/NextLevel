@@ -28,14 +28,20 @@ import PackageDescription
 let package = Package(
     name: "NextLevel",
     platforms: [
-      .iOS(.v16)
+      .iOS(.v12)
     ],
     products: [
       .library(name: "NextLevel", targets: ["NextLevel"])
     ],
+     dependencies: [
+          .package(url: "https://github.com/Akylas/SimulatorCamera", from: "1.0.0")
+    ],
     targets: [
       .target(
           name: "NextLevel",
+          dependencies: [
+            .product(name: "SimulatorCameraClient", package: "SimulatorCamera")
+          ],
           path: "Sources",
           swiftSettings: [
               .enableUpcomingFeature("StrictConcurrency"),

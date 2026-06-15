@@ -11,4 +11,6 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/*.swift'
   s.requires_arc = true
   s.swift_version = '6.0'
+
+  s.dependency 'farfromrefug/SimulatorCamera', '~> 1.0.0'
 end

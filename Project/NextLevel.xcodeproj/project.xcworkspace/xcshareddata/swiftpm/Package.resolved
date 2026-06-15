@@ -1,0 +1,15 @@
+{
+  "originHash" : "d3f842e7a10fde7f4e8451379a16d3d9ece4cb98274c74ed6907217163e383d5",
+  "pins" : [
+    {
+      "identity" : "simulatorcamera",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/farfromrefug/SimulatorCamera",
+      "state" : {
+        "revision" : "b6d4645b65009f862e52cad19ab8a73b4893e94b",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}
