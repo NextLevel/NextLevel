@@ -28,7 +28,7 @@ import PackageDescription
 let package = Package(
     name: "NextLevel",
     platforms: [
-      .iOS(.v16)
+      .iOS(.v12)
     ],
     products: [
       .library(name: "NextLevel", targets: ["NextLevel"])
